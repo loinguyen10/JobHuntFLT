@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "448352810413",
+    "project_id": "jobhunt-97208",
+    "storage_bucket": "jobhunt-97208.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448352810413:android:8782a16243c5fbb4251d24",
+        "android_client_info": {
+          "package_name": "com.jobhunthth.HTH0205"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448352810413-1ai3dsb2ae0nj1ngk5iso1ogkthh05mb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jobhunthth.HTH0205",
+            "certificate_hash": "21ae49b0651e662eb91534e21a423d52936ab593"
+          }
+        },
+        {
+          "client_id": "448352810413-kv6vhr3b0def5s1k8igl64lg8fpdd18c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0oEaLFHSmKDAFlzr4sbGLdvxUa7z2vPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448352810413-kv6vhr3b0def5s1k8igl64lg8fpdd18c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "448352810413-0ea5s8l0tb760m9550bj8h6io2ulcg95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.united7.jobhuntFtl"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448352810413:android:63dcff52dc10b4eb251d24",
+        "android_client_info": {
+          "package_name": "com.united7.jobhunt_ftl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448352810413-kv6vhr3b0def5s1k8igl64lg8fpdd18c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0oEaLFHSmKDAFlzr4sbGLdvxUa7z2vPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448352810413-kv6vhr3b0def5s1k8igl64lg8fpdd18c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "448352810413-0ea5s8l0tb760m9550bj8h6io2ulcg95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.united7.jobhuntFtl"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

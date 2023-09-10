@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>448352810413-0ea5s8l0tb760m9550bj8h6io2ulcg95.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.448352810413-0ea5s8l0tb760m9550bj8h6io2ulcg95</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>448352810413-1ai3dsb2ae0nj1ngk5iso1ogkthh05mb.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDwUWJBiq49mCEwCYZOnhqmAuls7ombwOg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>448352810413</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.united7.jobhuntFtl</string>
+	<key>PROJECT_ID</key>
+	<string>jobhunt-97208</string>
+	<key>STORAGE_BUCKET</key>
+	<string>jobhunt-97208.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:448352810413:ios:37ae6b460d77a45b251d24</string>
+</dict>
+</plist>

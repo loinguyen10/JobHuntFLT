@@ -7,12 +7,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/value/style.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../blocs/app_bloc.dart';
 import '../blocs/app_event.dart';
+import '../blocs/app_getx.dart';
 import '../blocs/app_state.dart';
 import '../component/edittext.dart';
 import '../component/loader_overlay.dart';
@@ -24,30 +26,30 @@ class EditUserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InsideBloc, InsideState>(
-      builder: (context, state) {
-        log('profile: ${state.uploadProfileAvatarStatus}');
-        if (state.uploadProfileAvatarStatus ==
-            UploadProfileAvatarStatus.success) {
-          // Loader.show(context);
-        }
+    // return BlocBuilder<InsideBloc, InsideState>(
+    //   builder: (context, state) {
+    //     log('profile: ${state.uploadProfileAvatarStatus}');
+    //     if (state.uploadProfileAvatarStatus ==
+    //         UploadProfileAvatarStatus.success) {
+    //       // Loader.show(context);
+    //     }
 
-        if (state.uploadProfileAvatarStatus == UploadProfileCVStatus.open) {
-          // Loader.hide();
-        }
+    //     if (state.uploadProfileAvatarStatus == UploadProfileCVStatus.open) {
+    //       // Loader.hide();
+    //     }
 
-        return SafeArea(
-            child: Scaffold(
-          appBar: AppBar(
-            title: Text("EDIT USER PROFILE"),
-            backgroundColor: Colors.black,
-          ),
-          body: ScreenEditUserProfile(
-            profileDetail: profileDetail,
-          ),
-        ));
-      },
-    );
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        title: Text("EDIT PROFILE"),
+        backgroundColor: Colors.black,
+      ),
+      body: ScreenEditUserProfile(
+        profileDetail: profileDetail,
+      ),
+    ));
+    // },
+    // );
   }
 }
 
@@ -65,80 +67,83 @@ class ScreenEditUserProfile extends StatefulWidget {
 enum _typeSalaryRadio { usd, vnd }
 
 class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
-  String avatar = '';
-  String cv = '';
+  // String avatar = '';
+  // String cv = '';
   String filePath = '';
   String? education;
   String? profession;
   _typeSalaryRadio? typeSalary = _typeSalaryRadio.vnd;
 
-  List<String> listEducation = [
-    'Tốt nghiệp THPT',
-    'Tốt nghiệp trung cấp',
-    'Tốt nghiệp Cao Đẳng',
-    'Tốt nghiệp đại học',
-    'Trên đại học',
-  ];
+  final getXX = Get.put(InsideGetX());
 
-  List<String> listProfession = [
-    'Công nghệ thông tin',
-    'Marketing',
-    'Kế toán',
-    'Bảo hiểm',
-    'Bác sĩ',
-  ];
+  List<EducationList> listEducation = [];
+  // 'Tốt nghiệp THPT',
+  // 'Tốt nghiệp trung cấp',
+  // 'Tốt nghiệp Cao Đẳng',
+  // 'Tốt nghiệp đại học',
+  // 'Trên đại học',
+  // ];
+
+  List<ProfessionList> listProfession = [];
+  // 'Công nghệ thông tin',
+  // 'Marketing',
+  // 'Kế toán',
+  // 'Bảo hiểm',
+  // 'Bác sĩ',
+  // ];
 
   @override
   void initState() {
     super.initState();
 
-    avatar = widget.profileDetail?.avatarUrl ?? '';
+    // avatar = widget.profileDetail?.avatarUrl ?? '';
+    getXX.getAvatarProfileString(widget.profileDetail?.avatarUrl ?? '');
+    getXX.getEducationList();
+    getXX.getProfessionList();
   }
 
-  DropdownButtonHideUnderline dropButton(List<String> list) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton2<String>(
-        isExpanded: true,
-        hint: Text(
-          'Select Item',
-          style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).hintColor,
-          ),
-        ),
-        items: list
-            .map((String item) => DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ))
-            .toList(),
-        value: list == listEducation ? education : profession,
-        onChanged: (String? value) {
-          setState(() {
-            list == listEducation
-                ? education = value
-                //  BlocProvider.of<InsideBloc>(context).add(UserProfileEducationChangedEvent(education: value))
-                : profession = value;
-            // BlocProvider.of<InsideBloc>(context).add(UserProfileProfessionChangedEvent(profession: value));
-            log('$education & $profession');
-          });
-        },
-        buttonStyleData: const ButtonStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          height: 40,
-          width: 140,
-        ),
-        menuItemStyleData: const MenuItemStyleData(
-          height: 40,
-        ),
-      ),
-    );
-  }
+  // DropdownButtonHideUnderline dropEducation(int type) {
+  //   return DropdownButtonHideUnderline(
+  //     child: DropdownButton2(
+  //       isExpanded: true,
+  //       hint: Text(
+  //         'Select',
+  //         style: TextStyle(
+  //           fontSize: 14,
+  //           color: Theme.of(context).hintColor,
+  //         ),
+  //       ),
+  //       items: getXX.listEducation
+  //           .map((item) => DropdownMenuItem<EducationList>(
+  //                 value: item,
+  //                 child: Text(
+  //                   item.title ?? '',
+  //                   style: const TextStyle(
+  //                     fontSize: 14,
+  //                   ),
+  //                 ),
+  //               ))
+  //           .toList(),
+  //       value: getXX.educationChoose.value.id != null
+  //           ? getXX.educationChoose
+  //           : null,
+  //       onChanged: (dynamic value) {
+  //         getXX.getEducationProfileString(value);
+  //         setState(() {
+  //           // getXX.getEducationProfileString(value);
+  //         });
+  //       },
+  //       buttonStyleData: const ButtonStyleData(
+  //         padding: EdgeInsets.symmetric(horizontal: 16),
+  //         height: 40,
+  //         width: 140,
+  //       ),
+  //       menuItemStyleData: const MenuItemStyleData(
+  //         height: 40,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<void> upload(int type) async {
     filePath = '';
@@ -227,12 +232,15 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                                         //     'data:image/png;base64,' +
                                         //         base64Encode(bytes);
 
-                                        fileCall(1, filePath);
+                                        // fileCall(1, filePath);
+
+                                        getXX.getAvatarProfileString(filePath);
                                         Navigator.pop(context);
 
                                         // saveSignatureStaff(type, img64);
                                       } else {
-                                        fileCall(2, filePath);
+                                        // fileCall(2, filePath);
+                                        getXX.getCvProfileString(filePath);
                                         Navigator.pop(context);
                                       }
                                     } else {
@@ -345,15 +353,15 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
     );
   }
 
-  void fileCall(int type, String filePath) {
-    if (type == 1) {
-      avatar = filePath;
-      BlocProvider.of<InsideBloc>(context).add(UserProfileAvatarChangedEvent());
-    } else {
-      cv = filePath;
-      BlocProvider.of<InsideBloc>(context).add(UserProfileCVChangedEvent());
-    }
-  }
+  // void fileCall(int type, String filePath) {
+  //   if (type == 1) {
+  //     avatar = filePath;
+  //     BlocProvider.of<InsideBloc>(context).add(UserProfileAvatarChangedEvent());
+  //   } else {
+  //     cv = filePath;
+  //     BlocProvider.of<InsideBloc>(context).add(UserProfileCVChangedEvent());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -368,17 +376,20 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      avatar.trim().substring(0, 8) == 'https://'
-                          ? Image.network(
-                              avatar,
-                              width: 256,
-                              height: 256,
-                            )
-                          : Image.file(
-                              File(avatar),
-                              width: 256,
-                              height: 256,
-                            ),
+                      Obx(
+                        () => getXX.avatarProfile.trim().substring(0, 8) !=
+                                'https://'
+                            ? Image.file(
+                                File(getXX.avatarProfile.value),
+                                width: 256,
+                                height: 256,
+                              )
+                            : Image.network(
+                                getXX.avatarProfile.value,
+                                width: 256,
+                                height: 256,
+                              ),
+                      ),
                       ElevatedButton(
                           onPressed: () {
                             upload(1);
@@ -388,33 +399,82 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                   ),
                 ),
                 SizedBox(height: 30.0),
+                EditTextForm(
+                  onChanged: ((value) {
+                    getXX.getFullNameProfileString(value);
+                  }),
+                  content: widget.profileDetail?.fullName ?? '',
+                  textColor: Colors.black,
+                  borderSelected: Colors.orange,
+                  label: 'Full Name',
+                  hintText: 'Full Name',
+                ),
+                SizedBox(height: 30.0),
+                // Obx(() =>
+                EditTextForm(
+                  onChanged: ((value) {
+                    getXX.getDisplayNameProfileString(value);
+                  }),
+                  content: widget.profileDetail?.displayName ?? '',
+                  textColor: Colors.black,
+                  borderSelected: Colors.orange,
+                  label: 'Display Name',
+                  hintText: 'Display Name',
+                ),
+                // ),
+                SizedBox(height: 30.0),
+                EditTextForm(
+                  onChanged: ((value) {
+                    //
+                  }),
+                  content: widget.profileDetail?.email ?? '',
+                  textColor: Colors.black,
+                  borderSelected: Colors.orange,
+                  label: 'Email',
+                  hintText: 'Email',
+                  readOnly: true,
+                ),
+                SizedBox(height: 30.0),
+                EditTextForm(
+                  onChanged: ((value) {
+                    getXX.getPhoneProfileString(value);
+                  }),
+                  content: widget.profileDetail?.phone ?? '',
+                  textColor: Colors.black,
+                  borderSelected: Colors.orange,
+                  label: 'Phone',
+                  hintText: 'Phone',
+                ),
+                SizedBox(height: 30.0),
                 Padding(
                   padding: EdgeInsets.only(left: 15, right: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      widget.profileDetail?.cvUrl != null
-                          ? cv != ''
-                              ? Text(
-                                  'CV has uploaded',
-                                  style: textCVupload,
-                                )
-                              : Text(
-                                  'This profile has CV.',
-                                  style: textCV,
-                                )
-                          : cv != ''
-                              ? Text(
-                                  'CV has uploaded',
-                                  style: textCVupload,
-                                )
-                              : Text(
-                                  'This profile don\'t have CV.',
-                                  style: textCV,
-                                ),
+                      Obx(
+                        () => widget.profileDetail?.cvUrl != null
+                            ? getXX.cvProfile != ''
+                                ? Text(
+                                    'CV has uploaded',
+                                    style: textCVupload,
+                                  )
+                                : Text(
+                                    'This profile has CV.',
+                                    style: textCV,
+                                  )
+                            : getXX.cvProfile != ''
+                                ? Text(
+                                    'CV has uploaded',
+                                    style: textCVupload,
+                                  )
+                                : Text(
+                                    'This profile don\'t have CV.',
+                                    style: textCV,
+                                  ),
+                      ),
                       ElevatedButton(
                           onPressed: () {
-                            upload(2);
+                            upload(1);
                           },
                           child: Text('CV')),
                     ],
@@ -427,17 +487,18 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Education'),
-                      Container(
-                        child: dropButton(listEducation),
-                      ),
+                      // Container(
+                      //   child: Obx(() => dropEducation(1)),
+                      // ),
                     ],
                   ),
                 ),
                 SizedBox(height: 30.0),
                 EditTextForm(
                   onChanged: ((value) {
-                    BlocProvider.of<InsideBloc>(context).add(
-                        UserProfileMinSalaryChangedEvent(minSalary: value));
+                    // BlocProvider.of<InsideBloc>(context).add(
+                    //     UserProfileMinSalaryChangedEvent(minSalary: value));
+                    getXX.getMinSalaryProfileString(value);
                   }),
                   content: widget.profileDetail?.minSalary ?? '',
                   textColor: Colors.black,
@@ -448,8 +509,9 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                 SizedBox(height: 30.0),
                 EditTextForm(
                   onChanged: ((value) {
-                    BlocProvider.of<InsideBloc>(context).add(
-                        UserProfileMaxSalaryChangedEvent(maxSalary: value));
+                    // BlocProvider.of<InsideBloc>(context).add(
+                    //     UserProfileMaxSalaryChangedEvent(maxSalary: value));
+                    getXX.getMaxSalaryProfileString(value);
                   }),
                   content: widget.profileDetail?.maxSalary ?? '',
                   textColor: Colors.black,
@@ -464,25 +526,13 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Profession'),
-                      Container(
-                        child: dropButton(listProfession),
-                      ),
+                      // Container(
+                      //   child: Obx(() => dropButton(2)),
+                      // ),
                     ],
                   ),
                 ),
                 SizedBox(height: 30.0),
-                // EditTextForm(
-                //   onChanged: ((value) {
-                //     BlocProvider.of<InsideBloc>(context).add(
-                //         UserProfileTypeSalaryChangedEvent(typeSalary: value));
-                //   }),
-                //   content: widget.profileDetail?.typeSalary ?? '',
-                //   textColor: Colors.black,
-                //   borderSelected: Colors.orange,
-                //   label: 'Type Salary',
-                //   hintText: 'Type Salary',
-                // ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(

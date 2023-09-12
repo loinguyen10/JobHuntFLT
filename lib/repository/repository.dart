@@ -42,7 +42,6 @@ class InsideService {
   // }
 
   Future<dynamic> login(String emailAddress, String password) async {
-    // Loader.show(context);
     final msg = jsonEncode({
       'email': 'casinnasstark@gmail.com',
       // 'email': emailAddress.trim(),
@@ -53,7 +52,6 @@ class InsideService {
     //   'Content-type': 'application/json',
     //   'Accept': 'application/json',
     // };
-    // String jsonBody = json.encode(body);
     Response response = await post(Uri.parse(BASE_URL + "user/login.php"),
         // headers: requestHeaders,
         body: msg);
@@ -68,17 +66,15 @@ class InsideService {
       await prefs.setString('email', result.email ?? '');
       return result;
     } else {
-      Loader.hide();
-      Fluttertoast.showToast(
-          msg: jsonDecode(response.body)['message'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
-      throw Exception(response.reasonPhrase);
+      return null;
+      // Fluttertoast.showToast(
+      //     msg: jsonDecode(response.body)['message'],
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
     }
   }
 

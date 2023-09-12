@@ -69,12 +69,12 @@ class _AppEdittextState extends State<EditTextForm> {
       maxLength: widget.maxLength,
       onTap: widget.onTap,
       // validator: widget.validator,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter some text';
-        }
-        return null;
-      },
+      // validator: (value) {
+      //   if (value == null || value.isEmpty) {
+      //     return 'Please enter some text';
+      //   }
+      //   return null;
+      // },
       readOnly: widget.readOnly,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(

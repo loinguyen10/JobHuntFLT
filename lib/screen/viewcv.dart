@@ -17,29 +17,29 @@ class ViewCVScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InsideBloc, InsideState>(
-      builder: (context, state) {
-        // log('profile: ${state.getUserProfileStatus}');
-        // if (state.getUserProfileStatus == GetUserProfileStatus.loading) {
-        //   Loader.show(context);
-        // }
+    // return BlocBuilder<InsideBloc, InsideState>(
+    //   builder: (context, state) {
+    // log('profile: ${state.getUserProfileStatus}');
+    // if (state.getUserProfileStatus == GetUserProfileStatus.loading) {
+    //   Loader.show(context);
+    // }
 
-        // if (state.getUserProfileStatus == GetUserProfileStatus.success) {
-        //   Loader.hide();
-        // }
+    // if (state.getUserProfileStatus == GetUserProfileStatus.success) {
+    //   Loader.hide();
+    // }
 
-        return SafeArea(
-            child: Scaffold(
-          appBar: AppBar(
-            // title: Text("USER PROFILE"),
-            backgroundColor: Colors.black,
-          ),
-          body: ScreenViewCV(
-            cv: cv,
-          ),
-        ));
-      },
-    );
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        // title: Text("USER PROFILE"),
+        backgroundColor: Colors.black,
+      ),
+      body: ScreenViewCV(
+        cv: cv,
+      ),
+    ));
+    //   },
+    // );
   }
 }
 

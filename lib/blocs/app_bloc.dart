@@ -220,7 +220,6 @@ class InsideBloc extends Bloc<InsideEvent, InsideState> {
             maxSalary: data['maxSalary'],
             minSalary: data['minSalary'],
             profession: data['profession'],
-            salary: data['salary'],
             skillList: [],
             typeSalary: data['typeSalary'],
           );

@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:jobhunt_ftl/blocs/app_bloc.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
+import 'package:jobhunt_ftl/blocs/app_getx.dart';
 import 'package:jobhunt_ftl/blocs/app_state.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
@@ -15,35 +17,35 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<InsideBloc, InsideState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text("LOGIN"),
-            backgroundColor: Colors.black,
-          ),
-          body: ScreenLogin(),
-        );
-      },
-      listener: (context, state) {
-        log('login: ${state.loginStatus}');
-        if (state.loginStatus == LoginStatus.loading) {
-          Loader.show(context);
-        }
-
-        if (state.loginStatus == LoginStatus.success) {
-          Loader.hide();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
-        } else {
-          Loader.hide();
-        }
-      },
+    // return BlocConsumer<InsideBloc, InsideState>(
+    //   builder: (context, state) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("LOGIN"),
+        backgroundColor: Colors.black,
+      ),
+      body: ScreenLogin(),
     );
+    //   },
+    //   listener: (context, state) {
+    // log('login: ${state.loginStatus}');
+    // if (state.loginStatus == LoginStatus.loading) {
+    //   Loader.show(context);
+    // }
+
+    // if (state.loginStatus == LoginStatus.success) {
+    //   Loader.hide();
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => HomeScreen(),
+    //     ),
+    //   );
+    // } else {
+    //   Loader.hide();
+    // }
+    // },
+    // );
   }
 }
 
@@ -55,6 +57,7 @@ class ScreenLogin extends StatefulWidget {
 }
 
 class _ScreenLogin extends State<ScreenLogin> {
+  final getXX = Get.put(InsideGetX());
 //
 
   @override
@@ -69,8 +72,9 @@ class _ScreenLogin extends State<ScreenLogin> {
               SizedBox(height: 30.0),
               EditTextForm(
                 onChanged: ((value) {
-                  BlocProvider.of<InsideBloc>(context)
-                      .add(LoginEmailChangedEvent(email: value));
+                  // BlocProvider.of<InsideBloc>(context)
+                  //     .add(LoginEmailChangedEvent(email: value));
+                  getXX.getEmailLoginString(value);
                 }),
                 textColor: Colors.black,
                 borderSelected: Colors.orange,
@@ -82,8 +86,9 @@ class _ScreenLogin extends State<ScreenLogin> {
                 obscureText: true,
                 showEye: true,
                 onChanged: ((value) {
-                  BlocProvider.of<InsideBloc>(context)
-                      .add(LoginPasswordChangedEvent(password: value));
+                  // BlocProvider.of<InsideBloc>(context)
+                  //     .add(LoginPasswordChangedEvent(password: value));
+                  getXX.getPasswordLoginString(value);
                 }),
                 textColor: Colors.black,
                 borderSelected: Colors.orange,
@@ -98,11 +103,15 @@ class _ScreenLogin extends State<ScreenLogin> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                     minimumSize: Size(double.infinity, 60)),
-                onPressed: () {
+                onPressed: () async {
                   log("click button dang nhap");
 
-                  BlocProvider.of<InsideBloc>(context)
-                      .add(LoginButtonPressedEvent());
+                  // BlocProvider.of<InsideBloc>(context)
+                  //     .add(LoginButtonPressedEvent());
+                  await getXX.loginApp();
+                  if (getXX.loginCheck.value) {
+                    Get.off(() => HomeScreen());
+                  }
                 },
                 child: Text(
                   'LOGIN',

@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:jobhunt_ftl/blocs/app_bloc.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:jobhunt_ftl/screen/loginsreen.dart';
@@ -12,7 +14,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(GetMaterialApp(
+    home: LoginScreen(),
+    builder: EasyLoading.init(),
+  ));
 }
 
 // void main() => runApp(MyApp());
@@ -27,12 +33,13 @@ class MyApp extends StatelessWidget {
               InsideBloc(insideFirebase: InsideService()),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: LoginScreen(),
+        builder: EasyLoading.init(),
       ),
     );
   }

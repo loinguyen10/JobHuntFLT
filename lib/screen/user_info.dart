@@ -10,18 +10,18 @@ import 'package:jobhunt_ftl/repository/repository.dart';
 class UserInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InsideBloc, InsideState>(
-      builder: (context, state) {
-        return SafeArea(
-            child: Scaffold(
-          appBar: AppBar(
-            title: Text("USER INFO"),
-            backgroundColor: Colors.black,
-          ),
-          body: ScreenUserInfo(),
-        ));
-      },
-    );
+    // return BlocBuilder<InsideBloc, InsideState>(
+    //   builder: (context, state) {
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        title: Text("USER INFO"),
+        backgroundColor: Colors.black,
+      ),
+      body: ScreenUserInfo(),
+    ));
+    //   },
+    // );
   }
 }
 

@@ -70,8 +70,8 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
   // String avatar = '';
   // String cv = '';
   String filePath = '';
-  String? education;
-  String? profession;
+  EducationList? education;
+  ProfessionList? profession;
   _typeSalaryRadio? typeSalary = _typeSalaryRadio.vnd;
 
   final getXX = Get.put(InsideGetX());
@@ -95,55 +95,74 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
   @override
   void initState() {
     super.initState();
-
     // avatar = widget.profileDetail?.avatarUrl ?? '';
     getXX.getAvatarProfileString(widget.profileDetail?.avatarUrl ?? '');
     getXX.getEducationList();
     getXX.getProfessionList();
+    // getXX.setEducationProfileNull();
   }
 
-  // DropdownButtonHideUnderline dropEducation(int type) {
-  //   return DropdownButtonHideUnderline(
-  //     child: DropdownButton2(
-  //       isExpanded: true,
-  //       hint: Text(
-  //         'Select',
-  //         style: TextStyle(
-  //           fontSize: 14,
-  //           color: Theme.of(context).hintColor,
-  //         ),
-  //       ),
-  //       items: getXX.listEducation
-  //           .map((item) => DropdownMenuItem<EducationList>(
-  //                 value: item,
-  //                 child: Text(
-  //                   item.title ?? '',
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                   ),
-  //                 ),
-  //               ))
-  //           .toList(),
-  //       value: getXX.educationChoose.value.id != null
-  //           ? getXX.educationChoose
-  //           : null,
-  //       onChanged: (dynamic value) {
-  //         getXX.getEducationProfileString(value);
-  //         setState(() {
-  //           // getXX.getEducationProfileString(value);
-  //         });
-  //       },
-  //       buttonStyleData: const ButtonStyleData(
-  //         padding: EdgeInsets.symmetric(horizontal: 16),
-  //         height: 40,
-  //         width: 140,
-  //       ),
-  //       menuItemStyleData: const MenuItemStyleData(
-  //         height: 40,
-  //       ),
-  //     ),
-  //   );
-  // }
+  DropdownButtonHideUnderline dropEducation() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        isExpanded: true,
+        hint: Text(
+          'Select',
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).hintColor,
+          ),
+        ),
+        items: getXX.listEducation
+            .map((item) => DropdownMenuItem<EducationList>(
+                  value: item,
+                  child: Text(item.title ?? '', style: textNormal),
+                ))
+            .toList(),
+        value: getXX.educationChoose.value.id != null
+            ? getXX.educationChoose.value
+            : null,
+        onChanged: (value) {
+          setState(() {
+            getXX.getEducationProfileString(value!);
+          });
+        },
+        buttonStyleData: dropDownButtonStyle1,
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
+        ),
+      ),
+    );
+  }
+
+  DropdownButtonHideUnderline dropProfession() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        isExpanded: true,
+        hint: Text('Select', style: textNormalHint),
+        items: getXX.listEducation
+            .map((item) => DropdownMenuItem<EducationList>(
+                  value: item,
+                  child: Text(
+                    item.title ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ))
+            .toList(),
+        value: education,
+        onChanged: (value) {
+          setState(() {
+            education = value;
+            getXX.getEducationProfileString(value!);
+          });
+        },
+        buttonStyleData: dropDownButtonStyle1,
+        menuItemStyleData: const MenuItemStyleData(height: 40),
+      ),
+    );
+  }
 
   Future<void> upload(int type) async {
     filePath = '';
@@ -487,9 +506,9 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Education'),
-                      // Container(
-                      //   child: Obx(() => dropEducation(1)),
-                      // ),
+                      Container(
+                        child: Obx(() => dropEducation()),
+                      ),
                     ],
                   ),
                 ),

@@ -96,8 +96,13 @@ class InsideGetX extends GetxController {
 
   void getEducationProfileString(EducationList education) {
     educationChoose.value = education;
-    log('$educationChoose : ${education.title}');
+    log('${educationChoose.value.title} : ${education.title}');
   }
+
+  // void setEducationProfileNull() {
+  //   educationChoose.close();
+  //   log('close ${educationChoose.value.title}');
+  // }
 
   void getMinSalaryProfileString(String min) {
     minSalaryProfile.value = min;

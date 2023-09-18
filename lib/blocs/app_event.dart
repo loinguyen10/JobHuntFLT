@@ -17,6 +17,36 @@ class LoginButtonPressedEvent extends InsideEvent {
   const LoginButtonPressedEvent();
 }
 
+class SignInStateEvent extends InsideEvent {
+  const SignInStateEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SignInLoadingEvent extends InsideEvent {
+  const SignInLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SignInSuccessEvent extends InsideEvent {
+  const SignInSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SignInErrorEvent extends InsideEvent {
+  const SignInErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
 class LoginEmailChangedEvent extends InsideEvent {
   const LoginEmailChangedEvent({required this.email});
 

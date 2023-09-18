@@ -10,3 +10,4 @@ final textCVupload =
     TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red);
 final dropDownButtonStyle1 = ButtonStyleData(
     padding: EdgeInsets.symmetric(horizontal: 16), height: 56, width: 160);
+final appPrimaryColor = Color(0xff8C1F82);

@@ -21,22 +21,25 @@ final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
 
 class InsideService {
+  InsideService();
+
+  // Stream<User?> get authStateChange => _auth.idTokenChanges();
+
   // Future<dynamic> loginFirebase(String emailAddress, String password) async {
   //   try {
   //     final credential = await _auth.signInWithEmailAndPassword(
   //         email: emailAddress, password: password);
   //     final user = credential.user;
-  //     return UserDetail(
-  //         displayName: user?.displayName,
-  //         email: user?.email,
-  //         phoneNumber: user?.phoneNumber,
-  //         photoURL: user?.photoURL,
-  //         uid: user?.uid);
+  //     log('user :$user');
+  //     // return UserDetail(email: user?.email, uid: user?.uid);
+  //     return user;
   //   } on FirebaseAuthException catch (e) {
   //     if (e.code == 'user-not-found') {
-  //       print('No user found for that email.');
+  //       throw 'No user found for that email.';
   //     } else if (e.code == 'wrong-password') {
-  //       print('Wrong password provided for that user.');
+  //       throw 'Wrong password provided for that user.';
+  //     } else {
+  //       throw 'Wrong.';
   //     }
   //   }
   // }

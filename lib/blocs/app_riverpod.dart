@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:jobhunt_ftl/model/company.dart';
+import 'package:jobhunt_ftl/model/userprofile.dart';
+import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../model/user.dart';
@@ -16,60 +18,22 @@ String BASE_URL = 'https://lmatmet1234.000webhostapp.com/JHTest/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
+final InsideService insideService = InsideService();
 
 final emailLoginProvider = StateProvider((ref) => "");
 final passwordLoginProvider = StateProvider((ref) => "");
-final boolLoginProvider = StateProvider((ref) => false);
-// final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
 
-final userLoginProvider = FutureProvider<UserDetail?>((ref) async {
-  final email = ref.watch(emailLoginProvider);
-  final pass = ref.watch(passwordLoginProvider);
-  return login(email, pass);
+final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
+
+final authRepositoryProvider = Provider<InsideService>((ref) {
+  return InsideService();
 });
 
-// final loginCheckProvider = FutureProvider<bool>((ref) => login());
+final userProfileProvider = FutureProvider<UserProfileDetail?>(
+    (ref) => getUserProfile((ref.watch(userLoginProvider))!.uid ?? ''));
 
 final listCompanyProvider =
     FutureProvider<List<CompanyInfo>>((ref) => getCompanyList());
-
-Future<UserDetail?> login(String emailAddress, String password) async {
-  final msg = jsonEncode({
-    'email': 'casinnasstark@gmail.com',
-    // 'email': emailAddress.trim(),
-    'password': 'cstark',
-    // 'password': password.trim(),
-  });
-  // Map<String, String> requestHeaders = {
-  //   'Content-type': 'application/json',
-  //   'Accept': 'application/json',
-  // };
-  Response response = await post(Uri.parse(BASE_URL + "user/login.php"),
-      // headers: requestHeaders,
-      body: msg);
-  log('ket qua login00: ${response.statusCode}');
-  log('ket qua login: ${jsonDecode(response.body)}');
-  if (response.statusCode == 200) {
-    final UserDetail result =
-        UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
-    log("Token dc luu ${result.uid}");
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // await prefs.setString('uid', result.uid ?? '');
-    // await prefs.setString('email', result.email ?? '');
-    return result;
-    //
-  } else {
-    Fluttertoast.showToast(
-        msg: jsonDecode(response.body)['message'],
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
-    return null;
-  }
-}
 
 Future<List<CompanyInfo>> getCompanyList() async {
   QuerySnapshot xxx = await fireStore.collection('CompanyInfo').get();
@@ -96,4 +60,44 @@ Future<List<CompanyInfo>> getCompanyList() async {
   }
 
   return list;
+}
+
+Future<UserProfileDetail> getUserProfile(String uId) async {
+  UserProfileDetail profile = UserProfileDetail();
+
+  if (uId.isNotEmpty) {
+    List<DocumentSnapshot> result1 =
+        await insideService.getCollection('UserProfile');
+    List<DocumentSnapshot> result2 =
+        await insideService.getCollection('UserInfo');
+    for (final doc1 in result1) {
+      if (doc1.id == uId) {
+        for (final doc2 in result2) {
+          if (doc2.id == uId) {
+            final data1 = doc1.data() as Map<String, dynamic>;
+            final data2 = doc2.data() as Map<String, dynamic>;
+            profile = UserProfileDetail(
+              id: doc1.id,
+              avatarUrl: data1['avatar'],
+              cvUrl: data1['cv'],
+              displayName: data2['name'],
+              fullName: data2['name'],
+              email: data2['email'],
+              phone: data2['phone'],
+              address: data2['address'],
+              birthday: data2['birth'],
+              education: [],
+              maxSalary: data1['maxSalary'],
+              minSalary: data1['minSalary'],
+              profession: [],
+              skillList: [],
+              typeSalary: data1['typeSalary'],
+            );
+          }
+        }
+      }
+    }
+  }
+
+  return profile;
 }

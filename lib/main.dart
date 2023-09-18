@@ -9,6 +9,7 @@ import 'package:jobhunt_ftl/blocs/app_bloc.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:jobhunt_ftl/screen/loginsreen.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
+import 'package:jobhunt_ftl/value/string.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,10 +38,9 @@ class MyApp extends StatelessWidget {
         //     ),
         //   ],child:
         GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      supportedLocales: const [Locale('vi', 'VN'), Locale('en', 'US')],
+      translations: LocaleString(),
+      locale: Locale('en', 'US'),
       home: LoginScreen(),
       builder: EasyLoading.init(),
       // ),

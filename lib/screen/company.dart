@@ -133,53 +133,55 @@ class CompanyManagerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _data = ref.watch(listCompanyProvider);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("COMPANY INFO"),
-          backgroundColor: Colors.black,
-        ),
-        body: _data.when(
-          data: (_data) {
-            return Container(
-              child: ListView.builder(
-                itemBuilder: (_, index) {
-                  String name = _data[index].name ?? '';
-                  String address = _data[index].address ?? '';
+    return
+        // SafeArea(
+        //   child: Scaffold(
+        //     appBar: AppBar(
+        //       title: Text("COMPANY INFO"),
+        //       backgroundColor: Colors.black,
+        //     ),
+        //     body:
+        _data.when(
+      data: (_data) {
+        return Container(
+          child: ListView.builder(
+            itemBuilder: (_, index) {
+              String name = _data[index].name ?? '';
+              String address = _data[index].address ?? '';
 
-                  return Card(
-                    shadowColor: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    elevation: 2,
-                    child: ListTile(
-                      onTap: () {
-                        //
-                      },
-                      title: Column(children: [
-                        Text(
-                          name,
-                          overflow: TextOverflow.fade,
-                          maxLines: 3,
-                        ),
-                        Text(
-                          address,
-                          overflow: TextOverflow.fade,
-                          maxLines: 3,
-                        ),
-                      ]),
+              return Card(
+                shadowColor: Colors.grey,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                elevation: 2,
+                child: ListTile(
+                  onTap: () {
+                    //
+                  },
+                  title: Column(children: [
+                    Text(
+                      name,
+                      overflow: TextOverflow.fade,
+                      maxLines: 3,
                     ),
-                  );
-                },
-                itemCount: _data.length,
-              ),
-            );
-          },
-          error: (error, stackTrace) => Text(error.toString()),
-          loading: () => Center(
-            child: CircularProgressIndicator(),
+                    Text(
+                      address,
+                      overflow: TextOverflow.fade,
+                      maxLines: 3,
+                    ),
+                  ]),
+                ),
+              );
+            },
+            itemCount: _data.length,
           ),
-        ),
+        );
+      },
+      error: (error, stackTrace) => Text(error.toString()),
+      loading: () => Center(
+        child: CircularProgressIndicator(),
       ),
+      // ),
+      // ),
     );
   }
 }

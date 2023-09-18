@@ -5,12 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_bloc.dart';
+import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_getx.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_state.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../component/edittext.dart';
 
@@ -125,65 +127,107 @@ import '../component/edittext.dart';
 class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("LOGIN"),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30.0),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(emailLoginProvider.notifier).state = value;
-                }),
-                textColor: Colors.black,
-                borderSelected: Colors.orange,
-                label: 'Username',
-                hintText: 'Username',
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is SignInErrorEvent) {
+          Loader.hide();
+          log('error');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text('${state.error}'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is SignInSuccessEvent) {
+          Loader.hide();
+          log('success');
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ));
+        }
+
+        if (state is SignInLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
+
+    return SafeArea(
+      child: Scaffold(
+        //   appBar: AppBar(
+        //     title: Text("LOGIN"),
+        //     backgroundColor: Colors.black,
+        //   ),
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 30.0),
+                  Text(Keystring.APP_NAME.tr),
+                  SizedBox(height: 50.0),
+                  EditTextForm(
+                    onChanged: ((value) {
+                      ref.read(emailLoginProvider.notifier).state = value;
+                    }),
+                    textColor: Colors.black,
+                    borderSelected: Colors.orange,
+                    label: Keystring.EMAIL.tr,
+                    hintText: Keystring.EMAIL.tr,
+                  ),
+                  SizedBox(height: 30.0),
+                  EditTextForm(
+                    obscureText: true,
+                    showEye: true,
+                    onChanged: ((value) {
+                      ref.read(passwordLoginProvider.notifier).state = value;
+                    }),
+                    textColor: Colors.black,
+                    borderSelected: Colors.orange,
+                    // controller: _passController,
+                    label: Keystring.PASSWORD.tr,
+                    hintText: Keystring.PASSWORD.tr,
+                  ),
+                  SizedBox(height: 50.0),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        minimumSize: Size(double.infinity, 60)),
+                    onPressed: () async {
+                      log("click button dang nhap");
+                      ref.read(LoginControllerProvider.notifier).login(
+                            ref.watch(emailLoginProvider),
+                            ref.watch(passwordLoginProvider),
+                          );
+                    },
+                    child: Text(
+                      Keystring.LOGIN.tr,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 30.0),
-              EditTextForm(
-                obscureText: true,
-                showEye: true,
-                onChanged: ((value) {
-                  ref.read(passwordLoginProvider.notifier).state = value;
-                }),
-                textColor: Colors.black,
-                borderSelected: Colors.orange,
-                // controller: _passController,
-                label: 'Password',
-                hintText: 'Password',
-              ),
-              SizedBox(height: 50.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    minimumSize: Size(double.infinity, 60)),
-                onPressed: () async {
-                  log("click button dang nhap");
-                  final _data = await ref.watch(userLoginProvider);
-                  _data.when(
-                      data: (data) {
-                        log('yes');
-                      },
-                      error: (error, stackTrace) {
-                        log('no $error');
-                      },
-                      loading: () => CircularProgressIndicator());
-                },
-                child: Text(
-                  'LOGIN',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

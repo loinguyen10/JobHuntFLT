@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jobhunt_ftl/blocs/app_bloc.dart';
-import 'package:jobhunt_ftl/blocs/app_state.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 

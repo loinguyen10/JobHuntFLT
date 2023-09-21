@@ -2,14 +2,16 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../value/style.dart';
+
 class EditTextForm extends StatefulWidget {
   EditTextForm({
     this.hintText = '',
     required this.onChanged,
     this.validator,
     this.content = '',
-    this.borderSelected = Colors.blue,
-    this.borderUnSelected = Colors.grey,
+    this.borderSelected = Colors.black,
+    this.borderUnSelected = Colors.black,
     this.textColor = Colors.black,
     this.width = double.infinity,
     this.height = 60,
@@ -78,6 +80,8 @@ class _AppEdittextState extends State<EditTextForm> {
       readOnly: widget.readOnly,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           labelText: widget.label,
           hintText: widget.hintText,
           hintStyle: TextStyle(color: Colors.grey),
@@ -92,7 +96,7 @@ class _AppEdittextState extends State<EditTextForm> {
                     widget.obscureText
                         ? Icons.visibility
                         : Icons.visibility_off,
-                    color: Colors.amberAccent,
+                    color: appPrimaryColor,
                   ),
                   onPressed: () {
                     if (widget.obscureText) {
@@ -111,33 +115,6 @@ class _AppEdittextState extends State<EditTextForm> {
             borderSide: BorderSide(width: 1, color: widget.borderSelected),
             borderRadius: BorderRadius.circular(8),
           )),
-    );
-  }
-}
-
-class ObscuringTextEditingController extends TextEditingController {
-  @override
-  TextSpan buildTextSpan(
-      {required BuildContext context,
-      required bool withComposing,
-      TextStyle? style}) {
-    var displayValue = '•' * value.text.length;
-    if (!value.composing.isValid || !withComposing) {
-      return TextSpan(style: style, text: displayValue);
-    }
-    final TextStyle? composingStyle = style?.merge(
-      const TextStyle(decoration: TextDecoration.underline),
-    );
-    return TextSpan(
-      style: style,
-      children: <TextSpan>[
-        TextSpan(text: value.composing.textBefore(displayValue)),
-        TextSpan(
-          style: composingStyle,
-          text: value.composing.textInside(displayValue),
-        ),
-        TextSpan(text: value.composing.textAfter(displayValue)),
-      ],
     );
   }
 }

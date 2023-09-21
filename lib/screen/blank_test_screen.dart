@@ -1,26 +1,24 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/value/keystring.dart';
-import '../blocs/app_riverpod_object.dart';
-import '../model/company.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 
-class CompanyManagerScreen extends ConsumerWidget {
-  const CompanyManagerScreen({super.key});
+import '../value/keystring.dart';
+
+class BlankTestScreen extends ConsumerWidget {
+  const BlankTestScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listCompanyProvider);
+    final _data = ref.watch(listEducationProvider);
 
     return _data.when(
       data: (_data) {
         return ListView.builder(
           shrinkWrap: true,
           itemBuilder: (_, index) {
-            String name = _data[index].name ?? '';
-            String address = _data[index].address ?? '';
+            String id = _data[index].id ?? '';
+            String name = _data[index].title ?? '';
 
             return Card(
               shadowColor: Colors.grey,
@@ -32,12 +30,12 @@ class CompanyManagerScreen extends ConsumerWidget {
                 },
                 title: Column(children: [
                   Text(
-                    name,
+                    id.toString(),
                     overflow: TextOverflow.fade,
                     maxLines: 3,
                   ),
                   Text(
-                    address,
+                    name,
                     overflow: TextOverflow.fade,
                     maxLines: 3,
                   ),
@@ -45,7 +43,7 @@ class CompanyManagerScreen extends ConsumerWidget {
               ),
             );
           },
-          itemCount: 3, //_data.length,
+          itemCount: _data.length,
         );
       },
       error: (error, stackTrace) => SizedBox(

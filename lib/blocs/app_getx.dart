@@ -38,7 +38,6 @@ class InsideGetX extends GetxController {
   RxList listEducation = [].obs;
   RxList listProfession = [].obs;
   Rx<EducationList> educationChoose = EducationList().obs;
-  Rx<ProfessionList> professionChoose = ProfessionList().obs;
 
   // RxString typeSalaryProfile = ''.obs;
 
@@ -120,10 +119,6 @@ class InsideGetX extends GetxController {
     }
   }
 
-  void getProfessionProfileString(ProfessionList profession) {
-    professionChoose?.value = profession;
-  }
-
   Future<void> getCompanyList() async {
     EasyLoading.show(status: 'loading...', maskType: EasyLoadingMaskType.black);
     listCompany.clear();
@@ -183,7 +178,6 @@ class InsideGetX extends GetxController {
                 education: [],
                 maxSalary: data1['maxSalary'],
                 minSalary: data1['minSalary'],
-                profession: [],
                 skillList: [],
                 typeSalary: data1['typeSalary'],
               );
@@ -222,7 +216,7 @@ class InsideGetX extends GetxController {
     for (final doc in result) {
       final data = doc.data() as Map<String, dynamic>;
       final education = EducationList(
-        id: int.parse(doc.id),
+        id: doc.id,
         title: data['title'],
       );
       listEducation.add(education);
@@ -240,7 +234,7 @@ class InsideGetX extends GetxController {
     for (final doc in result) {
       final data = doc.data() as Map<String, dynamic>;
       final profession = EducationList(
-        id: int.parse(doc.id),
+        id: doc.id,
         title: data['title'],
       );
       listProfession.add(profession);

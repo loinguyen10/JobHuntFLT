@@ -1,39 +1,19 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
-import 'package:jobhunt_ftl/model/company.dart';
-import 'package:jobhunt_ftl/model/userprofile.dart';
-import 'package:jobhunt_ftl/repository/repository.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:jobhunt_ftl/model/address.dart';
 
-import '../model/user.dart';
+import '../model/company.dart';
+import '../model/userprofile.dart';
+import '../repository/repository.dart';
 
 String BASE_URL = 'https://lmatmet1234.000webhostapp.com/JHTest/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
 final InsideService insideService = InsideService();
-
-final emailLoginProvider = StateProvider((ref) => "");
-final passwordLoginProvider = StateProvider((ref) => "");
-
-final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
-
-final authRepositoryProvider = Provider<InsideService>((ref) {
-  return InsideService();
-});
-
-final userProfileProvider = FutureProvider<UserProfileDetail?>(
-    (ref) => getUserProfile((ref.watch(userLoginProvider))!.uid ?? ''));
-
-final listCompanyProvider =
-    FutureProvider<List<CompanyInfo>>((ref) => getCompanyList());
 
 Future<List<CompanyInfo>> getCompanyList() async {
   QuerySnapshot xxx = await fireStore.collection('CompanyInfo').get();
@@ -89,7 +69,6 @@ Future<UserProfileDetail> getUserProfile(String uId) async {
               education: [],
               maxSalary: data1['maxSalary'],
               minSalary: data1['minSalary'],
-              profession: [],
               skillList: [],
               typeSalary: data1['typeSalary'],
             );
@@ -100,4 +79,28 @@ Future<UserProfileDetail> getUserProfile(String uId) async {
   }
 
   return profile;
+}
+
+Future<List<EducationList>> getEducationList() async {
+  final list = await insideService.getListEducation();
+  log('list: ${list.length}');
+  return list;
+}
+
+Future<List<ProvinceList>> getProvinceList() async {
+  final list = await insideService.getListProvince();
+  log('list: ${list.length}');
+  return list;
+}
+
+Future<List<DistrictList>> getDistrictList() async {
+  final list = await insideService.getListDistrict();
+  log('list: ${list.length}');
+  return list;
+}
+
+Future<List<WardList>> getWardList() async {
+  final list = await insideService.getListWard();
+  log('list: ${list.length}');
+  return list;
 }

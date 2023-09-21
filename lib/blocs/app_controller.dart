@@ -2,9 +2,7 @@ import 'dart:developer';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
-import 'package:jobhunt_ftl/blocs/app_riverpod.dart';
-import 'package:jobhunt_ftl/blocs/app_state.dart';
-import 'package:jobhunt_ftl/model/userprofile.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 
 final LoginControllerProvider =
     StateNotifierProvider<LoginController, InsideEvent>((ref) {
@@ -26,7 +24,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         state = const SignInSuccessEvent();
         ref.read(userLoginProvider.notifier).state = user;
       } else {
-        state = const SignInErrorEvent(error: 'No Data');
+        state = const SignInErrorEvent(error: 'Login Failed');
       }
     } catch (e) {
       state = SignInErrorEvent(error: e.toString());

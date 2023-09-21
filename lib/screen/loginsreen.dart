@@ -1,20 +1,17 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/blocs/app_bloc.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
-import 'package:jobhunt_ftl/blocs/app_getx.dart';
-import 'package:jobhunt_ftl/blocs/app_riverpod.dart';
-import 'package:jobhunt_ftl/blocs/app_state.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../component/edittext.dart';
+import '../value/style.dart';
 
 // class LoginScreen extends StatelessWidget {
 //   const LoginScreen({Key? key}) : super(key: key);
@@ -189,7 +186,6 @@ class LoginScreen extends ConsumerWidget {
                       ref.read(emailLoginProvider.notifier).state = value;
                     }),
                     textColor: Colors.black,
-                    borderSelected: Colors.orange,
                     label: Keystring.EMAIL.tr,
                     hintText: Keystring.EMAIL.tr,
                   ),
@@ -201,15 +197,13 @@ class LoginScreen extends ConsumerWidget {
                       ref.read(passwordLoginProvider.notifier).state = value;
                     }),
                     textColor: Colors.black,
-                    borderSelected: Colors.orange,
-                    // controller: _passController,
                     label: Keystring.PASSWORD.tr,
                     hintText: Keystring.PASSWORD.tr,
                   ),
                   SizedBox(height: 50.0),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
+                        backgroundColor: appPrimaryColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
                         minimumSize: Size(double.infinity, 60)),

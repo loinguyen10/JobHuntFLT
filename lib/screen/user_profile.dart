@@ -6,7 +6,7 @@ import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/screen/edit_user_profile.dart';
 import 'package:jobhunt_ftl/screen/viewcv.dart';
 
-import '../blocs/app_riverpod.dart';
+import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
 
 class UserProfileScreen extends StatelessWidget {

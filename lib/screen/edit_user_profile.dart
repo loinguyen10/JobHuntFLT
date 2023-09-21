@@ -12,10 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/value/style.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../blocs/app_bloc.dart';
 import '../blocs/app_event.dart';
 import '../blocs/app_getx.dart';
-import '../blocs/app_state.dart';
 import '../component/edittext.dart';
 import '../component/loader_overlay.dart';
 import '../model/userprofile.dart';
@@ -71,7 +69,6 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
   // String cv = '';
   String filePath = '';
   EducationList? education;
-  ProfessionList? profession;
   _typeSalaryRadio? typeSalary = _typeSalaryRadio.vnd;
 
   final getXX = Get.put(InsideGetX());
@@ -84,7 +81,6 @@ class _ScreenEditUserProfile extends State<ScreenEditUserProfile> {
   // 'Trên đại học',
   // ];
 
-  List<ProfessionList> listProfession = [];
   // 'Công nghệ thông tin',
   // 'Marketing',
   // 'Kế toán',

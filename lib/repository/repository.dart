@@ -10,12 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart';
+import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/user.dart';
+import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../component/loader_overlay.dart';
 
-String BASE_URL = 'https://lmatmet1234.000webhostapp.com/JHTest/';
+String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -46,16 +48,16 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'casinnasstark@gmail.com',
+      'email': 'laingu@jobshunt.info',
       // 'email': emailAddress.trim(),
-      'password': 'cstark',
+      'password': 'laicutai',
       // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
     //   'Accept': 'application/json',
     // };
-    Response response = await post(Uri.parse(BASE_URL + "user/login.php"),
+    Response response = await post(Uri.parse(BASE_URL + "login.php"),
         // headers: requestHeaders,
         body: msg);
     log('ket qua login00: ${response.statusCode}');
@@ -96,5 +98,71 @@ class InsideService {
     final imageUrl = await ref.getDownloadURL();
 
     return imageUrl;
+  }
+
+  Future<dynamic> getListEducation() async {
+    Response response =
+        await get(Uri.parse(BASE_URL + "profile/education.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['education'];
+      log('$result');
+      return result.map((e) => EducationList.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> getListCurrency() async {
+    Response response = await get(Uri.parse(BASE_URL + "profile/currency.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['currency'];
+      return result.map((e) => CurrencyList.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> getListProvince() async {
+    Response response = await get(Uri.parse(BASE_URL + "address/province.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['province'];
+      return result.map((e) => ProvinceList.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> getListDistrict() async {
+    Response response = await get(Uri.parse(BASE_URL + "address/district.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['message']}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['district'];
+      return result.map((e) => DistrictList.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> getListWard() async {
+    Response response = await get(Uri.parse(BASE_URL + "address/ward.php"));
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['message']}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['ward'];
+      return result.map((e) => WardList.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 }

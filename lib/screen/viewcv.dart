@@ -2,9 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jobhunt_ftl/blocs/app_bloc.dart';
 // import 'package:jobhunt_ftl/blocs/app_event.dart';
-import 'package:jobhunt_ftl/blocs/app_state.dart';
 // import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';

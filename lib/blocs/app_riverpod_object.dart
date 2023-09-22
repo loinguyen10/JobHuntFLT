@@ -40,6 +40,8 @@ final listDistrictProvider =
     FutureProvider<List<DistrictList>>((ref) => getDistrictList());
 
 final listWardProvider = FutureProvider<List<WardList>>((ref) => getWardList());
+final listCurrencyProvider =
+    FutureProvider<List<CurrencyList>>((ref) => getCurrencyList());
 
 final educationChooseProvider =
     StateProvider<EducationList?>((ref) => EducationList());
@@ -51,3 +53,13 @@ final districtChooseProvider =
     StateProvider<DistrictList?>((ref) => DistrictList());
 
 final wardChooseProvider = StateProvider<WardList?>((ref) => WardList());
+
+final currencyChooseProvider =
+    StateProvider<CurrencyList?>((ref) => CurrencyList());
+
+final listEducationShowProvider =
+    StateProvider<List<EducationList>>((ref) => []);
+
+final avatarUploadProvider = StateProvider((ref) => '');
+final cvUploadProvider = StateProvider((ref) => '');
+final dateBirthProvider = StateProvider((ref) => '');

@@ -9,8 +9,6 @@ final textNormalHint = TextStyle(fontSize: 16, color: Colors.grey);
 final textCV = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 final textCVupload =
     TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red);
-final dropDownButtonStyle1 = ButtonStyleData(
-    padding: EdgeInsets.symmetric(horizontal: 16), height: 32, width: 160);
 final textJobHome = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 final textMenu = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
 final textNameMenu = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
@@ -34,3 +32,18 @@ final bgGradientColor = LinearGradient(
   ], // Gradient from https://learnui.design/tools/gradient-generator.html
   tileMode: TileMode.mirror,
 );
+
+//style
+final dropDownButtonStyle1 = ButtonStyleData(
+  padding: EdgeInsets.symmetric(horizontal: 8),
+  height: 32,
+  width: 160,
+);
+final dalDateStyle = ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(
+        EdgeInsets.symmetric(vertical: 16, horizontal: 8)),
+    backgroundColor: MaterialStateProperty.all(Colors.white),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            side: BorderSide(color: Colors.grey))));

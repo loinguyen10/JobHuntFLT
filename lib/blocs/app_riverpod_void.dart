@@ -104,3 +104,9 @@ Future<List<WardList>> getWardList() async {
   log('list: ${list.length}');
   return list;
 }
+
+Future<List<CurrencyList>> getCurrencyList() async {
+  final list = await insideService.getListCurrency();
+  log('list: ${list.length}');
+  return list;
+}

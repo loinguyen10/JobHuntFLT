@@ -48,10 +48,10 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
-      // 'email': 'emminh@jobshunt.info',
-      // 'password': 'minhhoang',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
+      'email': 'emminh@jobshunt.info',
+      'password': 'minhhoang',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -169,5 +169,41 @@ class InsideService {
     } else {
       return null;
     }
+  }
+
+  Future<dynamic> createProfile(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String birthday,
+    String education,
+    String job,
+    String minSalary,
+    String maxSalary,
+    String currency,
+  ) async {
+    final msg = jsonEncode({
+      'uid': uid,
+      'display_name': full_name,
+      'full_name': full_name,
+      'avatar_url': avatar_url,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'birthday': birthday,
+      'education': education,
+      'job': job,
+      'level': 'Basic',
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'currency': currency
+    });
+    Response response = await post(
+        Uri.parse(BASE_URL + "/profile/create_profile.php"),
+        body: msg);
+    return response;
   }
 }

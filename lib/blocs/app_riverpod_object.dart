@@ -141,7 +141,7 @@ final listEducationShowProvider =
     StateProvider.autoDispose<List<EducationList>>((ref) {
   if (ref.watch(userProfileProvider) != null) {
     var education = ref.watch(userProfileProvider)?.education;
-    return [...?education];
+    return [...education!];
   }
   return [];
 });

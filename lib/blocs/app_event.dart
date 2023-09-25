@@ -48,46 +48,32 @@ class SignInErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
-// class LoginEmailChangedEvent extends InsideEvent {
-//   const LoginEmailChangedEvent({required this.email});
+class CreateProfileStateEvent extends InsideEvent {
+  const CreateProfileStateEvent();
 
-//   final String email;
+  @override
+  List<Object> get props => [];
+}
 
-//   @override
-//   List<Object> get props => [email];
-// }
+class CreateProfileLoadingEvent extends InsideEvent {
+  const CreateProfileLoadingEvent();
 
-// class LoginPasswordChangedEvent extends InsideEvent {
-//   const LoginPasswordChangedEvent({required this.password});
+  @override
+  List<Object> get props => [];
+}
 
-//   final String password;
+class CreateProfileSuccessEvent extends InsideEvent {
+  const CreateProfileSuccessEvent();
 
-//   @override
-//   List<Object> get props => [password];
-// }
+  @override
+  List<Object> get props => [];
+}
 
-// class LoginCheckCodeChangedEvent extends InsideEvent {
-//   const LoginCheckCodeChangedEvent({required this.checkCode});
+class CreateProfileErrorEvent extends InsideEvent {
+  const CreateProfileErrorEvent({this.error});
 
-//   final String checkCode;
+  final String? error;
 
-//   @override
-//   List<Object> get props => [checkCode];
-// }
-
-// class LoginTypeChangedEvent extends InsideEvent {
-//   const LoginTypeChangedEvent({required this.type});
-
-//   final String type;
-
-//   @override
-//   List<Object> get props => [type];
-// }
-
-// class ChangeSignatureEvent extends InsideEvent {
-//   const ChangeSignatureEvent({this.signature = ''});
-//   final String signature;
-
-//   @override
-//   List<Object> get props => [signature];
-// }
+  @override
+  List<Object> get props => [error ?? ''];
+}

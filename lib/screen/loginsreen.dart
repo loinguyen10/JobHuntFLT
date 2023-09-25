@@ -163,7 +163,7 @@ class LoginScreen extends ConsumerWidget {
         if (state is SignInMissingEvent) {
           Loader.hide();
           log('missing');
-          Navigator.pushReplacement(
+          Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => EditProfileScreenNew(),

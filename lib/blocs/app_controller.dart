@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -39,5 +40,50 @@ class LoginController extends StateNotifier<InsideEvent> {
     }
 
     state = const SignInStateEvent();
+  }
+
+  void createProfile(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String birthday,
+    String education,
+    String job,
+    String minSalary,
+    String maxSalary,
+    String currency,
+  ) async {
+    state = const CreateProfileLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).createProfile(
+            uid,
+            full_name,
+            avatar_url,
+            email,
+            phone,
+            address,
+            birthday,
+            education,
+            job,
+            minSalary,
+            maxSalary,
+            currency,
+          );
+
+      if (jsonDecode(result.body)['success'] == 1) {
+        state = const CreateProfileSuccessEvent();
+      } else {
+        final x = jsonDecode(result.body)['message'];
+        log('$x');
+        state = const CreateProfileErrorEvent(error: 'Error: haha');
+      }
+    } catch (e) {
+      state = CreateProfileErrorEvent(error: e.toString());
+    }
+
+    state = const CreateProfileStateEvent();
   }
 }

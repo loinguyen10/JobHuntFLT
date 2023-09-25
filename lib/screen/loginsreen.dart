@@ -7,6 +7,7 @@ import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
+import 'package:jobhunt_ftl/screen/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
@@ -156,6 +157,16 @@ class LoginScreen extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => HomeScreen(),
+              ));
+        }
+
+        if (state is SignInMissingEvent) {
+          Loader.hide();
+          log('missing');
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditProfileScreenNew(),
               ));
         }
 

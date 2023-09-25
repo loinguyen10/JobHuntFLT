@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/screen/edit_profile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_riverpod_object.dart';
@@ -16,6 +17,8 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProfileProvider);
+
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: appHintColor,
@@ -32,18 +35,27 @@ class MenuScreen extends ConsumerWidget {
                 ClipOval(
                   child: SizedBox.fromSize(
                     size: Size.fromRadius(56), // Image radius
-                    child: Image.network(
-                      // _data?.avatarUrl ?? '',
-                      'https://firebasestorage.googleapis.com/v0/b/jobhunt-97208.appspot.com/o/company_images%2FAHh8mEpAnFUfcImaHhOnZIr46s02.jpg?alt=media&token=be0ee9ba-7e50-481d-a027-f1e83281f966',
-                      fit: BoxFit.cover,
-                    ),
+                    child: profile != null
+                        ? profile.avatarUrl != ''
+                            ? Image.network(
+                                profile.avatarUrl ?? '',
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(
+                                Icons.no_accounts_outlined,
+                                size: 112,
+                              )
+                        : Icon(
+                            Icons.no_accounts_outlined,
+                            size: 112,
+                          ),
                   ),
                 ),
                 SizedBox(
                   height: 24,
                 ),
                 Text(
-                  Keystring.APP_NAME.tr,
+                  profile != null ? profile.fullName ?? '' : Keystring.GUEST.tr,
                   style: textNameMenu,
                 ),
                 SizedBox(
@@ -53,7 +65,13 @@ class MenuScreen extends ConsumerWidget {
                 InkWell(
                   onTap: () {
                     log('click profile');
-                    // Navigator.push(//context,//MaterialPageRoute(//builder: (context) => UserProfileScreen(// loginUId: user.uid ?? '',)),);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfileScreenNew(
+                                edit: true,
+                              )),
+                    );
                   },
                   child: Card(
                     shadowColor: Colors.grey,

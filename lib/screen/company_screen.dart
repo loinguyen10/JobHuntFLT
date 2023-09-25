@@ -17,6 +17,7 @@ class CompanyManagerScreen extends ConsumerWidget {
     return _data.when(
       data: (_data) {
         return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (_, index) {
             String name = _data[index].name ?? '';

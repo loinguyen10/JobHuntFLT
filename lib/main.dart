@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       translations: LocaleString(),
       locale: Locale('en', 'US'),
       // home: LoginScreen(),
-      home: EditProfileScreenNew(),
+      home: LoginScreen(),
       builder: EasyLoading.init(),
     );
   }

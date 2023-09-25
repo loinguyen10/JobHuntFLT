@@ -49,8 +49,10 @@ class InsideService {
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
       'email': 'laingu@jobshunt.info',
-      // 'email': emailAddress.trim(),
       'password': 'laicutai',
+      // 'email': 'emminh@jobshunt.info',
+      // 'password': 'minhhoang',
+      // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
@@ -72,14 +74,6 @@ class InsideService {
       return result;
     } else {
       return null;
-      // Fluttertoast.showToast(
-      //     msg: jsonDecode(response.body)['message'],
-      //     toastLength: Toast.LENGTH_LONG,
-      //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.red,
-      //     textColor: Colors.white,
-      //     fontSize: 16.0);
     }
   }
 
@@ -130,8 +124,6 @@ class InsideService {
 
   Future<dynamic> getListProvince() async {
     Response response = await get(Uri.parse(BASE_URL + "address/province.php"));
-    log('ket qua get: ${response.statusCode}');
-    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == 200) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['province'];
@@ -143,8 +135,6 @@ class InsideService {
 
   Future<dynamic> getListDistrict() async {
     Response response = await get(Uri.parse(BASE_URL + "address/district.php"));
-    log('ket qua get: ${response.statusCode}');
-    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['message']}');
     if (response.statusCode == 200) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['district'];
@@ -163,6 +153,21 @@ class InsideService {
       return result.map((e) => WardList.fromJson(e)).toList();
     } else {
       return [];
+    }
+  }
+
+  Future<dynamic> getProfile(String uid) async {
+    final msg = jsonEncode({
+      'uid': uid,
+    });
+    Response response =
+        await post(Uri.parse(BASE_URL + "/profile/profile.php"), body: msg);
+    if (response.statusCode == 200) {
+      final UserProfileDetail result = UserProfileDetail.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['profile']);
+      return result;
+    } else {
+      return null;
     }
   }
 }

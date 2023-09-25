@@ -21,8 +21,16 @@ class LoginController extends StateNotifier<InsideEvent> {
       final user =
           await ref.read(authRepositoryProvider).login(email, password);
       if (user != null) {
-        state = const SignInSuccessEvent();
         ref.read(userLoginProvider.notifier).state = user;
+        final profile =
+            await ref.read(authRepositoryProvider).getProfile(user.uid);
+        log('pro: $profile');
+        ref.read(userProfileProvider.notifier).state = profile;
+        if (profile != null) {
+          state = const SignInSuccessEvent();
+        } else {
+          state = const SignInMissingEvent();
+        }
       } else {
         state = const SignInErrorEvent(error: 'Login Failed');
       }

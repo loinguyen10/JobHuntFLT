@@ -1,37 +1,60 @@
 class UserProfileDetail {
-  String? id;
-  String? avatarUrl;
-  String? cvUrl;
-  List<EducationList>? education;
-  String? maxSalary;
-  String? minSalary;
-  CurrencyList? currency;
-  List<String>? skillList;
-  String? typeSalary;
-  String? address;
-  String? birthday;
-  String? email;
+  String? uid;
   String? displayName;
   String? fullName;
+  String? avatarUrl;
+  String? cvUrl;
+  String? email;
   String? phone;
+  String? address;
+  String? birthday;
+  String? job;
+  String? level;
+  String? minSalary;
+  String? maxSalary;
+  String? currency;
+  List<EducationList>? education;
 
   UserProfileDetail({
-    this.id,
-    this.avatarUrl,
+    this.uid,
     this.displayName,
     this.fullName,
+    this.avatarUrl,
+    this.cvUrl,
     this.email,
     this.phone,
     this.address,
     this.birthday,
-    this.cvUrl,
-    this.education,
-    this.maxSalary,
+    this.job,
+    this.level,
     this.minSalary,
+    this.maxSalary,
     this.currency,
-    this.skillList,
-    this.typeSalary,
+    this.education,
   });
+
+  UserProfileDetail.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+    displayName = json['display_name'];
+    fullName = json['full_name'];
+    avatarUrl = json['avatar_url'];
+    cvUrl = json['cv_url'];
+    email = json['email'];
+    phone = json['phone'];
+    address = json['address'];
+    birthday = json['birthday'];
+    job = json['job'];
+    level = json['level'];
+    minSalary = json['minSalary'];
+    maxSalary = json['maxSalary'];
+    currency = json['currency'];
+    if (json['education'] != null) {
+      education = <EducationList>[];
+      json['education'].forEach((v) {
+        education!.add(new EducationList.fromJson(v));
+      });
+    }
+  }
 }
 
 class EducationList {

@@ -45,6 +45,7 @@ class LocaleString extends Translations {
           'Done': 'Done',
           'Update': 'Update',
           'Select': 'Select',
+          'Guest': 'Guest',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

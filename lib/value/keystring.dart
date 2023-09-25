@@ -39,4 +39,5 @@ class Keystring {
   static const String DONE = 'Done';
   static const String UPDATE = 'Update';
   static const String SELECT = 'Select';
+  static const String GUEST = 'Guest';
 }

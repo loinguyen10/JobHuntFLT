@@ -16,6 +16,7 @@ class DateCustomDialog {
   Widget dalDate(BuildContext context, WidgetRef ref, String? text) {
     return ElevatedButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           datePickerShow(context, ref);
         },
         child: Row(
@@ -37,17 +38,24 @@ class DateCustomDialog {
   //
 
   void datePickerShow(BuildContext context, WidgetRef ref) async {
+    final dateChoose = ref.watch(dateBirthProvider);
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: dateChoose != ''
+          ? DateTime(
+              int.parse(dateChoose.substring(6)), //year
+              int.parse(dateChoose.substring(3, 5)), //month
+              int.parse(dateChoose.substring(0, 2)), //day
+            )
+          : DateTime(DateTime.now().year - 16),
       firstDate: DateTime(1960),
-      lastDate: DateTime.now(),
-      keyboardType: TextInputType.numberWithOptions(),
+      lastDate: DateTime(DateTime.now().year - 16, 12, 31),
+      keyboardType: TextInputType.datetime,
     );
     if (picked != null) {
       log('${dateFormat.format(picked)}');
       ref.read(dateBirthProvider.notifier).state = dateFormat.format(picked);
-      // picked.toString().split(' ')[0];
     }
   }
 }

@@ -4,9 +4,9 @@ class AppButton extends StatelessWidget {
   AppButton({
     required this.onPressed,
     this.content = '',
-    this.bgColor = Colors.green,
+    this.bgColor = Colors.black,
     this.colorBorder = Colors.white,
-    this.textColor = Colors.black,
+    this.textColor = Colors.white,
     this.width = double.infinity,
     this.height = 40,
     this.pathIm = '',

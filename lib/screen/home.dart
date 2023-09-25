@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/model/user.dart';
-import 'package:jobhunt_ftl/screen/company.dart';
+import 'package:jobhunt_ftl/screen/company_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
@@ -16,9 +16,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // return BlocBuilder<InsideBloc, InsideState>(
-    //   builder: (context, state) {
-    final user = ref.watch(userLoginProvider);
+    // final user = ref.watch(userLoginProvider);
+    final profile = ref.watch(userProfileProvider);
 
     return
         // SafeArea(child:
@@ -42,13 +41,15 @@ class HomeScreen extends ConsumerWidget {
                   ClipOval(
                     child: SizedBox.fromSize(
                       size: Size.fromRadius(24), // Image radius
-                      child: Image.network(
-                        // _data?.avatarUrl ?? '',
-                        'https://firebasestorage.googleapis.com/v0/b/jobhunt-97208.appspot.com/o/company_images%2FAHh8mEpAnFUfcImaHhOnZIr46s02.jpg?alt=media&token=be0ee9ba-7e50-481d-a027-f1e83281f966',
-                        // width: 64,
-                        // height: 64,
-                        fit: BoxFit.cover,
-                      ),
+                      child: profile?.avatarUrl != ''
+                          ? Image.network(
+                              profile?.avatarUrl ?? '',
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.no_accounts_outlined,
+                              size: 48,
+                            ),
                     ),
                   ),
                 ],
@@ -66,16 +67,14 @@ class HomeScreen extends ConsumerWidget {
           icon: Icon(Icons.menu),
         ),
       ),
-      body: ScreenHome(loginUser: user!),
+      body: ScreenHome(),
     );
     // );
   }
 }
 
 class ScreenHome extends ConsumerStatefulWidget {
-  const ScreenHome({super.key, required this.loginUser});
-
-  final UserDetail loginUser;
+  const ScreenHome({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ScreenHome();

@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
+import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
@@ -18,12 +19,25 @@ import '../component/edittext.dart';
 import '../model/userprofile.dart';
 import '../value/style.dart';
 
-class EditProfileScreenNew extends ConsumerWidget {
-  const EditProfileScreenNew({super.key});
+class EditProfileScreenNew extends ConsumerStatefulWidget {
+  const EditProfileScreenNew({
+    super.key,
+    this.edit = false,
+  });
+  final bool edit;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ScreenEditProfileNew();
+}
+
+class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
+  @override
+  Widget build(BuildContext context) {
     String filePath = '';
+
+    final user = ref.watch(userLoginProvider);
+    final profile = ref.watch(userProfileProvider);
 
     final listEducationData = ref.watch(listEducationProvider);
     final listProvinceData = ref.watch(listProvinceProvider);
@@ -477,10 +491,15 @@ class EditProfileScreenNew extends ConsumerWidget {
                   child: GestureDetector(
                     onTap: () => upload(1),
                     child: avatarProfile != ''
-                        ? Image.file(
-                            File(avatarProfile),
-                            fit: BoxFit.cover,
-                          )
+                        ? avatarProfile.substring(0, 8) == 'https://'
+                            ? Image.network(
+                                avatarProfile,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(avatarProfile),
+                                fit: BoxFit.cover,
+                              )
                         : Icon(
                             Icons.no_accounts_outlined,
                             size: 256,
@@ -491,35 +510,34 @@ class EditProfileScreenNew extends ConsumerWidget {
               SizedBox(height: 32),
               EditTextForm(
                 onChanged: ((value) {
-                  //
+                  ref.read(fullNameProfileProvider.notifier).state = value;
                 }),
-                // content: widget.profileDetail?.fullName ?? '',
                 label: Keystring.FULLNAME.tr,
                 // hintText: Keystring.FULLNAME.tr,
+                content: profile?.fullName ?? '',
               ),
+              // SizedBox(height: 24),
+              // EditTextForm(
+              //   onChanged: ((value) {
+              //     //
+              //   }),
+              //   label: Keystring.DISPLAY_NAME.tr,
+              // ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
-                  //
+                  ref.read(emailProfileProvider.notifier).state = value;
                 }),
-                // content: widget.profileDetail?.fullName ?? '',
-                label: Keystring.DISPLAY_NAME.tr,
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  //
-                }),
-                // content: widget.profileDetail?.fullName ?? '',
                 label: Keystring.EMAIL.tr,
+                content: profile?.email ?? '',
               ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
-                  //
+                  ref.read(phoneProfileProvider.notifier).state = value;
                 }),
-                // content: widget.profileDetail?.fullName ?? '',
                 label: Keystring.PHONE.tr,
+                content: profile?.phone ?? '',
               ),
               SizedBox(height: 24),
               Container(
@@ -569,6 +587,13 @@ class EditProfileScreenNew extends ConsumerWidget {
                           child: dropWard(),
                         ),
                       ),
+                      SizedBox(height: 20),
+                      EditTextForm(
+                        onChanged: ((value) {
+                          //
+                        }),
+                        label: Keystring.ROAD_STREET.tr,
+                      ),
                     ],
                   ),
                 ),
@@ -599,11 +624,6 @@ class EditProfileScreenNew extends ConsumerWidget {
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (_, index) {
-                                String id =
-                                    listEducationShowData[index].id ?? '';
-                                String title =
-                                    listEducationShowData[index].title ?? '';
-
                                 return Card(
                                   shadowColor: Colors.grey,
                                   margin: EdgeInsets.symmetric(
@@ -615,7 +635,8 @@ class EditProfileScreenNew extends ConsumerWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          title,
+                                          listEducationShowData[index].title ??
+                                              '',
                                           overflow: TextOverflow.fade,
                                           maxLines: 3,
                                         ),
@@ -654,8 +675,8 @@ class EditProfileScreenNew extends ConsumerWidget {
                 onChanged: ((value) {
                   //
                 }),
-                // content: widget.profileDetail?.fullName ?? '',
                 label: Keystring.WANT_JOB.tr,
+                content: profile?.job ?? '',
               ),
               SizedBox(height: 24),
               Row(
@@ -666,7 +687,7 @@ class EditProfileScreenNew extends ConsumerWidget {
                       onChanged: ((value) {
                         //
                       }),
-                      // content: widget.profileDetail?.fullName ?? '',
+                      content: profile?.minSalary ?? '',
                       label: Keystring.MIN_SALARY.tr,
                       // width: 50,
                     ),
@@ -677,7 +698,7 @@ class EditProfileScreenNew extends ConsumerWidget {
                       onChanged: ((value) {
                         //
                       }),
-                      // content: widget.profileDetail?.fullName ?? '',
+                      content: profile?.maxSalary ?? '',
                       label: Keystring.MAX_SALARY.tr,
                       // width: 50,
                     ),
@@ -696,15 +717,17 @@ class EditProfileScreenNew extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 32),
               AppButton(
                 onPressed: () {
                   //
                 },
+                bgColor: appPrimaryColor,
                 height: 64,
-                content: 'Hello',
+                content: widget.edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                fontSize: 16,
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 32),
             ],
           ),
         ),

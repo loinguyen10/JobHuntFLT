@@ -32,6 +32,13 @@ class SignInSuccessEvent extends InsideEvent {
   List<Object> get props => [];
 }
 
+class SignInMissingEvent extends InsideEvent {
+  const SignInMissingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class SignInErrorEvent extends InsideEvent {
   const SignInErrorEvent({this.error});
 

@@ -179,10 +179,10 @@ class InsideService {
     String phone,
     String address,
     String birthday,
-    String education,
+    String educationId,
     String job,
-    String minSalary,
-    String maxSalary,
+    int minSalary,
+    int maxSalary,
     String currency,
   ) async {
     final msg = jsonEncode({
@@ -194,16 +194,19 @@ class InsideService {
       'phone': phone,
       'address': address,
       'birthday': birthday,
-      'education': education,
+      'educationId': educationId,
       'job': job,
       'level': 'Basic',
       'minSalary': minSalary,
       'maxSalary': maxSalary,
       'currency': currency
     });
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId \n job: $job \n min: $minSalary \n max: $maxSalary \n currency: $currency ');
+
     Response response = await post(
         Uri.parse(BASE_URL + "/profile/create_profile.php"),
         body: msg);
-    return response;
+
+    return jsonDecode(response.body)['success'];
   }
 }

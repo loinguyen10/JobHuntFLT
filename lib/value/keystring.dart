@@ -40,4 +40,7 @@ class Keystring {
   static const String UPDATE = 'Update';
   static const String SELECT = 'Select';
   static const String GUEST = 'Guest';
+  static const String SUCCESSFUL = 'Successful';
+  static const String UNSUCCESSFUL = 'Unsuccessful';
+  static const String NOT_FULL_DATA = 'No_Full_Data';
 }

@@ -14,10 +14,13 @@ import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
+import '../blocs/app_controller.dart';
+import '../blocs/app_event.dart';
 import '../blocs/app_riverpod_object.dart';
 import '../component/edittext.dart';
 import '../model/userprofile.dart';
 import '../value/style.dart';
+import 'home.dart';
 
 class EditProfileScreenNew extends ConsumerStatefulWidget {
   const EditProfileScreenNew({
@@ -476,6 +479,52 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
       );
     }
 
+//listen
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is CreateProfileErrorEvent ||
+            state is UpdateProfileErrorEvent) {
+          Loader.hide();
+          log('error');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(Keystring.UNSUCCESSFUL.tr),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateProfileSuccessEvent) {
+          Loader.hide();
+          log('c-success');
+          Get.offAll(HomeScreen());
+        }
+
+        if (state is UpdateProfileSuccessEvent) {
+          Loader.hide();
+          log('u-success');
+          Navigator.pop(context);
+        }
+
+        if (state is CreateProfileLoadingEvent ||
+            state is UpdateProfileLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
+
     return Container(
       decoration: BoxDecoration(gradient: bgGradientColor),
       child: SafeArea(
@@ -511,6 +560,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               EditTextForm(
                 onChanged: ((value) {
                   ref.read(fullNameProfileProvider.notifier).state = value;
+                  log(value);
                 }),
                 label: Keystring.FULLNAME.tr,
                 // hintText: Keystring.FULLNAME.tr,
@@ -526,10 +576,11 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
-                  ref.read(emailProfileProvider.notifier).state = value;
+                  // ref.read(emailProfileProvider.notifier).state = value;
                 }),
                 label: Keystring.EMAIL.tr,
-                content: profile?.email ?? '',
+                content: profile?.email ?? ref.watch(emailLoginProvider),
+                readOnly: true,
               ),
               SizedBox(height: 24),
               EditTextForm(
@@ -587,13 +638,13 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                           child: dropWard(),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      EditTextForm(
-                        onChanged: ((value) {
-                          //
-                        }),
-                        label: Keystring.ROAD_STREET.tr,
-                      ),
+                      // SizedBox(height: 20),
+                      // EditTextForm(
+                      //   onChanged: ((value) {
+                      //     //
+                      //   }),
+                      //   label: Keystring.ROAD_STREET.tr,
+                      // ),
                     ],
                   ),
                 ),
@@ -673,7 +724,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
-                  //
+                  ref.read(jobProfileProvider.notifier).state = value;
                 }),
                 label: Keystring.WANT_JOB.tr,
                 content: profile?.job ?? '',
@@ -684,10 +735,12 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 children: [
                   Expanded(
                     child: EditTextForm(
+                      typeKeyboard: TextInputType.number,
                       onChanged: ((value) {
-                        //
+                        ref.read(minSalaryProvider.notifier).state =
+                            int.parse(value);
                       }),
-                      content: profile?.minSalary ?? '',
+                      content: profile?.minSalary.toString() ?? '0',
                       label: Keystring.MIN_SALARY.tr,
                       // width: 50,
                     ),
@@ -695,10 +748,12 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                   SizedBox(width: 12),
                   Expanded(
                     child: EditTextForm(
+                      typeKeyboard: TextInputType.number,
                       onChanged: ((value) {
-                        //
+                        ref.read(maxSalaryProvider.notifier).state =
+                            int.parse(value);
                       }),
-                      content: profile?.maxSalary ?? '',
+                      content: profile?.maxSalary.toString() ?? '0',
                       label: Keystring.MAX_SALARY.tr,
                       // width: 50,
                     ),
@@ -720,7 +775,58 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
-                  //
+                  if (ref.watch(fullNameProfileProvider).isNotEmpty &&
+                      ref.watch(phoneProfileProvider).isNotEmpty &&
+                      provinceChoose!.code != null &&
+                      districtChoose!.code != null &&
+                      wardChoose!.code != null &&
+                      listEducationShowData.isNotEmpty &&
+                      ref.watch(dateBirthProvider).isNotEmpty &&
+                      ref.watch(jobProfileProvider).isNotEmpty &&
+                      ref.watch(minSalaryProvider) > 0 &&
+                      ref.watch(maxSalaryProvider) > 0 &&
+                      ref.watch(minSalaryProvider) <
+                          ref.watch(maxSalaryProvider) &&
+                      currencyChoose!.code != null) {
+                    var eduImport = '';
+                    for (var edu in listEducationShowData) {
+                      eduImport += "${edu.id},";
+                    }
+
+                    log('${eduImport.substring(0, eduImport.length - 1)}');
+
+                    if (!widget.edit) {
+                      log("click done");
+                      log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
+                      ref.read(LoginControllerProvider.notifier).createProfile(
+                            user!.uid ?? '0',
+                            ref.watch(fullNameProfileProvider),
+                            ref.watch(avatarUploadProvider),
+                            ref.watch(emailLoginProvider),
+                            ref.watch(phoneProfileProvider),
+                            ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                            ref.watch(dateBirthProvider),
+                            eduImport.substring(0, eduImport.length - 1),
+                            ref.watch(jobProfileProvider),
+                            ref.watch(minSalaryProvider),
+                            ref.watch(maxSalaryProvider),
+                            currencyChoose.code ?? '',
+                          );
+                    } else {
+                      log("click update");
+                    }
+                  } else {
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
+
+                    Fluttertoast.showToast(
+                        msg: Keystring.NOT_FULL_DATA,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
                 },
                 bgColor: appPrimaryColor,
                 height: 64,

@@ -50,10 +50,10 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String birthday,
-    String education,
+    String educationId,
     String job,
-    String minSalary,
-    String maxSalary,
+    int minSalary,
+    int maxSalary,
     String currency,
   ) async {
     state = const CreateProfileLoadingEvent();
@@ -66,19 +66,20 @@ class LoginController extends StateNotifier<InsideEvent> {
             phone,
             address,
             birthday,
-            education,
+            educationId,
             job,
             minSalary,
             maxSalary,
             currency,
           );
 
-      if (jsonDecode(result.body)['success'] == 1) {
+      if (result == 1) {
+        final profile = await ref.read(authRepositoryProvider).getProfile(uid);
+        log('pro: $profile');
+        ref.read(userProfileProvider.notifier).state = profile;
         state = const CreateProfileSuccessEvent();
       } else {
-        final x = jsonDecode(result.body)['message'];
-        log('$x');
-        state = const CreateProfileErrorEvent(error: 'Error: haha');
+        state = const CreateProfileErrorEvent(error: '');
       }
     } catch (e) {
       state = CreateProfileErrorEvent(error: e.toString());

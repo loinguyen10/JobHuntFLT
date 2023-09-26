@@ -10,8 +10,8 @@ class UserProfileDetail {
   String? birthday;
   String? job;
   String? level;
-  String? minSalary;
-  String? maxSalary;
+  int? minSalary;
+  int? maxSalary;
   String? currency;
   List<EducationList>? education;
 
@@ -45,8 +45,8 @@ class UserProfileDetail {
     birthday = json['birthday'];
     job = json['job'];
     level = json['level'];
-    minSalary = json['minSalary'];
-    maxSalary = json['maxSalary'];
+    minSalary = int.parse(json['minSalary']);
+    maxSalary = int.parse(json['maxSalary']);
     currency = json['currency'];
     if (json['education'] != null) {
       education = <EducationList>[];

@@ -77,3 +77,33 @@ class CreateProfileErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class UpdateProfileStateEvent extends InsideEvent {
+  const UpdateProfileStateEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateProfileLoadingEvent extends InsideEvent {
+  const UpdateProfileLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateProfileSuccessEvent extends InsideEvent {
+  const UpdateProfileSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateProfileErrorEvent extends InsideEvent {
+  const UpdateProfileErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

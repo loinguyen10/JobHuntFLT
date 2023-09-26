@@ -44,32 +44,32 @@ final listCurrencyProvider =
     FutureProvider<List<CurrencyList>>((ref) => getCurrencyList());
 
 //userProfile
-final avatarUploadProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.avatarUrl ?? '');
+final avatarUploadProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.avatarUrl ?? "");
 
-final cvUploadProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.cvUrl ?? '');
+final cvUploadProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.cvUrl ?? "");
 
-final fullNameProfileProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.fullName ?? '');
+final fullNameProfileProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.fullName ?? "");
 
-final emailProfileProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.email ?? '');
+final emailProfileProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.email ?? "");
 
-final phoneProfileProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.phone ?? '');
+final phoneProfileProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.phone ?? "");
 
-final jobProfileProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.job ?? '');
+final jobProfileProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.job ?? "");
 
 final dateBirthProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.birthday ?? '');
+    (ref) => ref.watch(userProfileProvider)?.birthday ?? "");
 
-final minSalaryProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.minSalary ?? '');
+final minSalaryProvider =
+    StateProvider<int>((ref) => ref.watch(userProfileProvider)?.minSalary ?? 0);
 
-final maxSalaryProvider = StateProvider.autoDispose(
-    (ref) => ref.watch(userProfileProvider)?.maxSalary ?? '');
+final maxSalaryProvider =
+    StateProvider<int>((ref) => ref.watch(userProfileProvider)?.maxSalary ?? 0);
 
 final educationChooseProvider =
     StateProvider<EducationList?>((ref) => EducationList());

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       supportedLocales: const [Locale('vi', 'VN'), Locale('en', 'US')],
       translations: LocaleString(),
       locale: Locale('en', 'US'),

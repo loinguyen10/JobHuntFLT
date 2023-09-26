@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -13,7 +15,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  HttpOverrides.global = new MyHTTPOverrides();
   runApp(ProviderScope(child: MyApp()));
+}
+class MyHTTPOverrides extends HttpOverrides {
+  @override
+  HttpClient client (SecurityContext context){
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert,String host,int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {

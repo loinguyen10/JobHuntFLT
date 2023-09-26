@@ -10,7 +10,7 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
-import 'loginsreen.dart';
+import 'login_sreen.dart';
 
 class MenuScreen extends ConsumerWidget {
   const MenuScreen({super.key});

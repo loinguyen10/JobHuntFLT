@@ -48,6 +48,36 @@ class SignInErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
+class SignUpStateEvent extends InsideEvent {
+  const SignUpStateEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SignUpLoadingEvent extends InsideEvent {
+  const SignUpLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SignUpSuccessEvent extends InsideEvent {
+  const SignUpSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SignUpErrorEvent extends InsideEvent {
+  const SignUpErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
 class CreateProfileStateEvent extends InsideEvent {
   const CreateProfileStateEvent();
 

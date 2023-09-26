@@ -23,13 +23,15 @@ class LoginController extends StateNotifier<InsideEvent> {
           await ref.read(authRepositoryProvider).login(email, password);
       if (user != null) {
         ref.read(userLoginProvider.notifier).state = user;
-        final profile =
-            await ref.read(authRepositoryProvider).getProfile(user.uid);
-        log('pro: $profile');
-        ref.read(userProfileProvider.notifier).state = profile;
-        if (profile != null) {
+
+        if (user.role != null && user.role != '') {
+          final profile =
+              await ref.read(authRepositoryProvider).getProfile(user.uid);
+          log('pro: $profile');
+          ref.read(userProfileProvider.notifier).state = profile;
           state = const SignInSuccessEvent();
         } else {
+          ref.read(userProfileProvider.notifier).state = null;
           state = const SignInMissingEvent();
         }
       } else {
@@ -40,6 +42,28 @@ class LoginController extends StateNotifier<InsideEvent> {
     }
 
     state = const SignInStateEvent();
+  }
+
+  void register(String email, String password) async {
+    state = const SignUpLoadingEvent();
+    log('$email + $password');
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).register(email, password);
+      if (result == 1) {
+        final user =
+            await ref.read(authRepositoryProvider).login(email, password);
+        ref.read(userLoginProvider.notifier).state = user;
+        ref.read(userProfileProvider.notifier).state = null;
+        state = const SignUpSuccessEvent();
+      } else {
+        state = const SignUpErrorEvent(error: 'Register Failed');
+      }
+    } catch (e) {
+      state = SignUpErrorEvent(error: e.toString());
+    }
+
+    state = const SignUpStateEvent();
   }
 
   void createProfile(

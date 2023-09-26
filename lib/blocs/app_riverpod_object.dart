@@ -17,11 +17,13 @@ import 'package:riverpod/riverpod.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
-final emailLoginProvider = StateProvider((ref) => "");
-final passwordLoginProvider = StateProvider((ref) => "");
+final emailLoginProvider = StateProvider((ref) => '');
+final passwordLoginProvider = StateProvider((ref) => '');
 final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
 final userProfileProvider =
     StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
+
+final checkboxTermProvider = StateProvider.autoDispose((ref) => false);
 
 final authRepositoryProvider = Provider<InsideService>((ref) {
   return InsideService();

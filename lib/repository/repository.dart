@@ -50,10 +50,10 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      'email': 'emminh@jobshunt.info',
-      'password': 'minhhoang',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      // 'email': 'emminh@jobshunt.info',
+      // 'password': 'minhhoang',
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -207,6 +207,16 @@ class InsideService {
         Uri.parse(BASE_URL + "/profile/create_profile.php"),
         body: msg);
 
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> register(String emailAddress, String password) async {
+    final msg = jsonEncode({
+      'email': emailAddress.trim(),
+      'password': password.trim(),
+    });
+    Response response =
+        await post(Uri.parse(BASE_URL + "register.php"), body: msg);
     return jsonDecode(response.body)['success'];
   }
 }

@@ -3,7 +3,9 @@ class Keystring {
   static const String APP_NAME = 'App_Name';
   static const String EMAIL = 'Email';
   static const String PASSWORD = 'Password';
+  static const String PASSWORD_AGAIN = 'Password_Again';
   static const String LOGIN = 'Login';
+  static const String REGISTER = 'Register';
   static const String SEARCH = 'Search';
   static const String RECOMMEND_JOB = 'Recommend_Job';
   static const String BEST_JOB = 'Best_Job';
@@ -43,4 +45,19 @@ class Keystring {
   static const String SUCCESSFUL = 'Successful';
   static const String UNSUCCESSFUL = 'Unsuccessful';
   static const String NOT_FULL_DATA = 'No_Full_Data';
+  static const String SIGN_IN_WITH = 'Sign_In_With';
+  static const String DONT_HAVE_ACC = 'Dont_Have_Acc';
+  static const String SIGN_UP_NOW = 'Sign_Up_Now';
+  static const String OR = 'Or';
+  static const String USING_APP_WITHOUT = 'Using_App_Without';
+  static const String HAVE_ACC = 'Have_Acc';
+  static const String SIGN_IN_NOW = 'Sign_In_Now';
+  static const String READ_ACCEPTED = 'Read_Accepted';
+  static const String Terms_Conditions = 'Terms_Conditions';
+  static const String CANDIDATE = 'Candidate';
+  static const String RECUITER = 'Recuiter';
+  static const String REMEMBER = 'Remember';
+  static const String FORGET_PASS = 'Forget_Pass';
+  static const String NEED_SAME_PASS = 'Need_Same_Pass';
+  static const String EMAIL_VALIDATION = 'Email_Validation';
 }

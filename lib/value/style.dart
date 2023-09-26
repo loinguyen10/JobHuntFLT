@@ -22,9 +22,8 @@ final bgGradientColor = LinearGradient(
   end: Alignment.bottomCenter,
   colors: <Color>[
     appPrimaryColor,
+    appPrimaryColor,
     Color(0xffA0DDFF),
-    Colors.white,
-    Colors.white,
     Colors.white,
     Colors.white,
     Colors.white,

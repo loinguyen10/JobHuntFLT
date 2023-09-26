@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/screen/edit_profile.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
-import 'package:jobhunt_ftl/screen/loginsreen.dart';
+import 'package:jobhunt_ftl/screen/login_sreen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
 
 void main() async {

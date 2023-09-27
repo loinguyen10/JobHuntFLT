@@ -12,32 +12,93 @@ class RoleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void confirmDialog(String role) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: AlertDialog(
+              content: Text(
+                "So ${Keystring.You_Are} $role?".toUpperCase(),
+                style: TextStyle(fontSize: 20),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    if (role == Keystring.CANDIDATE.tr) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditProfileScreenNew(),
+                          ));
+                    } else if (role == Keystring.RECUITER.tr) {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => EditProfileScreenNew(),
+                      //     ));
+                    }
+                  },
+                  child: Text(Keystring.ThatsRight.tr),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(Keystring.CANCEL.tr),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     return SafeArea(
         child: Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(gradient: bgGradientColor),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 2,
-            child: AppButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfileScreenNew(),
-                      ));
-                },
-                content: Keystring.CANDIDATE.tr),
+          SizedBox(height: 30.0),
+          Text(
+            "${Keystring.Welcome_to.tr} ${Keystring.APP_NAME.tr}",
+            style: textTitleRole,
           ),
-          Container(
-            width: MediaQuery.of(context).size.width / 2,
-            child: AppButton(
-                onPressed: () {
-                  //
-                },
-                content: Keystring.RECUITER.tr),
+          SizedBox(height: 28.0),
+          Text(
+            Keystring.Please_Set_Role.tr,
+            style: textTitleRole,
           ),
+          SizedBox(height: 50.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              AppButton(
+                onPressed: () {
+                  confirmDialog(Keystring.CANDIDATE.tr);
+                },
+                content: Keystring.CANDIDATE.tr,
+                width: MediaQuery.of(context).size.width / 3,
+                fontSize: 16,
+                padding: EdgeInsets.symmetric(vertical: 12),
+              ),
+              // SizedBox(
+              //   width: 30,
+              // ),
+              AppButton(
+                onPressed: () {
+                  confirmDialog(Keystring.RECUITER.tr);
+                },
+                content: Keystring.RECUITER.tr,
+                width: MediaQuery.of(context).size.width / 3,
+                fontSize: 16,
+                padding: EdgeInsets.symmetric(vertical: 12),
+              ),
+            ],
+          ),
+          SizedBox(height: 30.0),
         ],
       ),
     ));

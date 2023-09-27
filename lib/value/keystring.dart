@@ -60,4 +60,9 @@ class Keystring {
   static const String FORGET_PASS = 'Forget_Pass';
   static const String NEED_SAME_PASS = 'Need_Same_Pass';
   static const String EMAIL_VALIDATION = 'Email_Validation';
+  static const String You_Are = 'You_Are';
+  static const String Welcome_to = 'Welcome_to';
+  static const String Please_Set_Role = 'Please_Set_Role';
+  static const String CANCEL = 'Cancel';
+  static const String ThatsRight = 'ThatsRight';
 }

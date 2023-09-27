@@ -66,6 +66,11 @@ class LocaleString extends Translations {
           'Forget_Pass': 'Forget Password',
           'Need_Same_Pass': 'Two Passwords must be same',
           'Email_Validation': 'Please enter a valid email address.',
+          'You_Are': 'You are',
+          'Welcome_to': 'Welcome to',
+          'Please_Set_Role': 'Please set your role to continue.',
+          'Cancel': 'Cancel',
+          'ThatsRight': 'That\'s right',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

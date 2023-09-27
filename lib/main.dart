@@ -15,13 +15,16 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  HttpOverrides.global = new MyHTTPOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(ProviderScope(child: MyApp()));
 }
-class MyHTTPOverrides extends HttpOverrides {
+
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient client (SecurityContext context){
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert,String host,int port) => true;
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 

@@ -25,10 +25,17 @@ class LoginController extends StateNotifier<InsideEvent> {
         ref.read(userLoginProvider.notifier).state = user;
 
         if (user.role != null && user.role != '') {
-          final profile =
-              await ref.read(authRepositoryProvider).getProfile(user.uid);
-          log('pro: $profile');
-          ref.read(userProfileProvider.notifier).state = profile;
+          if (user.role == 'candidate') {
+            final profile =
+                await ref.read(authRepositoryProvider).getProfile(user.uid);
+            log('pro: $profile');
+            ref.read(userProfileProvider.notifier).state = profile;
+          } else if (user.role == 'recuiter') {
+            final company =
+                await ref.read(authRepositoryProvider).getCompany(user.uid);
+            log('company: $company');
+            ref.read(companyProfileProvider.notifier).state = company;
+          }
           state = const SignInSuccessEvent();
         } else {
           ref.read(userProfileProvider.notifier).state = null;
@@ -54,7 +61,8 @@ class LoginController extends StateNotifier<InsideEvent> {
         final user =
             await ref.read(authRepositoryProvider).login(email, password);
         ref.read(userLoginProvider.notifier).state = user;
-        ref.read(userProfileProvider.notifier).state = null;
+        // ref.read(userProfileProvider.notifier).state = null;
+        // ref.read(companyProfileProvider.notifier).state = null;
         state = const SignUpSuccessEvent();
       } else {
         state = const SignUpErrorEvent(error: 'Register Failed');
@@ -104,6 +112,46 @@ class LoginController extends StateNotifier<InsideEvent> {
         state = const CreateProfileSuccessEvent();
       } else {
         state = const CreateProfileErrorEvent(error: '');
+      }
+    } catch (e) {
+      state = CreateProfileErrorEvent(error: e.toString());
+    }
+
+    state = const CreateProfileStateEvent();
+  }
+
+  void createCompany(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String website,
+    String description,
+    String job,
+  ) async {
+    state = const CreateProfileLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).createCompany(
+            uid,
+            full_name,
+            avatar_url,
+            email,
+            phone,
+            address,
+            website,
+            description,
+            job,
+          );
+
+      if (result == 1) {
+        final company = await ref.read(authRepositoryProvider).getCompany(uid);
+        log('company: $company');
+        ref.read(companyProfileProvider.notifier).state = company;
+        state = const CreateProfileSuccessEvent();
+      } else {
+        state = const CreateProfileErrorEvent(error: 'error');
       }
     } catch (e) {
       state = CreateProfileErrorEvent(error: e.toString());

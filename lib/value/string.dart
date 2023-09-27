@@ -71,6 +71,8 @@ class LocaleString extends Translations {
           'Please_Set_Role': 'Please set your role to continue.',
           'Cancel': 'Cancel',
           'ThatsRight': 'That\'s right',
+          'Website': 'Website',
+          'Description': 'Description',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

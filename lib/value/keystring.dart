@@ -65,4 +65,6 @@ class Keystring {
   static const String Please_Set_Role = 'Please_Set_Role';
   static const String CANCEL = 'Cancel';
   static const String ThatsRight = 'ThatsRight';
+  static const String WEBSITE = 'Website';
+  static const String DESCRIPTION = 'Description';
 }

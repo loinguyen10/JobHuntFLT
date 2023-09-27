@@ -17,7 +17,9 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
+    final company = ref.watch(companyProfileProvider);
 
     return Scaffold(
       // appBar: AppBar(
@@ -35,7 +37,7 @@ class MenuScreen extends ConsumerWidget {
                 ClipOval(
                   child: SizedBox.fromSize(
                     size: Size.fromRadius(56), // Image radius
-                    child: profile != null
+                    child: profile != null || profile != null
                         ? profile.avatarUrl != ''
                             ? Image.network(
                                 profile.avatarUrl ?? '',

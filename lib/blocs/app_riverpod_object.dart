@@ -23,6 +23,9 @@ final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
 final userProfileProvider =
     StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
 
+final companyProfileProvider =
+    StateProvider<CompanyDetail?>((ref) => CompanyDetail());
+
 final checkboxTermProvider = StateProvider.autoDispose((ref) => false);
 
 final authRepositoryProvider = Provider<InsideService>((ref) {
@@ -46,7 +49,7 @@ final listCurrencyProvider =
     FutureProvider<List<CurrencyList>>((ref) => getCurrencyList());
 
 //userProfile
-final avatarUploadProvider =
+final avatarProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.avatarUrl ?? "");
 
 final cvUploadProvider =
@@ -147,3 +150,75 @@ final listEducationShowProvider =
   }
   return [];
 });
+
+//company
+final avatarCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.avatarUrl ?? "");
+
+final fullNameCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.fullname ?? "");
+
+final websiteCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
+
+final phoneCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
+
+final provinceCompanyProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
+  if (ref.watch(companyProfileProvider) != null &&
+      !ref.watch(listProvinceProvider).isLoading) {
+    var list = ref.watch(listProvinceProvider).value;
+    for (var x in list!) {
+      var address = ref.watch(companyProfileProvider)?.address;
+      if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
+        return x;
+      }
+    }
+  }
+  return ProvinceList();
+});
+
+final districtCompanyProvider = StateProvider.autoDispose<DistrictList?>((ref) {
+  if (ref.watch(companyProfileProvider) != null &&
+      !ref.watch(listDistrictProvider).isLoading) {
+    var list = ref.watch(listDistrictProvider).value;
+    for (var x in list!) {
+      var address = ref.watch(companyProfileProvider)?.address;
+      if (address?.substring(
+              address.lastIndexOf(',', address.lastIndexOf(',') - 1) + 1,
+              address.lastIndexOf(',')) ==
+          x.code) {
+        return x;
+      }
+    }
+  }
+  return DistrictList();
+});
+
+final wardCompanyProvider = StateProvider.autoDispose<WardList?>((ref) {
+  if (ref.watch(companyProfileProvider) != null &&
+      !ref.watch(listWardProvider).isLoading) {
+    var list = ref.watch(listWardProvider).value;
+    var address = ref.watch(companyProfileProvider)?.address;
+
+    for (var x in list!) {
+      if (address?.substring(address.indexOf(',') + 1,
+              address.indexOf(',', address.indexOf(',') + 1)) ==
+          x.code) {
+        return x;
+      }
+    }
+  }
+  return WardList();
+});
+
+final roadCompanyProvider = StateProvider((ref) =>
+    ref.watch(companyProfileProvider)?.address?.substring(
+        0, ref.watch(companyProfileProvider)?.address?.indexOf(',')) ??
+    "");
+
+final descriptionCompanyProvider = StateProvider(
+    (ref) => ref.watch(companyProfileProvider)?.description ?? "");
+
+final jobCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.job ?? "");

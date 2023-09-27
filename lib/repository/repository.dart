@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart';
 import 'package:jobhunt_ftl/model/address.dart';
+import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,7 +190,7 @@ class InsideService {
       'uid': uid,
       'display_name': full_name,
       'full_name': full_name,
-      'avatar_url': avatar_url,
+      'avatar_url': 'h',
       'email': email,
       'phone': phone,
       'address': address,
@@ -217,6 +218,53 @@ class InsideService {
     });
     Response response =
         await post(Uri.parse(BASE_URL + "register.php"), body: msg);
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getCompany(String uid) async {
+    final msg = jsonEncode({
+      'uid': uid,
+    });
+    Response response =
+        await post(Uri.parse(BASE_URL + "/company/company.php"), body: msg);
+    if (response.statusCode == 200) {
+      final CompanyDetail result = CompanyDetail.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['company']);
+      return result;
+    } else {
+      return null;
+    }
+  }
+
+  Future<dynamic> createCompany(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String website,
+    String description,
+    String job,
+  ) async {
+    final msg = jsonEncode({
+      'uid': uid,
+      'full_name': full_name,
+      'avatar_url': '',
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'web': website,
+      'description': description,
+      'job': job,
+      'level': 'Basic',
+    });
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job ');
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/company/create_company.php"),
+        body: msg);
+
     return jsonDecode(response.body)['success'];
   }
 }

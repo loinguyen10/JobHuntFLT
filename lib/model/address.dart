@@ -23,13 +23,15 @@ class ProvinceList {
 class DistrictList {
   String? code;
   String? name;
+  String? fullName;
   String? provinceCode;
 
-  DistrictList({this.code, this.name, this.provinceCode});
+  DistrictList({this.code, this.name, this.fullName, this.provinceCode});
 
   DistrictList.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     name = json['name'];
+    fullName = json['full_name'];
     provinceCode = json['province_code'];
   }
 
@@ -37,6 +39,7 @@ class DistrictList {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['code'] = this.code;
     data['name'] = this.name;
+    data['full_name'] = this.fullName;
     data['province_code'] = this.provinceCode;
     return data;
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
+import 'package:jobhunt_ftl/screen/edit_recuiter.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../value/style.dart';
@@ -19,12 +20,13 @@ class RoleScreen extends ConsumerWidget {
           return Container(
             child: AlertDialog(
               content: Text(
-                "So ${Keystring.You_Are} $role?".toUpperCase(),
+                "So ${Keystring.You_Are.tr} $role?".toUpperCase(),
                 style: TextStyle(fontSize: 20),
               ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     if (role == Keystring.CANDIDATE.tr) {
                       Navigator.push(
                           context,
@@ -32,11 +34,11 @@ class RoleScreen extends ConsumerWidget {
                             builder: (context) => EditProfileScreenNew(),
                           ));
                     } else if (role == Keystring.RECUITER.tr) {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => EditProfileScreenNew(),
-                      //     ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecuiterEditScreen(),
+                          ));
                     }
                   },
                   child: Text(Keystring.ThatsRight.tr),

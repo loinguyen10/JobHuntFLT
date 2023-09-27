@@ -8,71 +8,46 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:jobhunt_ftl/component/app_button.dart';
-import 'package:jobhunt_ftl/component/date_dialog.dart';
-import 'package:jobhunt_ftl/component/loader_overlay.dart';
-import 'package:jobhunt_ftl/model/address.dart';
-import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_controller.dart';
 import '../blocs/app_event.dart';
 import '../blocs/app_riverpod_object.dart';
+import '../component/app_button.dart';
+import '../component/date_dialog.dart';
 import '../component/edittext.dart';
-import '../model/userprofile.dart';
+import '../component/loader_overlay.dart';
+import '../model/address.dart';
+import '../value/keystring.dart';
 import '../value/style.dart';
 import 'home.dart';
 
-class EditProfileScreenNew extends ConsumerStatefulWidget {
-  const EditProfileScreenNew({
-    super.key,
-    this.edit = false,
-  });
+class RecuiterEditScreen extends ConsumerWidget {
+  const RecuiterEditScreen({super.key, this.edit = false});
+
   final bool edit;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ScreenEditProfileNew();
-}
-
-class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     String filePath = '';
 
     final user = ref.watch(userLoginProvider);
-    final profile = ref.watch(userProfileProvider);
+    final company = ref.watch(companyProfileProvider);
 
-    final listEducationData = ref.watch(listEducationProvider);
     final listProvinceData = ref.watch(listProvinceProvider);
     final listDistrictData = ref.watch(listDistrictProvider);
     final listWardData = ref.watch(listWardProvider);
-    final listCurrencyData = ref.watch(listCurrencyProvider);
-    final listEducationShowData = ref.watch(listEducationShowProvider);
 
-    final educationChoose = ref.watch(educationChooseProvider);
-    final provinceChoose = ref.watch(provinceChooseProvider);
-    final districtChoose = ref.watch(districtChooseProvider);
-    final wardChoose = ref.watch(wardChooseProvider);
-    final currencyChoose = ref.watch(currencyChooseProvider);
+    final provinceChoose = ref.watch(provinceCompanyProvider);
+    final districtChoose = ref.watch(districtCompanyProvider);
+    final wardChoose = ref.watch(wardCompanyProvider);
 
-    final avatarProfile = ref.watch(avatarProfileProvider);
-    final cvProfile = ref.watch(cvUploadProvider);
-    final birthdayProfile = ref.watch(dateBirthProvider);
+    final avatarProfile = ref.watch(avatarCompanyProvider);
 
-    List<EducationList> listEducation = [];
     List<ProvinceList> listProvince = [];
     List<DistrictList> listDistrict = [];
     List<WardList> listWard = [];
-    List<CurrencyList> listCurrency = [];
 
 //get data
-    listEducationData.when(
-      data: (_data) {
-        listEducation.addAll(_data);
-      },
-      error: (error, stackTrace) => null,
-      loading: () => const CircularProgressIndicator(),
-    );
 
     listProvinceData.when(
       data: (_data) {
@@ -113,48 +88,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
       loading: () => const CircularProgressIndicator(),
     );
 
-    listCurrencyData.when(
-      data: (_data) {
-        listCurrency.addAll(_data);
-        listCurrency.sort((a, b) => a.code!.compareTo(b.code!));
-      },
-      error: (error, stackTrace) => null,
-      loading: () => const CircularProgressIndicator(),
-    );
-
 //dropdown
-    DropdownButtonHideUnderline dropEducation() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listEducation
-              .map((item) => DropdownMenuItem<EducationList>(
-                    value: item,
-                    child: Text(item.title ?? '', style: textNormal),
-                  ))
-              .toList(),
-          value: educationChoose?.id != null ? educationChoose : null,
-          onChanged: (value) {
-            if (!listEducationShowData.any((x) => x == value)) {
-              ref.read(educationChooseProvider.notifier).state = value;
-              ref.read(listEducationShowProvider.notifier).state = [
-                ...listEducationShowData,
-                value!
-              ];
-              // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
-            }
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
 
     DropdownButtonHideUnderline dropProvince() {
       return DropdownButtonHideUnderline(
@@ -174,10 +108,10 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
           onChanged: (value) {
             // listProvince.clear();
             if (provinceChoose?.code != null) {
-              ref.read(wardChooseProvider.notifier).state = null;
-              ref.read(districtChooseProvider.notifier).state = null;
+              ref.read(wardCompanyProvider.notifier).state = null;
+              ref.read(districtCompanyProvider.notifier).state = null;
             }
-            ref.read(provinceChooseProvider.notifier).state = value;
+            ref.read(provinceCompanyProvider.notifier).state = value;
             log('Province: ${value?.code}');
           },
           buttonStyleData: dropDownButtonStyle1,
@@ -206,9 +140,9 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
           onChanged: (value) {
             // listWard.clear();
             if (wardChoose?.code != null) {
-              ref.read(wardChooseProvider.notifier).state = null;
+              ref.read(wardCompanyProvider.notifier).state = null;
             }
-            ref.read(districtChooseProvider.notifier).state = value;
+            ref.read(districtCompanyProvider.notifier).state = value;
             log('District: ${value?.code}');
           },
           buttonStyleData: dropDownButtonStyle1,
@@ -235,7 +169,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               .toList(),
           value: wardChoose?.code != null ? wardChoose : null,
           onChanged: (value) {
-            ref.read(wardChooseProvider.notifier).state = value;
+            ref.read(wardCompanyProvider.notifier).state = value;
             log('Ward: ${value?.code}');
           },
           buttonStyleData: dropDownButtonStyle1,
@@ -246,35 +180,8 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
       );
     }
 
-    DropdownButtonHideUnderline dropCurrency() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listCurrency
-              .map((item) => DropdownMenuItem<CurrencyList>(
-                    value: item,
-                    child: Text('${item.symbol ?? ''}  ${item.code ?? ''}',
-                        style: textNormal),
-                  ))
-              .toList(),
-          value: currencyChoose?.code != null ? currencyChoose : null,
-          onChanged: (value) {
-            ref.read(currencyChooseProvider.notifier).state = value;
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
-
 //upload
-    Future<void> upload(int type) async {
+    Future<void> uploadImg() async {
       filePath = '';
 
       return showDialog(
@@ -293,7 +200,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                     child: Column(
                       children: [
                         Text(
-                          type == 1 ? 'Avatar' : 'CV',
+                          'Avatar',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 17,
@@ -311,39 +218,19 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                         SizedBox(
                           height: 15,
                         ),
-                        type == 1
-                            ? Container(
-                                child: filePath != ''
-                                    ? Image.file(
-                                        File(filePath),
-                                        width: double.infinity,
-                                        height: 250,
-                                      )
-                                    : Container(
-                                        width: double.infinity,
-                                        height: 250,
-                                        color: Colors.white,
-                                      ),
-                              )
-                            : Container(
-                                child: filePath != ''
-                                    ? Container(
-                                        width: double.infinity,
-                                        height: 150,
-                                        color: Colors.white,
-                                        child: Center(
-                                          child: Text('Uploaded'),
-                                        ),
-                                      )
-                                    : Container(
-                                        width: double.infinity,
-                                        height: 150,
-                                        color: Colors.white,
-                                        child: Center(
-                                          child: Text('NOTHING'),
-                                        ),
-                                      ),
-                              ),
+                        Container(
+                          child: filePath != ''
+                              ? Image.file(
+                                  File(filePath),
+                                  width: double.infinity,
+                                  height: 250,
+                                )
+                              : Container(
+                                  width: double.infinity,
+                                  height: 250,
+                                  color: Colors.white,
+                                ),
+                        ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,18 +240,11 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                                 child: ElevatedButton(
                                     onPressed: () async {
                                       if (filePath != '') {
-                                        if (type == 1) {
-                                          ref
-                                              .read(avatarProfileProvider
-                                                  .notifier)
-                                              .state = filePath;
-                                          Navigator.pop(context);
-                                        } else {
-                                          ref
-                                              .read(cvUploadProvider.notifier)
-                                              .state = filePath;
-                                          Navigator.pop(context);
-                                        }
+                                        ref
+                                            .read(
+                                                avatarCompanyProvider.notifier)
+                                            .state = filePath;
+                                        Navigator.pop(context);
                                       } else {
                                         Fluttertoast.showToast(
                                             msg: "File is blank.",
@@ -410,33 +290,11 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                                           filePath = '';
                                         });
                                       } else {
-                                        if (type == 1) {
-                                          XFile? file;
-                                          file = await ImagePicker().pickImage(
-                                              source: ImageSource.gallery);
-                                          if (file != null) {
-                                            filePath = file.path;
-                                            setState(() {});
-                                          }
-                                        } else {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles(
-                                                      type: FileType.custom,
-                                                      allowedExtensions: [
-                                                'pdf'
-                                              ]);
-
-                                          if (result != null &&
-                                              result.files.single.path !=
-                                                  null) {
-                                            File file =
-                                                File(result.files.single.path!);
-
-                                            filePath = file.path;
-                                          } else {
-                                            // User canceled the picker
-                                          }
+                                        XFile? file;
+                                        file = await ImagePicker().pickImage(
+                                            source: ImageSource.gallery);
+                                        if (file != null) {
+                                          filePath = file.path;
                                           setState(() {});
                                         }
                                       }
@@ -538,7 +396,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 child: SizedBox.fromSize(
                   size: Size.fromRadius(128), // Image radius
                   child: GestureDetector(
-                    onTap: () => upload(1),
+                    onTap: () => uploadImg(),
                     child: avatarProfile != ''
                         ? avatarProfile.substring(0, 8) == 'https://'
                             ? Image.network(
@@ -559,36 +417,36 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               SizedBox(height: 32),
               EditTextForm(
                 onChanged: ((value) {
-                  ref.read(fullNameProfileProvider.notifier).state = value;
+                  ref.read(fullNameCompanyProvider.notifier).state = value;
                   log(value);
                 }),
                 label: Keystring.FULLNAME.tr,
-                // hintText: Keystring.FULLNAME.tr,
-                content: profile?.fullName ?? '',
+                content: company?.fullname ?? '',
               ),
-              // SizedBox(height: 24),
-              // EditTextForm(
-              //   onChanged: ((value) {
-              //     //
-              //   }),
-              //   label: Keystring.DISPLAY_NAME.tr,
-              // ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
                   // ref.read(emailProfileProvider.notifier).state = value;
                 }),
                 label: Keystring.EMAIL.tr,
-                content: profile?.email ?? ref.watch(emailLoginProvider),
+                content: company?.email ?? ref.watch(emailLoginProvider),
                 readOnly: true,
               ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
-                  ref.read(phoneProfileProvider.notifier).state = value;
+                  ref.read(phoneCompanyProvider.notifier).state = value;
                 }),
                 label: Keystring.PHONE.tr,
-                content: profile?.phone ?? '',
+                content: company?.phone ?? '',
+              ),
+              SizedBox(height: 24),
+              EditTextForm(
+                onChanged: ((value) {
+                  ref.read(websiteCompanyProvider.notifier).state = value;
+                }),
+                label: Keystring.WEBSITE.tr,
+                content: '',
               ),
               SizedBox(height: 24),
               Container(
@@ -638,186 +496,66 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                           child: dropWard(),
                         ),
                       ),
-                      // SizedBox(height: 20),
-                      // EditTextForm(
-                      //   onChanged: ((value) {
-                      //     //
-                      //   }),
-                      //   label: Keystring.ROAD_STREET.tr,
-                      // ),
+                      SizedBox(height: 20),
+                      EditTextForm(
+                        onChanged: ((value) {
+                          ref.read(roadCompanyProvider.notifier).state = value;
+                        }),
+                        label: Keystring.ROAD_STREET.tr,
+                      ),
                     ],
                   ),
-                ),
-              ),
-              SizedBox(height: 24),
-              Container(
-                color: Colors.white,
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelText: Keystring.EDUCATION.tr,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      dropEducation(),
-                      listEducationShowData.isNotEmpty
-                          ? SizedBox(
-                              height: 16,
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                      listEducationShowData.isNotEmpty
-                          ? ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (_, index) {
-                                return Card(
-                                  shadowColor: Colors.grey,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  elevation: 2,
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          listEducationShowData[index].title ??
-                                              '',
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 3,
-                                        ),
-                                        InkWell(
-                                          child: Icon(Icons.delete_outlined),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemCount: listEducationShowData.length,
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 24),
-              Container(
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelText: Keystring.BIRTHDAY.tr,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child:
-                      DateCustomDialog().dalDate(context, ref, birthdayProfile),
                 ),
               ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
-                  ref.read(jobProfileProvider.notifier).state = value;
+                  ref.read(descriptionCompanyProvider.notifier).state = value;
                 }),
-                label: Keystring.WANT_JOB.tr,
-                content: profile?.job ?? '',
+                label: Keystring.DESCRIPTION.tr,
+                height: 120,
+                content: '',
+                maxLines: 5,
               ),
               SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: EditTextForm(
-                      typeKeyboard: TextInputType.number,
-                      onChanged: ((value) {
-                        ref.read(minSalaryProvider.notifier).state =
-                            int.parse(value);
-                      }),
-                      content: profile?.minSalary.toString() ?? '0',
-                      label: Keystring.MIN_SALARY.tr,
-                      // width: 50,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: EditTextForm(
-                      typeKeyboard: TextInputType.number,
-                      onChanged: ((value) {
-                        ref.read(maxSalaryProvider.notifier).state =
-                            int.parse(value);
-                      }),
-                      content: profile?.maxSalary.toString() ?? '0',
-                      label: Keystring.MAX_SALARY.tr,
-                      // width: 50,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: Keystring.CURRENCY.tr,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      child: dropCurrency(),
-                    ),
-                  ),
-                ],
+              EditTextForm(
+                onChanged: ((value) {
+                  ref.read(jobCompanyProvider.notifier).state = value;
+                }),
+                label: Keystring.WANT_JOB.tr,
+                content: company?.job ?? '',
               ),
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
-                  if (ref.watch(fullNameProfileProvider).isNotEmpty &&
-                      ref.watch(phoneProfileProvider).isNotEmpty &&
-                      provinceChoose!.code != null &&
-                      districtChoose!.code != null &&
-                      wardChoose!.code != null &&
-                      listEducationShowData.isNotEmpty &&
-                      ref.watch(dateBirthProvider).isNotEmpty &&
-                      ref.watch(jobProfileProvider).isNotEmpty &&
-                      ref.watch(minSalaryProvider) > 0 &&
-                      ref.watch(maxSalaryProvider) > 0 &&
-                      ref.watch(minSalaryProvider) <
-                          ref.watch(maxSalaryProvider) &&
-                      currencyChoose!.code != null) {
-                    var eduImport = '';
-                    for (var edu in listEducationShowData) {
-                      eduImport += "${edu.id},";
-                    }
-
-                    log('${eduImport.substring(0, eduImport.length - 1)}');
-
-                    if (!widget.edit) {
+                  log('${user!.uid} + ${ref.watch(fullNameCompanyProvider)} + ${ref.watch(phoneCompanyProvider)} + ${ref.watch(websiteCompanyProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(roadCompanyProvider)} + ${ref.watch(jobCompanyProvider)}  + ${ref.watch(descriptionCompanyProvider)}');
+                  if (ref.watch(fullNameCompanyProvider).isNotEmpty &&
+                      ref.watch(phoneCompanyProvider).isNotEmpty &&
+                      ref.watch(websiteCompanyProvider).isNotEmpty &&
+                      provinceChoose.code != null &&
+                      districtChoose.code != null &&
+                      wardChoose.code != null &&
+                      ref.watch(roadCompanyProvider).isNotEmpty &&
+                      ref.watch(jobCompanyProvider).isNotEmpty &&
+                      ref.watch(descriptionCompanyProvider).isNotEmpty) {
+                    if (!edit) {
                       log("click done");
-                      log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
-                      ref.read(LoginControllerProvider.notifier).createProfile(
+
+                      ref.read(LoginControllerProvider.notifier).createCompany(
                             user!.uid ?? '0',
-                            ref.watch(fullNameProfileProvider),
-                            ref.watch(avatarProfileProvider),
+                            ref.watch(fullNameCompanyProvider),
+                            ref.watch(avatarCompanyProvider),
                             ref.watch(emailLoginProvider),
-                            ref.watch(phoneProfileProvider),
-                            ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(dateBirthProvider),
-                            eduImport.substring(0, eduImport.length - 1),
-                            ref.watch(jobProfileProvider),
-                            ref.watch(minSalaryProvider),
-                            ref.watch(maxSalaryProvider),
-                            currencyChoose.code ?? '',
+                            ref.watch(phoneCompanyProvider),
+                            '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                            ref.watch(websiteCompanyProvider),
+                            ref.watch(descriptionCompanyProvider),
+                            ref.watch(jobCompanyProvider),
                           );
                     } else {
                       log("click update");
                     }
                   } else {
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
-
                     Fluttertoast.showToast(
                         msg: Keystring.NOT_FULL_DATA,
                         toastLength: Toast.LENGTH_SHORT,
@@ -830,7 +568,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 },
                 bgColor: appPrimaryColor,
                 height: 64,
-                content: widget.edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                content: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
                 fontSize: 16,
               ),
               SizedBox(height: 32),

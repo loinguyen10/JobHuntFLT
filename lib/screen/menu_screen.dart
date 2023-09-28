@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/screen/edit_profile.dart';
+import 'package:jobhunt_ftl/screen/edit_recuiter.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_riverpod_object.dart';
@@ -17,7 +19,6 @@ class MenuScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
 
@@ -37,16 +38,22 @@ class MenuScreen extends ConsumerWidget {
                 ClipOval(
                   child: SizedBox.fromSize(
                     size: Size.fromRadius(56), // Image radius
-                    child: profile != null || profile != null
-                        ? profile.avatarUrl != ''
+                    child: profile != null || company != null
+                        ? profile?.avatarUrl != null && profile?.avatarUrl != ''
                             ? Image.network(
-                                profile.avatarUrl ?? '',
+                                profile?.avatarUrl ?? '',
                                 fit: BoxFit.cover,
                               )
-                            : Icon(
-                                Icons.no_accounts_outlined,
-                                size: 112,
-                              )
+                            : company?.avatarUrl != null &&
+                                    company?.avatarUrl != ''
+                                ? Image.network(
+                                    company?.avatarUrl ?? '',
+                                    fit: BoxFit.cover,
+                                  )
+                                : Icon(
+                                    Icons.no_accounts_outlined,
+                                    size: 112,
+                                  )
                         : Icon(
                             Icons.no_accounts_outlined,
                             size: 112,
@@ -57,7 +64,11 @@ class MenuScreen extends ConsumerWidget {
                   height: 24,
                 ),
                 Text(
-                  profile != null ? profile.fullName ?? '' : Keystring.GUEST.tr,
+                  profile == null && company == null
+                      ? Keystring.GUEST.tr
+                      : profile != null
+                          ? profile.fullName ?? ''
+                          : company?.fullname ?? '',
                   style: textNameMenu,
                 ),
                 SizedBox(
@@ -67,13 +78,40 @@ class MenuScreen extends ConsumerWidget {
                 InkWell(
                   onTap: () {
                     log('click profile');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditProfileScreenNew(
-                                edit: true,
-                              )),
-                    );
+                    if (profile != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditProfileScreenNew(
+                                  edit: true,
+                                )),
+                      );
+                    } else if (company != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RecuiterEditScreen(
+                                  edit: true,
+                                )),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text('Please sign in.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(Keystring.OK.tr),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   child: Card(
                     shadowColor: Colors.grey,
@@ -327,19 +365,25 @@ class MenuScreen extends ConsumerWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                Loader.show(context);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
-                                    ));
-                                ref.read(emailLoginProvider.notifier).state =
-                                    '';
-                                ref.read(passwordLoginProvider.notifier).state =
-                                    '';
-                                ref.read(userLoginProvider.notifier).state =
-                                    null;
-                                Loader.hide();
+                                if (profile == null && company == null) {
+                                  SystemChannels.platform.invokeMethod<void>(
+                                      'SystemNavigator.pop');
+                                } else {
+                                  Loader.show(context);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginScreen(),
+                                      ));
+                                  ref.read(emailLoginProvider.notifier).state =
+                                      '';
+                                  ref
+                                      .read(passwordLoginProvider.notifier)
+                                      .state = '';
+                                  ref.read(userLoginProvider.notifier).state =
+                                      null;
+                                  Loader.hide();
+                                }
                               },
                               child: const Text('YES'),
                             ),

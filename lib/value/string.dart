@@ -73,6 +73,7 @@ class LocaleString extends Translations {
           'ThatsRight': 'That\'s right',
           'Website': 'Website',
           'Description': 'Description',
+          'OK': 'OK',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

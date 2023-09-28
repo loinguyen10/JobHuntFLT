@@ -3,13 +3,16 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 
 import '../model/company.dart';
 import '../model/userprofile.dart';
 import '../repository/repository.dart';
+import '../screen/home.dart';
+import 'app_riverpod_object.dart';
 
-String BASE_URL = 'https://lmatmet1234.000webhostapp.com/JHTest/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -70,4 +73,11 @@ Future<List<CurrencyList>> getCurrencyList() async {
   final list = await insideService.getListCurrency();
   log('list: ${list.length}');
   return list;
+}
+
+void resetCall(WidgetRef ref) {
+  ref.read(userLoginProvider.notifier).state = null;
+  ref.read(userProfileProvider.notifier).state = null;
+  ref.read(companyProfileProvider.notifier).state = null;
+  Get.offAll(HomeScreen());
 }

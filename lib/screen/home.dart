@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
+    final company = ref.watch(companyProfileProvider);
 
     return
         // SafeArea(child:
@@ -41,11 +42,23 @@ class HomeScreen extends ConsumerWidget {
                   ClipOval(
                     child: SizedBox.fromSize(
                       size: Size.fromRadius(24), // Image radius
-                      child: profile?.avatarUrl != ''
-                          ? Image.network(
-                              profile?.avatarUrl ?? '',
-                              fit: BoxFit.cover,
-                            )
+                      child: profile != null || company != null
+                          ? profile?.avatarUrl != null &&
+                                  profile?.avatarUrl != ''
+                              ? Image.network(
+                                  profile?.avatarUrl ?? '',
+                                  fit: BoxFit.cover,
+                                )
+                              : company?.avatarUrl != null &&
+                                      company?.avatarUrl != ''
+                                  ? Image.network(
+                                      company?.avatarUrl ?? '',
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Icon(
+                                      Icons.no_accounts_outlined,
+                                      size: 48,
+                                    )
                           : Icon(
                               Icons.no_accounts_outlined,
                               size: 48,

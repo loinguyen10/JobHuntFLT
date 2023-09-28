@@ -67,4 +67,5 @@ class Keystring {
   static const String ThatsRight = 'ThatsRight';
   static const String WEBSITE = 'Website';
   static const String DESCRIPTION = 'Description';
+  static const String OK = 'OK';
 }

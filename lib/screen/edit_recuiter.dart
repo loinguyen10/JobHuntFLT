@@ -446,7 +446,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                   ref.read(websiteCompanyProvider.notifier).state = value;
                 }),
                 label: Keystring.WEBSITE.tr,
-                content: '',
+                content: company?.web ?? '',
               ),
               SizedBox(height: 24),
               Container(
@@ -502,6 +502,9 @@ class RecuiterEditScreen extends ConsumerWidget {
                           ref.read(roadCompanyProvider.notifier).state = value;
                         }),
                         label: Keystring.ROAD_STREET.tr,
+                        content: company?.address!
+                                .substring(0, company.address!.indexOf(',')) ??
+                            '',
                       ),
                     ],
                   ),
@@ -514,7 +517,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                 }),
                 label: Keystring.DESCRIPTION.tr,
                 height: 120,
-                content: '',
+                content: company?.description ?? '',
                 maxLines: 5,
               ),
               SizedBox(height: 24),
@@ -554,10 +557,21 @@ class RecuiterEditScreen extends ConsumerWidget {
                           );
                     } else {
                       log("click update");
+                      ref.read(LoginControllerProvider.notifier).updateCompany(
+                            user!.uid ?? '0',
+                            ref.watch(fullNameCompanyProvider),
+                            ref.watch(avatarCompanyProvider),
+                            ref.watch(emailLoginProvider),
+                            ref.watch(phoneCompanyProvider),
+                            '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                            ref.watch(websiteCompanyProvider),
+                            ref.watch(descriptionCompanyProvider),
+                            ref.watch(jobCompanyProvider),
+                          );
                     }
                   } else {
                     Fluttertoast.showToast(
-                        msg: Keystring.NOT_FULL_DATA,
+                        msg: Keystring.NOT_FULL_DATA.tr,
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,

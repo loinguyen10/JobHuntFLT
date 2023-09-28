@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/screen/register_screen.dart';
 import 'package:jobhunt_ftl/screen/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
+import '../blocs/app_riverpod_void.dart';
 import '../component/edittext.dart';
 import '../value/style.dart';
 
@@ -334,9 +335,7 @@ class LoginScreen extends ConsumerWidget {
                     SizedBox(height: 8.0),
                     InkWell(
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(Keystring.APP_NAME.tr),
-                        ));
+                        resetCall(ref);
                       },
                       child: Text(
                         Keystring.USING_APP_WITHOUT.tr,

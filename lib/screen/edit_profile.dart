@@ -794,10 +794,9 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                     }
 
                     log('${eduImport.substring(0, eduImport.length - 1)}');
-
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
                     if (!widget.edit) {
                       log("click done");
-                      log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
                       ref.read(LoginControllerProvider.notifier).createProfile(
                             user!.uid ?? '0',
                             ref.watch(fullNameProfileProvider),
@@ -814,12 +813,24 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                           );
                     } else {
                       log("click update");
+                      ref.read(LoginControllerProvider.notifier).updateProfile(
+                            user!.uid ?? '0',
+                            ref.watch(fullNameProfileProvider),
+                            ref.watch(avatarProfileProvider),
+                            ref.watch(emailLoginProvider),
+                            ref.watch(phoneProfileProvider),
+                            ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                            ref.watch(dateBirthProvider),
+                            eduImport.substring(0, eduImport.length - 1),
+                            ref.watch(jobProfileProvider),
+                            ref.watch(minSalaryProvider),
+                            ref.watch(maxSalaryProvider),
+                            currencyChoose.code ?? '',
+                          );
                     }
                   } else {
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
-
                     Fluttertoast.showToast(
-                        msg: Keystring.NOT_FULL_DATA,
+                        msg: Keystring.NOT_FULL_DATA.tr,
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,

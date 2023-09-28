@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../component/loader_overlay.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
+String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -51,10 +52,10 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      // 'email': 'emminh@jobshunt.info',
-      // 'password': 'minhhoang',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      'email': 'emminh@jobshunt.info',
+      'password': 'minhhoang',
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -190,7 +191,7 @@ class InsideService {
       'uid': uid,
       'display_name': full_name,
       'full_name': full_name,
-      'avatar_url': 'h',
+      'avatar_url': '',
       'email': email,
       'phone': phone,
       'address': address,
@@ -263,6 +264,75 @@ class InsideService {
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/create_company.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> updateProfile(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String birthday,
+    String educationId,
+    String job,
+    int minSalary,
+    int maxSalary,
+    String currency,
+  ) async {
+    final msg = jsonEncode({
+      'uid': uid,
+      'display_name': full_name,
+      'full_name': full_name,
+      'avatar_url': '',
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'birthday': birthday,
+      'educationId': educationId,
+      'job': job,
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'currency': currency
+    });
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId \n job: $job \n min: $minSalary \n max: $maxSalary \n currency: $currency ');
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/profile/update_profile.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> updateCompany(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String website,
+    String description,
+    String job,
+  ) async {
+    final msg = jsonEncode({
+      'uid': uid,
+      'full_name': full_name,
+      'avatar_url': '',
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'web': website,
+      'description': description,
+      'job': job,
+    });
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job ');
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/company/update_company.php"),
         body: msg);
 
     return jsonDecode(response.body)['success'];

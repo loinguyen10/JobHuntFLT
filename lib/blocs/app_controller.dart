@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:jobhunt_ftl/repository/repository.dart';
+import 'package:path/path.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 
 final LoginControllerProvider =
     StateNotifierProvider<LoginController, InsideEvent>((ref) {
@@ -16,6 +21,9 @@ class LoginController extends StateNotifier<InsideEvent> {
   final Ref ref;
 
   void login(String email, String password) async {
+    ref.read(userLoginProvider.notifier).state = null;
+    ref.read(userProfileProvider.notifier).state = null;
+    ref.read(companyProfileProvider.notifier).state = null;
     state = const SignInLoadingEvent();
     log('$email + $password');
     try {
@@ -26,11 +34,13 @@ class LoginController extends StateNotifier<InsideEvent> {
 
         if (user.role != null && user.role != '') {
           if (user.role == 'candidate') {
+            log('candidate');
             final profile =
                 await ref.read(authRepositoryProvider).getProfile(user.uid);
             log('pro: $profile');
             ref.read(userProfileProvider.notifier).state = profile;
           } else if (user.role == 'recuiter') {
+            log('recuiter');
             final company =
                 await ref.read(authRepositoryProvider).getCompany(user.uid);
             log('company: $company');
@@ -90,26 +100,38 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const CreateProfileLoadingEvent();
     try {
-      final result = await ref.read(authRepositoryProvider).createProfile(
-            uid,
-            full_name,
-            avatar_url,
-            email,
-            phone,
-            address,
-            birthday,
-            educationId,
-            job,
-            minSalary,
-            maxSalary,
-            currency,
-          );
+      FormData formData = FormData.fromMap({
+        "uploadedfile": await MultipartFile.fromFile(avatar_url,
+            filename: "img_id${uid}_user_profile_avatar.jpg")
+      });
+      Response response = await Dio()
+          .post("$BASE_URL/profile/upload_profile_avatar.php", data: formData);
+      log('$response');
+      if (jsonDecode(response.data)['success'] == 1) {
+        final result = await ref.read(authRepositoryProvider).createProfile(
+              uid,
+              full_name,
+              '${BASE_IMG_URL}profile/avatar/img_id${uid}_user_profile_avatar.jpg',
+              email,
+              phone,
+              address,
+              birthday,
+              educationId,
+              job,
+              minSalary,
+              maxSalary,
+              currency,
+            );
 
-      if (result == 1) {
-        final profile = await ref.read(authRepositoryProvider).getProfile(uid);
-        log('pro: $profile');
-        ref.read(userProfileProvider.notifier).state = profile;
-        state = const CreateProfileSuccessEvent();
+        if (result == 1) {
+          final profile =
+              await ref.read(authRepositoryProvider).getProfile(uid);
+          log('pro: $profile');
+          ref.read(userProfileProvider.notifier).state = profile;
+          state = const CreateProfileSuccessEvent();
+        } else {
+          state = const CreateProfileErrorEvent(error: '');
+        }
       } else {
         state = const CreateProfileErrorEvent(error: '');
       }
@@ -133,28 +155,150 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const CreateProfileLoadingEvent();
     try {
-      final result = await ref.read(authRepositoryProvider).createCompany(
-            uid,
-            full_name,
-            avatar_url,
-            email,
-            phone,
-            address,
-            website,
-            description,
-            job,
-          );
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(avatar_url,
+            filename: "img_id${uid}_company_profile_avatar.jpg")
+      });
+      Response response = await Dio()
+          .post("$BASE_URL/company/upload_company_avatar.php", data: formData);
 
-      if (result == 1) {
-        final company = await ref.read(authRepositoryProvider).getCompany(uid);
-        log('company: $company');
-        ref.read(companyProfileProvider.notifier).state = company;
-        state = const CreateProfileSuccessEvent();
+      if (jsonDecode(response.data)['success'] == 1) {
+        final result = await ref.read(authRepositoryProvider).createCompany(
+              uid,
+              full_name,
+              '${BASE_IMG_URL}company/avatar/img_id${uid}_company_profile_avatar.jpg',
+              email,
+              phone,
+              address,
+              website,
+              description,
+              job,
+            );
+
+        if (result == 1) {
+          final company =
+              await ref.read(authRepositoryProvider).getCompany(uid);
+          log('company: $company');
+          ref.read(companyProfileProvider.notifier).state = company;
+          state = const CreateProfileSuccessEvent();
+        } else {
+          state = const CreateProfileErrorEvent(error: 'error');
+        }
       } else {
         state = const CreateProfileErrorEvent(error: 'error');
       }
     } catch (e) {
       state = CreateProfileErrorEvent(error: e.toString());
+    }
+
+    state = const CreateProfileStateEvent();
+  }
+
+  void updateProfile(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String birthday,
+    String educationId,
+    String job,
+    int minSalary,
+    int maxSalary,
+    String currency,
+  ) async {
+    state = const UpdateProfileLoadingEvent();
+    try {
+      FormData formData = FormData.fromMap({
+        "uploadedfile": await MultipartFile.fromFile(avatar_url,
+            filename: "img_id${uid}_user_profile_avatar.jpg")
+      });
+      Response response = await Dio()
+          .post("$BASE_URL/profile/upload_profile_avatar.php", data: formData);
+      log('$response');
+      if (jsonDecode(response.data)['success'] == 1) {
+        final result = await ref.read(authRepositoryProvider).updateProfile(
+              uid,
+              full_name,
+              '${BASE_IMG_URL}profile/avatar/img_id${uid}_user_profile_avatar.jpg',
+              email,
+              phone,
+              address,
+              birthday,
+              educationId,
+              job,
+              minSalary,
+              maxSalary,
+              currency,
+            );
+
+        if (result == 1) {
+          final profile =
+              await ref.read(authRepositoryProvider).getProfile(uid);
+          log('pro: $profile');
+          ref.read(userProfileProvider.notifier).state = profile;
+          state = const UpdateProfileSuccessEvent();
+        } else {
+          state = const UpdateProfileErrorEvent(error: '');
+        }
+      } else {
+        state = const UpdateProfileErrorEvent(error: '');
+      }
+    } catch (e) {
+      state = UpdateProfileErrorEvent(error: e.toString());
+    }
+
+    state = const UpdateProfileStateEvent();
+  }
+
+  void updateCompany(
+    String uid,
+    String full_name,
+    String avatar_url,
+    String email,
+    String phone,
+    String address,
+    String website,
+    String description,
+    String job,
+  ) async {
+    state = const UpdateProfileLoadingEvent();
+    try {
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(avatar_url,
+            filename: "img_id${uid}_company_profile_avatar.jpg")
+      });
+      Response response = await Dio()
+          .post("$BASE_URL/company/upload_company_avatar.php", data: formData);
+
+      if (jsonDecode(response.data)['success'] == 1) {
+        final result = await ref.read(authRepositoryProvider).updateCompany(
+              uid,
+              full_name,
+              '${BASE_IMG_URL}company/avatar/img_id${uid}_company_profile_avatar.jpg',
+              email,
+              phone,
+              address,
+              website,
+              description,
+              job,
+            );
+
+        if (result == 1) {
+          final company =
+              await ref.read(authRepositoryProvider).getCompany(uid);
+          log('company: $company');
+          ref.read(companyProfileProvider.notifier).state = company;
+          state = const UpdateProfileSuccessEvent();
+        } else {
+          state = const UpdateProfileErrorEvent(error: 'error');
+        }
+      } else {
+        state = const UpdateProfileErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = UpdateProfileErrorEvent(error: e.toString());
     }
 
     state = const CreateProfileStateEvent();

@@ -265,13 +265,13 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const UpdateProfileLoadingEvent();
     try {
+      log('avatar: ${avatar_url}');
       FormData formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(avatar_url,
+        "uploadedfile": await MultipartFile.fromFile(avatar_url,
             filename: "img_id${uid}_company_profile_avatar.jpg")
       });
       Response response = await Dio()
-          .post("$BASE_URL/company/upload_company_avatar.php", data: formData);
-
+          .post(BASE_URL + 'company/upload_company_avatar.php', data: formData);
       if (jsonDecode(response.data)['success'] == 1) {
         final result = await ref.read(authRepositoryProvider).updateCompany(
               uid,
@@ -286,12 +286,14 @@ class LoginController extends StateNotifier<InsideEvent> {
             );
 
         if (result == 1) {
+          log('hello2');
           final company =
               await ref.read(authRepositoryProvider).getCompany(uid);
           log('company: $company');
           ref.read(companyProfileProvider.notifier).state = company;
           state = const UpdateProfileSuccessEvent();
         } else {
+          log('hello3');
           state = const UpdateProfileErrorEvent(error: 'error');
         }
       } else {

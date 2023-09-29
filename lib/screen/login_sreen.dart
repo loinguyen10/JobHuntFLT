@@ -12,6 +12,7 @@ import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/screen/register_screen.dart';
 import 'package:jobhunt_ftl/screen/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../blocs/app_riverpod_void.dart';
 import '../component/edittext.dart';
@@ -195,8 +196,7 @@ class LoginScreen extends ConsumerWidget {
                     SizedBox(height: 30.0),
                     Text(
                       Keystring.APP_NAME.tr,
-                      style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.josefinSans(textStyle: textLogo),
                     ),
                     SizedBox(height: 50.0),
                     EditTextForm(

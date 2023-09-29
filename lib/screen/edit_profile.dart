@@ -17,6 +17,7 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import '../blocs/app_controller.dart';
 import '../blocs/app_event.dart';
 import '../blocs/app_riverpod_object.dart';
+import '../blocs/app_riverpod_void.dart';
 import '../component/edittext.dart';
 import '../model/userprofile.dart';
 import '../value/style.dart';
@@ -354,10 +355,11 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                                     onPressed: () async {
                                       if (filePath != '') {
                                         if (type == 1) {
+                                          String newFile = convertJpg(filePath);
                                           ref
                                               .read(avatarProfileProvider
                                                   .notifier)
-                                              .state = filePath;
+                                              .state = newFile;
                                           Navigator.pop(context);
                                         } else {
                                           ref
@@ -375,7 +377,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       }
-                                      log(filePath);
                                     },
                                     child: Container(
                                       width: 80,

@@ -74,6 +74,8 @@ class LocaleString extends Translations {
           'Website': 'Website',
           'Description': 'Description',
           'OK': 'OK',
+          'CV_Today': 'Signed CV Today',
+          'Posted_Jobs': 'Your Posted Jobs',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

@@ -52,8 +52,8 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      'email': 'emminh@jobshunt.info',
-      'password': 'minhhoang',
+      'email': 'hungbip@jobshunt.info',
+      'password': 'hung',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -336,5 +336,19 @@ class InsideService {
         body: msg);
 
     return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getListCompany() async {
+    Response response =
+        await get(Uri.parse(BASE_URL + "company/allCompany.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['company'];
+      return result.map((e) => CompanyDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
@@ -79,8 +80,7 @@ class RegisterScreen extends ConsumerWidget {
                     SizedBox(height: 30.0),
                     Text(
                       Keystring.APP_NAME.tr,
-                      style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.josefinSans(textStyle: textLogo),
                     ),
                     SizedBox(height: 50.0),
                     EditTextForm(

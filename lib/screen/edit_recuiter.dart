@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 
 import '../blocs/app_controller.dart';
 import '../blocs/app_event.dart';
@@ -240,10 +241,11 @@ class RecuiterEditScreen extends ConsumerWidget {
                                 child: ElevatedButton(
                                     onPressed: () async {
                                       if (filePath != '') {
+                                        String newFile = convertJpg(filePath);
                                         ref
                                             .read(
                                                 avatarCompanyProvider.notifier)
-                                            .state = filePath;
+                                            .state = newFile;
                                         Navigator.pop(context);
                                       } else {
                                         Fluttertoast.showToast(
@@ -255,7 +257,6 @@ class RecuiterEditScreen extends ConsumerWidget {
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       }
-                                      log(filePath);
                                     },
                                     child: Container(
                                       width: 80,
@@ -429,7 +430,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                   // ref.read(emailProfileProvider.notifier).state = value;
                 }),
                 label: Keystring.EMAIL.tr,
-                content: company?.email ?? ref.watch(emailLoginProvider),
+                content: company?.email ?? ref.watch(emailCompanyProvider),
                 readOnly: true,
               ),
               SizedBox(height: 24),
@@ -548,7 +549,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                             user!.uid ?? '0',
                             ref.watch(fullNameCompanyProvider),
                             ref.watch(avatarCompanyProvider),
-                            ref.watch(emailLoginProvider),
+                            ref.watch(emailCompanyProvider),
                             ref.watch(phoneCompanyProvider),
                             '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(websiteCompanyProvider),

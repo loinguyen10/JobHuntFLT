@@ -68,4 +68,6 @@ class Keystring {
   static const String WEBSITE = 'Website';
   static const String DESCRIPTION = 'Description';
   static const String OK = 'OK';
+  static const String CV_Today = 'CV_Today';
+  static const String Posted_Jobs = 'Posted_Jobs';
 }

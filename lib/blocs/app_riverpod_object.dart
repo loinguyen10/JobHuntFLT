@@ -32,8 +32,11 @@ final authRepositoryProvider = Provider<InsideService>((ref) {
   return InsideService();
 });
 
+final listJobProvider =
+    FutureProvider<List<CompanyInfo>>((ref) => getJobList());
+
 final listCompanyProvider =
-    FutureProvider<List<CompanyInfo>>((ref) => getCompanyList());
+    FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
 
 final listEducationProvider =
     FutureProvider<List<EducationList>>((ref) => getEducationList());
@@ -158,6 +161,11 @@ final avatarCompanyProvider =
 
 final fullNameCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.fullname ?? "");
+
+final emailCompanyProvider = StateProvider((ref) =>
+    ref.watch(companyProfileProvider)?.email ??
+    ref.watch(emailLoginProvider) ??
+    '');
 
 final websiteCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");

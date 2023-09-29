@@ -13,6 +13,8 @@ final textJobHome = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 final textMenu = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
 final textNameMenu = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 final textTitleRole = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
+final textLogo = TextStyle(fontSize: 48, fontWeight: FontWeight.bold);
+final textNameVCompany = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
 //color
 final appPrimaryColor = Color(0xff00A3FF);

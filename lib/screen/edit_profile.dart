@@ -579,7 +579,8 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                   // ref.read(emailProfileProvider.notifier).state = value;
                 }),
                 label: Keystring.EMAIL.tr,
-                content: profile?.email ?? ref.watch(emailLoginProvider),
+                content:
+                    profile?.email ?? ref.watch(emailProfileProvider) ?? '',
                 readOnly: true,
               ),
               SizedBox(height: 24),
@@ -663,14 +664,16 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       dropEducation(),
-                      listEducationShowData.isNotEmpty
+                      listEducationShowData.isNotEmpty &&
+                              listEducationShowData != null
                           ? SizedBox(
                               height: 16,
                             )
                           : SizedBox(
                               height: 0,
                             ),
-                      listEducationShowData.isNotEmpty
+                      listEducationShowData.isNotEmpty &&
+                              listEducationShowData != null
                           ? ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -801,7 +804,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             user!.uid ?? '0',
                             ref.watch(fullNameProfileProvider),
                             ref.watch(avatarProfileProvider),
-                            ref.watch(emailLoginProvider),
+                            ref.watch(emailProfileProvider),
                             ref.watch(phoneProfileProvider),
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
@@ -817,7 +820,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             user!.uid ?? '0',
                             ref.watch(fullNameProfileProvider),
                             ref.watch(avatarProfileProvider),
-                            ref.watch(emailLoginProvider),
+                            ref.watch(emailProfileProvider),
                             ref.watch(phoneProfileProvider),
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),

@@ -58,8 +58,10 @@ final cvUploadProvider =
 final fullNameProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.fullName ?? "");
 
-final emailProfileProvider =
-    StateProvider((ref) => ref.watch(userProfileProvider)?.email ?? "");
+final emailProfileProvider = StateProvider((ref) =>
+    ref.watch(userProfileProvider)?.email ??
+    ref.watch(emailLoginProvider) ??
+    '');
 
 final phoneProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.phone ?? "");
@@ -142,8 +144,7 @@ final currencyChooseProvider = StateProvider.autoDispose<CurrencyList?>((ref) {
   return CurrencyList();
 });
 
-final listEducationShowProvider =
-    StateProvider.autoDispose<List<EducationList>>((ref) {
+final listEducationShowProvider = StateProvider<List<EducationList>>((ref) {
   if (ref.watch(userProfileProvider) != null) {
     var education = ref.watch(userProfileProvider)?.education;
     return [...education!];

@@ -98,7 +98,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     int maxSalary,
     String currency,
   ) async {
-    state = const CreateProfileLoadingEvent();
+    state = const CreateThingLoadingEvent();
     try {
       FormData formData = FormData.fromMap({
         "uploadedfile": await MultipartFile.fromFile(avatar_url,
@@ -128,18 +128,18 @@ class LoginController extends StateNotifier<InsideEvent> {
               await ref.read(authRepositoryProvider).getProfile(uid);
           log('pro: $profile');
           ref.read(userProfileProvider.notifier).state = profile;
-          state = const CreateProfileSuccessEvent();
+          state = const CreateThingSuccessEvent();
         } else {
-          state = const CreateProfileErrorEvent(error: '');
+          state = const CreateThingErrorEvent(error: '');
         }
       } else {
-        state = const CreateProfileErrorEvent(error: '');
+        state = const CreateThingErrorEvent(error: '');
       }
     } catch (e) {
-      state = CreateProfileErrorEvent(error: e.toString());
+      state = CreateThingErrorEvent(error: e.toString());
     }
 
-    state = const CreateProfileStateEvent();
+    state = const ThingStateEvent();
   }
 
   void createCompany(
@@ -153,7 +153,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String description,
     String job,
   ) async {
-    state = const CreateProfileLoadingEvent();
+    state = const CreateThingLoadingEvent();
     try {
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(avatar_url,
@@ -180,18 +180,18 @@ class LoginController extends StateNotifier<InsideEvent> {
               await ref.read(authRepositoryProvider).getCompany(uid);
           log('company: $company');
           ref.read(companyProfileProvider.notifier).state = company;
-          state = const CreateProfileSuccessEvent();
+          state = const CreateThingSuccessEvent();
         } else {
-          state = const CreateProfileErrorEvent(error: 'error');
+          state = const CreateThingErrorEvent(error: 'error');
         }
       } else {
-        state = const CreateProfileErrorEvent(error: 'error');
+        state = const CreateThingErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateProfileErrorEvent(error: e.toString());
+      state = CreateThingErrorEvent(error: e.toString());
     }
 
-    state = const CreateProfileStateEvent();
+    state = const ThingStateEvent();
   }
 
   void updateProfile(
@@ -208,7 +208,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     int maxSalary,
     String currency,
   ) async {
-    state = const UpdateProfileLoadingEvent();
+    state = const UpdateThingLoadingEvent();
     try {
       FormData formData = FormData.fromMap({
         "uploadedfile": await MultipartFile.fromFile(avatar_url,
@@ -238,18 +238,18 @@ class LoginController extends StateNotifier<InsideEvent> {
               await ref.read(authRepositoryProvider).getProfile(uid);
           log('pro: $profile');
           ref.read(userProfileProvider.notifier).state = profile;
-          state = const UpdateProfileSuccessEvent();
+          state = const UpdateThingSuccessEvent();
         } else {
-          state = const UpdateProfileErrorEvent(error: '');
+          state = const UpdateThingErrorEvent(error: '');
         }
       } else {
-        state = const UpdateProfileErrorEvent(error: '');
+        state = const UpdateThingErrorEvent(error: '');
       }
     } catch (e) {
-      state = UpdateProfileErrorEvent(error: e.toString());
+      state = UpdateThingErrorEvent(error: e.toString());
     }
 
-    state = const UpdateProfileStateEvent();
+    state = const ThingStateEvent();
   }
 
   void updateCompany(
@@ -263,7 +263,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String description,
     String job,
   ) async {
-    state = const UpdateProfileLoadingEvent();
+    state = const UpdateThingLoadingEvent();
     try {
       log('avatar: ${avatar_url}');
       FormData formData = FormData.fromMap({
@@ -291,18 +291,124 @@ class LoginController extends StateNotifier<InsideEvent> {
               await ref.read(authRepositoryProvider).getCompany(uid);
           log('company: $company');
           ref.read(companyProfileProvider.notifier).state = company;
-          state = const UpdateProfileSuccessEvent();
+          state = const UpdateThingSuccessEvent();
         } else {
           log('hello3');
-          state = const UpdateProfileErrorEvent(error: 'error');
+          state = const UpdateThingErrorEvent(error: 'error');
         }
       } else {
-        state = const UpdateProfileErrorEvent(error: 'error');
+        state = const UpdateThingErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = UpdateProfileErrorEvent(error: e.toString());
+      state = UpdateThingErrorEvent(error: e.toString());
     }
 
-    state = const CreateProfileStateEvent();
+    state = const ThingStateEvent();
+  }
+
+  void createJob(
+    String name,
+    String companyId,
+    int minSalary,
+    int maxSalary,
+    String currency,
+    int yearExperience,
+    int typeJob,
+    int numberCandidate,
+    String address,
+    String description,
+    String candidateRequirement,
+    String jobBenefit,
+    String tag,
+    String deadline,
+    int active,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).createJob(
+            name,
+            companyId,
+            minSalary,
+            maxSalary,
+            currency,
+            yearExperience,
+            typeJob,
+            numberCandidate,
+            address,
+            description,
+            candidateRequirement,
+            jobBenefit,
+            tag,
+            deadline,
+            active,
+          );
+
+      if (result == 1) {
+        // final job = await ref.read(authRepositoryProvider).getJob(code);
+        // log('job: $job');
+        // ref.read(jobDetailProvider.notifier).state = job;
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void updateJob(
+    String code,
+    String name,
+    String companyId,
+    int minSalary,
+    int maxSalary,
+    String currency,
+    int yearExperience,
+    int typeJob,
+    int numberCandidate,
+    String address,
+    String description,
+    String candidateRequirement,
+    String jobBenefit,
+    String tag,
+    String deadline,
+    int active,
+  ) async {
+    state = const UpdateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).updateJob(
+            code,
+            name,
+            companyId,
+            minSalary,
+            maxSalary,
+            currency,
+            yearExperience,
+            typeJob,
+            numberCandidate,
+            address,
+            description,
+            candidateRequirement,
+            jobBenefit,
+            tag,
+            deadline,
+            active,
+          );
+
+      if (result == 1) {
+        final job = await ref.read(authRepositoryProvider).getJob(code);
+        log('job: $job');
+        ref.read(jobDetailProvider.notifier).state = job;
+        state = const UpdateThingSuccessEvent();
+      } else {
+        state = const UpdateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = UpdateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
   }
 }

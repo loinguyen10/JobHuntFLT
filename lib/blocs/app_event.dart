@@ -78,29 +78,29 @@ class SignUpErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
-class CreateProfileStateEvent extends InsideEvent {
-  const CreateProfileStateEvent();
+class ThingStateEvent extends InsideEvent {
+  const ThingStateEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class CreateProfileLoadingEvent extends InsideEvent {
-  const CreateProfileLoadingEvent();
+class CreateThingLoadingEvent extends InsideEvent {
+  const CreateThingLoadingEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class CreateProfileSuccessEvent extends InsideEvent {
-  const CreateProfileSuccessEvent();
+class CreateThingSuccessEvent extends InsideEvent {
+  const CreateThingSuccessEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class CreateProfileErrorEvent extends InsideEvent {
-  const CreateProfileErrorEvent({this.error});
+class CreateThingErrorEvent extends InsideEvent {
+  const CreateThingErrorEvent({this.error});
 
   final String? error;
 
@@ -108,29 +108,22 @@ class CreateProfileErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
-class UpdateProfileStateEvent extends InsideEvent {
-  const UpdateProfileStateEvent();
+class UpdateThingLoadingEvent extends InsideEvent {
+  const UpdateThingLoadingEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class UpdateProfileLoadingEvent extends InsideEvent {
-  const UpdateProfileLoadingEvent();
+class UpdateThingSuccessEvent extends InsideEvent {
+  const UpdateThingSuccessEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class UpdateProfileSuccessEvent extends InsideEvent {
-  const UpdateProfileSuccessEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-class UpdateProfileErrorEvent extends InsideEvent {
-  const UpdateProfileErrorEvent({this.error});
+class UpdateThingErrorEvent extends InsideEvent {
+  const UpdateThingErrorEvent({this.error});
 
   final String? error;
 

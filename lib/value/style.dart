@@ -13,7 +13,8 @@ final textJobHome = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 final textMenu = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
 final textNameMenu = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 final textTitleRole = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
-final textLogo = TextStyle(fontSize: 48, fontWeight: FontWeight.bold);
+final textLogo =
+    TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white);
 final textNameVCompany = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 
 //color
@@ -24,7 +25,6 @@ final bgGradientColor = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   colors: <Color>[
-    appPrimaryColor,
     appPrimaryColor,
     Color(0xffA0DDFF),
     Colors.white,

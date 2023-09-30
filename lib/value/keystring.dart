@@ -70,4 +70,20 @@ class Keystring {
   static const String OK = 'OK';
   static const String CV_Today = 'CV_Today';
   static const String Posted_Jobs = 'Posted_Jobs';
+  static const String Company_Name = 'Company_Name';
+  static const String Name_Job = 'Name_Job';
+  static const String Year_Experience = 'Year_Experience';
+  static const String Type_Job = 'Type_Job';
+  static const String Number_Candidate = 'Number_Candidate';
+  static const String Job_Detail = 'Job_Detail';
+  static const String Candidate_Requirement = 'Candidate_Requirement';
+  static const String Job_Benefit = 'Job_Benefit';
+  static const String Tag = 'Tag';
+  static const String Deadline = 'Deadline';
+  static const String ACTIVE = 'Active';
+  static const String ARGEEMENT = 'Argeement';
+  static const String DISARGEEMENT = 'Disagreement';
+  static const String INTERN = 'Intern';
+  static const String PART_TIME = 'Part_Time';
+  static const String FULL_TIME = 'Full_Time';
 }

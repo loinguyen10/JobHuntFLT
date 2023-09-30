@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/company.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -349,6 +350,109 @@ class InsideService {
       return result.map((e) => CompanyDetail.fromJson(e)).toList();
     } else {
       return [];
+    }
+  }
+
+  Future<dynamic> createJob(
+    String name,
+    String companyId,
+    int minSalary,
+    int maxSalary,
+    String currency,
+    int yearExperience,
+    int typeJob,
+    int numberCandidate,
+    String address,
+    String description,
+    String candidateRequirement,
+    String jobBenefit,
+    String tag,
+    String deadline,
+    int active,
+  ) async {
+    final msg = jsonEncode({
+      'name': name,
+      'companyId': companyId,
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'currency': currency,
+      'yearExperience': yearExperience,
+      'typeJob': typeJob,
+      'numberCandidate': numberCandidate,
+      'address': address,
+      'description': description,
+      'candidateRequirement': candidateRequirement,
+      'jobBenefit': jobBenefit,
+      'tag': tag,
+      'deadline': deadline,
+      'active': active,
+      'level': 'Basic',
+    });
+    log('name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\ncurrency: $currency\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/job/create_job.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> updateJob(
+    String code,
+    String name,
+    String companyId,
+    int minSalary,
+    int maxSalary,
+    String currency,
+    int yearExperience,
+    int typeJob,
+    int numberCandidate,
+    String address,
+    String description,
+    String candidateRequirement,
+    String jobBenefit,
+    String tag,
+    String deadline,
+    int active,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+      'name': name,
+      'companyId': companyId,
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'currency': currency,
+      'yearExperience': yearExperience,
+      'typeJob': typeJob,
+      'numberCandidate': numberCandidate,
+      'address': address,
+      'description': description,
+      'candidateRequirement': candidateRequirement,
+      'jobBenefit': jobBenefit,
+      'tag': tag,
+      'deadline': deadline,
+      'active': active,
+      'level': 'Basic',
+    });
+    log('code: $code\n name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\ncurrency: $currency\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/job/update_job.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getJob(String code) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+    Response response =
+        await post(Uri.parse(BASE_URL + "/job/job.php"), body: msg);
+    if (response.statusCode == 200) {
+      final JobDetail result = JobDetail.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['job']);
+      return result;
+    } else {
+      return null;
     }
   }
 }

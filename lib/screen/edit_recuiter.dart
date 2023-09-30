@@ -343,8 +343,7 @@ class RecuiterEditScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateProfileErrorEvent ||
-            state is UpdateProfileErrorEvent) {
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
           Loader.hide();
           log('error');
           showDialog(
@@ -365,20 +364,20 @@ class RecuiterEditScreen extends ConsumerWidget {
           );
         }
 
-        if (state is CreateProfileSuccessEvent) {
+        if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
           Get.offAll(HomeScreen());
         }
 
-        if (state is UpdateProfileSuccessEvent) {
+        if (state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('u-success');
           Navigator.pop(context);
         }
 
-        if (state is CreateProfileLoadingEvent ||
-            state is UpdateProfileLoadingEvent) {
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
           Loader.show(context);
         }
       },
@@ -454,6 +453,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                 color: Colors.white,
                 child: InputDecorator(
                   decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.black),
                     labelText: Keystring.ADDRESS.tr,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -465,6 +465,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                       Container(
                         child: InputDecorator(
                           decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             labelText: Keystring.PROVINCE.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -477,6 +478,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                       Container(
                         child: InputDecorator(
                           decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             labelText: Keystring.DISTRICT.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -489,6 +491,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                       Container(
                         child: InputDecorator(
                           decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             labelText: Keystring.WARD.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),

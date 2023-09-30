@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/company.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
@@ -26,13 +27,18 @@ final userProfileProvider =
 final companyProfileProvider =
     StateProvider<CompanyDetail?>((ref) => CompanyDetail());
 
+final jobDetailProvider = StateProvider<JobDetail?>((ref) => JobDetail());
+
 final checkboxTermProvider = StateProvider.autoDispose((ref) => false);
 
 final authRepositoryProvider = Provider<InsideService>((ref) {
   return InsideService();
 });
 
-final listJobProvider =
+final listCVCompanyProvider =
+    FutureProvider<List<CompanyInfo>>((ref) => getCVList());
+
+final listJobCompanyProvider =
     FutureProvider<List<CompanyInfo>>((ref) => getJobList());
 
 final listCompanyProvider =
@@ -231,3 +237,100 @@ final descriptionCompanyProvider = StateProvider(
 
 final jobCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.job ?? "");
+
+//job
+
+final jobNameProvider =
+    StateProvider((ref) => ref.watch(jobDetailProvider)?.name ?? "");
+
+final jobSalaryProvider = StateProvider.autoDispose((ref) {
+  if (ref.watch(jobDetailProvider)?.code != null) {
+    if (ref.watch(jobDetailProvider)!.minSalary! < 0 &&
+        ref.watch(jobDetailProvider)!.maxSalary! < 0) {
+      return false;
+    }
+  }
+
+  return true;
+});
+
+final jobMinSalaryProvider =
+    StateProvider<int>((ref) => ref.watch(jobDetailProvider)?.minSalary ?? 0);
+
+final jobMaxSalaryProvider =
+    StateProvider<int>((ref) => ref.watch(jobDetailProvider)?.maxSalary ?? 0);
+
+final jobCurrencyProvider = StateProvider.autoDispose<CurrencyList?>((ref) {
+  if (ref.watch(jobDetailProvider) != null &&
+      !ref.watch(listCurrencyProvider).isLoading) {
+    var list = ref.watch(listCurrencyProvider).value;
+    var currency = ref.watch(jobDetailProvider)?.currency;
+
+    for (var x in list!) {
+      if (currency == x.code) {
+        return x;
+      }
+    }
+  }
+  return CurrencyList();
+});
+
+final jobYearExperienceProvider = StateProvider<int>(
+    (ref) => ref.watch(jobDetailProvider)?.yearExperience ?? 0);
+
+final jobTypeChooseProvider =
+    StateProvider.autoDispose((ref) => ref.watch(jobDetailProvider)?.typeJob);
+
+final jobNumberCandidateProvider = StateProvider<int>(
+    (ref) => ref.watch(jobDetailProvider)?.numberCandidate ?? 0);
+
+final provinceJobProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
+  if (ref.watch(jobDetailProvider) != null &&
+      !ref.watch(listProvinceProvider).isLoading) {
+    var list = ref.watch(listProvinceProvider).value;
+    for (var x in list!) {
+      var address = ref.watch(companyProfileProvider)?.address;
+      if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
+        return x;
+      }
+    }
+  }
+  return ProvinceList();
+});
+
+final districtJobProvider = StateProvider.autoDispose<DistrictList?>((ref) {
+  if (ref.watch(jobDetailProvider) != null &&
+      !ref.watch(listDistrictProvider).isLoading) {
+    var list = ref.watch(listDistrictProvider).value;
+    for (var x in list!) {
+      var address = ref.watch(jobDetailProvider)?.address;
+      if (address?.substring(0, address.indexOf(',')) == x.code) {
+        return x;
+      }
+    }
+  }
+  return DistrictList();
+});
+
+final jobDescriptionProvider =
+    StateProvider((ref) => ref.watch(jobDetailProvider)?.description ?? "");
+
+final jobCandidateRequirementProvider = StateProvider(
+    (ref) => ref.watch(jobDetailProvider)?.candidateRequirement ?? "");
+
+final jobBenefitProvider =
+    StateProvider((ref) => ref.watch(jobDetailProvider)?.jobBenefit ?? "");
+
+final jobTagProvider =
+    StateProvider((ref) => ref.watch(jobDetailProvider)?.tag ?? "");
+
+final jobDeadlineProvider = StateProvider.autoDispose(
+    (ref) => ref.watch(jobDetailProvider)?.deadline ?? "");
+
+final jobActiveProvider = StateProvider.autoDispose((ref) {
+  if (ref.watch(jobDetailProvider)?.active == 1) {
+    return true;
+  }
+
+  return false;
+});

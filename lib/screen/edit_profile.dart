@@ -485,8 +485,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateProfileErrorEvent ||
-            state is UpdateProfileErrorEvent) {
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
           Loader.hide();
           log('error');
           showDialog(
@@ -507,20 +506,20 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
           );
         }
 
-        if (state is CreateProfileSuccessEvent) {
+        if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
           Get.offAll(HomeScreen());
         }
 
-        if (state is UpdateProfileSuccessEvent) {
+        if (state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('u-success');
           Navigator.pop(context);
         }
 
-        if (state is CreateProfileLoadingEvent ||
-            state is UpdateProfileLoadingEvent) {
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
           Loader.show(context);
         }
       },
@@ -597,6 +596,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 color: Colors.white,
                 child: InputDecorator(
                   decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.black),
                     labelText: Keystring.ADDRESS.tr,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -608,6 +608,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       Container(
                         child: InputDecorator(
                           decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             labelText: Keystring.PROVINCE.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -620,6 +621,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       Container(
                         child: InputDecorator(
                           decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             labelText: Keystring.DISTRICT.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -632,6 +634,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       Container(
                         child: InputDecorator(
                           decoration: InputDecoration(
+                            labelStyle: TextStyle(color: Colors.black),
                             labelText: Keystring.WARD.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -656,6 +659,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 color: Colors.white,
                 child: InputDecorator(
                   decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.black),
                     labelText: Keystring.EDUCATION.tr,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -716,13 +720,14 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               Container(
                 child: InputDecorator(
                   decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.black),
                     labelText: Keystring.BIRTHDAY.tr,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                   child:
-                      DateCustomDialog().dalDate(context, ref, birthdayProfile),
+                      DateCustomDialog().dobDate(context, ref, birthdayProfile),
                 ),
               ),
               SizedBox(height: 24),
@@ -744,7 +749,9 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                         ref.read(minSalaryProvider.notifier).state =
                             int.parse(value);
                       }),
-                      content: profile?.minSalary.toString() ?? '0',
+                      content: profile?.minSalary == null
+                          ? ''
+                          : profile?.minSalary.toString() ?? '',
                       label: Keystring.MIN_SALARY.tr,
                       // width: 50,
                     ),
@@ -757,7 +764,9 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                         ref.read(maxSalaryProvider.notifier).state =
                             int.parse(value);
                       }),
-                      content: profile?.maxSalary.toString() ?? '0',
+                      content: profile?.maxSalary == null
+                          ? ''
+                          : profile?.maxSalary.toString() ?? '',
                       label: Keystring.MAX_SALARY.tr,
                       // width: 50,
                     ),
@@ -766,6 +775,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                   Expanded(
                     child: InputDecorator(
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(color: Colors.black),
                         labelText: Keystring.CURRENCY.tr,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),

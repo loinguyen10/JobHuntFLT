@@ -20,7 +20,7 @@ final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
 final InsideService insideService = InsideService();
 
-Future<List<CompanyInfo>> getJobList() async {
+Future<List<CompanyInfo>> getCVList() async {
   QuerySnapshot xxx = await fireStore.collection('CompanyInfo').get();
   List<DocumentSnapshot> result = xxx.docs;
   List<CompanyInfo> list = [];

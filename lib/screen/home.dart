@@ -89,8 +89,8 @@ class HomeScreen extends ConsumerWidget {
 }
 
 class ScreenHome extends ConsumerStatefulWidget {
-  ScreenHome({super.key, this.company});
-  CompanyDetail? company;
+  const ScreenHome({super.key, this.company});
+  final CompanyDetail? company;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ScreenHome();
@@ -165,7 +165,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobManagerScreen(),
+                              child: const CVCompanyScreen(),
                             ),
                           ),
                         ],
@@ -197,7 +197,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobManagerScreen(),
+                              child: const CVCompanyScreen(),
                             ),
                           ),
                         ],
@@ -269,7 +269,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobCompanyScreen(),
+                              child: const CVCompanyScreen(),
                             ),
                           ),
                         ],

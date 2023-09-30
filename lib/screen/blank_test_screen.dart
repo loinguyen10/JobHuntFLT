@@ -236,8 +236,7 @@ class BlankTestScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateProfileErrorEvent ||
-            state is UpdateProfileErrorEvent) {
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
           Loader.hide();
           log('error');
           showDialog(
@@ -258,18 +257,18 @@ class BlankTestScreen extends ConsumerWidget {
           );
         }
 
-        if (state is CreateProfileSuccessEvent) {
+        if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
         }
 
-        if (state is UpdateProfileSuccessEvent) {
+        if (state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('u-success');
         }
 
-        if (state is CreateProfileLoadingEvent ||
-            state is UpdateProfileLoadingEvent) {
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
           Loader.show(context);
         }
       },

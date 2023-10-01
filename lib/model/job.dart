@@ -1,3 +1,5 @@
+import 'package:jobhunt_ftl/model/company.dart';
+
 class JobDetail {
   String? code;
   String? name;
@@ -16,6 +18,7 @@ class JobDetail {
   String? deadline;
   int? active;
   String? level;
+  List<CompanyDetail>? company;
 
   JobDetail({
     this.code,
@@ -35,6 +38,7 @@ class JobDetail {
     this.deadline,
     this.active,
     this.level,
+    this.company,
   });
 
   JobDetail.fromJson(Map<String, dynamic> json) {
@@ -55,6 +59,12 @@ class JobDetail {
     deadline = json['deadline'];
     active = int.parse(json['active']);
     level = json['level'];
+    if (json['company'] != null) {
+      company = <CompanyDetail>[];
+      json['company'].forEach((v) {
+        company!.add(new CompanyDetail.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +86,9 @@ class JobDetail {
     data['deadline'] = this.deadline;
     data['active'] = this.active;
     data['level'] = this.level;
+    if (this.company != null) {
+      data['company'] = this.company!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

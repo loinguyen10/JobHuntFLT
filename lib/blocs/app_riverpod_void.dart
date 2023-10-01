@@ -135,3 +135,14 @@ Future<List<JobDetail>> getJobList() async {
   log('list: ${list.length}');
   return list;
 }
+
+Future<List<JobDetail>> getPostedJobList(String companyId) async {
+  final list = await insideService.getListJob();
+  List<JobDetail> yourJob = [];
+
+  for (var i in list) {
+    if (companyId == i.companyId) yourJob.add(i);
+  }
+
+  return yourJob;
+}

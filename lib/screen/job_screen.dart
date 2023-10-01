@@ -130,54 +130,44 @@ class JobCompanyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listJobProvider);
-    List<JobDetail> yourJob = [];
+    final _data = ref.watch(listPostJobProvider);
 
     return _data.when(
-      data: (_data) {
-        for (var i in _data) {
-          if (uid == i.companyId) yourJob.add(i);
-        }
+      data: (data) {
+        // Future.delayed(const Duration(minutes: 1),() => ref.refresh(listPostJobProvider.future));
 
-        return yourJob.isNotEmpty
-            ? ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (_, index) {
-                  String name = yourJob[index].name ?? '';
-                  String address = yourJob[index].address ?? '';
+        return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (_, index) {
+            String name = data[index].name ?? '';
+            String address = data[index].address ?? '';
 
-                  return Card(
-                    shadowColor: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    elevation: 2,
-                    child: ListTile(
-                      onTap: () {
-                        //
-                      },
-                      title: Column(children: [
-                        Text(
-                          name,
-                          overflow: TextOverflow.fade,
-                          maxLines: 3,
-                        ),
-                        Text(
-                          address,
-                          overflow: TextOverflow.fade,
-                          maxLines: 3,
-                        ),
-                      ]),
-                    ),
-                  );
+            return Card(
+              shadowColor: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              elevation: 2,
+              child: ListTile(
+                onTap: () {
+                  //
                 },
-                itemCount: yourJob.length,
-              )
-            : SizedBox(
-                height: 160,
-                child: Center(
-                  child: Text(Keystring.NO_DATA.tr),
-                ),
-              );
+                title: Column(children: [
+                  Text(
+                    name,
+                    overflow: TextOverflow.fade,
+                    maxLines: 3,
+                  ),
+                  Text(
+                    address,
+                    overflow: TextOverflow.fade,
+                    maxLines: 3,
+                  ),
+                ]),
+              ),
+            );
+          },
+          itemCount: data.length,
+        );
       },
       error: (error, stackTrace) => SizedBox(
         height: 160,

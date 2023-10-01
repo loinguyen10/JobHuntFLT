@@ -322,6 +322,7 @@ class JobEditScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
+          ref.refresh(listPostJobProvider.future);
           Get.offAll(() => HomeScreen());
         }
 
@@ -329,7 +330,6 @@ class JobEditScreen extends ConsumerWidget {
           Loader.hide();
           log('u-success');
           Navigator.pop(context);
-          getJobList();
         }
 
         if (state is CreateThingLoadingEvent ||
@@ -410,7 +410,7 @@ class JobEditScreen extends ConsumerWidget {
                                   onChanged: ((value) {
                                     ref
                                         .read(jobMinSalaryProvider.notifier)
-                                        .state = value;
+                                        .state = int.parse(value);
                                   }),
                                   content: job?.minSalary == null
                                       ? ''
@@ -425,7 +425,7 @@ class JobEditScreen extends ConsumerWidget {
                                   onChanged: ((value) {
                                     ref
                                         .read(jobMaxSalaryProvider.notifier)
-                                        .state = value;
+                                        .state = int.parse(value);
                                   }),
                                   content: job?.maxSalary == null
                                       ? ''

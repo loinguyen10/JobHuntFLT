@@ -32,6 +32,7 @@ class JobEditScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String filePath = '';
+    CurrencyList? vndCurrency;
 
     final user = ref.watch(userLoginProvider);
     final company = ref.watch(companyProfileProvider);
@@ -89,6 +90,10 @@ class JobEditScreen extends ConsumerWidget {
       data: (_data) {
         listCurrency.addAll(_data);
         listCurrency.sort((a, b) => a.code!.compareTo(b.code!));
+
+        for (var i in _data) {
+          if (i.code == 'VND') vndCurrency = i;
+        }
       },
       error: (error, stackTrace) => null,
       loading: () => const CircularProgressIndicator(),
@@ -218,6 +223,76 @@ class JobEditScreen extends ConsumerWidget {
       );
     }
 
+//void
+    void doneButton() {
+      log('${company!.uid} + ${ref.watch(jobNameProvider)} + ${ref.watch(jobMinSalaryProvider)} + ${ref.watch(jobMaxSalaryProvider)} + ${currencyChoose!.code} + ${provinceChoose!.code} + ${districtChoose!.code} + ${ref.watch(jobYearExperienceProvider)}  + ${jobTypeChoose!} + ${ref.watch(jobNumberCandidateProvider)}  + ${ref.watch(jobDescriptionProvider)} + ${ref.watch(jobCandidateRequirementProvider)} + ${ref.watch(jobBenefitProvider)} + ${ref.watch(jobTagProvider)} + ${jobDeadline}');
+      if (ref.watch(jobNameProvider).isNotEmpty &&
+          !ref.watch(jobMinSalaryProvider).isNaN &&
+          !ref.watch(jobMaxSalaryProvider).isNaN &&
+          currencyChoose.code != null &&
+          !ref.watch(jobYearExperienceProvider).isNaN &&
+          jobTypeChoose != null &&
+          !ref.watch(jobNumberCandidateProvider).isNaN &&
+          provinceChoose.code != null &&
+          districtChoose.code != null &&
+          ref.watch(jobDescriptionProvider).isNotEmpty &&
+          ref.watch(jobCandidateRequirementProvider).isNotEmpty &&
+          ref.watch(jobBenefitProvider).isNotEmpty &&
+          ref.watch(jobTagProvider).isNotEmpty &&
+          jobDeadline.isNotEmpty) {
+        if (!edit) {
+          log("click done");
+
+          ref.read(LoginControllerProvider.notifier).createJob(
+                ref.watch(jobNameProvider),
+                company.uid ?? '0',
+                ref.watch(jobMinSalaryProvider),
+                ref.watch(jobMaxSalaryProvider),
+                currencyChoose.code ?? '',
+                ref.watch(jobYearExperienceProvider),
+                jobTypeChoose,
+                ref.watch(jobNumberCandidateProvider),
+                '${districtChoose.code},${provinceChoose.code}',
+                ref.watch(jobDescriptionProvider),
+                ref.watch(jobCandidateRequirementProvider),
+                ref.watch(jobBenefitProvider),
+                ref.watch(jobTagProvider),
+                jobDeadline,
+                jobActive ? 1 : 0,
+              );
+        } else {
+          log("click update");
+          ref.read(LoginControllerProvider.notifier).updateJob(
+                job!.code ?? '0',
+                ref.watch(jobNameProvider),
+                company.uid ?? '0',
+                ref.watch(jobMinSalaryProvider),
+                ref.watch(jobMaxSalaryProvider),
+                currencyChoose.code ?? '',
+                ref.watch(jobYearExperienceProvider),
+                jobTypeChoose,
+                ref.watch(jobNumberCandidateProvider),
+                '${districtChoose.code},${provinceChoose.code}',
+                ref.watch(jobDescriptionProvider),
+                ref.watch(jobCandidateRequirementProvider),
+                ref.watch(jobBenefitProvider),
+                ref.watch(jobTagProvider),
+                jobDeadline,
+                jobActive ? 1 : 0,
+              );
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: Keystring.NOT_FULL_DATA.tr,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    }
+
 //listen
     ref.listen<InsideEvent>(
       LoginControllerProvider,
@@ -247,13 +322,14 @@ class JobEditScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
-          Get.offAll(HomeScreen());
+          Get.offAll(() => HomeScreen());
         }
 
         if (state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('u-success');
           Navigator.pop(context);
+          getJobList();
         }
 
         if (state is CreateThingLoadingEvent ||
@@ -378,7 +454,7 @@ class JobEditScreen extends ConsumerWidget {
                     child: EditTextForm(
                       onChanged: ((value) {
                         ref.read(jobYearExperienceProvider.notifier).state =
-                            value;
+                            int.parse(value);
                       }),
                       label: Keystring.Year_Experience.tr,
                       content: job?.yearExperience == null
@@ -397,7 +473,7 @@ class JobEditScreen extends ConsumerWidget {
                     child: EditTextForm(
                       onChanged: ((value) {
                         ref.read(jobNumberCandidateProvider.notifier).state =
-                            value;
+                            int.parse(value);
                       }),
                       label: Keystring.Number_Candidate.tr,
                       content: job?.numberCandidate == null
@@ -513,82 +589,13 @@ class JobEditScreen extends ConsumerWidget {
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
-                  log('${company!.uid} + ${ref.watch(jobNameProvider)} + ${ref.watch(jobMinSalaryProvider)} + ${ref.watch(jobMaxSalaryProvider)} + ${currencyChoose!.code} + ${provinceChoose!.code} + ${districtChoose!.code} + ${ref.watch(roadCompanyProvider)} + ${ref.watch(jobCompanyProvider)}  + ${ref.watch(descriptionCompanyProvider)}');
                   if (salaryActive == false) {
                     ref.read(jobMinSalaryProvider.notifier).state = -1;
                     ref.read(jobMaxSalaryProvider.notifier).state = -1;
-                    ref.read(jobCurrencyProvider.notifier).state = CurrencyList(
-                      code: 'VND',
-                      name: 'Dong',
-                      name_vi: 'Đồng',
-                      symbol: '₫',
-                    );
-                  }
-
-                  if (ref.watch(jobNameProvider).isNotEmpty &&
-                      !ref.watch(jobMinSalaryProvider).isNaN &&
-                      !ref.watch(jobMaxSalaryProvider).isNaN &&
-                      currencyChoose.code != null &&
-                      !ref.watch(jobYearExperienceProvider).isNaN &&
-                      jobTypeChoose != null &&
-                      !ref.watch(jobNumberCandidateProvider).isNaN &&
-                      provinceChoose.code != null &&
-                      districtChoose.code != null &&
-                      ref.watch(jobDescriptionProvider).isNotEmpty &&
-                      ref.watch(jobCandidateRequirementProvider).isNotEmpty &&
-                      ref.watch(jobBenefitProvider).isNotEmpty &&
-                      ref.watch(jobTagProvider).isNotEmpty &&
-                      jobDeadline.isNotEmpty) {
-                    if (!edit) {
-                      log("click done");
-
-                      ref.read(LoginControllerProvider.notifier).createJob(
-                            ref.watch(jobNameProvider),
-                            company.uid ?? '0',
-                            ref.watch(jobMinSalaryProvider),
-                            ref.watch(jobMaxSalaryProvider),
-                            currencyChoose.code ?? '',
-                            ref.watch(jobYearExperienceProvider),
-                            jobTypeChoose,
-                            ref.watch(jobNumberCandidateProvider),
-                            '${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(jobDescriptionProvider),
-                            ref.watch(jobCandidateRequirementProvider),
-                            ref.watch(jobBenefitProvider),
-                            ref.watch(jobTagProvider),
-                            jobDeadline,
-                            jobActive ? 1 : 0,
-                          );
-                    } else {
-                      log("click update");
-                      ref.read(LoginControllerProvider.notifier).updateJob(
-                            job!.code ?? '0',
-                            ref.watch(jobNameProvider),
-                            company.uid ?? '0',
-                            ref.watch(jobMinSalaryProvider),
-                            ref.watch(jobMaxSalaryProvider),
-                            currencyChoose.code ?? '',
-                            ref.watch(jobYearExperienceProvider),
-                            jobTypeChoose,
-                            ref.watch(jobNumberCandidateProvider),
-                            '${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(jobDescriptionProvider),
-                            ref.watch(jobCandidateRequirementProvider),
-                            ref.watch(jobBenefitProvider),
-                            ref.watch(jobTagProvider),
-                            jobDeadline,
-                            jobActive ? 1 : 0,
-                          );
-                    }
+                    ref.read(jobCurrencyProvider.notifier).state = vndCurrency;
+                    doneButton();
                   } else {
-                    Fluttertoast.showToast(
-                        msg: Keystring.NOT_FULL_DATA.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
+                    doneButton();
                   }
                 },
                 bgColor: appPrimaryColor,

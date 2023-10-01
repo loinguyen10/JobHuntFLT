@@ -3,19 +3,21 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/screen/company_screen.dart';
+import 'package:jobhunt_ftl/screen/edit_job.dart';
 import 'package:jobhunt_ftl/screen/job_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
+import '../blocs/app_controller.dart';
+import '../component/loader_overlay.dart';
 import '../value/style.dart';
 
 class HomeScreen extends ConsumerWidget {
-  // final getXX = Get.put(InsideGetX());
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final user = ref.watch(userLoginProvider);
@@ -293,7 +295,11 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  //
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => JobEditScreen()),
+                                  );
                                 },
                                 child: Icon(
                                   Icons.add,
@@ -313,7 +319,8 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobCompanyScreen(),
+                              child: JobCompanyScreen(
+                                  uid: widget.company?.uid ?? '0'),
                             ),
                           ),
                         ],

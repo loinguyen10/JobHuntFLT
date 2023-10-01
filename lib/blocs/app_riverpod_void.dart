@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart';
 import 'package:jobhunt_ftl/model/address.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 
 import '../model/company.dart';
 import '../model/userprofile.dart';
@@ -112,4 +113,25 @@ String getProvinceName(String code, WidgetRef ref) {
       );
   log('$code & $name');
   return name;
+}
+
+String getDistrictName(String code, WidgetRef ref) {
+  String name = '';
+  ref.watch(listDistrictProvider).when(
+        data: (_data) {
+          for (var i in _data) {
+            if (code == i.code) name = i.name ?? '';
+          }
+        },
+        error: (error, stackTrace) => (),
+        loading: () => (),
+      );
+  log('$code & $name');
+  return name;
+}
+
+Future<List<JobDetail>> getJobList() async {
+  final list = await insideService.getListJob();
+  log('list: ${list.length}');
+  return list;
 }

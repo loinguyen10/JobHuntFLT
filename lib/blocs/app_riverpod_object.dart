@@ -38,8 +38,7 @@ final authRepositoryProvider = Provider<InsideService>((ref) {
 final listCVCompanyProvider =
     FutureProvider<List<CompanyInfo>>((ref) => getCVList());
 
-final listJobCompanyProvider =
-    FutureProvider<List<CompanyInfo>>((ref) => getJobList());
+final listJobProvider = FutureProvider<List<JobDetail>>((ref) => getJobList());
 
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
@@ -285,13 +284,19 @@ final jobNumberCandidateProvider = StateProvider<int>(
     (ref) => ref.watch(jobDetailProvider)?.numberCandidate ?? 0);
 
 final provinceJobProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
-  if (ref.watch(jobDetailProvider) != null &&
-      !ref.watch(listProvinceProvider).isLoading) {
+  if (!ref.watch(listProvinceProvider).isLoading) {
     var list = ref.watch(listProvinceProvider).value;
     for (var x in list!) {
-      var address = ref.watch(companyProfileProvider)?.address;
-      if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
-        return x;
+      if (ref.watch(jobDetailProvider)?.code != null) {
+        var address = ref.watch(jobDetailProvider)?.address;
+        if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
+          return x;
+        }
+      } else if (ref.watch(companyProfileProvider)?.uid != null) {
+        var address = ref.watch(companyProfileProvider)?.address;
+        if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
+          return x;
+        }
       }
     }
   }
@@ -299,13 +304,22 @@ final provinceJobProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
 });
 
 final districtJobProvider = StateProvider.autoDispose<DistrictList?>((ref) {
-  if (ref.watch(jobDetailProvider) != null &&
-      !ref.watch(listDistrictProvider).isLoading) {
+  if (!ref.watch(listDistrictProvider).isLoading) {
     var list = ref.watch(listDistrictProvider).value;
     for (var x in list!) {
-      var address = ref.watch(jobDetailProvider)?.address;
-      if (address?.substring(0, address.indexOf(',')) == x.code) {
-        return x;
+      if (ref.watch(jobDetailProvider)?.code != null) {
+        var address = ref.watch(jobDetailProvider)?.address;
+        if (address?.substring(0, address.indexOf(',')) == x.code) {
+          return x;
+        }
+      } else if (ref.watch(companyProfileProvider)?.uid != null) {
+        var address = ref.watch(companyProfileProvider)?.address;
+        if (address?.substring(
+                address.lastIndexOf(',', address.lastIndexOf(',') - 1) + 1,
+                address.lastIndexOf(',')) ==
+            x.code) {
+          return x;
+        }
       }
     }
   }

@@ -344,9 +344,7 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        // final job = await ref.read(authRepositoryProvider).getJob(code);
-        // log('job: $job');
-        // ref.read(jobDetailProvider.notifier).state = job;
+        ref.watch(listJobProvider);
         state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');

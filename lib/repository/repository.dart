@@ -455,4 +455,17 @@ class InsideService {
       return null;
     }
   }
+
+  Future<dynamic> getListJob() async {
+    Response response = await get(Uri.parse(BASE_URL + "job/allJob.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      return result.map((e) => JobDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
 }

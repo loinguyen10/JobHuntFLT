@@ -291,6 +291,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               await ref.read(authRepositoryProvider).getCompany(uid);
           log('company: $company');
           ref.read(companyProfileProvider.notifier).state = company;
+          ref.refresh(avatarCompanyProvider);
           state = const UpdateThingSuccessEvent();
         } else {
           log('hello3');
@@ -344,7 +345,6 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        ref.watch(listJobProvider);
         state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');

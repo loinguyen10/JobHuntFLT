@@ -92,6 +92,10 @@ class LocaleString extends Translations {
           'Intern': 'Intern',
           'Part_Time': 'Part-Time',
           'Full_Time': 'Full-Time',
+          'Apply_Now': 'Apply Now',
+          'Information': 'Information',
+          'Person': 'Persons',
+          'Check_CV': 'Check CVs',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

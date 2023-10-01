@@ -18,7 +18,7 @@ class JobDetail {
   String? deadline;
   int? active;
   String? level;
-  List<CompanyDetail>? company;
+  CompanyDetail? company;
 
   JobDetail({
     this.code,
@@ -59,12 +59,9 @@ class JobDetail {
     deadline = json['deadline'];
     active = int.parse(json['active']);
     level = json['level'];
-    if (json['company'] != null) {
-      company = <CompanyDetail>[];
-      json['company'].forEach((v) {
-        company!.add(new CompanyDetail.fromJson(v));
-      });
-    }
+    company = json['company'] != null
+        ? new CompanyDetail.fromJson(json['company'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -87,7 +84,7 @@ class JobDetail {
     data['active'] = this.active;
     data['level'] = this.level;
     if (this.company != null) {
-      data['company'] = this.company!.map((v) => v.toJson()).toList();
+      data['company'] = this.company!.toJson();
     }
     return data;
   }

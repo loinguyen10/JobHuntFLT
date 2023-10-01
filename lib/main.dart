@@ -9,6 +9,7 @@ import 'package:jobhunt_ftl/screen/edit_job.dart';
 import 'package:jobhunt_ftl/screen/edit_profile.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
 import 'package:jobhunt_ftl/screen/edit_recuiter.dart';
+import 'package:jobhunt_ftl/screen/job_view_screen.dart';
 import 'package:jobhunt_ftl/screen/login_sreen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
 

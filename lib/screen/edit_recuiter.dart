@@ -565,7 +565,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                             user!.uid ?? '0',
                             ref.watch(fullNameCompanyProvider),
                             ref.watch(avatarCompanyProvider),
-                            ref.watch(emailLoginProvider),
+                            company?.email ?? '',
                             ref.watch(phoneCompanyProvider),
                             '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(websiteCompanyProvider),

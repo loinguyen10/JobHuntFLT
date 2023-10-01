@@ -319,16 +319,12 @@ class JobEditScreen extends ConsumerWidget {
           );
         }
 
-        if (state is CreateThingSuccessEvent) {
+        if (state is CreateThingSuccessEvent ||
+            state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
           ref.refresh(listPostJobProvider.future);
-          Get.offAll(() => HomeScreen());
-        }
-
-        if (state is UpdateThingSuccessEvent) {
-          Loader.hide();
-          log('u-success');
+          ref.refresh(listJobProvider.future);
           Navigator.pop(context);
         }
 

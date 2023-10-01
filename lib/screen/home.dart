@@ -295,6 +295,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               ),
                               InkWell(
                                 onTap: () {
+                                  ref.refresh(jobDetailProvider);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -319,8 +320,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: JobCompanyScreen(
-                                  uid: widget.company?.uid ?? '0'),
+                              child: JobPostedCompanyScreen(),
                             ),
                           ),
                         ],

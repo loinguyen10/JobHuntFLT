@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/screen/job_view_screen.dart';
 
 import '../blocs/app_controller.dart';
 import '../blocs/app_event.dart';
@@ -283,38 +284,12 @@ class BlankTestScreen extends ConsumerWidget {
               SizedBox(
                 height: 24,
               ),
-              ClipOval(
-                child: SizedBox.fromSize(
-                  size: Size.fromRadius(128), // Image radius
-                  child: GestureDetector(
-                    onTap: () => upload(1),
-                    child: avatarProfile != ''
-                        ? avatarProfile.substring(0, 8) == 'https://'
-                            ? Image.network(
-                                avatarProfile,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(avatarProfile),
-                                fit: BoxFit.cover,
-                              )
-                        : Icon(
-                            Icons.no_accounts_outlined,
-                            size: 256,
-                          ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 32),
               AppButton(
-                onPressed: () {
-                  // ref.read(LoginControllerProvider.notifier).uploadImage(
-                  //     'candidate', '2', ref.watch(avatarProfileProvider));
-                },
-                bgColor: appPrimaryColor,
-                height: 64,
-                content: Keystring.DONE.tr,
-                fontSize: 16,
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => JobViewScreen()),
+                ),
+                bgColor: Colors.brown,
               ),
               SizedBox(height: 32),
             ],

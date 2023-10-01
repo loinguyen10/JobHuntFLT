@@ -14,6 +14,7 @@ class AppButton extends StatelessWidget {
     this.disableBtn = false,
     this.rightIcon,
     this.padding,
+    this.borderRadius = 8,
   });
   final GestureTapCallback onPressed;
   String content;
@@ -27,6 +28,7 @@ class AppButton extends StatelessWidget {
   Color colorBorder;
   IconData? rightIcon;
   EdgeInsets? padding;
+  double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,8 @@ class AppButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             padding: padding,
             backgroundColor: disableBtn == false ? bgColor : Colors.grey,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(borderRadius)),
             side: BorderSide(color: colorBorder, width: 1),
             minimumSize: Size(width, height)),
         child: Row(

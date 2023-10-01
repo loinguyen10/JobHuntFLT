@@ -86,4 +86,8 @@ class Keystring {
   static const String INTERN = 'Intern';
   static const String PART_TIME = 'Part_Time';
   static const String FULL_TIME = 'Full_Time';
+  static const String APPLY_NOW = 'Apply_Now';
+  static const String INFORMATION = 'Information';
+  static const String PERSON = 'Person';
+  static const String CHECK_CV = 'Check_CV';
 }

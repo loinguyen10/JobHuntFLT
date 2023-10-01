@@ -9,6 +9,7 @@ class AppBorderFrame extends StatefulWidget {
     required this.child,
     this.width,
     this.height,
+    this.margin = const EdgeInsets.all(0),
   });
 
   final Color bgColor;
@@ -17,6 +18,7 @@ class AppBorderFrame extends StatefulWidget {
   final Widget child;
   final double? width;
   final double? height;
+  final EdgeInsetsGeometry margin;
 
   @override
   State<AppBorderFrame> createState() => _AppBorderFrameState();
@@ -28,6 +30,7 @@ class _AppBorderFrameState extends State<AppBorderFrame> {
     return Container(
       width: widget.width,
       height: widget.height,
+      margin: widget.margin,
       decoration: BoxDecoration(
           color: widget.bgColor,
           borderRadius: BorderRadius.circular(widget.borderRadius)),

@@ -157,3 +157,14 @@ Future<List<JobDetail>> getSuggestionJobList(String companyId) async {
 
   return yourJob;
 }
+
+Future<List<JobDetail>> getRecommendJobList() async {
+  final list = await insideService.getListJob();
+  List<JobDetail> yourJob = [];
+
+  for (var i in list) {
+    if (i.active == 1) yourJob.add(i);
+  }
+
+  return yourJob;
+}

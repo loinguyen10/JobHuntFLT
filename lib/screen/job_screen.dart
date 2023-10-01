@@ -16,41 +16,41 @@ class JobManagerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listCVCompanyProvider);
+    final _data = ref.watch(listRecommendJobProvider);
 
     return _data.when(
-      data: (_data) {
+      data: (data) {
         return ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (_, index) {
-            String name = _data[index].name ?? '';
-            String address = _data[index].address ?? '';
+            String avatar = data[index].company?.avatarUrl ?? '';
+            String name = data[index].name ?? '';
+            String province = getProvinceName(
+                data[index]
+                    .address!
+                    .substring(data[index].address!.lastIndexOf(',') + 1),
+                ref);
+            String maxSalary = data[index].maxSalary != -1
+                ? data[index].maxSalary.toString()
+                : Keystring.ARGEEMENT.tr;
 
-            return Card(
-              shadowColor: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              elevation: 2,
-              child: ListTile(
-                onTap: () {
-                  //
-                },
-                title: Column(children: [
-                  Text(
-                    name,
-                    overflow: TextOverflow.fade,
-                    maxLines: 3,
-                  ),
-                  Text(
-                    address,
-                    overflow: TextOverflow.fade,
-                    maxLines: 3,
-                  ),
-                ]),
-              ),
+            return GestureDetector(
+              onTap: () {
+                ref.read(jobDetailProvider.notifier).state = data[index];
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => JobViewScreen()),
+                );
+              },
+              child: AppJobCard(
+                  avatar: avatar,
+                  name: name,
+                  province: province,
+                  maxSalary: maxSalary),
             );
           },
-          itemCount: _data.length < 3 ? _data.length : 3,
+          itemCount: data.length < 3 ? data.length : 3,
         );
       },
       error: (error, stackTrace) => SizedBox(

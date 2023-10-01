@@ -146,6 +146,7 @@ class _AppJobCardState extends State<AppJobCard> {
           SizedBox(width: 8),
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   widget.name,

@@ -400,12 +400,12 @@ class JobViewScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: Container(
-                              child: JobCompanySuggestionScreen(),
-                            ),
-                          ),
+                          // SizedBox(width: 12),
+                          // Expanded(
+                          //   child: Container(
+                          //     child: JobCompanySuggestionScreen(),
+                          //   ),
+                          // ),
                           SizedBox(width: 8),
                         ],
                       ),

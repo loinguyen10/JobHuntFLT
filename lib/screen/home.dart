@@ -167,7 +167,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const CVCompanyScreen(),
+                              child: const JobManagerScreen(),
                             ),
                           ),
                         ],
@@ -199,7 +199,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               decoration: BoxDecoration(color: Colors.white),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const CVCompanyScreen(),
+                              child: const JobManagerScreen(),
                             ),
                           ),
                         ],

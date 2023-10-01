@@ -40,6 +40,9 @@ final listCVCompanyProvider =
 
 final listJobProvider = FutureProvider<List<JobDetail>>((ref) => getJobList());
 
+final listRecommendJobProvider =
+    FutureProvider<List<JobDetail>>((ref) => getRecommendJobList());
+
 final listPostJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
 

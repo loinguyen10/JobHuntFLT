@@ -3,7 +3,6 @@ class UserProfileDetail {
   String? displayName;
   String? fullName;
   String? avatarUrl;
-  String? cvUrl;
   String? email;
   String? phone;
   String? address;
@@ -20,7 +19,6 @@ class UserProfileDetail {
     this.displayName,
     this.fullName,
     this.avatarUrl,
-    this.cvUrl,
     this.email,
     this.phone,
     this.address,
@@ -38,15 +36,14 @@ class UserProfileDetail {
     displayName = json['display_name'];
     fullName = json['full_name'];
     avatarUrl = json['avatar_url'];
-    cvUrl = json['cv_url'];
     email = json['email'];
     phone = json['phone'];
     address = json['address'];
     birthday = json['birthday'];
     job = json['job'];
     level = json['level'];
-    minSalary = int.parse(json['minSalary']);
-    maxSalary = int.parse(json['maxSalary']);
+    minSalary = int.parse(json['minSalary'] ?? '0');
+    maxSalary = int.parse(json['maxSalary'] ?? '0');
     currency = json['currency'];
     if (json['education'] != null) {
       education = <EducationList>[];

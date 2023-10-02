@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
+import 'package:jobhunt_ftl/screen/user/viewcv.dart';
 
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
@@ -101,6 +102,7 @@ class CVChooseScreen extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  ref.refresh(listYourCVProvider);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CVManagerScreen()),
@@ -363,6 +365,8 @@ class CVManagerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final _data = ref.watch(listYourCVProvider);
+
     return SafeArea(
       child: Container(
         color: bgPrimaryColor,
@@ -374,6 +378,80 @@ class CVManagerScreen extends ConsumerWidget {
                 backgroundColor: bgPrimaryColor,
                 elevation: 0,
                 foregroundColor: Colors.black,
+              ),
+              SizedBox(height: 16),
+              _data.when(
+                data: (data) {
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      String type = data[index].type ?? '';
+                      String createTime = data[index].createTime ?? '';
+                      String? updateTime = data[index].updateTime;
+
+                      return Card(
+                        shadowColor: Colors.black,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        elevation: 5,
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ViewCVScreen(
+                                        cv: data[index].cvUrl ?? '',
+                                      )),
+                            );
+                          },
+                          title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 15,
+                                  child: Text(
+                                    (index + 1).toString(),
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    type == 'create'
+                                        ? Keystring.CREATED_CV.tr
+                                        : Keystring.UPLOADED_CV.tr,
+                                    overflow: TextOverflow.fade,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    updateTime != null && updateTime.isNotEmpty
+                                        ? '${Keystring.UPDATE.tr}: ${updateTime}'
+                                        : '${Keystring.CREATE.tr}: ${createTime}',
+                                    overflow: TextOverflow.fade,
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      );
+                    },
+                    itemCount: data.length,
+                  );
+                },
+                error: (error, stackTrace) => SizedBox(
+                  height: 160,
+                  child: Center(
+                    child: Text(Keystring.NO_DATA.tr),
+                  ),
+                ),
+                loading: () => const SizedBox(
+                  height: 160,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               ),
             ],
           ),

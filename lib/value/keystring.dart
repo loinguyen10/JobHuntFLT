@@ -100,4 +100,7 @@ class Keystring {
   static const String MAXIMIUM_SIZE = 'Maximium_Size';
   static const String WAITING = 'Waiting';
   static const String HAVING = 'Having';
+  static const String CREATED_CV = 'Created_CV';
+  static const String UPLOADED_CV = 'Uploaded_CV';
+  static const String CREATE = 'Create';
 }

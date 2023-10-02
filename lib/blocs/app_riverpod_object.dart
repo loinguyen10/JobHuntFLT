@@ -1,15 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
-import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/company.dart';
+import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
@@ -359,3 +353,8 @@ final jobActiveProvider = StateProvider.autoDispose((ref) {
 final cvUploadProvider = StateProvider((ref) => "");
 
 final uploadCheckProvider = StateProvider((ref) => "waiting");
+
+final cvDetailProvider = StateProvider<CVDetail?>((ref) => CVDetail());
+
+final listYourCVProvider = FutureProvider<List<CVDetail>>(
+    (ref) => getYourCVList(ref.watch(userLoginProvider)!.uid ?? '0'));

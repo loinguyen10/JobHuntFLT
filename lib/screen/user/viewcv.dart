@@ -29,8 +29,9 @@ class ViewCVScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        // title: Text("USER PROFILE"),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.black,
       ),
       body: ScreenViewCV(
         cv: cv,

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart';
 import 'package:jobhunt_ftl/model/address.dart';
+import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 
 import '../model/company.dart';
@@ -167,4 +168,17 @@ Future<List<JobDetail>> getRecommendJobList() async {
   }
 
   return yourJob;
+}
+
+Future<List<CVDetail>> getYourCVList(String userId) async {
+  final list = await insideService.getListCV();
+  List<CVDetail> yourCV = [];
+
+  log('hello : ${userId}');
+
+  for (var i in list) {
+    if (userId == i.userId) yourCV.add(i);
+  }
+
+  return yourCV;
 }

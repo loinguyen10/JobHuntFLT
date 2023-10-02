@@ -106,6 +106,9 @@ class LocaleString extends Translations {
           'Maximium_Size': 'Maximium File Size',
           'Waiting': 'Waiting',
           'Having': 'You\'re still having file. Do you want to choose again?',
+          'Created_CV': 'Created CV',
+          'Uploaded_CV': 'Upload CV',
+          'Create': 'Create',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

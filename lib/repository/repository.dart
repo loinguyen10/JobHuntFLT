@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/company.dart';
+import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
@@ -479,6 +481,7 @@ class InsideService {
       'cv_url': cv,
       'user_id': userId,
       'type': type,
+      'create_date': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
     log('cv: $cv\n userid: $userId\n type: $type');
 
@@ -486,5 +489,18 @@ class InsideService {
         await post(Uri.parse(BASE_URL + "/cv/create_cv.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getListCV() async {
+    Response response = await get(Uri.parse(BASE_URL + "cv/allCV.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['cv'];
+      return result.map((e) => CVDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 }

@@ -7,9 +7,9 @@ import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/user.dart';
-import 'package:jobhunt_ftl/screen/company_screen.dart';
-import 'package:jobhunt_ftl/screen/edit_job.dart';
-import 'package:jobhunt_ftl/screen/job_screen.dart';
+import 'package:jobhunt_ftl/screen/user/company_screen.dart';
+import 'package:jobhunt_ftl/screen/job/edit_job.dart';
+import 'package:jobhunt_ftl/screen/job/job_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 

@@ -9,14 +9,14 @@ import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
-import 'package:jobhunt_ftl/screen/edit_profile.dart';
+import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
-import 'package:jobhunt_ftl/screen/select_role_screen.dart';
+import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
-import '../blocs/app_riverpod_void.dart';
-import '../component/edittext.dart';
-import '../value/style.dart';
+import '../../blocs/app_riverpod_void.dart';
+import '../../component/edittext.dart';
+import '../../value/style.dart';
 
 class RegisterScreen extends ConsumerWidget {
   var emailUp = '';

@@ -14,14 +14,14 @@ import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
-import '../blocs/app_controller.dart';
-import '../blocs/app_event.dart';
-import '../blocs/app_riverpod_object.dart';
-import '../blocs/app_riverpod_void.dart';
-import '../component/edittext.dart';
-import '../model/userprofile.dart';
-import '../value/style.dart';
-import 'home.dart';
+import '../../blocs/app_controller.dart';
+import '../../blocs/app_event.dart';
+import '../../blocs/app_riverpod_object.dart';
+import '../../blocs/app_riverpod_void.dart';
+import '../../component/edittext.dart';
+import '../../model/userprofile.dart';
+import '../../value/style.dart';
+import '../home.dart';
 
 class EditProfileScreenNew extends ConsumerStatefulWidget {
   const EditProfileScreenNew({
@@ -531,6 +531,15 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              widget.edit
+                  ? AppBar(
+                      title: Text(Keystring.YOUR_PROFILE.tr),
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    )
+                  : SizedBox(
+                      height: 0,
+                    ),
               SizedBox(
                 height: 24,
               ),

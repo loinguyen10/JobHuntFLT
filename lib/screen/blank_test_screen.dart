@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
-import 'package:jobhunt_ftl/screen/job_view_screen.dart';
+import 'package:jobhunt_ftl/screen/job/job_view_screen.dart';
 
 import '../blocs/app_controller.dart';
 import '../blocs/app_event.dart';

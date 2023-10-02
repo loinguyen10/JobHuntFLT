@@ -409,4 +409,30 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+
+  void uploadCV(String uid, String cv, int lastNumber) async {
+    state = const CreateThingLoadingEvent();
+    log('$uid + $cv');
+    try {
+      FormData formData = FormData.fromMap({
+        "uid": uid,
+        "uploadedfile": await MultipartFile.fromFile(cv,
+            filename: "cv_id${uid}_${lastNumber + 1}.pdf")
+      });
+      Response response =
+          await Dio().post(BASE_URL + 'cv/upload_cv.php', data: formData);
+      if (jsonDecode(response.data)['success'] == 1) {
+        String url = '${BASE_CV_URL}/${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
+        final result =
+            await ref.read(authRepositoryProvider).addCV(url, uid, 'upload');
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'Failed');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
 }

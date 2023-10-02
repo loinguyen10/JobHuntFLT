@@ -69,9 +69,6 @@ final listCurrencyProvider =
 final avatarProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.avatarUrl ?? "");
 
-final cvUploadProvider =
-    StateProvider((ref) => ref.watch(userProfileProvider)?.cvUrl ?? "");
-
 final fullNameProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.fullName ?? "");
 
@@ -357,3 +354,8 @@ final jobActiveProvider = StateProvider.autoDispose((ref) {
 
   return false;
 });
+
+//job
+final cvUploadProvider = StateProvider((ref) => "");
+
+final uploadCheckProvider = StateProvider((ref) => "waiting");

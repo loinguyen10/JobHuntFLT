@@ -6,9 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-import '../blocs/app_riverpod_object.dart';
-import '../model/company.dart';
-import '../value/style.dart';
+import '../../blocs/app_riverpod_object.dart';
+import '../../model/company.dart';
+import '../../value/style.dart';
 
 class CompanyPremiumScreen extends ConsumerWidget {
   const CompanyPremiumScreen({super.key});

@@ -5,7 +5,7 @@ class AppBorderFrame extends StatefulWidget {
     super.key,
     this.bgColor = Colors.white,
     this.borderRadius = 8,
-    required this.labelText,
+    this.labelText = '',
     required this.child,
     this.width,
     this.height,

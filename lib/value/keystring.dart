@@ -90,4 +90,14 @@ class Keystring {
   static const String INFORMATION = 'Information';
   static const String PERSON = 'Person';
   static const String CHECK_CV = 'Check_CV';
+  static const String YOUR_CV = 'Your_CV';
+  static const String CREATE_CV = 'Create_CV';
+  static const String UPLOAD_CV = 'Upload_CV';
+  static const String MANAGER_CV = 'Manager_CV';
+  static const String PRESS_CHOOSE = 'Press_Choose';
+  static const String UPLOAD = 'Upload';
+  static const String SUPPORTED_FILE = 'Supported_File';
+  static const String MAXIMIUM_SIZE = 'Maximium_Size';
+  static const String WAITING = 'Waiting';
+  static const String HAVING = 'Having';
 }

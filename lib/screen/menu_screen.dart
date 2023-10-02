@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/screen/edit_profile.dart';
-import 'package:jobhunt_ftl/screen/edit_recuiter.dart';
+import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
+import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
+import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
-import 'login_sreen.dart';
+import 'login_register/login_sreen.dart';
 
 class MenuScreen extends ConsumerWidget {
   const MenuScreen({super.key});
@@ -162,6 +163,39 @@ class MenuScreen extends ConsumerWidget {
                           ),
                           Text(
                             Keystring.YOUR_INBOX.tr,
+                            style: textMenu,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CVChooseScreen()),
+                    );
+                  },
+                  child: Card(
+                    shadowColor: Colors.grey,
+                    shape: Border.all(color: Colors.white, width: 2),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    elevation: 2,
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.description_outlined,
+                            size: 32,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.YOUR_CV.tr,
                             style: textMenu,
                           ),
                         ],
@@ -366,8 +400,9 @@ class MenuScreen extends ConsumerWidget {
                             TextButton(
                               onPressed: () {
                                 if (profile == null && company == null) {
-                                  SystemChannels.platform.invokeMethod<void>(
-                                      'SystemNavigator.pop');
+                                  // SystemChannels.platform.invokeMethod<void>(
+                                  //     'SystemNavigator.pop');
+                                  Get.offAll(LoginScreen());
                                 } else {
                                   Loader.show(context);
                                   Navigator.pushReplacement(

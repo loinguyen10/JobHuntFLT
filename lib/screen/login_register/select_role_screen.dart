@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
-import 'package:jobhunt_ftl/screen/edit_recuiter.dart';
+import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
-import '../value/style.dart';
-import 'edit_profile.dart';
+import '../../value/style.dart';
+import '../user/edit_profile.dart';
 
 class RoleScreen extends ConsumerWidget {
   const RoleScreen({super.key});

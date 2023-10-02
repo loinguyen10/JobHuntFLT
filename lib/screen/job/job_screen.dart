@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/model/job.dart';
-import 'package:jobhunt_ftl/screen/job_view_screen.dart';
+import 'package:jobhunt_ftl/screen/job/job_view_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-import '../blocs/app_riverpod_object.dart';
-import '../blocs/app_riverpod_void.dart';
-import '../model/company.dart';
+import '../../blocs/app_riverpod_object.dart';
+import '../../blocs/app_riverpod_void.dart';
+import '../../model/company.dart';
 
 class JobManagerScreen extends ConsumerWidget {
   const JobManagerScreen({super.key});

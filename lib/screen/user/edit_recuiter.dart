@@ -10,17 +10,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 
-import '../blocs/app_controller.dart';
-import '../blocs/app_event.dart';
-import '../blocs/app_riverpod_object.dart';
-import '../component/app_button.dart';
-import '../component/date_dialog.dart';
-import '../component/edittext.dart';
-import '../component/loader_overlay.dart';
-import '../model/address.dart';
-import '../value/keystring.dart';
-import '../value/style.dart';
-import 'home.dart';
+import '../../blocs/app_controller.dart';
+import '../../blocs/app_event.dart';
+import '../../blocs/app_riverpod_object.dart';
+import '../../component/app_button.dart';
+import '../../component/date_dialog.dart';
+import '../../component/edittext.dart';
+import '../../component/loader_overlay.dart';
+import '../../model/address.dart';
+import '../../value/keystring.dart';
+import '../../value/style.dart';
+import '../home.dart';
 
 class RecuiterEditScreen extends ConsumerWidget {
   const RecuiterEditScreen({super.key, this.edit = false});
@@ -389,6 +389,15 @@ class RecuiterEditScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              edit
+                  ? AppBar(
+                      title: Text(Keystring.YOUR_PROFILE.tr),
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    )
+                  : SizedBox(
+                      height: 0,
+                    ),
               SizedBox(
                 height: 24,
               ),

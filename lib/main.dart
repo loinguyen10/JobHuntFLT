@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/screen/edit_job.dart';
-import 'package:jobhunt_ftl/screen/edit_profile.dart';
+import 'package:jobhunt_ftl/screen/job/edit_job.dart';
+import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
-import 'package:jobhunt_ftl/screen/edit_recuiter.dart';
-import 'package:jobhunt_ftl/screen/job_view_screen.dart';
-import 'package:jobhunt_ftl/screen/login_sreen.dart';
+import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
+import 'package:jobhunt_ftl/screen/job/job_view_screen.dart';
+import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
 
 void main() async {

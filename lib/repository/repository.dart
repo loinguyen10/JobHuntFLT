@@ -21,6 +21,7 @@ import '../component/loader_overlay.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
+String BASE_CV_URL = 'https://jobshunt.info/app_auth/cv/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -467,5 +468,23 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> addCV(
+    String cv,
+    String userId,
+    String type,
+  ) async {
+    final msg = jsonEncode({
+      'cv_url': cv,
+      'user_id': userId,
+      'type': type,
+    });
+    log('cv: $cv\n userid: $userId\n type: $type');
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/cv/create_cv.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

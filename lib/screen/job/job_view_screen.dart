@@ -5,12 +5,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
-import 'package:jobhunt_ftl/screen/edit_job.dart';
-import 'package:jobhunt_ftl/screen/job_screen.dart';
-import '../blocs/app_riverpod_object.dart';
-import '../component/app_button.dart';
-import '../value/keystring.dart';
-import '../value/style.dart';
+import 'package:jobhunt_ftl/screen/job/edit_job.dart';
+import 'package:jobhunt_ftl/screen/job/job_screen.dart';
+import '../../blocs/app_riverpod_object.dart';
+import '../../component/app_button.dart';
+import '../../value/keystring.dart';
+import '../../value/style.dart';
 
 class JobViewScreen extends ConsumerWidget {
   const JobViewScreen({super.key});

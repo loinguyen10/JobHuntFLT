@@ -6,9 +6,11 @@ import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
-import 'package:jobhunt_ftl/screen/job/job_screen.dart';
+import '../../blocs/app_controller.dart';
+import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../component/app_button.dart';
+import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 
@@ -19,6 +21,46 @@ class JobViewScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final role = ref.watch(userLoginProvider)?.role;
     final job = ref.watch(jobDetailProvider);
+    final bmCheck = ref.watch(turnBookmarkOn);
+
+    //listen
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+          Loader.hide();
+          log('error4');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(Keystring.UNSUCCESSFUL.tr),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingSuccessEvent ||
+            state is UpdateThingSuccessEvent) {
+          Loader.hide();
+          log('c-success');
+        }
+
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
 
     return Container(
       decoration: BoxDecoration(gradient: bgGradientColor),
@@ -88,42 +130,78 @@ class JobViewScreen extends ConsumerWidget {
                         SizedBox(
                           height: 16,
                         ),
-                        role != 'recuiter'
-                            ? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppButton(
+                        role != null
+                            ? role != 'recuiter'
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      AppButton(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                3.5,
+                                        onPressed: () {
+                                          //
+                                        },
+                                        content: Keystring.APPLY_NOW.tr,
+                                        bgColor: appPrimaryColor,
+                                        colorBorder: appPrimaryColor,
+                                        borderRadius: 16,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          if (bmCheck) {
+                                            ref
+                                                .read(LoginControllerProvider
+                                                    .notifier)
+                                                .removeFavorive(
+                                                  job.code ?? '0',
+                                                  ref
+                                                          .watch(
+                                                              userLoginProvider)
+                                                          ?.uid ??
+                                                      '0',
+                                                );
+                                          } else {
+                                            ref
+                                                .read(LoginControllerProvider
+                                                    .notifier)
+                                                .addFavorive(
+                                                  job.code ?? '0',
+                                                  ref
+                                                          .watch(
+                                                              userLoginProvider)
+                                                          ?.uid ??
+                                                      '0',
+                                                );
+                                          }
+                                        },
+                                        child: bmCheck
+                                            ? const Icon(
+                                                Icons.bookmark_added_rounded,
+                                                size: 48,
+                                                color: Colors.yellow,
+                                              )
+                                            : const Icon(
+                                                Icons.bookmark_outline,
+                                                size: 48,
+                                              ),
+                                      ),
+                                    ],
+                                  )
+                                : AppButton(
                                     width:
                                         MediaQuery.of(context).size.width / 3.5,
                                     onPressed: () {
                                       //
                                     },
-                                    content: Keystring.APPLY_NOW.tr,
+                                    content: Keystring.CHECK_CV.tr,
                                     bgColor: appPrimaryColor,
                                     colorBorder: appPrimaryColor,
                                     borderRadius: 16,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      //
-                                    },
-                                    child: const Icon(
-                                      Icons.bookmark_outline,
-                                      size: 48,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : AppButton(
-                                width: MediaQuery.of(context).size.width / 3.5,
-                                onPressed: () {
-                                  //
-                                },
-                                content: Keystring.CHECK_CV.tr,
-                                bgColor: appPrimaryColor,
-                                colorBorder: appPrimaryColor,
-                                borderRadius: 16,
+                                  )
+                            : SizedBox(
+                                height: 0,
                               ),
                       ],
                     ),

@@ -548,9 +548,12 @@ class InsideService {
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == 200) {
-      final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
+      if(jsonDecode(utf8.decode(response.bodyBytes))['data']['success'] == 1){
+        final List result = jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
       return result.map((e) => FavoriteDetail.fromJson(e)).toList();
+      }else{
+        return [];
+      }
     } else {
       return [];
     }

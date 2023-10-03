@@ -189,5 +189,6 @@ Future<List<CVDetail>> getAllCVList() async {
 
 Future<List<FavoriteDetail>> getYourFavoriteList(String uid) async {
   final list = await insideService.getListFavorite(uid);
+
   return list;
 }

@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
+import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
@@ -502,5 +503,107 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> addFavorite(
+    String jobId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'jobId': jobId,
+      'userId': userId,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/profile/add_favorive.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> removeFavorite(
+    String jobId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'jobId': jobId,
+      'userId': userId,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/profile/remove_favorive.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getListFavorite(String userId) async {
+    final msg = jsonEncode({
+      'userId': userId,
+    });
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/your_favorite.php"),
+        body: msg);
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
+      return result.map((e) => FavoriteDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> createApplication(
+    String cv_url,
+    String jobId,
+    String candidateId,
+  ) async {
+    final msg = jsonEncode({
+      'cv_url': cv_url,
+      'jobId': jobId,
+      'candidateId': candidateId,
+      'send_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/application/create_application.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> removeApplication(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/application/remove_application.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> apporveApplication(
+    String code,
+    String apporve,
+    String apporveTime,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+      'apporve': apporve,
+      'apporve_time': apporveTime,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/application/apporve_application.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

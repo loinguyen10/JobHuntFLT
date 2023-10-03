@@ -109,6 +109,9 @@ class LocaleString extends Translations {
           'Created_CV': 'Created CV',
           'Uploaded_CV': 'Upload CV',
           'Create': 'Create',
+          'Select_CV': 'Select Your CV',
+          'View_CV': 'View Your Selected CV',
+          'Confirm': 'Confirm',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

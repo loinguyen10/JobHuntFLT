@@ -410,10 +410,11 @@ class LoginController extends StateNotifier<InsideEvent> {
     state = const ThingStateEvent();
   }
 
-  void uploadCV(String uid, String cv, int lastNumber) async {
+  void uploadCV(String uid, String cv) async {
     state = const CreateThingLoadingEvent();
     log('$uid + $cv');
     try {
+      final lastNumber = ref.watch(lastNumberCVProvider);
       FormData formData = FormData.fromMap({
         "uid": uid,
         "uploadedfile": await MultipartFile.fromFile(cv,
@@ -428,6 +429,107 @@ class LoginController extends StateNotifier<InsideEvent> {
         state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'Failed');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    ref.refresh(lastNumberCVProvider);
+    state = const ThingStateEvent();
+  }
+
+  void addFavorive(
+    String jobId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).addFavorite(
+            jobId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFavoriteProvider);
+        ref.refresh(turnBookmarkOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void removeFavorive(
+    String jobId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeFavorite(
+            jobId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFavoriteProvider);
+        ref.refresh(turnBookmarkOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void createApplication(
+    String cv_url,
+    String jobId,
+    String candidateId,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).createApplication(
+            cv_url,
+            jobId,
+            candidateId,
+          );
+
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'hello');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void removeApplication(
+    String jobId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeFavorite(
+            jobId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFavoriteProvider);
+        ref.refresh(turnBookmarkOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());

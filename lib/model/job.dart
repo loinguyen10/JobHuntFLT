@@ -48,9 +48,9 @@ class JobDetail {
     minSalary = int.parse(json['minSalary']);
     maxSalary = int.parse(json['maxSalary']);
     currency = json['currency'];
-    yearExperience = int.parse(json['yearExperience']);
-    typeJob = int.parse(json['typeJob']);
-    numberCandidate = int.parse(json['numberCandidate']);
+    yearExperience = int.parse(json['yearExperience'] ?? '0');
+    typeJob = int.parse(json['typeJob'] ?? '0');
+    numberCandidate = int.parse(json['numberCandidate'] ?? '0');
     address = json['address'];
     description = json['description'];
     candidateRequirement = json['candidateRequirement'];

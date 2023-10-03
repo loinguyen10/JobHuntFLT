@@ -26,14 +26,16 @@ class JobManagerScreen extends ConsumerWidget {
           itemBuilder: (_, index) {
             String avatar = data[index].company?.avatarUrl ?? '';
             String name = data[index].name ?? '';
+            String companyName = data[index].company?.fullname ?? '';
             String province = getProvinceName(
                 data[index]
                     .address!
                     .substring(data[index].address!.lastIndexOf(',') + 1),
                 ref);
-            String maxSalary = data[index].maxSalary != -1
-                ? data[index].maxSalary.toString()
+            String money = data[index].maxSalary != -1
+                ? '${data[index].maxSalary} ${data[index].currency}'
                 : Keystring.ARGEEMENT.tr;
+            String deadline = data[index].deadline ?? '';
 
             return GestureDetector(
               onTap: () {
@@ -44,10 +46,13 @@ class JobManagerScreen extends ConsumerWidget {
                 );
               },
               child: AppJobCard(
-                  avatar: avatar,
-                  name: name,
-                  province: province,
-                  maxSalary: maxSalary),
+                avatar: avatar,
+                name: name,
+                companyName: companyName,
+                province: province,
+                money: money,
+                deadline: deadline,
+              ),
             );
           },
           itemCount: data.length < 3 ? data.length : 3,
@@ -144,14 +149,16 @@ class JobPostedCompanyScreen extends ConsumerWidget {
           itemBuilder: (_, index) {
             String avatar = data[index].company?.avatarUrl ?? '';
             String name = data[index].name ?? '';
+            String companyName = data[index].company?.fullname ?? '';
             String province = getProvinceName(
                 data[index]
                     .address!
                     .substring(data[index].address!.lastIndexOf(',') + 1),
                 ref);
-            String maxSalary = data[index].maxSalary != -1
-                ? data[index].maxSalary.toString()
+            String money = data[index].maxSalary != -1
+                ? '${data[index].maxSalary} ${data[index].currency}'
                 : Keystring.ARGEEMENT.tr;
+            String deadline = data[index].deadline ?? '';
 
             return GestureDetector(
               onTap: () {
@@ -164,8 +171,10 @@ class JobPostedCompanyScreen extends ConsumerWidget {
               child: AppJobCard(
                 avatar: avatar,
                 name: name,
+                companyName: companyName,
                 province: province,
-                maxSalary: maxSalary,
+                money: money,
+                deadline: deadline,
               ),
             );
           },

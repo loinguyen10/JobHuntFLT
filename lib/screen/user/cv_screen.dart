@@ -303,7 +303,7 @@ class CVUploadScreen extends ConsumerWidget {
                   if (cv != '') {
                     ref
                         .read(LoginControllerProvider.notifier)
-                        .uploadCV(user!.uid ?? '0', cv, 0);
+                        .uploadCV(user!.uid ?? '0', cv);
                   } else {
                     Fluttertoast.showToast(
                         msg: Keystring.NOT_FULL_DATA.tr,

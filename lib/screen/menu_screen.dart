@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
@@ -235,7 +236,12 @@ class MenuScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                    ref.refresh(listYourFavoriteProvider);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => YourJobSavedScreen()),
+                    );
                   },
                   child: Card(
                     shadowColor: Colors.grey,

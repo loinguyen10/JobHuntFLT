@@ -85,6 +85,13 @@ class ThingStateEvent extends InsideEvent {
   List<Object> get props => [];
 }
 
+class ThingLoadingEvent extends InsideEvent {
+  const ThingLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class CreateThingLoadingEvent extends InsideEvent {
   const CreateThingLoadingEvent();
 

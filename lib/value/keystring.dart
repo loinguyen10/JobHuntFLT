@@ -103,4 +103,7 @@ class Keystring {
   static const String CREATED_CV = 'Created_CV';
   static const String UPLOADED_CV = 'Uploaded_CV';
   static const String CREATE = 'Create';
+  static const String SELECT_CV = 'Select_CV';
+  static const String VIEW_CV = 'View_CV';
+  static const String CONFIRM = 'Confirm';
 }

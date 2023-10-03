@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
+import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
@@ -356,5 +357,38 @@ final uploadCheckProvider = StateProvider((ref) => "waiting");
 
 final cvDetailProvider = StateProvider<CVDetail?>((ref) => CVDetail());
 
+final listAllCVProvider =
+    FutureProvider<List<CVDetail>>((ref) => getAllCVList());
+
 final listYourCVProvider = FutureProvider<List<CVDetail>>(
     (ref) => getYourCVList(ref.watch(userLoginProvider)!.uid ?? '0'));
+
+final lastNumberCVProvider = StateProvider<int>((ref) {
+  final list = ref.watch(listAllCVProvider);
+  if (list != null && list.value!.isNotEmpty) {
+    return int.parse(list.value!.last.code ?? '0');
+  }
+
+  return 0;
+});
+
+final listYourFavoriteProvider = FutureProvider<List<FavoriteDetail>>(
+    (ref) => getYourFavoriteList(ref.watch(userLoginProvider)!.uid ?? '0'));
+
+final turnBookmarkOn = StateProvider<bool>((ref) {
+  final list = ref.watch(listYourFavoriteProvider);
+  final job = ref.watch(jobDetailProvider);
+
+  if (!list.isLoading && list.hasValue) {
+    for (var i in list.value!) {
+      if (job!.code == i.jobId) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+});
+
+final CVChooseProvider =
+    StateProvider.autoDispose<CVDetail?>((ref) => CVDetail());

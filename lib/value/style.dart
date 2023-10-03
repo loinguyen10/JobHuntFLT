@@ -15,13 +15,14 @@ final textNameMenu = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
 final textTitleRole = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 final textLogo =
     TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white);
-final textNameVCompany = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
+final textNameVCompany = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
 final textNameJView = TextStyle(fontSize: 28, fontWeight: FontWeight.w600);
 final textCompanyJView = TextStyle(fontSize: 16);
 final textTitleJView = TextStyle(
     fontSize: 20, fontWeight: FontWeight.bold, color: appPrimaryColor);
 final textTitle2JView = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 final textCompany2JView = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+final textCompanyFView = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
 
 //color
 final appPrimaryColor = Color(0xff00A3FF);

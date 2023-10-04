@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
+import '../blocs/app_riverpod_void.dart';
 import '../value/style.dart';
 
 class AppCompanyCard extends StatefulWidget {
@@ -385,6 +387,90 @@ class _AppFavoriteCardState extends State<AppFavoriteCard> {
                     ),
                   ],
                 )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class AppCandidateProfileCard extends StatefulWidget {
+  const AppCandidateProfileCard({
+    super.key,
+    required this.candidate,
+    required this.province,
+  });
+
+  final UserProfileDetail? candidate;
+  final String province;
+
+  @override
+  State<AppCandidateProfileCard> createState() =>
+      _AppCandidateProfileCardState();
+}
+
+class _AppCandidateProfileCardState extends State<AppCandidateProfileCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(width: 1, color: Colors.black),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SizedBox(width: 8),
+          ClipOval(
+            child: SizedBox.fromSize(
+              size: Size.fromRadius(40), // Image radius
+              child: widget.candidate!.avatarUrl != ''
+                  ? Image.network(
+                      widget.candidate!.avatarUrl ?? '',
+                      fit: BoxFit.cover,
+                    )
+                  : Icon(
+                      Icons.no_accounts_outlined,
+                      size: 80,
+                    ),
+            ),
+          ),
+          SizedBox(width: 24),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.candidate!.fullName ?? '',
+                  style: textNameVCompany,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  '${Keystring.BIRTHDAY.tr}: ${widget.candidate!.birthday}',
+                  style: textCompanyJView,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1.5, color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: Text(widget.province),
+                ),
+                SizedBox(height: 12),
+                Text('${Keystring.EMAIL.tr}: ${widget.candidate!.email}'),
+                SizedBox(height: 12),
+                Text('${Keystring.PHONE.tr}: ${widget.candidate!.phone}'),
               ],
             ),
           )

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart';
 import 'package:jobhunt_ftl/model/address.dart';
+import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/job.dart';
@@ -189,6 +190,17 @@ Future<List<CVDetail>> getAllCVList() async {
 
 Future<List<FavoriteDetail>> getYourFavoriteList(String uid) async {
   final list = await insideService.getListFavorite(uid);
+  return list;
+}
 
+Future<List<ApplicationDetail>> getCandidateApplication(
+    String candidateId) async {
+  final list = await insideService.getCandidateApplication(candidateId);
+  return list;
+}
+
+Future<List<ApplicationDetail>> getRecuiterApplication(
+    String recuiterId) async {
+  final list = await insideService.getRecuiterApplication(recuiterId);
   return list;
 }

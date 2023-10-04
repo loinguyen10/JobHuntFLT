@@ -94,22 +94,30 @@ class ApplyJobScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        // if (state is CreateThingErrorEvent) {
-        //   Loader.hide();
-        //   log('error2');
-        //   Fluttertoast.showToast(
-        //       msg: Keystring.UNSUCCESSFUL.tr,
-        //       toastLength: Toast.LENGTH_SHORT,
-        //       gravity: ToastGravity.CENTER,
-        //       timeInSecForIosWeb: 1,
-        //       backgroundColor: Colors.red,
-        //       textColor: Colors.white,
-        //       fontSize: 16.0);
-        // }
+        if (state is CreateThingErrorEvent) {
+          Loader.hide();
+          log('error2');
+          Fluttertoast.showToast(
+              msg: Keystring.UNSUCCESSFUL.tr,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
 
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success1');
+          Fluttertoast.showToast(
+              msg: Keystring.SUCCESSFUL.tr,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
           Navigator.pop(context);
         }
 
@@ -155,7 +163,7 @@ class ApplyJobScreen extends ConsumerWidget {
                                   )),
                         );
                       },
-                      content: Keystring.VIEW_CV.tr,
+                      content: Keystring.VIEW_SELECTED_CV.tr,
                       bgColor: Colors.grey,
                       textColor: Colors.black,
                       colorBorder: Colors.black,
@@ -183,6 +191,7 @@ class ApplyJobScreen extends ConsumerWidget {
                                           job.code ?? '',
                                           ref.watch(userLoginProvider)!.uid ??
                                               '',
+                                          job.company!.uid ?? '',
                                         );
                                     Navigator.pop(context);
                                   },

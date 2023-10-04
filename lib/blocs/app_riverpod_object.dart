@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
+import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
@@ -350,7 +352,7 @@ final jobActiveProvider = StateProvider.autoDispose((ref) {
   return false;
 });
 
-//job
+//cv & application
 final cvUploadProvider = StateProvider((ref) => "");
 
 final uploadCheckProvider = StateProvider((ref) => "waiting");
@@ -379,11 +381,23 @@ final turnBookmarkOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFavoriteProvider);
   final job = ref.watch(jobDetailProvider);
 
-  if (!list.isLoading && list.hasValue) {
-    for (var i in list.value!) {
-      if (job!.code == i.jobId) {
-        return true;
-      }
+  List<FavoriteDetail> listF = [];
+
+  list.maybeWhen(
+    data: (data) {
+      listF = data;
+    },
+    orElse: () {
+      listF = [];
+    },
+  );
+
+  log('listF: ${listF.length}');
+
+  for (var i in listF) {
+    if (job!.code == i.jobId) {
+      log('message111: ${job.code} & ${i.jobId} ');
+      return true;
     }
   }
 
@@ -392,3 +406,119 @@ final turnBookmarkOn = StateProvider<bool>((ref) {
 
 final CVChooseProvider =
     StateProvider.autoDispose<CVDetail?>((ref) => CVDetail());
+
+final listCandidateApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) =>
+        getCandidateApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
+
+final listCandidateApporveApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listCandidateApplicationProvider);
+  List<ApplicationDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.apporve == '1') list.add(i);
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  return list;
+});
+
+final listCandidateRejectApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listCandidateApplicationProvider);
+  List<ApplicationDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.apporve == '0') list.add(i);
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  return list;
+});
+
+final listCandidateWaitingApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listCandidateApplicationProvider);
+  List<ApplicationDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.apporve == null || i.apporve == '') list.add(i);
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  return list;
+});
+
+final StatusCheckProvider = StateProvider((ref) => '');
+
+final listRecuiterApplicationProvider = FutureProvider<List<ApplicationDetail>>(
+    (ref) => getRecuiterApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
+
+final listRecuiterWaitingApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listRecuiterApplicationProvider);
+  List<ApplicationDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.apporve == null || i.apporve == '') list.add(i);
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  return list;
+});
+
+final listRecuiterTodayApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listRecuiterApplicationProvider);
+  List<ApplicationDetail> list = [];
+  String now = DateFormat('dd/MM/yyyy').format(DateTime.now());
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if ((i.apporve == null || i.apporve == '') &&
+            i.sendTime!.substring(0, i.sendTime!.indexOf(' ')) == now) {
+          log('messageTime: ${i.sendTime} - $now');
+          list.add(i);
+        }
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  list.sort((b, a) => a.sendTime!.compareTo(b.sendTime!));
+  return list;
+});
+
+final CandidateProfileProvider =
+    StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
+
+final applicationDetailProvider =
+    StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());

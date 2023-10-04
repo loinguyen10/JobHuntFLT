@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 //text
 final textNormal = TextStyle(fontSize: 16);
+final textNormalBold = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 final textNormalHint = TextStyle(fontSize: 16, color: Colors.grey);
 final textCV = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 final textCVupload =
@@ -23,6 +24,11 @@ final textTitleJView = TextStyle(
 final textTitle2JView = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 final textCompany2JView = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 final textCompanyFView = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+final textStatusView =
+    TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold);
+final textStatus2View =
+    TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold);
+final textNormal2 = TextStyle(fontSize: 16, color: Colors.white);
 
 //color
 final appPrimaryColor = Color(0xff00A3FF);
@@ -34,6 +40,8 @@ final bgGradientColor = LinearGradient(
   colors: <Color>[
     appPrimaryColor,
     Color(0xffA0DDFF),
+    Colors.white,
+    Colors.white,
     Colors.white,
     Colors.white,
     Colors.white,

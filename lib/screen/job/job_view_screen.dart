@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
+import 'package:jobhunt_ftl/screen/job/apply_job_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
@@ -25,7 +26,7 @@ class JobViewScreen extends ConsumerWidget {
 
     //listen
     ref.listen<InsideEvent>(
-      LoginControllerProvider,
+      JobViewControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
         if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
@@ -53,6 +54,7 @@ class JobViewScreen extends ConsumerWidget {
             state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
+          log('bm: ${bmCheck}');
         }
 
         if (state is CreateThingLoadingEvent ||
@@ -141,7 +143,11 @@ class JobViewScreen extends ConsumerWidget {
                                             MediaQuery.of(context).size.width /
                                                 3.5,
                                         onPressed: () {
-                                          //
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ApplyJobScreen()));
                                         },
                                         content: Keystring.APPLY_NOW.tr,
                                         bgColor: appPrimaryColor,

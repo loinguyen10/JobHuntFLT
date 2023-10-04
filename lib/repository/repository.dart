@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
+import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
@@ -548,12 +549,9 @@ class InsideService {
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == 200) {
-      if(jsonDecode(utf8.decode(response.bodyBytes))['data']['success'] == 1){
-        final List result = jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
       return result.map((e) => FavoriteDetail.fromJson(e)).toList();
-      }else{
-        return [];
-      }
     } else {
       return [];
     }
@@ -563,11 +561,13 @@ class InsideService {
     String cv_url,
     String jobId,
     String candidateId,
+    String companyId,
   ) async {
     final msg = jsonEncode({
       'cv_url': cv_url,
       'jobId': jobId,
       'candidateId': candidateId,
+      'companyId': companyId,
       'send_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
 
@@ -595,12 +595,11 @@ class InsideService {
   Future<dynamic> apporveApplication(
     String code,
     String apporve,
-    String apporveTime,
   ) async {
     final msg = jsonEncode({
       'code': code,
       'apporve': apporve,
-      'apporve_time': apporveTime,
+      'apporve_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
 
     Response response = await post(
@@ -608,5 +607,47 @@ class InsideService {
         body: msg);
 
     return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getCandidateApplication(String candidateId) async {
+    final msg = jsonEncode({
+      'candidateId': candidateId,
+    });
+
+    Response response = await post(
+      Uri.parse(BASE_URL + "application/candidate_application.php"),
+      body: msg,
+    );
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
+      return result.map((e) => ApplicationDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> getRecuiterApplication(String companyId) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+    });
+
+    Response response = await post(
+      Uri.parse(BASE_URL + "application/recuiter_application.php"),
+      body: msg,
+    );
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == 200) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
+      return result.map((e) => ApplicationDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 }

@@ -105,5 +105,12 @@ class Keystring {
   static const String CREATE = 'Create';
   static const String SELECT_CV = 'Select_CV';
   static const String VIEW_CV = 'View_CV';
+  static const String VIEW_SELECTED_CV = 'View_Selected_CV';
   static const String CONFIRM = 'Confirm';
+  static const String APPORVE = 'Apporve';
+  static const String REJECT = 'Reject';
+  static const String COMPANY = 'Company';
+  static const String SENT_TIME = 'Sent_Time';
+  static const String STATUS = 'Status';
+  static const String VIEW_JOB = 'View_Job';
 }

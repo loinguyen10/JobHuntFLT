@@ -15,6 +15,11 @@ final LoginControllerProvider =
   return LoginController(ref);
 });
 
+final JobViewControllerProvider =
+    StateNotifierProvider<LoginController, InsideEvent>((ref) {
+  return LoginController(ref);
+});
+
 class LoginController extends StateNotifier<InsideEvent> {
   LoginController(this.ref) : super(const SignInStateEvent());
 
@@ -492,6 +497,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String cv_url,
     String jobId,
     String candidateId,
+    String companyId,
   ) async {
     state = const ThingLoadingEvent();
     try {
@@ -499,12 +505,15 @@ class LoginController extends StateNotifier<InsideEvent> {
             cv_url,
             jobId,
             candidateId,
+            companyId,
           );
 
       if (result == 1) {
-        state = const CreateThingSuccessEvent();
+        Future.delayed(Duration(seconds: 3), () {
+          state = const CreateThingSuccessEvent();
+        });
       } else {
-        state = const CreateThingErrorEvent(error: 'hello');
+        state = const CreateThingErrorEvent(error: 'error');
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());
@@ -528,6 +537,32 @@ class LoginController extends StateNotifier<InsideEvent> {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
         state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void apporveApplication(
+    String code,
+    String apporve,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).apporveApplication(
+            code,
+            apporve,
+          );
+
+      if (result == 1) {
+        Future.delayed(Duration(seconds: 3), () {
+          ref.refresh(listRecuiterTodayApplicationProvider);
+          state = const CreateThingSuccessEvent();
+        });
       } else {
         state = const CreateThingErrorEvent(error: 'error');
       }

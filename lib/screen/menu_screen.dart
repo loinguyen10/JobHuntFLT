@@ -206,7 +206,13 @@ class MenuScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                    ref.refresh(StatusCheckProvider);
+                    ref.refresh(listCandidateApplicationProvider);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => YourJobStatusScreen()),
+                    );
                   },
                   child: Card(
                     shadowColor: Colors.grey,

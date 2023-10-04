@@ -78,9 +78,13 @@ class RegisterScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 30.0),
-                    Text(
-                      Keystring.APP_NAME.tr,
-                      style: GoogleFonts.josefinSans(textStyle: textLogo),
+                    // Text(
+                    //   Keystring.APP_NAME.tr,
+                    //   style: GoogleFonts.josefinSans(textStyle: textLogo),
+                    // ),
+                    Image.asset(
+                      'assets/image/font_logo.png',
+                      scale: 1.5,
                     ),
                     SizedBox(height: 50.0),
                     EditTextForm(

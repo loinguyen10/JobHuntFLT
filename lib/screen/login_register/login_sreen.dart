@@ -194,9 +194,13 @@ class LoginScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 30.0),
-                    Text(
-                      Keystring.APP_NAME.tr,
-                      style: GoogleFonts.josefinSans(textStyle: textLogo),
+                    // Text(
+                    //   Keystring.APP_NAME.tr,
+                    //   style: GoogleFonts.josefinSans(textStyle: textLogo),
+                    // ),
+                    Image.asset(
+                      'assets/image/font_logo.png',
+                      scale: 1.5,
                     ),
                     SizedBox(height: 50.0),
                     EditTextForm(
@@ -300,8 +304,10 @@ class LoginScreen extends ConsumerWidget {
                       child: ClipOval(
                         child: SizedBox.fromSize(
                             size: Size.fromRadius(24), // Image radius
-                            child: Image.network(
-                              'https://pngimg.com/uploads/google/google_PNG19635.png',
+                            child:
+                                // Image.network('https://pngimg.com/uploads/google/google_PNG19635.png',fit: BoxFit.cover,)),
+                                Image.asset(
+                              'assets/image/google_logo.png',
                               fit: BoxFit.cover,
                             )),
                       ),

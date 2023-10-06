@@ -84,7 +84,7 @@ class RegisterScreen extends ConsumerWidget {
                     // ),
                     Image.asset(
                       'assets/image/font_logo.png',
-                      scale: 1.5,
+                      width: MediaQuery.of(context).size.width / 1.3,
                     ),
                     SizedBox(height: 50.0),
                     EditTextForm(
@@ -119,25 +119,30 @@ class RegisterScreen extends ConsumerWidget {
                       hintText: Keystring.PASSWORD_AGAIN.tr,
                     ),
                     SizedBox(height: 20.0),
-                    Row(
-                      children: [
-                        Checkbox(
-                          checkColor: Colors.white,
-                          // fillColor: MaterialStateProperty.resolveWith(getColor),
-                          value: ref.watch(checkboxTermProvider),
-                          onChanged: (bool? value) {
-                            ref.read(checkboxTermProvider.notifier).state =
-                                value!;
-                          },
-                        ),
-                        Text(
-                          Keystring.READ_ACCEPTED.tr,
-                        ),
-                        SizedBox(width: 2),
-                        Text(
-                          Keystring.Terms_Conditions.tr,
-                        ),
-                      ],
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            // fillColor: MaterialStateProperty.resolveWith(getColor),
+                            value: ref.watch(checkboxTermProvider),
+                            onChanged: (bool? value) {
+                              ref.read(checkboxTermProvider.notifier).state =
+                                  value!;
+                            },
+                          ),
+                          Text(
+                            Keystring.READ_ACCEPTED.tr,
+                          ),
+                          SizedBox(width: 2),
+                          Text(
+                            Keystring.Terms_Conditions.tr,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 20.0),
                     ElevatedButton(

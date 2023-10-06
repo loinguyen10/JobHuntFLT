@@ -200,7 +200,7 @@ class LoginScreen extends ConsumerWidget {
                     // ),
                     Image.asset(
                       'assets/image/font_logo.png',
-                      scale: 1.5,
+                      width: MediaQuery.of(context).size.width / 1.3,
                     ),
                     SizedBox(height: 50.0),
                     EditTextForm(

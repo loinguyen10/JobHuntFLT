@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/screen/job/edit_job.dart';
-import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
-import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
-import 'package:jobhunt_ftl/screen/job/job_view_screen.dart';
 import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +17,19 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   HttpOverrides.global = MyHttpOverrides();
-  runApp(ProviderScope(child: MyApp()));
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var languagueSeleted =
+      prefs.getString('language') ?? Get.deviceLocale!.languageCode;
+
+  if (Get.deviceLocale!.languageCode != 'vi' &&
+      Get.deviceLocale!.languageCode != 'en') {
+    languagueSeleted = 'en';
+  }
+
+  runApp(ProviderScope(
+      child: MyApp(
+    language: languagueSeleted,
+  )));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -32,13 +42,24 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.language});
+  final String language;
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      supportedLocales: const [Locale('vi', 'VN'), Locale('en', 'US')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('vi'),
+        Locale('en'),
+      ],
       translations: LocaleString(),
-      locale: Locale('en', 'US'),
+      locale: Locale(language),
       home: LoginScreen(),
       builder: EasyLoading.init(),
     );

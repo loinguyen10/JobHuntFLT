@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
@@ -20,6 +21,8 @@ final passwordLoginProvider = StateProvider((ref) => '');
 final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
 final userProfileProvider =
     StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
+
+final checkboxRememberProvider = StateProvider.autoDispose((ref) => false);
 
 final companyProfileProvider =
     StateProvider<CompanyDetail?>((ref) => CompanyDetail());

@@ -6,131 +6,31 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/component/editcontroller.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
-import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/screen/login_register/register_screen.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../blocs/app_riverpod_void.dart';
 import '../../component/edittext.dart';
 import '../../value/style.dart';
 
-// class LoginScreen extends StatelessWidget {
-//   const LoginScreen({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     // return BlocConsumer<InsideBloc, InsideState>(
-//     //   builder: (context, state) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("LOGIN"),
-//         backgroundColor: Colors.black,
-//       ),
-//       body: ScreenLogin(),
-//     );
-//   },
-//   listener: (context, state) {
-// log('login: ${state.loginStatus}');
-// if (state.loginStatus == LoginStatus.loading) {
-//   Loader.show(context);
-// }
-// if (state.loginStatus == LoginStatus.success) {
-//   Loader.hide();
-//   Navigator.pushReplacement(
-//     context,
-//     MaterialPageRoute(
-//       builder: (context) => HomeScreen(),
-//     ),
-//   );
-// } else {
-//   Loader.hide();
-// }
-// },
-// );
-//   }
-// }
-
-// class ScreenLogin extends StatefulWidget {
-//   const ScreenLogin({super.key});
-//   @override
-//   State<ScreenLogin> createState() => _ScreenLogin();
-// }
-
-// class _ScreenLogin extends State<ScreenLogin> {
-//   final getXX = Get.put(InsideGetX());
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//         padding: EdgeInsets.symmetric(horizontal: 5),
-//         child: SingleChildScrollView(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               SizedBox(height: 30.0),
-//               EditTextForm(
-//                 onChanged: ((value) {
-//                   // BlocProvider.of<InsideBloc>(context)
-//                   //     .add(LoginEmailChangedEvent(email: value));
-//                   getXX.getEmailLoginString(value);
-//                 }),
-//                 textColor: Colors.black,
-//                 borderSelected: Colors.orange,
-//                 label: 'Username',
-//                 hintText: 'Username',
-//               ),
-//               SizedBox(height: 30.0),
-//               EditTextForm(
-//                 obscureText: true,
-//                 showEye: true,
-//                 onChanged: ((value) {
-//                   // BlocProvider.of<InsideBloc>(context)
-//                   //     .add(LoginPasswordChangedEvent(password: value));
-//                   getXX.getPasswordLoginString(value);
-//                 }),
-//                 textColor: Colors.black,
-//                 borderSelected: Colors.orange,
-//                 // controller: _passController,
-//                 label: 'Password',
-//                 hintText: 'Password',
-//               ),
-//               SizedBox(height: 50.0),
-//               ElevatedButton(
-//                 style: ElevatedButton.styleFrom(
-//                     backgroundColor: Colors.orange,
-//                     shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(8)),
-//                     minimumSize: Size(double.infinity, 60)),
-//                 onPressed: () async {
-//                   log("click button dang nhap");
-//                   // BlocProvider.of<InsideBloc>(context)
-//                   //     .add(LoginButtonPressedEvent());
-//                   await getXX.loginApp();
-//                   if (getXX.loginCheck.value) {
-//                     Get.off(() => HomeScreen());
-//                   }
-//                 },
-//                 child: Text(
-//                   'LOGIN',
-//                   style: TextStyle(fontSize: 18),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class LoginScreen extends ConsumerWidget {
-  var check = false;
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController emailEditingController = TextEditingController();
+    TextEditingController passwordEditingController = TextEditingController();
+
     ref.listen<InsideEvent>(
       LoginControllerProvider,
       (previous, state) {
@@ -182,6 +82,24 @@ class LoginScreen extends ConsumerWidget {
       },
     );
 
+    Future<void> saveEaP(String email, String password) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('saveEmail', ref.watch(emailLoginProvider));
+      prefs.setString('savePassword', ref.watch(passwordLoginProvider));
+    }
+
+    Future<void> loadEaP() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      ref.read(emailLoginProvider.notifier).state =
+          prefs.getString('saveEmail') ?? '';
+      emailEditingController.text = prefs.getString('saveEmail') ?? '';
+      ref.read(passwordLoginProvider.notifier).state =
+          prefs.getString('savePassword') ?? '';
+      passwordEditingController.text = prefs.getString('savePassword') ?? '';
+    }
+
+    loadEaP();
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -203,21 +121,23 @@ class LoginScreen extends ConsumerWidget {
                       width: MediaQuery.of(context).size.width / 1.3,
                     ),
                     SizedBox(height: 50.0),
-                    EditTextForm(
+                    EditTextController(
                       onChanged: ((value) {
                         ref.read(emailLoginProvider.notifier).state = value;
                       }),
+                      controller: emailEditingController,
                       textColor: Colors.black,
                       label: Keystring.EMAIL.tr,
                       hintText: Keystring.EMAIL.tr,
                     ),
                     SizedBox(height: 30.0),
-                    EditTextForm(
+                    EditTextController(
                       obscureText: true,
                       showEye: true,
                       onChanged: ((value) {
                         ref.read(passwordLoginProvider.notifier).state = value;
                       }),
+                      controller: passwordEditingController,
                       textColor: Colors.black,
                       label: Keystring.PASSWORD.tr,
                       hintText: Keystring.PASSWORD.tr,
@@ -230,9 +150,13 @@ class LoginScreen extends ConsumerWidget {
                           children: [
                             Checkbox(
                               checkColor: Colors.white,
-                              value: check,
+                              value: ref.watch(checkboxRememberProvider),
                               onChanged: (bool? value) {
-                                check = value!;
+                                setState(() {
+                                  ref
+                                      .read(checkboxRememberProvider.notifier)
+                                      .state = value!;
+                                });
                               },
                             ),
                             Text(
@@ -262,6 +186,11 @@ class LoginScreen extends ConsumerWidget {
                           minimumSize: Size(double.infinity, 60)),
                       onPressed: () async {
                         log("click button dang nhap");
+                        if (ref.watch(checkboxRememberProvider)) {
+                          saveEaP(ref.watch(emailLoginProvider),
+                              ref.watch(passwordLoginProvider));
+                        }
+
                         ref.read(LoginControllerProvider.notifier).login(
                               ref.watch(emailLoginProvider),
                               ref.watch(passwordLoginProvider),

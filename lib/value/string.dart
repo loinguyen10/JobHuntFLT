@@ -119,6 +119,11 @@ class LocaleString extends Translations {
           'Sent_Time': 'Sent Time',
           'Status': 'Status',
           'View_Job': 'View Job',
+          'View_All': 'View All',
+          'Language': 'Language',
+          'English': 'English',
+          'Vietnamese': 'Vietnamese',
+          'Theme': 'Theme',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

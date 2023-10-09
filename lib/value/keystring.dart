@@ -113,4 +113,9 @@ class Keystring {
   static const String SENT_TIME = 'Sent_Time';
   static const String STATUS = 'Status';
   static const String VIEW_JOB = 'View_Job';
+  static const String VIEW_ALL = 'View_All';
+  static const String LANGUAGE = 'Language';
+  static const String ENGLISH = 'English';
+  static const String VIETNAMESE = 'Vietnamese';
+  static const String THEME = 'Theme';
 }

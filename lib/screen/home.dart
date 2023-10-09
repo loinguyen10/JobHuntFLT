@@ -150,12 +150,18 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                       margin: EdgeInsets.all(8),
                       child: Column(
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              Keystring.RECOMMEND_JOB.tr,
-                              style: textJobHome,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                Keystring.RECOMMEND_JOB.tr,
+                                style: textJobHome,
+                              ),
+                              Text(
+                                '${Keystring.VIEW_ALL.tr} ➤    ',
+                                style: textNormalBold,
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 4,
@@ -182,12 +188,18 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                       margin: EdgeInsets.all(8),
                       child: Column(
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              Keystring.BEST_JOB.tr,
-                              style: textJobHome,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                Keystring.BEST_JOB.tr,
+                                style: textJobHome,
+                              ),
+                              Text(
+                                '${Keystring.VIEW_ALL.tr} ➤    ',
+                                style: textNormalBold,
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 4,
@@ -214,12 +226,18 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                       margin: EdgeInsets.all(8),
                       child: Column(
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              Keystring.VERIFIED_COMPANIES.tr,
-                              style: textJobHome,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                Keystring.VERIFIED_COMPANIES.tr,
+                                style: textJobHome,
+                              ),
+                              Text(
+                                '${Keystring.VIEW_ALL.tr} ➤    ',
+                                style: textNormalBold,
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 4,

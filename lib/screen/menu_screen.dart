@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
 import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
@@ -29,9 +30,10 @@ class MenuScreen extends ConsumerWidget {
       //   backgroundColor: appHintColor,
       // ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            color: bgPrimaryColor,
+        child: Container(
+          color: bgPrimaryColor,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
@@ -171,170 +173,175 @@ class MenuScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CVChooseScreen()),
-                    );
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.description_outlined,
-                            size: 32,
+                company == null
+                    ? Column(children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CVChooseScreen()),
+                            );
+                          },
+                          child: Card(
+                            shadowColor: Colors.grey,
+                            shape: Border.all(color: Colors.white, width: 2),
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.description_outlined,
+                                    size: 32,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    Keystring.YOUR_CV.tr,
+                                    style: textMenu,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          SizedBox(
-                            width: 16,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            ref.refresh(StatusCheckProvider);
+                            ref.refresh(listCandidateApplicationProvider);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => YourJobStatusScreen()),
+                            );
+                          },
+                          child: Card(
+                            shadowColor: Colors.grey,
+                            shape: Border.all(color: Colors.white, width: 2),
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.briefcase,
+                                    size: 32,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    Keystring.YOUR_JOB_STATUS.tr,
+                                    style: textMenu,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Text(
-                            Keystring.YOUR_CV.tr,
-                            style: textMenu,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            ref.refresh(listYourFavoriteProvider);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => YourJobSavedScreen()),
+                            );
+                          },
+                          child: Card(
+                            shadowColor: Colors.grey,
+                            shape: Border.all(color: Colors.white, width: 2),
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.save_outlined,
+                                    size: 32,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    Keystring.YOUR_JOB_SAVED.tr,
+                                    style: textMenu,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    ref.refresh(StatusCheckProvider);
-                    ref.refresh(listCandidateApplicationProvider);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => YourJobStatusScreen()),
-                    );
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.briefcase,
-                            size: 32,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                          },
+                          child: Card(
+                            shadowColor: Colors.grey,
+                            shape: Border.all(color: Colors.white, width: 2),
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.apartment_outlined,
+                                    size: 32,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    Keystring.YOUR_FOLLOWING_COMPANY.tr,
+                                    style: textMenu,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          SizedBox(
-                            width: 16,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                          },
+                          child: Card(
+                            shadowColor: Colors.grey,
+                            shape: Border.all(color: Colors.white, width: 2),
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.settings_outlined,
+                                    size: 32,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    Keystring.JOB_RECOMMEND_SETTING.tr,
+                                    style: textMenu,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Text(
-                            Keystring.YOUR_JOB_STATUS.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    ref.refresh(listYourFavoriteProvider);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => YourJobSavedScreen()),
-                    );
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.save_outlined,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.YOUR_JOB_SAVED.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.apartment_outlined,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.YOUR_FOLLOWING_COMPANY.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.settings_outlined,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.JOB_RECOMMEND_SETTING.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                        ),
+                      ])
+                    : SizedBox(height: 0),
                 GestureDetector(
                   onTap: () {
                     // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
@@ -367,7 +374,10 @@ class MenuScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingScreen()),
+                    );
                   },
                   child: Card(
                     shadowColor: Colors.grey,

@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -14,7 +13,6 @@ import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../component/app_button.dart';
-import '../../component/date_dialog.dart';
 import '../../component/edittext.dart';
 import '../../component/loader_overlay.dart';
 import '../../model/address.dart';
@@ -558,7 +556,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                       log("click done");
 
                       ref.read(LoginControllerProvider.notifier).createCompany(
-                            user!.uid ?? '0',
+                            user.uid ?? '0',
                             ref.watch(fullNameCompanyProvider),
                             ref.watch(avatarCompanyProvider),
                             ref.watch(emailCompanyProvider),
@@ -571,7 +569,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                     } else {
                       log("click update");
                       ref.read(LoginControllerProvider.notifier).updateCompany(
-                            user!.uid ?? '0',
+                            user.uid ?? '0',
                             ref.watch(fullNameCompanyProvider),
                             ref.watch(avatarCompanyProvider),
                             company?.email ?? '',

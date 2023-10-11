@@ -15,7 +15,6 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../blocs/app_riverpod_void.dart';
-import '../../component/edittext.dart';
 import '../../value/style.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -98,7 +97,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       passwordEditingController.text = prefs.getString('savePassword') ?? '';
     }
 
-    loadEaP();
+    // loadEaP();
 
     return SafeArea(
       child: Scaffold(

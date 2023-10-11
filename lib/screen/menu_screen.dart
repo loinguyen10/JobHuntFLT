@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
+import 'package:jobhunt_ftl/screen/setting/upgrape_screen.dart';
 import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
@@ -342,6 +343,40 @@ class MenuScreen extends ConsumerWidget {
                         ),
                       ])
                     : SizedBox(height: 0),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpgrapePremiumScreen()),
+                    );
+                  },
+                  child: Card(
+                    shadowColor: Colors.grey,
+                    shape: Border.all(color: Colors.white, width: 2),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    elevation: 2,
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.upgrade,
+                            size: 32,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.UPGRAPE.tr,
+                            style: textMenu,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 GestureDetector(
                   onTap: () {
                     // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);

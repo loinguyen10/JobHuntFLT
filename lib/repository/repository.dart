@@ -58,10 +58,10 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      // 'email': 'hungbip@jobshunt.info',
-      // 'password': 'hung',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      'email': 'hungbip@jobshunt.info',
+      'password': 'hung',
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',

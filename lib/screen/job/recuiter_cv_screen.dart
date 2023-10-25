@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -9,19 +10,27 @@ import '../../blocs/app_riverpod_object.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 
-class ApplicationTodayRecuiterScreen extends ConsumerWidget {
+class ApplicationTodayRecuiterScreen extends ConsumerStatefulWidget {
   const ApplicationTodayRecuiterScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listRecuiterTodayApplicationProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ApplicationTodayRecuiterScreenState();
+}
 
-    if (ref.watch(userLoginProvider)?.role == 'recuiter') {
-      Future.delayed(Duration(minutes: 1), () {
-        ref.refresh(listRecuiterTodayApplicationProvider);
-        log('refresh ne');
-      });
-    }
+class _ApplicationTodayRecuiterScreenState
+    extends ConsumerState<ApplicationTodayRecuiterScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final data = ref.watch(listRecuiterTodayApplicationProvider);
+
+    // if (ref.watch(userLoginProvider) != null &&
+    //     ref.watch(userLoginProvider)!.role == 'recuiter') {
+    //   Timer.periodic(Duration(seconds: 15), (Timer t) {
+    //     ref.invalidate(listRecuiterApplicationProvider);
+    //     log('refresh ne');
+    //   });
+    // }
 
     return Column(
       children: [
@@ -59,7 +68,8 @@ class ApplicationTodayRecuiterScreen extends ConsumerWidget {
         SizedBox(
           height: 4,
         ),
-        _data.when(
+        data.when(
+          skipLoadingOnRefresh: true,
           data: (data) {
             return ListView.builder(
               shrinkWrap: true,
@@ -126,7 +136,7 @@ class ApplicationTodayRecuiterScreen extends ConsumerWidget {
             ),
           ),
         ),
-        _data.value?.length == 0
+        data.value?.length == 0
             ? SizedBox(
                 height: 160,
                 child: Center(

@@ -119,4 +119,5 @@ class Keystring {
   static const String VIETNAMESE = 'Vietnamese';
   static const String THEME = 'Theme';
   static const String UPGRAPE = 'Upgrape';
+  static const String ALL_APPLICATIONS = 'All_Appications';
 }

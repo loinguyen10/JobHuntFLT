@@ -16,6 +16,7 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
+import 'job/recuiter_application_screen.dart';
 import 'login_register/login_sreen.dart';
 
 class MenuScreen extends ConsumerWidget {
@@ -167,6 +168,41 @@ class MenuScreen extends ConsumerWidget {
                           ),
                           Text(
                             Keystring.YOUR_INBOX.tr,
+                            style: textMenu,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    ref.refresh(listRecuiterApplicationProvider);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllAppicationRecuiterScreen()),
+                    );
+                  },
+                  child: Card(
+                    shadowColor: Colors.grey,
+                    shape: Border.all(color: Colors.white, width: 2),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    elevation: 2,
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.description_outlined,
+                            size: 32,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.ALL_APPLICATIONS.tr,
                             style: textMenu,
                           ),
                         ],

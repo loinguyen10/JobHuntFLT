@@ -154,44 +154,46 @@ class JobViewScreen extends ConsumerWidget {
                                         colorBorder: appPrimaryColor,
                                         borderRadius: 16,
                                       ),
-                                      InkWell(
-                                        onTap: () {
-                                          if (bmCheck) {
-                                            ref
-                                                .read(LoginControllerProvider
-                                                    .notifier)
-                                                .removeFavorive(
-                                                  job.code ?? '0',
-                                                  ref
-                                                          .watch(
-                                                              userLoginProvider)
-                                                          ?.uid ??
-                                                      '0',
-                                                );
-                                          } else {
-                                            ref
-                                                .read(LoginControllerProvider
-                                                    .notifier)
-                                                .addFavorive(
-                                                  job.code ?? '0',
-                                                  ref
-                                                          .watch(
-                                                              userLoginProvider)
-                                                          ?.uid ??
-                                                      '0',
-                                                );
-                                          }
-                                        },
-                                        child: bmCheck
-                                            ? const Icon(
-                                                Icons.bookmark_added_rounded,
-                                                size: 48,
-                                                color: Colors.yellow,
-                                              )
-                                            : const Icon(
-                                                Icons.bookmark_outline,
-                                                size: 48,
-                                              ),
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (bmCheck) {
+                                              ref
+                                                  .read(LoginControllerProvider
+                                                      .notifier)
+                                                  .removeFavorive(
+                                                    job.code ?? '0',
+                                                    ref
+                                                            .watch(
+                                                                userLoginProvider)
+                                                            ?.uid ??
+                                                        '0',
+                                                  );
+                                            } else {
+                                              ref
+                                                  .read(LoginControllerProvider
+                                                      .notifier)
+                                                  .addFavorive(
+                                                    job.code ?? '0',
+                                                    ref
+                                                            .watch(
+                                                                userLoginProvider)
+                                                            ?.uid ??
+                                                        '0',
+                                                  );
+                                            }
+                                          },
+                                          child: bmCheck
+                                              ? const Icon(
+                                                  Icons.bookmark_added_rounded,
+                                                  size: 48,
+                                                  color: Colors.yellow,
+                                                )
+                                              : const Icon(
+                                                  Icons.bookmark_outline,
+                                                  size: 48,
+                                                ),
+                                        ),
                                       ),
                                     ],
                                   )

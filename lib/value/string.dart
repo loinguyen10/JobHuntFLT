@@ -125,6 +125,7 @@ class LocaleString extends Translations {
           'Vietnamese': 'Vietnamese',
           'Theme': 'Theme',
           'Upgrape': 'Upgrape',
+          'All_Appications': 'All Appications',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

@@ -10,6 +10,7 @@ class ApplicationDetail {
   String? sendTime;
   String? apporve;
   String? apporveTime;
+  String? interviewTime;
   JobDetail? job;
   UserProfileDetail? candidate;
 
@@ -22,6 +23,7 @@ class ApplicationDetail {
       this.sendTime,
       this.apporve,
       this.apporveTime,
+      this.interviewTime,
       this.job,
       this.candidate});
 
@@ -34,6 +36,7 @@ class ApplicationDetail {
     sendTime = json['send_time'];
     apporve = json['apporve'];
     apporveTime = json['apporve_time'];
+    interviewTime = json['interview_time'];
     job = json['job'] != null ? new JobDetail.fromJson(json['job']) : null;
     candidate = json['candidate'] != null
         ? new UserProfileDetail.fromJson(json['candidate'])
@@ -50,6 +53,7 @@ class ApplicationDetail {
     data['send_time'] = this.sendTime;
     data['apporve'] = this.apporve;
     data['apporve_time'] = this.apporveTime;
+    data['interview_time'] = this.interviewTime;
     // if (this.job != null) {
     //   data['job'] = this.job!.toJson();
     // }

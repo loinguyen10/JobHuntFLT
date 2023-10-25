@@ -65,7 +65,7 @@ class _AppEdittextState extends State<EditTextForm> {
       width: widget.width,
       child: TextFormField(
         // inputFormatters: widget.textInputFormater,
-        style: TextStyle(fontSize: 15),
+        style: TextStyle(fontSize: 15, color: Colors.black),
         key: Key(widget.content.toString()),
         initialValue: widget.content,
         controller: widget.controller,
@@ -76,6 +76,7 @@ class _AppEdittextState extends State<EditTextForm> {
         onChanged: widget.onChanged,
         maxLength: widget.maxLength,
         onTap: widget.onTap,
+        cursorColor: Colors.black,
         // focusNode: FocusNode(),
         // validator: (value) {
         //   if (value == null || value.isEmpty) {
@@ -85,6 +86,7 @@ class _AppEdittextState extends State<EditTextForm> {
         // },
         readOnly: widget.readOnly,
         autovalidateMode: AutovalidateMode.onUserInteraction,
+
         decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,

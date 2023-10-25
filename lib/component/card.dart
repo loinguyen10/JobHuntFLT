@@ -130,8 +130,9 @@ class _AppJobCardState extends State<AppJobCard> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(width: 1, color: Colors.black),
+          color: Theme.of(context).colorScheme.inversePrimary,
+          border: Border.all(
+              width: 1, color: Theme.of(context).colorScheme.outline),
           borderRadius: BorderRadius.all(Radius.circular(8))),
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 12),
       child: Row(

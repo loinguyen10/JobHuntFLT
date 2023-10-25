@@ -59,7 +59,10 @@ class RoleScreen extends ConsumerWidget {
     return SafeArea(
         child: Container(
       height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(gradient: bgGradientColor),
+      decoration: BoxDecoration(
+          gradient: Theme.of(context).colorScheme.background == Colors.white
+              ? bgGradientColor0
+              : bgGradientColor1),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

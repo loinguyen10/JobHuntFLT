@@ -33,7 +33,7 @@ class MenuScreen extends ConsumerWidget {
       // ),
       body: SafeArea(
         child: Container(
-          color: bgPrimaryColor,
+          color: Theme.of(context).colorScheme.secondary,
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Column(
@@ -125,7 +125,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
@@ -155,7 +156,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
@@ -190,7 +192,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
@@ -226,7 +229,9 @@ class MenuScreen extends ConsumerWidget {
                             margin: EdgeInsets.symmetric(vertical: 4),
                             elevation: 2,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding: EdgeInsets.all(20),
                               child: Row(
                                 children: [
@@ -262,7 +267,9 @@ class MenuScreen extends ConsumerWidget {
                             margin: EdgeInsets.symmetric(vertical: 4),
                             elevation: 2,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding: EdgeInsets.all(20),
                               child: Row(
                                 children: [
@@ -297,7 +304,9 @@ class MenuScreen extends ConsumerWidget {
                             margin: EdgeInsets.symmetric(vertical: 4),
                             elevation: 2,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding: EdgeInsets.all(20),
                               child: Row(
                                 children: [
@@ -327,7 +336,9 @@ class MenuScreen extends ConsumerWidget {
                             margin: EdgeInsets.symmetric(vertical: 4),
                             elevation: 2,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding: EdgeInsets.all(20),
                               child: Row(
                                 children: [
@@ -357,7 +368,9 @@ class MenuScreen extends ConsumerWidget {
                             margin: EdgeInsets.symmetric(vertical: 4),
                             elevation: 2,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding: EdgeInsets.all(20),
                               child: Row(
                                 children: [
@@ -393,7 +406,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
@@ -423,7 +437,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
@@ -456,7 +471,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
@@ -526,7 +542,8 @@ class MenuScreen extends ConsumerWidget {
                     margin: EdgeInsets.symmetric(vertical: 4),
                     elevation: 2,
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
                       padding: EdgeInsets.all(20),
                       child: Row(
                         children: [

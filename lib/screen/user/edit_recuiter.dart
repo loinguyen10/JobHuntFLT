@@ -95,12 +95,13 @@ class RecuiterEditScreen extends ConsumerWidget {
           isExpanded: true,
           hint: Text(
             Keystring.SELECT.tr,
-            style: textNormal,
+            style: textNormal.copyWith(color: Colors.black),
           ),
           items: listProvince
               .map((item) => DropdownMenuItem<ProvinceList>(
                     value: item,
-                    child: Text(item.name ?? '', style: textNormal),
+                    child: Text(item.name ?? '',
+                        style: textNormal.copyWith(color: Colors.black)),
                   ))
               .toList(),
           value: provinceChoose?.code != null ? provinceChoose : null,
@@ -127,12 +128,13 @@ class RecuiterEditScreen extends ConsumerWidget {
           isExpanded: true,
           hint: Text(
             Keystring.SELECT.tr,
-            style: textNormal,
+            style: textNormal.copyWith(color: Colors.black),
           ),
           items: listDistrict
               .map((item) => DropdownMenuItem<DistrictList>(
                     value: item,
-                    child: Text(item.fullName ?? '', style: textNormal),
+                    child: Text(item.fullName ?? '',
+                        style: textNormal.copyWith(color: Colors.black)),
                   ))
               .toList(),
           value: districtChoose?.code != null ? districtChoose : null,
@@ -158,12 +160,13 @@ class RecuiterEditScreen extends ConsumerWidget {
           isExpanded: true,
           hint: Text(
             Keystring.SELECT.tr,
-            style: textNormal,
+            style: textNormal.copyWith(color: Colors.black),
           ),
           items: listWard
               .map((item) => DropdownMenuItem<WardList>(
                     value: item,
-                    child: Text(item.fullName ?? '', style: textNormal),
+                    child: Text(item.fullName ?? '',
+                        style: textNormal.copyWith(color: Colors.black)),
                   ))
               .toList(),
           value: wardChoose?.code != null ? wardChoose : null,
@@ -383,7 +386,10 @@ class RecuiterEditScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(gradient: bgGradientColor),
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -476,6 +482,8 @@ class RecuiterEditScreen extends ConsumerWidget {
                             labelText: Keystring.PROVINCE.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.grey),
                             ),
                           ),
                           child: dropProvince(),
@@ -489,6 +497,8 @@ class RecuiterEditScreen extends ConsumerWidget {
                             labelText: Keystring.DISTRICT.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.grey),
                             ),
                           ),
                           child: dropDistrict(),
@@ -502,6 +512,8 @@ class RecuiterEditScreen extends ConsumerWidget {
                             labelText: Keystring.WARD.tr,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.grey),
                             ),
                           ),
                           child: dropWard(),

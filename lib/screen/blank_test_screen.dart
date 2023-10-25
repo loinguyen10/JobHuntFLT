@@ -277,7 +277,10 @@ class BlankTestScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(gradient: bgGradientColor),
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
         child: SingleChildScrollView(
           child: Column(
             children: [

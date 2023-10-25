@@ -23,15 +23,15 @@ class CVChooseScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Container(
-        color: bgPrimaryColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: SingleChildScrollView(
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.YOUR_CV.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
               GestureDetector(
                 onTap: () {
@@ -46,7 +46,8 @@ class CVChooseScreen extends ConsumerWidget {
                   margin: EdgeInsets.symmetric(vertical: 4),
                   elevation: 2,
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background),
                     padding: EdgeInsets.all(20),
                     child: Row(
                       children: [
@@ -80,7 +81,8 @@ class CVChooseScreen extends ConsumerWidget {
                   margin: EdgeInsets.symmetric(vertical: 4),
                   elevation: 2,
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background),
                     padding: EdgeInsets.all(20),
                     child: Row(
                       children: [
@@ -114,7 +116,8 @@ class CVChooseScreen extends ConsumerWidget {
                   margin: EdgeInsets.symmetric(vertical: 4),
                   elevation: 2,
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background),
                     padding: EdgeInsets.all(20),
                     child: Row(
                       children: [
@@ -149,15 +152,15 @@ class CVCreateScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Container(
-        color: bgPrimaryColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: SingleChildScrollView(
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.CREATE_CV.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
@@ -214,15 +217,15 @@ class CVUploadScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-        color: bgPrimaryColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: SingleChildScrollView(
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.UPLOAD_CV.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 15,
@@ -369,15 +372,15 @@ class CVManagerScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-        color: bgPrimaryColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: SingleChildScrollView(
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.MANAGER_CV.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
               SizedBox(height: 16),
               _data.when(

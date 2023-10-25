@@ -4,6 +4,7 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:jobhunt_ftl/value/style.dart';
 
 import 'languague_screen.dart';
+import 'theme_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -11,7 +12,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: appHintColor,
+      color: Theme.of(context).colorScheme.secondary,
       child: SafeArea(
         child: Column(
           children: [
@@ -19,18 +20,18 @@ class SettingScreen extends StatelessWidget {
               title: Text(Keystring.SETTING.tr),
               backgroundColor: Colors.transparent,
               elevation: 0,
-              foregroundColor: Colors.black,
+              foregroundColor: Theme.of(context).colorScheme.primary,
             ),
             SingleChildScrollView(
               child: Column(
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => LanguageSelectScreen()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ThemeSelectScreen()),
+                      );
                     },
                     child: Card(
                       shadowColor: Colors.grey,
@@ -38,7 +39,8 @@ class SettingScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 4),
                       elevation: 3,
                       child: Container(
-                        decoration: BoxDecoration(color: Colors.white),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background),
                         padding: EdgeInsets.all(20),
                         child: Row(
                           children: [
@@ -72,7 +74,8 @@ class SettingScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 4),
                       elevation: 3,
                       child: Container(
-                        decoration: BoxDecoration(color: Colors.white),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background),
                         padding: EdgeInsets.all(20),
                         child: Row(
                           children: [

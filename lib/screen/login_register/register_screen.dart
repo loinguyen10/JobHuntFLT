@@ -70,7 +70,10 @@ class RegisterScreen extends ConsumerWidget {
       child: Scaffold(
         body: Container(
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(gradient: bgGradientColor),
+          decoration: BoxDecoration(
+              gradient: Theme.of(context).colorScheme.background == Colors.white
+                  ? bgGradientColor0
+                  : bgGradientColor1),
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5),

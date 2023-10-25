@@ -30,14 +30,14 @@ class YourJobStatusScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-          color: bgPrimaryColor,
+          color: Theme.of(context).colorScheme.secondary,
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.YOUR_JOB_STATUS.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
               Row(
                 children: [
@@ -291,15 +291,15 @@ class YourJobSavedScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-        color: bgPrimaryColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: SingleChildScrollView(
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.YOUR_JOB_SAVED.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
               SizedBox(height: 16),
               _data.when(

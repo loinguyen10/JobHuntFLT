@@ -29,7 +29,6 @@ class HomeScreen extends ConsumerWidget {
         // SafeArea(child:
         Scaffold(
       appBar: AppBar(
-        // title: Text("HOME"),
         backgroundColor: appPrimaryColor,
         actions: [
           Padding(
@@ -103,9 +102,10 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          color: bgPrimaryColor,
+      body: Container(
+        color: Theme.of(context).colorScheme.secondary,
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
           child: widget.company == null
               ? Column(
                   //member & guest screen
@@ -283,11 +283,11 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             height: 4,
                           ),
                           Card(
-                            shape: Border.all(color: Colors.white, width: 2),
-                            // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: const ApplicationTodayRecuiterScreen(),
@@ -332,11 +332,11 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             height: 4,
                           ),
                           Card(
-                            shape: Border.all(color: Colors.white, width: 2),
-                            // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: JobPostedCompanyScreen(),

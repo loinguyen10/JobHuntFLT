@@ -120,4 +120,6 @@ class Keystring {
   static const String THEME = 'Theme';
   static const String UPGRAPE = 'Upgrape';
   static const String ALL_APPLICATIONS = 'All_Appications';
+  static const String DARK = 'Dark';
+  static const String LIGHT = 'Light';
 }

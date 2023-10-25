@@ -103,7 +103,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       child: Scaffold(
         body: Container(
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(gradient: bgGradientColor),
+          decoration: BoxDecoration(
+              gradient: Theme.of(context).colorScheme.background == Colors.white
+                  ? bgGradientColor0
+                  : bgGradientColor1),
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5),
@@ -207,7 +210,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Container(
                           height: 2,
                           width: 80,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         SizedBox(width: 12),
                         Text(
@@ -218,7 +221,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Container(
                           height: 2,
                           width: 80,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),

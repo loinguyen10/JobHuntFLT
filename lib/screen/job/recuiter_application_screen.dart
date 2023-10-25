@@ -23,7 +23,7 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
             AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              foregroundColor: Colors.black,
+              foregroundColor: Theme.of(context).colorScheme.primary,
             ),
             Expanded(
               child: Row(

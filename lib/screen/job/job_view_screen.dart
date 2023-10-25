@@ -65,7 +65,10 @@ class JobViewScreen extends ConsumerWidget {
     );
 
     return Container(
-      decoration: BoxDecoration(gradient: bgGradientColor),
+      decoration: BoxDecoration(
+          gradient: Theme.of(context).colorScheme.background == Colors.white
+              ? bgGradientColor0
+              : bgGradientColor1),
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(

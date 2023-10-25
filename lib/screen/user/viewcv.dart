@@ -31,7 +31,7 @@ class ViewCVScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: ScreenViewCV(
         cv: cv,

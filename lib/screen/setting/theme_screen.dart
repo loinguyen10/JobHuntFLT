@@ -1,31 +1,36 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobhunt_ftl/value/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 
-class LanguageSelectScreen extends StatelessWidget {
-  const LanguageSelectScreen({super.key});
+class ThemeSelectScreen extends StatefulWidget {
+  const ThemeSelectScreen({super.key});
+
+  @override
+  State<ThemeSelectScreen> createState() => _ThemeSelectScreenState();
+}
+
+class _ThemeSelectScreenState extends State<ThemeSelectScreen> {
+// class ThemeSelectScreen extends StatelessWidget {
+//   const ThemeSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    log('${Get.locale}');
-
-    Future<void> setLanguage(String language) async {
+    Future<void> setTheme(bool theme) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('language', language);
+      prefs.setBool('theme', theme);
     }
 
     return Container(
-      color: appHintColor,
+      color: Theme.of(context).colorScheme.secondary,
       child: SafeArea(
         child: Column(
           children: [
             AppBar(
-              title: Text(Keystring.LANGUAGE.tr),
+              title: Text(Keystring.THEME.tr),
               backgroundColor: Colors.transparent,
               elevation: 0,
               foregroundColor: Theme.of(context).colorScheme.primary,
@@ -35,9 +40,11 @@ class LanguageSelectScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      if (Get.locale != 'vi') {
-                        Get.updateLocale(Locale('vi'));
-                        setLanguage('vi');
+                      if (Theme.of(context).colorScheme.background !=
+                          Colors.white) {
+                        setTheme(true);
+                        Get.changeTheme(appLightTheme);
+                        setState(() {});
                       }
                     },
                     child: Card(
@@ -53,10 +60,11 @@ class LanguageSelectScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              Keystring.VIETNAMESE.tr,
+                              Keystring.LIGHT.tr,
                               style: textMenu,
                             ),
-                            Get.locale!.languageCode == 'vi'
+                            Theme.of(context).colorScheme.background ==
+                                    Colors.white
                                 ? Icon(Icons.done)
                                 : SizedBox(width: 0),
                           ],
@@ -66,9 +74,11 @@ class LanguageSelectScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (Get.locale != 'en') {
-                        Get.updateLocale(Locale('en'));
-                        setLanguage('en');
+                      if (Theme.of(context).colorScheme.background !=
+                          Colors.black) {
+                        setTheme(false);
+                        Get.changeTheme(appDarkTheme);
+                        setState(() {});
                       }
                     },
                     child: Card(
@@ -84,10 +94,11 @@ class LanguageSelectScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              Keystring.ENGLISH.tr,
+                              Keystring.DARK.tr,
                               style: textMenu,
                             ),
-                            Get.locale!.languageCode == 'en'
+                            Theme.of(context).colorScheme.background ==
+                                    Colors.black
                                 ? Icon(Icons.done)
                                 : SizedBox(width: 0),
                           ],

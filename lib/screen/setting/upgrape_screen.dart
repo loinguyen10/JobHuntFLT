@@ -12,15 +12,15 @@ class UpgrapePremiumScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Container(
-        color: bgPrimaryColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: SingleChildScrollView(
           child: Column(
             children: [
               AppBar(
                 title: Text(Keystring.UPGRAPE.tr),
-                backgroundColor: bgPrimaryColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
-                foregroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),

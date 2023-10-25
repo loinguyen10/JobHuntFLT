@@ -59,9 +59,20 @@ class _ThemeSelectScreenState extends State<ThemeSelectScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              Keystring.LIGHT.tr,
-                              style: textMenu,
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.light_mode,
+                                  size: 32,
+                                ),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  Keystring.LIGHT.tr,
+                                  style: textMenu,
+                                ),
+                              ],
                             ),
                             Theme.of(context).colorScheme.background ==
                                     Colors.white
@@ -93,9 +104,20 @@ class _ThemeSelectScreenState extends State<ThemeSelectScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              Keystring.DARK.tr,
-                              style: textMenu,
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.dark_mode,
+                                  size: 32,
+                                ),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  Keystring.DARK.tr,
+                                  style: textMenu,
+                                ),
+                              ],
                             ),
                             Theme.of(context).colorScheme.background ==
                                     Colors.black

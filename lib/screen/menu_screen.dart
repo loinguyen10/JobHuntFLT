@@ -179,7 +179,7 @@ class MenuScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    ref.refresh(listRecuiterApplicationProvider);
+                    ref.invalidate(listRecuiterApplicationProvider);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -253,8 +253,8 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            ref.refresh(StatusCheckProvider);
-                            ref.refresh(listCandidateApplicationProvider);
+                            ref.invalidate(StatusCheckProvider);
+                            ref.invalidate(listCandidateApplicationProvider);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -291,7 +291,7 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            ref.refresh(listYourFavoriteProvider);
+                            ref.invalidate(listYourFavoriteProvider);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -420,37 +420,6 @@ class MenuScreen extends ConsumerWidget {
                           ),
                           Text(
                             Keystring.UPGRAPE.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.bell,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.NOTIFICATION.tr,
                             style: textMenu,
                           ),
                         ],

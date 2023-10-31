@@ -179,6 +179,7 @@ class MenuScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    ref.invalidate(StatusCheckProvider);
                     ref.invalidate(listRecuiterApplicationProvider);
                     Navigator.push(
                       context,

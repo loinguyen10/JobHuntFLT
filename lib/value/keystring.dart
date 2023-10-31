@@ -122,4 +122,6 @@ class Keystring {
   static const String ALL_APPLICATIONS = 'All_Appications';
   static const String DARK = 'Dark';
   static const String LIGHT = 'Light';
+  static const String DETAIL = 'Detail';
+  static const String INTERVIEW_TIME = 'Interview_Time';
 }

@@ -128,6 +128,8 @@ class LocaleString extends Translations {
           'All_Appications': 'All Appications',
           'Dark': 'Dark',
           'Light': 'Light',
+          'Detail': 'Detail',
+          'Interview_Time': 'Interview Time',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

@@ -476,6 +476,44 @@ final StatusCheckProvider = StateProvider((ref) => '');
 final listRecuiterApplicationProvider = FutureProvider<List<ApplicationDetail>>(
     (ref) => getRecuiterApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
 
+final listRecuiterApporveApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listRecuiterApplicationProvider);
+  List<ApplicationDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.apporve == '1') list.add(i);
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  return list;
+});
+
+final listRecuiterRejectApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) {
+  final listAll = ref.watch(listRecuiterApplicationProvider);
+  List<ApplicationDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.apporve == '0') list.add(i);
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+
+  return list;
+});
+
 final listRecuiterWaitingApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) {
   final listAll = ref.watch(listRecuiterApplicationProvider);

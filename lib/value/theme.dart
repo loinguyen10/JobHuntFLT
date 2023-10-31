@@ -4,11 +4,11 @@ import 'style.dart';
 final appLightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-    background: Colors.white,
-    primary: Colors.black,
-    secondary: bgPrimaryColor0,
-    inversePrimary: Colors.white,
-    outline: Colors.black,
+    background: Colors.white, // màu nền chính
+    primary: Colors.black, //màu chữ chính
+    secondary: bgPrimaryColor0, //màu nền phụ
+    inversePrimary: Colors.white, //màu
+    outline: Colors.black, //màu viền
   ),
 );
 

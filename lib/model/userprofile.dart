@@ -7,7 +7,6 @@ class UserProfileDetail {
   String? phone;
   String? address;
   String? birthday;
-  String? job;
   String? level;
   int? minSalary;
   int? maxSalary;
@@ -23,7 +22,6 @@ class UserProfileDetail {
     this.phone,
     this.address,
     this.birthday,
-    this.job,
     this.level,
     this.minSalary,
     this.maxSalary,
@@ -40,7 +38,6 @@ class UserProfileDetail {
     phone = json['phone'];
     address = json['address'];
     birthday = json['birthday'];
-    job = json['job'];
     level = json['level'];
     minSalary = int.parse(json['minSalary'] ?? '0');
     maxSalary = int.parse(json['maxSalary'] ?? '0');

@@ -33,7 +33,7 @@ final textNormal2 = TextStyle(fontSize: 16, color: Colors.white);
 //color
 final appPrimaryColor = Color(0xff00A3FF);
 final bgPrimaryColor0 = Color(0xffEEEEEE);
-final bgPrimaryColor1 = Color(0xff111111);
+final bgPrimaryColor1 = Color(0xff404040);
 final appHintColor = Color.fromARGB(0, 238, 238, 238);
 final bgGradientColor0 = LinearGradient(
   begin: Alignment.topCenter,
@@ -55,8 +55,8 @@ final bgGradientColor1 = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   colors: <Color>[
-    Colors.grey.shade600,
-    Colors.grey.shade600,
+    bgPrimaryColor1,
+    bgPrimaryColor1,
   ],
   tileMode: TileMode.mirror,
 );

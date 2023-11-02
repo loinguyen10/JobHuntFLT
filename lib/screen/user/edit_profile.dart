@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
+import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/address.dart';
@@ -604,151 +605,85 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 content: profile?.phone ?? '',
               ),
               SizedBox(height: 24),
-              Container(
-                color: Colors.white,
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(color: Colors.black),
-                    labelText: Keystring.ADDRESS.tr,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+              AppBorderFrame(
+                labelText: Keystring.ADDRESS.tr,
+                child: Column(
+                  children: [
+                    AppBorderFrame(
+                      labelText: Keystring.PROVINCE.tr,
+                      child: dropProvince(),
                     ),
-                  ),
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.black),
-                            labelText: Keystring.PROVINCE.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: dropProvince(),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.black),
-                            labelText: Keystring.DISTRICT.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: dropDistrict(),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.black),
-                            labelText: Keystring.WARD.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: dropWard(),
-                        ),
-                      ),
-                      // SizedBox(height: 20),
-                      // EditTextForm(
-                      //   onChanged: ((value) {
-                      //     //
-                      //   }),
-                      //   label: Keystring.ROAD_STREET.tr,
-                      // ),
-                    ],
-                  ),
+                    SizedBox(height: 20),
+                    AppBorderFrame(
+                      labelText: Keystring.DISTRICT.tr,
+                      child: dropDistrict(),
+                    ),
+                    SizedBox(height: 20),
+                    AppBorderFrame(
+                      labelText: Keystring.WARD.tr,
+                      child: dropWard(),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 24),
-              Container(
-                color: Colors.white,
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(color: Colors.black),
-                    labelText: Keystring.EDUCATION.tr,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      dropEducation(),
-                      listEducationShowData.isNotEmpty &&
-                              listEducationShowData != null
-                          ? SizedBox(
-                              height: 16,
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                      listEducationShowData.isNotEmpty &&
-                              listEducationShowData != null
-                          ? ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (_, index) {
-                                return Card(
-                                  shadowColor: Colors.grey,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  elevation: 2,
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          listEducationShowData[index].title ??
-                                              '',
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 3,
-                                        ),
-                                        InkWell(
-                                          child: Icon(Icons.delete_outlined),
-                                        ),
-                                      ],
-                                    ),
+              AppBorderFrame(
+                labelText: Keystring.EDUCATION.tr,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    dropEducation(),
+                    listEducationShowData.isNotEmpty &&
+                            listEducationShowData != null
+                        ? SizedBox(
+                            height: 16,
+                          )
+                        : SizedBox(
+                            height: 0,
+                          ),
+                    listEducationShowData.isNotEmpty &&
+                            listEducationShowData != null
+                        ? ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (_, index) {
+                              return Card(
+                                shadowColor: Colors.grey,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                elevation: 2,
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        listEducationShowData[index].title ??
+                                            '',
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 3,
+                                      ),
+                                      InkWell(
+                                        child: Icon(Icons.delete_outlined),
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                              itemCount: listEducationShowData.length,
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                    ],
-                  ),
+                                ),
+                              );
+                            },
+                            itemCount: listEducationShowData.length,
+                          )
+                        : SizedBox(
+                            height: 0,
+                          ),
+                  ],
                 ),
               ),
               SizedBox(height: 24),
-              Container(
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(color: Colors.black),
-                    labelText: Keystring.BIRTHDAY.tr,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child:
-                      DateCustomDialog().dobDate(context, ref, birthdayProfile),
-                ),
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(jobProfileProvider.notifier).state = value;
-                }),
-                label: Keystring.WANT_JOB.tr,
-                content: profile?.job ?? '',
+              AppBorderFrame(
+                labelText: Keystring.BIRTHDAY.tr,
+                child:
+                    DateCustomDialog().dobDate(context, ref, birthdayProfile),
               ),
               SizedBox(height: 24),
               Row(
@@ -785,14 +720,8 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                   ),
                   SizedBox(width: 12),
                   Expanded(
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.black),
-                        labelText: Keystring.CURRENCY.tr,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
+                    child: AppBorderFrame(
+                      labelText: Keystring.CURRENCY.tr,
                       child: dropCurrency(),
                     ),
                   ),
@@ -808,7 +737,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       wardChoose!.code != null &&
                       listEducationShowData.isNotEmpty &&
                       ref.watch(dateBirthProvider).isNotEmpty &&
-                      ref.watch(jobProfileProvider).isNotEmpty &&
                       ref.watch(minSalaryProvider) > 0 &&
                       ref.watch(maxSalaryProvider) > 0 &&
                       ref.watch(minSalaryProvider) <
@@ -820,7 +748,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                     }
 
                     log('${eduImport.substring(0, eduImport.length - 1)}');
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(jobProfileProvider)} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
                     if (!widget.edit) {
                       log("click done");
                       ref.read(LoginControllerProvider.notifier).createProfile(
@@ -832,7 +760,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
                             eduImport.substring(0, eduImport.length - 1),
-                            ref.watch(jobProfileProvider),
                             ref.watch(minSalaryProvider),
                             ref.watch(maxSalaryProvider),
                             currencyChoose.code ?? '',
@@ -848,7 +775,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
                             eduImport.substring(0, eduImport.length - 1),
-                            ref.watch(jobProfileProvider),
                             ref.watch(minSalaryProvider),
                             ref.watch(maxSalaryProvider),
                             currencyChoose.code ?? '',

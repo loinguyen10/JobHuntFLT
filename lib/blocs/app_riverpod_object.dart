@@ -80,9 +80,6 @@ final emailProfileProvider = StateProvider((ref) =>
 final phoneProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.phone ?? "");
 
-final jobProfileProvider =
-    StateProvider((ref) => ref.watch(userProfileProvider)?.job ?? "");
-
 final dateBirthProvider = StateProvider.autoDispose(
     (ref) => ref.watch(userProfileProvider)?.birthday ?? "");
 
@@ -563,3 +560,22 @@ final CandidateProfileProvider =
 
 final applicationDetailProvider =
     StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());
+
+// recommend job
+final genderJobSetting = StateProvider((ref) => "");
+
+final listJob2Setting = StateProvider<List<String>>((ref) {
+  // if (ref.watch(userProfileProvider) != null) {
+  //   var education = ref.watch(userProfileProvider)?.education;
+  //   return [...education!];
+  // }
+  return [];
+});
+
+final listSkillJobSetting = StateProvider<List<String>>((ref) {
+  // if (ref.watch(userProfileProvider) != null) {
+  //   var education = ref.watch(userProfileProvider)?.education;
+  //   return [...education!];
+  // }
+  return [];
+});

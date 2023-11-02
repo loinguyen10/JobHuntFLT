@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/upgrape_screen.dart';
 import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
@@ -177,43 +178,6 @@ class MenuScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    ref.invalidate(StatusCheckProvider);
-                    ref.invalidate(listRecuiterApplicationProvider);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AllAppicationRecuiterScreen()),
-                    );
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.description_outlined,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.ALL_APPLICATIONS.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 company == null
                     ? Column(children: [
                         GestureDetector(
@@ -361,7 +325,12 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      JobRecommendSettingScreen()),
+                            );
                           },
                           child: Card(
                             shadowColor: Colors.grey,
@@ -392,7 +361,45 @@ class MenuScreen extends ConsumerWidget {
                           ),
                         ),
                       ])
-                    : SizedBox(height: 0),
+                    : GestureDetector(
+                        onTap: () {
+                          ref.invalidate(StatusCheckProvider);
+                          ref.invalidate(listRecuiterApplicationProvider);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AllAppicationRecuiterScreen()),
+                          );
+                        },
+                        child: Card(
+                          shadowColor: Colors.grey,
+                          shape: Border.all(color: Colors.white, width: 2),
+                          margin: EdgeInsets.symmetric(vertical: 4),
+                          elevation: 2,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).colorScheme.background),
+                            padding: EdgeInsets.all(20),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.description_outlined,
+                                  size: 32,
+                                ),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  Keystring.ALL_APPLICATIONS.tr,
+                                  style: textMenu,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(

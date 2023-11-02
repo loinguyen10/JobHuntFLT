@@ -11,9 +11,8 @@ class EditTextForm extends StatefulWidget {
     required this.onChanged,
     this.validator,
     this.content = '',
-    this.borderSelected = Colors.black,
-    this.borderUnSelected = Colors.black,
-    this.textColor = Colors.black,
+    this.borderSelected,
+    this.textColor,
     this.width = double.infinity,
     this.height = 56,
     this.label = '',
@@ -32,9 +31,8 @@ class EditTextForm extends StatefulWidget {
   });
   String content;
   TextInputType typeKeyboard;
-  Color borderSelected;
-  Color borderUnSelected;
-  Color textColor;
+  Color? borderSelected;
+  Color? textColor;
   double width;
   double height;
   String hintText;
@@ -65,7 +63,8 @@ class _AppEdittextState extends State<EditTextForm> {
       width: widget.width,
       child: TextFormField(
         // inputFormatters: widget.textInputFormater,
-        style: TextStyle(fontSize: 15, color: Colors.black),
+        style: TextStyle(
+            fontSize: 15, color: Theme.of(context).colorScheme.primary),
         key: Key(widget.content.toString()),
         initialValue: widget.content,
         controller: widget.controller,
@@ -89,11 +88,13 @@ class _AppEdittextState extends State<EditTextForm> {
 
         decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).colorScheme.inversePrimary,
             labelText: widget.label,
             hintText: widget.hintText,
-            hintStyle: TextStyle(color: Colors.grey),
-            labelStyle: TextStyle(color: widget.textColor),
+            // hintStyle: TextStyle(color: Colors.grey),
+            labelStyle: TextStyle(
+              color: widget.textColor ?? Theme.of(context).colorScheme.primary,
+            ),
             // errorText: '',
             border: OutlineInputBorder(
               borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -120,7 +121,11 @@ class _AppEdittextState extends State<EditTextForm> {
                   )
                 : null,
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: widget.borderSelected),
+              borderSide: BorderSide(
+                width: 1,
+                color: widget.borderSelected ??
+                    Theme.of(context).colorScheme.primary,
+              ),
               borderRadius: BorderRadius.circular(8),
             )),
       ),

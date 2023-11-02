@@ -56,10 +56,10 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      // 'email': 'laingu@jobshunt.info',
-      // 'password': 'laicutai',
-      'email': 'hungbip@jobshunt.info',
-      'password': 'hung',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -188,7 +188,6 @@ class InsideService {
     String address,
     String birthday,
     String educationId,
-    String job,
     int minSalary,
     int maxSalary,
     String currency,
@@ -203,13 +202,12 @@ class InsideService {
       'address': address,
       'birthday': birthday,
       'educationId': educationId,
-      'job': job,
       'level': 'Basic',
       'minSalary': minSalary,
       'maxSalary': maxSalary,
       'currency': currency
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId \n job: $job \n min: $minSalary \n max: $maxSalary \n currency: $currency ');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId \n min: $minSalary \n max: $maxSalary \n currency: $currency ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/profile/create_profile.php"),
@@ -284,7 +282,6 @@ class InsideService {
     String address,
     String birthday,
     String educationId,
-    String job,
     int minSalary,
     int maxSalary,
     String currency,
@@ -299,12 +296,11 @@ class InsideService {
       'address': address,
       'birthday': birthday,
       'educationId': educationId,
-      'job': job,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
       'currency': currency
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId \n job: $job \n min: $minSalary \n max: $maxSalary \n currency: $currency ');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId \n min: $minSalary \n max: $maxSalary \n currency: $currency ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/profile/update_profile.php"),

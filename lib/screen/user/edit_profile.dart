@@ -48,14 +48,13 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
     final listProvinceData = ref.watch(listProvinceProvider);
     final listDistrictData = ref.watch(listDistrictProvider);
     final listWardData = ref.watch(listWardProvider);
-    final listCurrencyData = ref.watch(listCurrencyProvider);
+
     final listEducationShowData = ref.watch(listEducationShowProvider);
 
     final educationChoose = ref.watch(educationChooseProvider);
     final provinceChoose = ref.watch(provinceChooseProvider);
     final districtChoose = ref.watch(districtChooseProvider);
     final wardChoose = ref.watch(wardChooseProvider);
-    final currencyChoose = ref.watch(currencyChooseProvider);
 
     final avatarProfile = ref.watch(avatarProfileProvider);
     final cvProfile = ref.watch(cvUploadProvider);
@@ -65,7 +64,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
     List<ProvinceList> listProvince = [];
     List<DistrictList> listDistrict = [];
     List<WardList> listWard = [];
-    List<CurrencyList> listCurrency = [];
 
 //get data
     listEducationData.when(
@@ -110,15 +108,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
             }
           }
         }
-      },
-      error: (error, stackTrace) => null,
-      loading: () => const CircularProgressIndicator(),
-    );
-
-    listCurrencyData.when(
-      data: (_data) {
-        listCurrency.addAll(_data);
-        listCurrency.sort((a, b) => a.code!.compareTo(b.code!));
       },
       error: (error, stackTrace) => null,
       loading: () => const CircularProgressIndicator(),
@@ -239,33 +228,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
           onChanged: (value) {
             ref.read(wardChooseProvider.notifier).state = value;
             log('Ward: ${value?.code}');
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
-
-    DropdownButtonHideUnderline dropCurrency() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listCurrency
-              .map((item) => DropdownMenuItem<CurrencyList>(
-                    value: item,
-                    child: Text('${item.symbol ?? ''}  ${item.code ?? ''}',
-                        style: textNormal),
-                  ))
-              .toList(),
-          value: currencyChoose?.code != null ? currencyChoose : null,
-          onChanged: (value) {
-            ref.read(currencyChooseProvider.notifier).state = value;
           },
           buttonStyleData: dropDownButtonStyle1,
           menuItemStyleData: const MenuItemStyleData(
@@ -685,48 +647,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 child:
                     DateCustomDialog().dobDate(context, ref, birthdayProfile),
               ),
-              SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: EditTextForm(
-                      typeKeyboard: TextInputType.number,
-                      onChanged: ((value) {
-                        ref.read(minSalaryProvider.notifier).state =
-                            int.parse(value);
-                      }),
-                      content: profile?.minSalary == null
-                          ? ''
-                          : profile?.minSalary.toString() ?? '',
-                      label: Keystring.MIN_SALARY.tr,
-                      // width: 50,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: EditTextForm(
-                      typeKeyboard: TextInputType.number,
-                      onChanged: ((value) {
-                        ref.read(maxSalaryProvider.notifier).state =
-                            int.parse(value);
-                      }),
-                      content: profile?.maxSalary == null
-                          ? ''
-                          : profile?.maxSalary.toString() ?? '',
-                      label: Keystring.MAX_SALARY.tr,
-                      // width: 50,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: AppBorderFrame(
-                      labelText: Keystring.CURRENCY.tr,
-                      child: dropCurrency(),
-                    ),
-                  ),
-                ],
-              ),
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
@@ -736,19 +656,14 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       districtChoose!.code != null &&
                       wardChoose!.code != null &&
                       listEducationShowData.isNotEmpty &&
-                      ref.watch(dateBirthProvider).isNotEmpty &&
-                      ref.watch(minSalaryProvider) > 0 &&
-                      ref.watch(maxSalaryProvider) > 0 &&
-                      ref.watch(minSalaryProvider) <
-                          ref.watch(maxSalaryProvider) &&
-                      currencyChoose!.code != null) {
+                      ref.watch(dateBirthProvider).isNotEmpty) {
                     var eduImport = '';
                     for (var edu in listEducationShowData) {
                       eduImport += "${edu.id},";
                     }
 
                     log('${eduImport.substring(0, eduImport.length - 1)}');
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length} + ${ref.watch(minSalaryProvider)} + ${ref.watch(maxSalaryProvider)} + ${currencyChoose!.code} ');
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length}');
                     if (!widget.edit) {
                       log("click done");
                       ref.read(LoginControllerProvider.notifier).createProfile(
@@ -760,9 +675,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
                             eduImport.substring(0, eduImport.length - 1),
-                            ref.watch(minSalaryProvider),
-                            ref.watch(maxSalaryProvider),
-                            currencyChoose.code ?? '',
                           );
                     } else {
                       log("click update");
@@ -775,9 +687,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
                             eduImport.substring(0, eduImport.length - 1),
-                            ref.watch(minSalaryProvider),
-                            ref.watch(maxSalaryProvider),
-                            currencyChoose.code ?? '',
                           );
                     }
                   } else {

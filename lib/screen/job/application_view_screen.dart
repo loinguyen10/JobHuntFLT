@@ -100,7 +100,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                     MaterialPageRoute(builder: (context) => JobViewScreen()),
                   );
                 },
-                content: Keystring.VIEW_JOB.tr,
+                label: Keystring.VIEW_JOB.tr,
                 bgColor: Colors.grey,
                 textColor: Colors.black,
                 colorBorder: Colors.black,
@@ -126,7 +126,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                             )),
                   );
                 },
-                content: Keystring.VIEW_CV.tr,
+                label: Keystring.VIEW_CV.tr,
                 bgColor: Colors.grey,
                 textColor: Colors.black,
                 colorBorder: Colors.black,
@@ -147,7 +147,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                               '1',
                             );
                       },
-                      content: Keystring.APPORVE.tr,
+                      label: Keystring.APPORVE.tr,
                       bgColor: Colors.green,
                       textColor: Colors.white,
                       colorBorder: Colors.green,
@@ -166,7 +166,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                               '0',
                             );
                       },
-                      content: Keystring.REJECT.tr,
+                      label: Keystring.REJECT.tr,
                       bgColor: Colors.red,
                       textColor: Colors.white,
                       colorBorder: Colors.red,

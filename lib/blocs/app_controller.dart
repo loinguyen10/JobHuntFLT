@@ -97,7 +97,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String birthday,
-    String educationId,
   ) async {
     state = const CreateThingLoadingEvent();
     try {
@@ -110,7 +109,6 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               birthday,
-              educationId,
             );
 
         if (result == 1) {
@@ -140,7 +138,6 @@ class LoginController extends StateNotifier<InsideEvent> {
                 phone,
                 address,
                 birthday,
-                educationId,
               );
 
           if (result == 1) {
@@ -248,7 +245,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String birthday,
-    String educationId,
   ) async {
     state = const UpdateThingLoadingEvent();
     try {
@@ -268,7 +264,6 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               birthday,
-              educationId,
             );
 
         if (result == 1) {

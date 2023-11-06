@@ -325,6 +325,7 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
+                            ref.refresh(listAllTitleJobSettingProvider);
                             Navigator.push(
                               context,
                               MaterialPageRoute(

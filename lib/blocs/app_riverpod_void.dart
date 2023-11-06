@@ -204,3 +204,8 @@ Future<List<ApplicationDetail>> getRecuiterApplication(
   final list = await insideService.getRecuiterApplication(recuiterId);
   return list;
 }
+
+Future<List<String>> getAllJobTitle() async {
+  final list = await insideService.getAllJobTitle();
+  return list;
+}

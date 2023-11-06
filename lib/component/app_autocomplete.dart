@@ -53,13 +53,27 @@ class _AppAutocompleteEditTextState extends State<AppAutocompleteEditText> {
         if (textEditingValue.text == '') {
           return const Iterable<String>.empty();
         }
+        if (!widget.listSuggestion.any((x) => x == textEditingValue.text)) {
+          return widget.listSuggestion.where((String option) {
+                return option
+                    .toLowerCase()
+                    .contains(textEditingValue.text.toLowerCase());
+              }).toList() +
+              [textEditingValue.text];
+        }
+
         return widget.listSuggestion.where((String option) {
-          return option.contains(textEditingValue.text.toLowerCase());
+          return option
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
         });
       },
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) {
         return TextFormField(
+          onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           // inputFormatters: widget.textInputFormater,
           style: TextStyle(
               fontSize: 15, color: Theme.of(context).colorScheme.primary),

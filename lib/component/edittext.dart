@@ -28,6 +28,7 @@ class EditTextForm extends StatefulWidget {
     this.showEye = false,
     this.readOnly = false,
     this.maxLines = 1,
+    this.textAlign = TextAlign.start,
   });
   String content;
   TextInputType typeKeyboard;
@@ -49,6 +50,7 @@ class EditTextForm extends StatefulWidget {
   int? maxLength;
   bool readOnly;
   int maxLines;
+  TextAlign textAlign;
   // List<TextInputFormatter>? textInputFormater;
 
   @override
@@ -76,6 +78,7 @@ class _AppEdittextState extends State<EditTextForm> {
         maxLength: widget.maxLength,
         onTap: widget.onTap,
         cursorColor: Colors.black,
+        textAlign: widget.textAlign,
         // focusNode: FocusNode(),
         // validator: (value) {
         //   if (value == null || value.isEmpty) {

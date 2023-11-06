@@ -44,36 +44,22 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
     final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
 
-    final listEducationData = ref.watch(listEducationProvider);
     final listProvinceData = ref.watch(listProvinceProvider);
     final listDistrictData = ref.watch(listDistrictProvider);
     final listWardData = ref.watch(listWardProvider);
 
-    final listEducationShowData = ref.watch(listEducationShowProvider);
-
-    final educationChoose = ref.watch(educationChooseProvider);
     final provinceChoose = ref.watch(provinceChooseProvider);
     final districtChoose = ref.watch(districtChooseProvider);
     final wardChoose = ref.watch(wardChooseProvider);
 
     final avatarProfile = ref.watch(avatarProfileProvider);
-    final cvProfile = ref.watch(cvUploadProvider);
     final birthdayProfile = ref.watch(dateBirthProvider);
 
-    List<EducationList> listEducation = [];
     List<ProvinceList> listProvince = [];
     List<DistrictList> listDistrict = [];
     List<WardList> listWard = [];
 
 //get data
-    listEducationData.when(
-      data: (_data) {
-        listEducation.addAll(_data);
-      },
-      error: (error, stackTrace) => null,
-      loading: () => const CircularProgressIndicator(),
-    );
-
     listProvinceData.when(
       data: (_data) {
         listProvince.addAll(_data);
@@ -114,39 +100,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
     );
 
 //dropdown
-    DropdownButtonHideUnderline dropEducation() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listEducation
-              .map((item) => DropdownMenuItem<EducationList>(
-                    value: item,
-                    child: Text(item.title ?? '', style: textNormal),
-                  ))
-              .toList(),
-          value: educationChoose?.id != null ? educationChoose : null,
-          onChanged: (value) {
-            if (!listEducationShowData.any((x) => x == value)) {
-              ref.read(educationChooseProvider.notifier).state = value;
-              ref.read(listEducationShowProvider.notifier).state = [
-                ...listEducationShowData,
-                value!
-              ];
-              // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
-            }
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
-
     DropdownButtonHideUnderline dropProvince() {
       return DropdownButtonHideUnderline(
         child: DropdownButton2(
@@ -590,59 +543,6 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
               ),
               SizedBox(height: 24),
               AppBorderFrame(
-                labelText: Keystring.EDUCATION.tr,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    dropEducation(),
-                    listEducationShowData.isNotEmpty &&
-                            listEducationShowData != null
-                        ? SizedBox(
-                            height: 16,
-                          )
-                        : SizedBox(
-                            height: 0,
-                          ),
-                    listEducationShowData.isNotEmpty &&
-                            listEducationShowData != null
-                        ? ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (_, index) {
-                              return Card(
-                                shadowColor: Colors.grey,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                elevation: 2,
-                                child: ListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        listEducationShowData[index].title ??
-                                            '',
-                                        overflow: TextOverflow.fade,
-                                        maxLines: 3,
-                                      ),
-                                      InkWell(
-                                        child: Icon(Icons.delete_outlined),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            itemCount: listEducationShowData.length,
-                          )
-                        : SizedBox(
-                            height: 0,
-                          ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
                 labelText: Keystring.BIRTHDAY.tr,
                 child:
                     DateCustomDialog().dobDate(context, ref, birthdayProfile),
@@ -655,15 +555,14 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       provinceChoose!.code != null &&
                       districtChoose!.code != null &&
                       wardChoose!.code != null &&
-                      listEducationShowData.isNotEmpty &&
                       ref.watch(dateBirthProvider).isNotEmpty) {
-                    var eduImport = '';
-                    for (var edu in listEducationShowData) {
-                      eduImport += "${edu.id},";
-                    }
+                    // var eduImport = '';
+                    // for (var edu in listEducationShowData) {
+                    //   eduImport += "${edu.id},";
+                    // }
 
-                    log('${eduImport.substring(0, eduImport.length - 1)}');
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} + ${listEducationShowData.length}');
+                    // log('${eduImport.substring(0, eduImport.length - 1)}');
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} ');
                     if (!widget.edit) {
                       log("click done");
                       ref.read(LoginControllerProvider.notifier).createProfile(
@@ -674,7 +573,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             ref.watch(phoneProfileProvider),
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
-                            eduImport.substring(0, eduImport.length - 1),
+                            // eduImport.substring(0, eduImport.length - 1),
                           );
                     } else {
                       log("click update");
@@ -686,7 +585,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                             ref.watch(phoneProfileProvider),
                             ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
                             ref.watch(dateBirthProvider),
-                            eduImport.substring(0, eduImport.length - 1),
+                            // eduImport.substring(0, eduImport.length - 1),
                           );
                     }
                   } else {
@@ -702,7 +601,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 },
                 bgColor: appPrimaryColor,
                 height: 64,
-                content: widget.edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                label: widget.edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
                 fontSize: 16,
               ),
               SizedBox(height: 32),

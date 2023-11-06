@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/app_autocomplete.dart';
+import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:jobhunt_ftl/value/style.dart';
@@ -21,18 +22,24 @@ class JobRecommendSettingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyChoose = ref.watch(currencyChooseJobSettingProvider);
     final provinceChoose = ref.watch(provinceChooseJobSettingProvider);
+    final educationChoose = ref.watch(educationChooseJobSettingProvider);
 
     final _gender = ref.watch(genderJobSettingProvider);
-    final listS = <String>['aardvark', 'bobcat', 'chameleon'];
     final listJob = ref.watch(listJob2SettingProvider);
-    final listSkill = ref.watch(listSkillJobSettingProvider);
     final listProvinceChoose = ref.watch(listProvinceChooseJobSettingProvider);
 
     final listCurrencyData = ref.watch(listCurrencyProvider);
     final listProvinceData = ref.watch(listProvinceProvider);
+    final listEducationData = ref.watch(listEducationJobSettingProvider);
+    final listAllTitleJobData = ref.watch(listAllTitleJobSettingProvider);
+
+    final listEducationShowData =
+        ref.watch(listEducationShowJobSettingProvider);
 
     List<CurrencyList> listCurrency = [];
     List<ProvinceList> listProvince = [];
+    List<EducationList> listEducation = [];
+    List<String> listTitleJob = [];
 
     listCurrencyData.when(
       data: (_data) {
@@ -47,6 +54,22 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       data: (_data) {
         listProvince.addAll(_data);
         listProvince.sort((a, b) => a.name!.compareTo(b.name!));
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    listEducationData.when(
+      data: (_data) {
+        listEducation.addAll(_data);
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    listAllTitleJobData.when(
+      data: (_data) {
+        listTitleJob.addAll(_data);
       },
       error: (error, stackTrace) => null,
       loading: () => const CircularProgressIndicator(),
@@ -105,6 +128,40 @@ class JobRecommendSettingScreen extends ConsumerWidget {
               ];
             }
             log('Province: ${value?.code}');
+          },
+          buttonStyleData: dropDownButtonStyle1,
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+          ),
+        ),
+      );
+    }
+
+    DropdownButtonHideUnderline dropEducation() {
+      return DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Text(
+            Keystring.SELECT.tr,
+            style: textNormal,
+          ),
+          items: listEducation
+              .map((item) => DropdownMenuItem<EducationList>(
+                    value: item,
+                    child: Text(item.title ?? '', style: textNormal),
+                  ))
+              .toList(),
+          value: educationChoose?.id != null ? educationChoose : null,
+          onChanged: (value) {
+            if (!listEducationShowData.any((x) => x == value)) {
+              ref.read(educationChooseJobSettingProvider.notifier).state =
+                  value;
+              ref.read(listEducationShowJobSettingProvider.notifier).state = [
+                ...listEducationShowData,
+                value!
+              ];
+              // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
+            }
           },
           buttonStyleData: dropDownButtonStyle1,
           menuItemStyleData: const MenuItemStyleData(
@@ -174,20 +231,13 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                       ],
                     )),
                 SizedBox(height: 16),
-                EditTextForm(
-                  onChanged: ((value) {
-                    //
-                  }),
-                  label: 'Position',
-                ),
-                SizedBox(height: 16),
                 AppBorderFrame(
                   labelText: 'Job',
                   child: Column(
                     children: [
                       AppAutocompleteEditText(
                         borderSelected: Colors.transparent,
-                        listSuggestion: listS,
+                        listSuggestion: listTitleJob,
                         onSelected: (value) {
                           if (!listJob.any((x) => x == value)) {
                             ref.read(listJob2SettingProvider.notifier).state = [
@@ -240,25 +290,19 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                 ),
                 SizedBox(height: 16),
                 AppBorderFrame(
-                  labelText: 'Skill',
+                  labelText: Keystring.EDUCATION.tr,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      AppAutocompleteEditText(
-                        borderSelected: Colors.transparent,
-                        listSuggestion: listS,
-                        onSelected: (value) {
-                          if (!listSkill.any((x) => x == value)) {
-                            ref
-                                .read(listSkillJobSettingProvider.notifier)
-                                .state = [...listSkill, value];
-                            // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
-                          }
-                        },
-                      ),
-                      listSkill.isNotEmpty
-                          ? SizedBox(height: 16)
-                          : SizedBox(height: 0),
-                      listSkill.isNotEmpty
+                      dropEducation(),
+                      listEducationShowData.isNotEmpty
+                          ? SizedBox(
+                              height: 16,
+                            )
+                          : SizedBox(
+                              height: 0,
+                            ),
+                      listEducationShowData.isNotEmpty
                           ? ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -274,33 +318,50 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          listSkill[index],
+                                          listEducationShowData[index].title ??
+                                              '',
                                           overflow: TextOverflow.fade,
                                           maxLines: 3,
                                         ),
                                         InkWell(
                                           child: Icon(Icons.delete_outlined),
-                                          onTap: () {
-                                            //
-                                          },
                                         ),
                                       ],
                                     ),
                                   ),
                                 );
                               },
-                              itemCount: listSkill.length,
+                              itemCount: listEducationShowData.length,
                             )
-                          : SizedBox(height: 0),
+                          : SizedBox(
+                              height: 0,
+                            ),
                     ],
                   ),
                 ),
                 SizedBox(height: 16),
                 AppBorderFrame(
                     labelText: 'Expericement',
-                    child: Column(
+                    child: Row(
                       children: [
-                        //
+                        SizedBox(width: 16),
+                        Text('Less than', style: textNormal),
+                        SizedBox(width: 8),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: EditTextForm(
+                            typeKeyboard: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            onChanged: ((value) {
+                              ref
+                                  .read(yearExpericementJobSettingProvider
+                                      .notifier)
+                                  .state = int.parse(value);
+                            }),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text('year', style: textNormal),
                       ],
                     )),
                 SizedBox(height: 16),
@@ -393,7 +454,14 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                             : SizedBox(height: 0),
                       ],
                     )),
-                SizedBox(height: 16),
+                SizedBox(height: 32),
+                AppButton(
+                  onPressed: () {
+                    //
+                  },
+                  label: Keystring.DONE.tr,
+                ),
+                SizedBox(height: 32),
               ],
             ),
           ),

@@ -52,9 +52,6 @@ final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
 
-final listEducationProvider =
-    FutureProvider<List<EducationList>>((ref) => getEducationList());
-
 final listProvinceProvider =
     FutureProvider<List<ProvinceList>>((ref) => getProvinceList());
 
@@ -82,9 +79,6 @@ final phoneProfileProvider =
 
 final dateBirthProvider = StateProvider.autoDispose(
     (ref) => ref.watch(userProfileProvider)?.birthday ?? "");
-
-final educationChooseProvider =
-    StateProvider<EducationList?>((ref) => EducationList());
 
 final provinceChooseProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
   if (ref.watch(userProfileProvider) != null &&
@@ -132,14 +126,6 @@ final wardChooseProvider = StateProvider.autoDispose<WardList?>((ref) {
     }
   }
   return WardList();
-});
-
-final listEducationShowProvider = StateProvider<List<EducationList>>((ref) {
-  if (ref.watch(userProfileProvider) != null) {
-    var education = ref.watch(userProfileProvider)?.education;
-    return [...education!];
-  }
-  return [];
 });
 
 //company
@@ -551,13 +537,8 @@ final listJob2SettingProvider = StateProvider<List<String>>((ref) {
   return [];
 });
 
-final listSkillJobSettingProvider = StateProvider<List<String>>((ref) {
-  // if (ref.watch(userProfileProvider) != null) {
-  //   var education = ref.watch(userProfileProvider)?.education;
-  //   return [...education!];
-  // }
-  return [];
-});
+final listAllTitleJobSettingProvider =
+    FutureProvider<List<String>>((ref) => getAllJobTitle());
 
 final minSalaryJobSettingProvider = StateProvider<int>((ref) => 0);
 
@@ -600,5 +581,22 @@ final listProvinceChooseJobSettingProvider =
   //   var education = ref.watch(userProfileProvider)?.education;
   //   return [...education!];
   // }
+  return [];
+});
+
+final yearExpericementJobSettingProvider = StateProvider<int>((ref) => 0);
+
+final educationChooseJobSettingProvider =
+    StateProvider<EducationList?>((ref) => EducationList());
+
+final listEducationJobSettingProvider =
+    FutureProvider<List<EducationList>>((ref) => getEducationList());
+
+final listEducationShowJobSettingProvider =
+    StateProvider<List<EducationList>>((ref) {
+  if (ref.watch(userProfileProvider) != null) {
+    var education = ref.watch(userProfileProvider)?.education;
+    return [...education!];
+  }
   return [];
 });

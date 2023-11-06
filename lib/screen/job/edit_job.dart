@@ -599,7 +599,7 @@ class JobEditScreen extends ConsumerWidget {
                 },
                 bgColor: appPrimaryColor,
                 height: 64,
-                content: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
                 fontSize: 16,
               ),
               SizedBox(height: 32),

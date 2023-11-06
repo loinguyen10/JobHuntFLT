@@ -22,6 +22,7 @@ import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../component/loader_overlay.dart';
+import '../value/style.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
@@ -72,7 +73,7 @@ class InsideService {
         body: msg);
     log('ket qua login00: ${response.statusCode}');
     log('ket qua login: ${jsonDecode(response.body)}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final UserDetail result =
           UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
       log("Token dc luu ${result.uid}");
@@ -107,7 +108,7 @@ class InsideService {
         await get(Uri.parse(BASE_URL + "profile/education.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['education'];
       log('$result');
@@ -121,7 +122,7 @@ class InsideService {
     Response response = await get(Uri.parse(BASE_URL + "profile/currency.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['currency'];
       return result.map((e) => CurrencyList.fromJson(e)).toList();
@@ -132,7 +133,7 @@ class InsideService {
 
   Future<dynamic> getListProvince() async {
     Response response = await get(Uri.parse(BASE_URL + "address/province.php"));
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['province'];
       return result.map((e) => ProvinceList.fromJson(e)).toList();
@@ -143,7 +144,7 @@ class InsideService {
 
   Future<dynamic> getListDistrict() async {
     Response response = await get(Uri.parse(BASE_URL + "address/district.php"));
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['district'];
       return result.map((e) => DistrictList.fromJson(e)).toList();
@@ -155,7 +156,7 @@ class InsideService {
   Future<dynamic> getListWard() async {
     Response response = await get(Uri.parse(BASE_URL + "address/ward.php"));
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['message']}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['ward'];
       return result.map((e) => WardList.fromJson(e)).toList();
@@ -170,7 +171,7 @@ class InsideService {
     });
     Response response =
         await post(Uri.parse(BASE_URL + "/profile/profile.php"), body: msg);
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final UserProfileDetail result = UserProfileDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['profile']);
       return result;
@@ -187,7 +188,6 @@ class InsideService {
     String phone,
     String address,
     String birthday,
-    String educationId,
   ) async {
     final msg = jsonEncode({
       'uid': uid,
@@ -198,10 +198,9 @@ class InsideService {
       'phone': phone,
       'address': address,
       'birthday': birthday,
-      'educationId': educationId,
       'level': 'Basic',
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/profile/create_profile.php"),
@@ -226,7 +225,7 @@ class InsideService {
     });
     Response response =
         await post(Uri.parse(BASE_URL + "/company/company.php"), body: msg);
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final CompanyDetail result = CompanyDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['company']);
       return result;
@@ -275,7 +274,6 @@ class InsideService {
     String phone,
     String address,
     String birthday,
-    String educationId,
   ) async {
     final msg = jsonEncode({
       'uid': uid,
@@ -286,9 +284,8 @@ class InsideService {
       'phone': phone,
       'address': address,
       'birthday': birthday,
-      'educationId': educationId,
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n educationId $educationId');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/profile/update_profile.php"),
@@ -333,7 +330,7 @@ class InsideService {
         await get(Uri.parse(BASE_URL + "company/allCompany.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['company'];
       return result.map((e) => CompanyDetail.fromJson(e)).toList();
@@ -436,7 +433,7 @@ class InsideService {
     });
     Response response =
         await post(Uri.parse(BASE_URL + "/job/job.php"), body: msg);
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final JobDetail result = JobDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['job']);
       return result;
@@ -449,7 +446,7 @@ class InsideService {
     Response response = await get(Uri.parse(BASE_URL + "job/allJob.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
       return result.map((e) => JobDetail.fromJson(e)).toList();
@@ -481,7 +478,7 @@ class InsideService {
     Response response = await get(Uri.parse(BASE_URL + "cv/allCV.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['cv'];
       return result.map((e) => CVDetail.fromJson(e)).toList();
@@ -532,7 +529,7 @@ class InsideService {
 
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
       return result.map((e) => FavoriteDetail.fromJson(e)).toList();
@@ -605,7 +602,7 @@ class InsideService {
 
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
       return result.map((e) => ApplicationDetail.fromJson(e)).toList();
@@ -626,12 +623,36 @@ class InsideService {
 
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
       return result.map((e) => ApplicationDetail.fromJson(e)).toList();
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> getAllJobTitle() async {
+    List<String> list = [];
+    Response response = await get(Uri.parse(BASE_URL + "/job/allJobTitle.php"));
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['data']['title'];
+      list = List<String>.from(result);
+    }
+    return list;
+  }
+
+  Future<dynamic> createJobTitle(
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/job/allJobTitle.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

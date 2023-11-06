@@ -132,6 +132,13 @@ class LocaleString extends Translations {
           'Interview_Time': 'Interview Time',
           'See_more': 'See more',
           'Collapse': 'Collapse',
+          'Gender': 'Gender',
+          'Male': 'Male',
+          'Female': 'Female',
+          'Other': 'Other',
+          'Place_Job': 'Place To Find Job',
+          'Less_Than': 'Less than',
+          'Year': 'Year',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

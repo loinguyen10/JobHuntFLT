@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../model/job_setting.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
@@ -52,9 +53,6 @@ final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
 
-final listEducationProvider =
-    FutureProvider<List<EducationList>>((ref) => getEducationList());
-
 final listProvinceProvider =
     FutureProvider<List<ProvinceList>>((ref) => getProvinceList());
 
@@ -80,20 +78,8 @@ final emailProfileProvider = StateProvider((ref) =>
 final phoneProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.phone ?? "");
 
-final jobProfileProvider =
-    StateProvider((ref) => ref.watch(userProfileProvider)?.job ?? "");
-
 final dateBirthProvider = StateProvider.autoDispose(
     (ref) => ref.watch(userProfileProvider)?.birthday ?? "");
-
-final minSalaryProvider =
-    StateProvider<int>((ref) => ref.watch(userProfileProvider)?.minSalary ?? 0);
-
-final maxSalaryProvider =
-    StateProvider<int>((ref) => ref.watch(userProfileProvider)?.maxSalary ?? 0);
-
-final educationChooseProvider =
-    StateProvider<EducationList?>((ref) => EducationList());
 
 final provinceChooseProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
   if (ref.watch(userProfileProvider) != null &&
@@ -141,29 +127,6 @@ final wardChooseProvider = StateProvider.autoDispose<WardList?>((ref) {
     }
   }
   return WardList();
-});
-
-final currencyChooseProvider = StateProvider.autoDispose<CurrencyList?>((ref) {
-  if (ref.watch(userProfileProvider) != null &&
-      !ref.watch(listCurrencyProvider).isLoading) {
-    var list = ref.watch(listCurrencyProvider).value;
-    var currency = ref.watch(userProfileProvider)?.currency;
-
-    for (var x in list!) {
-      if (currency == x.code) {
-        return x;
-      }
-    }
-  }
-  return CurrencyList();
-});
-
-final listEducationShowProvider = StateProvider<List<EducationList>>((ref) {
-  if (ref.watch(userProfileProvider) != null) {
-    var education = ref.watch(userProfileProvider)?.education;
-    return [...education!];
-  }
-  return [];
 });
 
 //company
@@ -563,3 +526,81 @@ final CandidateProfileProvider =
 
 final applicationDetailProvider =
     StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());
+
+// recommend job
+final genderJobSettingProvider = StateProvider((ref) => "");
+
+final listJob2SettingProvider = StateProvider<List<String>>((ref) {
+  // if (ref.watch(userProfileProvider) != null) {
+  //   var education = ref.watch(userProfileProvider)?.education;
+  //   return [...education!];
+  // }
+  return [];
+});
+
+final listAllTitleJobSettingProvider =
+    FutureProvider<List<String>>((ref) => getAllJobTitle());
+
+final minSalaryJobSettingProvider = StateProvider<int>((ref) => 0);
+
+final maxSalaryJobSettingProvider = StateProvider<int>((ref) => 0);
+
+final currencyChooseJobSettingProvider =
+    StateProvider.autoDispose<CurrencyList?>((ref) {
+  // if (ref.watch(userProfileProvider) != null &&
+  //     !ref.watch(listCurrencyProvider).isLoading) {
+  //   var list = ref.watch(listCurrencyProvider).value;
+  //   var currency = ref.watch(userProfileProvider)?.currency;
+
+  //   for (var x in list!) {
+  //     if (currency == x.code) {
+  //       return x;
+  //     }
+  //   }
+  // }
+  return CurrencyList();
+});
+
+final provinceChooseJobSettingProvider =
+    StateProvider.autoDispose<ProvinceList?>((ref) {
+  // if (ref.watch(userProfileProvider) != null &&
+  //     !ref.watch(listProvinceProvider).isLoading) {
+  //   var list = ref.watch(listProvinceProvider).value;
+  //   for (var x in list!) {
+  //     var address = ref.watch(userProfileProvider)?.address;
+  //     if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
+  //       return x;
+  //     }
+  //   }
+  // }
+  return ProvinceList();
+});
+
+final listProvinceChooseJobSettingProvider =
+    StateProvider<List<ProvinceList>>((ref) {
+  // if (ref.watch(userProfileProvider) != null) {
+  //   var education = ref.watch(userProfileProvider)?.education;
+  //   return [...education!];
+  // }
+  return [];
+});
+
+final yearExpericementJobSettingProvider = StateProvider<int>((ref) => 0);
+
+final educationChooseJobSettingProvider =
+    StateProvider<EducationList?>((ref) => EducationList());
+
+final listEducationJobSettingProvider =
+    FutureProvider<List<EducationList>>((ref) => getEducationList());
+
+final listEducationShowJobSettingProvider =
+    StateProvider<List<EducationList>>((ref) {
+  // if (ref.watch(userProfileProvider) != null) {
+  //   var education = ref.watch(userProfileProvider)?.education;
+  //   return [...education!];
+  // }
+  return [];
+});
+
+final userDetailJobSettingProvider =
+    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());

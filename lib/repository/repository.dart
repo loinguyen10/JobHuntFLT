@@ -658,6 +658,7 @@ class InsideService {
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final result = JobRecommendSetting.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']);
+      log('message setting: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']}');
       return result;
     } else {
       return null;

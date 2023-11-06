@@ -3,7 +3,7 @@ class JobRecommendSetting {
   String? gender;
   String? job;
   String? educationId;
-  String? yearExperience;
+  int? yearExperience;
   String? workProvince;
   int? minSalary;
   int? maxSalary;
@@ -27,7 +27,7 @@ class JobRecommendSetting {
     gender = json['gender'];
     job = json['job'];
     educationId = json['educationId'];
-    yearExperience = json['yearExperience'];
+    yearExperience = int.parse(json['yearExperience']);
     workProvince = json['workProvince'];
     minSalary = int.parse(json['minSalary']);
     maxSalary = int.parse(json['maxSalary']);

@@ -47,6 +47,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
             log('pro: $profile');
+            log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
             ref.read(userDetailJobSettingProvider.notifier).state = setting;
           } else if (user.role == 'recuiter') {

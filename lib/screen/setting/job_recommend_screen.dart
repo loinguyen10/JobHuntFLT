@@ -25,6 +25,8 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final setting = ref.watch(userDetailJobSettingProvider);
+
     final currencyChoose = ref.watch(currencyChooseJobSettingProvider);
     final provinceChoose = ref.watch(provinceChooseJobSettingProvider);
     final educationChoose = ref.watch(educationChooseJobSettingProvider);
@@ -489,6 +491,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                       .notifier)
                                   .state = int.parse(value);
                             }),
+                            content: setting?.yearExperience.toString() ?? '',
                           ),
                         ),
                         SizedBox(width: 8),
@@ -509,7 +512,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                 .read(minSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
-                          // content: profile?.minSalary == null ? '' : profile?.minSalary.toString() ?? '',
+                          content: setting?.minSalary.toString() ?? '',
                           label: Keystring.MIN_SALARY.tr,
                         ),
                       ),
@@ -522,7 +525,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                 .read(maxSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
-                          // content: profile?.maxSalary == null ? '' : profile?.maxSalary.toString() ?? '',
+                          content: setting?.maxSalary.toString() ?? '',
                           label: Keystring.MAX_SALARY.tr,
                         ),
                       ),

@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../model/job_setting.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
@@ -594,9 +595,12 @@ final listEducationJobSettingProvider =
 
 final listEducationShowJobSettingProvider =
     StateProvider<List<EducationList>>((ref) {
-  if (ref.watch(userProfileProvider) != null) {
-    var education = ref.watch(userProfileProvider)?.education;
-    return [...education!];
-  }
+  // if (ref.watch(userProfileProvider) != null) {
+  //   var education = ref.watch(userProfileProvider)?.education;
+  //   return [...education!];
+  // }
   return [];
 });
+
+final userDetailJobSettingProvider =
+    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());

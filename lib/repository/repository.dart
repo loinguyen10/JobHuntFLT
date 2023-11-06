@@ -3,11 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +17,7 @@ import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../component/loader_overlay.dart';
+import '../model/job_setting.dart';
 import '../value/style.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
@@ -84,11 +80,6 @@ class InsideService {
     } else {
       return null;
     }
-  }
-
-  Future<dynamic> getCollection(String collection) async {
-    QuerySnapshot xxx = await fireStore.collection(collection).get();
-    return xxx.docs;
   }
 
   Future<dynamic> uploadPdfStorage(File file, String uid) async {
@@ -170,7 +161,7 @@ class InsideService {
       'uid': uid,
     });
     Response response =
-        await post(Uri.parse(BASE_URL + "/profile/profile.php"), body: msg);
+        await post(Uri.parse(BASE_URL + "profile/profile.php"), body: msg);
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final UserProfileDetail result = UserProfileDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['profile']);
@@ -203,7 +194,7 @@ class InsideService {
     log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n ');
 
     Response response = await post(
-        Uri.parse(BASE_URL + "/profile/create_profile.php"),
+        Uri.parse(BASE_URL + "profile/create_profile.php"),
         body: msg);
 
     return jsonDecode(response.body)['success'];
@@ -288,7 +279,7 @@ class InsideService {
     log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n');
 
     Response response = await post(
-        Uri.parse(BASE_URL + "/profile/update_profile.php"),
+        Uri.parse(BASE_URL + "profile/update_profile.php"),
         body: msg);
 
     return jsonDecode(response.body)['success'];
@@ -496,9 +487,8 @@ class InsideService {
       'userId': userId,
     });
 
-    Response response = await post(
-        Uri.parse(BASE_URL + "/profile/add_favorive.php"),
-        body: msg);
+    Response response =
+        await post(Uri.parse(BASE_URL + "profile/add_favorive.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -513,7 +503,7 @@ class InsideService {
     });
 
     Response response = await post(
-        Uri.parse(BASE_URL + "/profile/remove_favorive.php"),
+        Uri.parse(BASE_URL + "profile/remove_favorive.php"),
         body: msg);
 
     return jsonDecode(response.body)['success'];
@@ -652,6 +642,88 @@ class InsideService {
 
     Response response =
         await post(Uri.parse(BASE_URL + "/job/allJobTitle.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getJobRecommendSetting(String uid) async {
+    final msg = jsonEncode({
+      'uid': uid,
+    });
+
+    Response response = await post(
+      Uri.parse(BASE_URL + "profile/profile_recommend_setting.php"),
+      body: msg,
+    );
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final result = JobRecommendSetting.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']);
+      return result;
+    } else {
+      return null;
+    }
+  }
+
+  Future<dynamic> createJobRecommendSetting(
+    String uid,
+    String gender,
+    String job,
+    String educationId,
+    int yearExperience,
+    String workProvince,
+    int minSalary,
+    int maxSalary,
+    String currency,
+  ) async {
+    final msg = jsonEncode({
+      'uid': uid,
+      'gender': gender,
+      'job': job,
+      'educationId': educationId,
+      'yearExperience': yearExperience,
+      'workProvince': workProvince,
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'currency': currency,
+    });
+
+    log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/create_profile_recommend_setting.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> updateJobRecommendSetting(
+    String uid,
+    String gender,
+    String job,
+    String educationId,
+    int yearExperience,
+    String workProvince,
+    int minSalary,
+    int maxSalary,
+    String currency,
+  ) async {
+    final msg = jsonEncode({
+      'uid': uid,
+      'gender': gender,
+      'job': job,
+      'educationId': educationId,
+      'yearExperience': yearExperience,
+      'workProvince': workProvince,
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'currency': currency,
+    });
+
+    log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/update_profile_recommend_setting.php"),
+        body: msg);
 
     return jsonDecode(response.body)['success'];
   }

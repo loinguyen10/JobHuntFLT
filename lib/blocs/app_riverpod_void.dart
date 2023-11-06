@@ -14,6 +14,7 @@ import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 
 import '../model/company.dart';
+import '../model/job_setting.dart';
 import '../model/userprofile.dart';
 import '../repository/repository.dart';
 import '../screen/home.dart';

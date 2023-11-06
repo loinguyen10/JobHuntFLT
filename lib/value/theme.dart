@@ -10,6 +10,7 @@ final appLightTheme = ThemeData(
     inversePrimary: Colors.white, //màu
     outline: Colors.black, //màu viền
     onBackground: Colors.white, //màu ô
+    onPrimaryContainer: appPrimaryColor, // màu
   ),
 );
 
@@ -22,5 +23,6 @@ final appDarkTheme = ThemeData(
     inversePrimary: bgPrimaryColor1,
     outline: Colors.white,
     onBackground: Colors.transparent,
+    onPrimaryContainer: Colors.white, // màu
   ),
 );

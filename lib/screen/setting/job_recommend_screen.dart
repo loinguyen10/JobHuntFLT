@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
@@ -11,12 +12,16 @@ import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:jobhunt_ftl/value/style.dart';
 
+import '../../blocs/app_controller.dart';
+import '../../blocs/app_event.dart';
 import '../../component/edittext.dart';
+import '../../component/loader_overlay.dart';
 import '../../model/address.dart';
-import '../../model/userprofile.dart';
+import '../../model/job_setting.dart';
 
 class JobRecommendSettingScreen extends ConsumerWidget {
-  const JobRecommendSettingScreen({super.key});
+  const JobRecommendSettingScreen({super.key, this.edit = false});
+  final bool edit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -148,7 +153,13 @@ class JobRecommendSettingScreen extends ConsumerWidget {
           items: listEducation
               .map((item) => DropdownMenuItem<EducationList>(
                     value: item,
-                    child: Text(item.title ?? '', style: textNormal),
+                    child: Text(
+                      (Get.locale!.languageCode == 'en'
+                              ? item.title_en
+                              : item.title) ??
+                          '',
+                      style: textNormal,
+                    ),
                   ))
               .toList(),
           value: educationChoose?.id != null ? educationChoose : null,
@@ -171,6 +182,96 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       );
     }
 
+    //listen
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+          Loader.hide();
+          log('error');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(Keystring.UNSUCCESSFUL.tr),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingSuccessEvent ||
+            state is UpdateThingSuccessEvent) {
+          Loader.hide();
+          log('c-success');
+          // ref.refresh(listPostJobProvider.future);
+          // ref.refresh(listJobProvider.future);
+          Navigator.pop(context);
+        }
+
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
+
+    void done() {
+      String job = '';
+      String educationId = '';
+      String provinceId = '';
+
+      for (var y in listJob) {
+        if (!listTitleJob.any((x) => x == y)) {
+          log('message title: y');
+          ref.read(LoginControllerProvider.notifier).createJobTitle(y);
+        }
+        job += '$y,';
+      }
+
+      for (var y in listEducationShowData) {
+        educationId += '${y.id},';
+      }
+
+      for (var y in listProvinceChoose) {
+        provinceId += '${y.code},';
+      }
+
+      if (edit) {
+        ref.read(LoginControllerProvider.notifier).updateJobRecommendSetting(
+              ref.watch(userLoginProvider)!.uid ?? '',
+              ref.watch(genderJobSettingProvider),
+              job.substring(0, job.length - 1),
+              educationId.substring(0, educationId.length - 1),
+              ref.watch(yearExpericementJobSettingProvider),
+              provinceId.substring(0, provinceId.length - 1),
+              ref.watch(minSalaryJobSettingProvider),
+              ref.watch(maxSalaryJobSettingProvider),
+              currencyChoose?.code ?? '',
+            );
+      } else {
+        ref.read(LoginControllerProvider.notifier).createJobRecommendSetting(
+              ref.watch(userLoginProvider)!.uid ?? '',
+              ref.watch(genderJobSettingProvider),
+              job.substring(0, job.length - 1),
+              educationId.substring(0, educationId.length - 1),
+              ref.watch(yearExpericementJobSettingProvider),
+              provinceId.substring(0, provinceId.length - 1),
+              ref.watch(minSalaryJobSettingProvider),
+              ref.watch(maxSalaryJobSettingProvider),
+              currencyChoose?.code ?? '',
+            );
+      }
+    }
+
     return SafeArea(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
@@ -186,11 +287,11 @@ class JobRecommendSettingScreen extends ConsumerWidget {
               children: [
                 SizedBox(height: 16),
                 AppBorderFrame(
-                    labelText: 'Gender',
+                    labelText: Keystring.GENDER.tr,
                     child: Column(
                       children: [
                         ListTile(
-                          title: Text('Male'),
+                          title: Text(Keystring.MALE.tr),
                           leading: Radio(
                             activeColor: Theme.of(context).colorScheme.primary,
                             value: 'Male',
@@ -203,7 +304,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           ),
                         ),
                         ListTile(
-                          title: Text('Female'),
+                          title: Text(Keystring.FEMALE.tr),
                           leading: Radio(
                             activeColor: Theme.of(context).colorScheme.primary,
                             value: 'Female',
@@ -216,10 +317,10 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           ),
                         ),
                         ListTile(
-                          title: Text('Null'),
+                          title: Text(Keystring.OTHER.tr),
                           leading: Radio(
                             activeColor: Theme.of(context).colorScheme.primary,
-                            value: 'Null',
+                            value: 'Other',
                             groupValue: _gender,
                             onChanged: (value) {
                               ref
@@ -232,7 +333,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                     )),
                 SizedBox(height: 16),
                 AppBorderFrame(
-                  labelText: 'Job',
+                  labelText: Keystring.WANT_JOB.tr,
                   child: Column(
                     children: [
                       AppAutocompleteEditText(
@@ -274,7 +375,16 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                         InkWell(
                                           child: Icon(Icons.delete_outlined),
                                           onTap: () {
-                                            //
+                                            if (listJob.isNotEmpty) {
+                                              ref
+                                                  .read(listJob2SettingProvider
+                                                      .notifier)
+                                                  .state = [
+                                                for (final value in listJob)
+                                                  if (value != listJob[index])
+                                                    value
+                                              ];
+                                            }
                                           },
                                         ),
                                       ],
@@ -318,13 +428,34 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          listEducationShowData[index].title ??
+                                          (Get.locale!.languageCode == 'en'
+                                                  ? listEducationShowData[index]
+                                                      .title_en
+                                                  : listEducationShowData[index]
+                                                      .title) ??
                                               '',
                                           overflow: TextOverflow.fade,
                                           maxLines: 3,
                                         ),
                                         InkWell(
                                           child: Icon(Icons.delete_outlined),
+                                          onTap: () {
+                                            if (listEducationShowData
+                                                .isNotEmpty) {
+                                              ref
+                                                  .read(
+                                                      listEducationShowJobSettingProvider
+                                                          .notifier)
+                                                  .state = [
+                                                for (final value
+                                                    in listEducationShowData)
+                                                  if (value !=
+                                                      listEducationShowData[
+                                                          index])
+                                                    value
+                                              ];
+                                            }
+                                          },
                                         ),
                                       ],
                                     ),
@@ -341,11 +472,11 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                 ),
                 SizedBox(height: 16),
                 AppBorderFrame(
-                    labelText: 'Expericement',
+                    labelText: Keystring.Year_Experience.tr,
                     child: Row(
                       children: [
                         SizedBox(width: 16),
-                        Text('Less than', style: textNormal),
+                        Text(Keystring.LESS_THAN.tr, style: textNormal),
                         SizedBox(width: 8),
                         SizedBox(
                           width: MediaQuery.of(context).size.width / 8,
@@ -361,12 +492,12 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(width: 8),
-                        Text('year', style: textNormal),
+                        Text(Keystring.YEAR.tr, style: textNormal),
                       ],
                     )),
                 SizedBox(height: 16),
                 AppBorderFrame(
-                  labelText: 'Payment',
+                  labelText: Keystring.SALARY.tr,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -407,7 +538,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                 ),
                 SizedBox(height: 16),
                 AppBorderFrame(
-                    labelText: 'Place',
+                    labelText: Keystring.PLACE_JOB.tr,
                     child: Column(
                       children: [
                         SizedBox(
@@ -441,7 +572,21 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                           InkWell(
                                             child: Icon(Icons.delete_outlined),
                                             onTap: () {
-                                              //
+                                              if (listProvinceChoose
+                                                  .isNotEmpty) {
+                                                ref
+                                                    .read(
+                                                        listProvinceChooseJobSettingProvider
+                                                            .notifier)
+                                                    .state = [
+                                                  for (final value
+                                                      in listProvinceChoose)
+                                                    if (value !=
+                                                        listProvinceChoose[
+                                                            index])
+                                                      value
+                                                ];
+                                              }
                                             },
                                           ),
                                         ],
@@ -457,7 +602,21 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                 SizedBox(height: 32),
                 AppButton(
                   onPressed: () {
-                    //
+                    if (ref.watch(genderJobSettingProvider).isEmpty ||
+                        listJob.isEmpty ||
+                        listEducationShowData.isEmpty ||
+                        currencyChoose?.code == '' ||
+                        listProvinceChoose.isEmpty) {
+                      Fluttertoast.showToast(
+                          msg: "File is blank.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                    done();
                   },
                   label: Keystring.DONE.tr,
                 ),

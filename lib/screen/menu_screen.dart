@@ -28,6 +28,25 @@ class MenuScreen extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
 
+    void showD() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Please sign in.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(Keystring.OK.tr),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: appHintColor,
@@ -102,22 +121,7 @@ class MenuScreen extends ConsumerWidget {
                                 )),
                       );
                     } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text('Please sign in.'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(Keystring.OK.tr),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      showD();
                     }
                   },
                   child: Card(
@@ -325,13 +329,23 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            ref.refresh(listAllTitleJobSettingProvider);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      JobRecommendSettingScreen()),
-                            );
+                            log('click profile');
+                            if (profile != null) {
+                              bool edit = false;
+                              ref.refresh(listAllTitleJobSettingProvider);
+                              if (ref.watch(userDetailJobSettingProvider) !=
+                                  null) {
+                                edit = true;
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        JobRecommendSettingScreen()),
+                              );
+                            } else {
+                              showD();
+                            }
                           },
                           child: Card(
                             shadowColor: Colors.grey,

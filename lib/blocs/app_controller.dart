@@ -29,6 +29,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     ref.read(userLoginProvider.notifier).state = null;
     ref.read(userProfileProvider.notifier).state = null;
     ref.read(companyProfileProvider.notifier).state = null;
+    ref.read(userDetailJobSettingProvider.notifier).state = null;
     state = const SignInLoadingEvent();
     log('$email + $password');
     try {
@@ -42,8 +43,12 @@ class LoginController extends StateNotifier<InsideEvent> {
             log('candidate');
             final profile =
                 await ref.read(authRepositoryProvider).getProfile(user.uid);
+            final setting = await ref
+                .read(authRepositoryProvider)
+                .getJobRecommendSetting(user.uid);
             log('pro: $profile');
             ref.read(userProfileProvider.notifier).state = profile;
+            ref.read(userDetailJobSettingProvider.notifier).state = setting;
           } else if (user.role == 'recuiter') {
             log('recuiter');
             final company =
@@ -596,6 +601,104 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void createJobTitle(String title) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).createJobTitle(title);
+
+      if (result == 1) {
+        //
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void createJobRecommendSetting(
+    String uid,
+    String gender,
+    String job,
+    String educationId,
+    int yearExperience,
+    String workProvince,
+    int minSalary,
+    int maxSalary,
+    String currency,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).createJobRecommendSetting(
+                uid,
+                gender,
+                job,
+                educationId,
+                yearExperience,
+                workProvince,
+                minSalary,
+                maxSalary,
+                currency,
+              );
+
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void updateJobRecommendSetting(
+    String uid,
+    String gender,
+    String job,
+    String educationId,
+    int yearExperience,
+    String workProvince,
+    int minSalary,
+    int maxSalary,
+    String currency,
+  ) async {
+    state = const UpdateThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).updateJobRecommendSetting(
+                uid,
+                gender,
+                job,
+                educationId,
+                yearExperience,
+                workProvince,
+                minSalary,
+                maxSalary,
+                currency,
+              );
+
+      if (result == 1) {
+        final setting =
+            await ref.read(authRepositoryProvider).getJobRecommendSetting(uid);
+        log('setting: $setting');
+        ref.read(userDetailJobSettingProvider.notifier).state = setting;
+        state = const UpdateThingSuccessEvent();
+      } else {
+        state = const UpdateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = UpdateThingErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

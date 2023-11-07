@@ -130,6 +130,8 @@ class LocaleString extends Translations {
           'Light': 'Light',
           'Detail': 'Detail',
           'Interview_Time': 'Interview Time',
+          'See_more': 'See more',
+          'Collapse': 'Collapse',
           'Gender': 'Gender',
           'Male': 'Male',
           'Female': 'Female',
@@ -137,6 +139,9 @@ class LocaleString extends Translations {
           'Place_Job': 'Place To Find Job',
           'Less_Than': 'Less than',
           'Year': 'Year',
+          'Company_Introduction' :'Company introduction',
+          'News_Recruitment' :'News recruitment',
+          'Company_Address' :'Company address',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

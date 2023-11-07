@@ -139,6 +139,9 @@ class LocaleString extends Translations {
           'Place_Job': 'Place To Find Job',
           'Less_Than': 'Less than',
           'Year': 'Year',
+          'Company_Introduction' :'Company introduction',
+          'News_Recruitment' :'News recruitment',
+          'Company_Address' :'Company address',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

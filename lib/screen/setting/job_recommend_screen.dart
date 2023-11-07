@@ -25,6 +25,8 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final setting = ref.watch(userDetailJobSettingProvider);
+
     final currencyChoose = ref.watch(currencyChooseJobSettingProvider);
     final provinceChoose = ref.watch(provinceChooseJobSettingProvider);
     final educationChoose = ref.watch(educationChooseJobSettingProvider);
@@ -182,6 +184,21 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       );
     }
 
+    String capitalizeWords(String text) {
+      if (text.isEmpty) {
+        return text;
+      }
+
+      List<String> words = text.split(' ');
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].isNotEmpty) {
+          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+        }
+      }
+
+      return words.join(' ');
+    }
+
     //listen
     ref.listen<InsideEvent>(
       LoginControllerProvider,
@@ -231,7 +248,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
       for (var y in listJob) {
         if (!listTitleJob.any((x) => x == y)) {
-          log('message title: y');
+          log('message title: $y');
           ref.read(LoginControllerProvider.notifier).createJobTitle(y);
         }
         job += '$y,';
@@ -343,7 +360,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           if (!listJob.any((x) => x == value)) {
                             ref.read(listJob2SettingProvider.notifier).state = [
                               ...listJob,
-                              value
+                              capitalizeWords(value)
                             ];
                             // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
                           }
@@ -489,6 +506,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                       .notifier)
                                   .state = int.parse(value);
                             }),
+                            content: setting?.yearExperience.toString() ?? '',
                           ),
                         ),
                         SizedBox(width: 8),
@@ -509,7 +527,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                 .read(minSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
-                          // content: profile?.minSalary == null ? '' : profile?.minSalary.toString() ?? '',
+                          content: setting?.minSalary.toString() ?? '',
                           label: Keystring.MIN_SALARY.tr,
                         ),
                       ),
@@ -522,7 +540,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                 .read(maxSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
-                          // content: profile?.maxSalary == null ? '' : profile?.maxSalary.toString() ?? '',
+                          content: setting?.maxSalary.toString() ?? '',
                           label: Keystring.MAX_SALARY.tr,
                         ),
                       ),

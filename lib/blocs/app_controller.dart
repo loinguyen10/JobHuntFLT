@@ -47,6 +47,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
             log('pro: $profile');
+            log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
             ref.read(userDetailJobSettingProvider.notifier).state = setting;
           } else if (user.role == 'recuiter') {
@@ -607,21 +608,23 @@ class LoginController extends StateNotifier<InsideEvent> {
   }
 
   void createJobTitle(String title) async {
-    state = const CreateThingLoadingEvent();
+    state = const ThingLoadingEvent();
     try {
       final result =
           await ref.read(authRepositoryProvider).createJobTitle(title);
-
       if (result == 1) {
-        //
+        log('${DateTime.now()} $result');
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        log('${DateTime.now()} $result');
+        state = const AddTitleErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = AddTitleErrorEvent(error: e.toString());
     }
 
-    state = const ThingStateEvent();
+    ref.refresh(listAllTitleJobSettingProvider);
+
+    // state = const ThingStateEvent();
   }
 
   void createJobRecommendSetting(
@@ -635,30 +638,37 @@ class LoginController extends StateNotifier<InsideEvent> {
     int maxSalary,
     String currency,
   ) async {
-    state = const CreateThingLoadingEvent();
-    try {
-      final result =
-          await ref.read(authRepositoryProvider).createJobRecommendSetting(
-                uid,
-                gender,
-                job,
-                educationId,
-                yearExperience,
-                workProvince,
-                minSalary,
-                maxSalary,
-                currency,
-              );
+    if (state == AddTitleErrorEvent()) {
+      state = const CreateThingErrorEvent(error: 'error');
+    } else {
+      state = const CreateThingLoadingEvent();
+      try {
+        final result =
+            await ref.read(authRepositoryProvider).createJobRecommendSetting(
+                  uid,
+                  gender,
+                  job,
+                  educationId,
+                  yearExperience,
+                  workProvince,
+                  minSalary,
+                  maxSalary,
+                  currency,
+                );
 
-      if (result == 1) {
-        state = const CreateThingSuccessEvent();
-      } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        if (result == 1) {
+          state = const CreateThingSuccessEvent();
+          final setting = await ref
+              .read(authRepositoryProvider)
+              .getJobRecommendSetting(uid);
+          ref.read(userDetailJobSettingProvider.notifier).state = setting;
+        } else {
+          state = const CreateThingErrorEvent(error: 'error');
+        }
+      } catch (e) {
+        state = CreateThingErrorEvent(error: e.toString());
       }
-    } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
     }
-
     state = const ThingStateEvent();
   }
 

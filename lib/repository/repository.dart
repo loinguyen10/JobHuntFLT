@@ -641,7 +641,7 @@ class InsideService {
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/job/allJobTitle.php"), body: msg);
+        await post(Uri.parse(BASE_URL + "job/create_job_title.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }

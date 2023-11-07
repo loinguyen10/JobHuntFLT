@@ -184,6 +184,21 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       );
     }
 
+    String capitalizeWords(String text) {
+      if (text.isEmpty) {
+        return text;
+      }
+
+      List<String> words = text.split(' ');
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].isNotEmpty) {
+          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+        }
+      }
+
+      return words.join(' ');
+    }
+
     //listen
     ref.listen<InsideEvent>(
       LoginControllerProvider,
@@ -233,7 +248,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
       for (var y in listJob) {
         if (!listTitleJob.any((x) => x == y)) {
-          log('message title: y');
+          log('message title: $y');
           ref.read(LoginControllerProvider.notifier).createJobTitle(y);
         }
         job += '$y,';
@@ -345,7 +360,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           if (!listJob.any((x) => x == value)) {
                             ref.read(listJob2SettingProvider.notifier).state = [
                               ...listJob,
-                              value
+                              capitalizeWords(value)
                             ];
                             // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
                           }

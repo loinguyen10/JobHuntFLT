@@ -341,7 +341,9 @@ class MenuScreen extends ConsumerWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        JobRecommendSettingScreen()),
+                                        JobRecommendSettingScreen(
+                                          edit: edit,
+                                        )),
                               );
                             } else {
                               showD();

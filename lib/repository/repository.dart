@@ -641,7 +641,7 @@ class InsideService {
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/job/allJobTitle.php"), body: msg);
+        await post(Uri.parse(BASE_URL + "job/create_job_title.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -658,6 +658,7 @@ class InsideService {
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final result = JobRecommendSetting.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']);
+      log('message setting: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']}');
       return result;
     } else {
       return null;

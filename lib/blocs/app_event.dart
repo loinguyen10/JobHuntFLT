@@ -137,3 +137,12 @@ class UpdateThingErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class AddTitleErrorEvent extends InsideEvent {
+  const AddTitleErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

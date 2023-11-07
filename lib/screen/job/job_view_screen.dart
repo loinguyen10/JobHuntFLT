@@ -152,7 +152,7 @@ class JobViewScreen extends ConsumerWidget {
                                                   builder: (context) =>
                                                       ApplyJobScreen()));
                                         },
-                                        content: Keystring.APPLY_NOW.tr,
+                                        label: Keystring.APPLY_NOW.tr,
                                         bgColor: appPrimaryColor,
                                         colorBorder: appPrimaryColor,
                                         borderRadius: 16,
@@ -206,7 +206,7 @@ class JobViewScreen extends ConsumerWidget {
                                     onPressed: () {
                                       //
                                     },
-                                    content: Keystring.CHECK_CV.tr,
+                                    label: Keystring.CHECK_CV.tr,
                                     bgColor: appPrimaryColor,
                                     colorBorder: appPrimaryColor,
                                     borderRadius: 16,

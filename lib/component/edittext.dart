@@ -11,9 +11,8 @@ class EditTextForm extends StatefulWidget {
     required this.onChanged,
     this.validator,
     this.content = '',
-    this.borderSelected = Colors.black,
-    this.borderUnSelected = Colors.black,
-    this.textColor = Colors.black,
+    this.borderSelected,
+    this.textColor,
     this.width = double.infinity,
     this.height = 56,
     this.label = '',
@@ -29,12 +28,12 @@ class EditTextForm extends StatefulWidget {
     this.showEye = false,
     this.readOnly = false,
     this.maxLines = 1,
+    this.textAlign = TextAlign.start,
   });
   String content;
   TextInputType typeKeyboard;
-  Color borderSelected;
-  Color borderUnSelected;
-  Color textColor;
+  Color? borderSelected;
+  Color? textColor;
   double width;
   double height;
   String hintText;
@@ -51,6 +50,7 @@ class EditTextForm extends StatefulWidget {
   int? maxLength;
   bool readOnly;
   int maxLines;
+  TextAlign textAlign;
   // List<TextInputFormatter>? textInputFormater;
 
   @override
@@ -65,7 +65,8 @@ class _AppEdittextState extends State<EditTextForm> {
       width: widget.width,
       child: TextFormField(
         // inputFormatters: widget.textInputFormater,
-        style: TextStyle(fontSize: 15, color: Colors.black),
+        style: TextStyle(
+            fontSize: 15, color: Theme.of(context).colorScheme.primary),
         key: Key(widget.content.toString()),
         initialValue: widget.content,
         controller: widget.controller,
@@ -77,6 +78,7 @@ class _AppEdittextState extends State<EditTextForm> {
         maxLength: widget.maxLength,
         onTap: widget.onTap,
         cursorColor: Colors.black,
+        textAlign: widget.textAlign,
         // focusNode: FocusNode(),
         // validator: (value) {
         //   if (value == null || value.isEmpty) {
@@ -89,11 +91,13 @@ class _AppEdittextState extends State<EditTextForm> {
 
         decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).colorScheme.inversePrimary,
             labelText: widget.label,
             hintText: widget.hintText,
-            hintStyle: TextStyle(color: Colors.grey),
-            labelStyle: TextStyle(color: widget.textColor),
+            // hintStyle: TextStyle(color: Colors.grey),
+            labelStyle: TextStyle(
+              color: widget.textColor ?? Theme.of(context).colorScheme.primary,
+            ),
             // errorText: '',
             border: OutlineInputBorder(
               borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -120,7 +124,11 @@ class _AppEdittextState extends State<EditTextForm> {
                   )
                 : null,
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: widget.borderSelected),
+              borderSide: BorderSide(
+                width: 1,
+                color: widget.borderSelected ??
+                    Theme.of(context).colorScheme.primary,
+              ),
               borderRadius: BorderRadius.circular(8),
             )),
       ),

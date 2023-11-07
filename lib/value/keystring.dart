@@ -124,4 +124,13 @@ class Keystring {
   static const String LIGHT = 'Light';
   static const String DETAIL = 'Detail';
   static const String INTERVIEW_TIME = 'Interview_Time';
+  static const String SEE_MORE = "See more";
+  static const String COLLAPSE = "Collapse";
+  static const String GENDER = 'Gender';
+  static const String MALE = 'Male';
+  static const String FEMALE = 'Female';
+  static const String OTHER = 'Other';
+  static const String PLACE_JOB = 'Place_Job';
+  static const String LESS_THAN = 'Less_Than';
+  static const String YEAR = 'Year';
 }

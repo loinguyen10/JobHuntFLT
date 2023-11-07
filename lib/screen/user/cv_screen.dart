@@ -318,7 +318,7 @@ class CVUploadScreen extends ConsumerWidget {
                         fontSize: 16.0);
                   }
                 },
-                content: Keystring.UPLOAD.tr,
+                label: Keystring.UPLOAD.tr,
                 height: 56,
                 fontSize: 20,
               ),

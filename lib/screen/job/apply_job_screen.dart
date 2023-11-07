@@ -166,7 +166,7 @@ class ApplyJobScreen extends ConsumerWidget {
                                   )),
                         );
                       },
-                      content: Keystring.VIEW_SELECTED_CV.tr,
+                      label: Keystring.VIEW_SELECTED_CV.tr,
                       bgColor: Colors.grey,
                       textColor: Colors.black,
                       colorBorder: Colors.black,
@@ -211,7 +211,7 @@ class ApplyJobScreen extends ConsumerWidget {
                           },
                         );
                       },
-                      content: Keystring.DONE.tr,
+                      label: Keystring.DONE.tr,
                       bgColor: appPrimaryColor,
                       height: 56,
                     )

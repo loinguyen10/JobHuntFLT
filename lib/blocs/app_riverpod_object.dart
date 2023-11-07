@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../model/job_setting.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
@@ -40,8 +41,15 @@ final listCVCompanyProvider =
 
 final listJobProvider = FutureProvider<List<JobDetail>>((ref) => getJobList());
 
-final listRecommendJobProvider =
-    FutureProvider<List<JobDetail>>((ref) => getRecommendJobList());
+final listActiveJobProvider =
+    FutureProvider<List<JobDetail>>((ref) => getActiveJobList());
+
+// final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
+//   (ref) {
+//     final listActive = getActiveJobList();
+
+//   },
+// );
 
 final listPostJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
@@ -51,9 +59,6 @@ final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
 
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
-
-final listEducationProvider =
-    FutureProvider<List<EducationList>>((ref) => getEducationList());
 
 final listProvinceProvider =
     FutureProvider<List<ProvinceList>>((ref) => getProvinceList());
@@ -80,20 +85,8 @@ final emailProfileProvider = StateProvider((ref) =>
 final phoneProfileProvider =
     StateProvider((ref) => ref.watch(userProfileProvider)?.phone ?? "");
 
-final jobProfileProvider =
-    StateProvider((ref) => ref.watch(userProfileProvider)?.job ?? "");
-
 final dateBirthProvider = StateProvider.autoDispose(
     (ref) => ref.watch(userProfileProvider)?.birthday ?? "");
-
-final minSalaryProvider =
-    StateProvider<int>((ref) => ref.watch(userProfileProvider)?.minSalary ?? 0);
-
-final maxSalaryProvider =
-    StateProvider<int>((ref) => ref.watch(userProfileProvider)?.maxSalary ?? 0);
-
-final educationChooseProvider =
-    StateProvider<EducationList?>((ref) => EducationList());
 
 final provinceChooseProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
   if (ref.watch(userProfileProvider) != null &&
@@ -141,29 +134,6 @@ final wardChooseProvider = StateProvider.autoDispose<WardList?>((ref) {
     }
   }
   return WardList();
-});
-
-final currencyChooseProvider = StateProvider.autoDispose<CurrencyList?>((ref) {
-  if (ref.watch(userProfileProvider) != null &&
-      !ref.watch(listCurrencyProvider).isLoading) {
-    var list = ref.watch(listCurrencyProvider).value;
-    var currency = ref.watch(userProfileProvider)?.currency;
-
-    for (var x in list!) {
-      if (currency == x.code) {
-        return x;
-      }
-    }
-  }
-  return CurrencyList();
-});
-
-final listEducationShowProvider = StateProvider<List<EducationList>>((ref) {
-  if (ref.watch(userProfileProvider) != null) {
-    var education = ref.watch(userProfileProvider)?.education;
-    return [...education!];
-  }
-  return [];
 });
 
 //company
@@ -563,3 +533,86 @@ final CandidateProfileProvider =
 
 final applicationDetailProvider =
     StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());
+
+// recommend job
+final userDetailJobSettingProvider =
+    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
+
+final genderJobSettingProvider = StateProvider(
+    (ref) => ref.watch(userDetailJobSettingProvider)?.gender ?? '');
+
+final listJob2SettingProvider = StateProvider<List<String>>((ref) {
+  if (ref.watch(userDetailJobSettingProvider) != null) {
+    var job = ref.watch(userDetailJobSettingProvider)?.job?.split(',');
+    return [...job!];
+  }
+  return [];
+});
+
+final listAllTitleJobSettingProvider =
+    FutureProvider<List<String>>((ref) => getAllJobTitle());
+
+final minSalaryJobSettingProvider = StateProvider<int>(
+    (ref) => ref.watch(userDetailJobSettingProvider)!.minSalary ?? 0);
+
+final maxSalaryJobSettingProvider = StateProvider<int>(
+    (ref) => ref.watch(userDetailJobSettingProvider)!.maxSalary ?? 0);
+
+final currencyChooseJobSettingProvider =
+    StateProvider.autoDispose<CurrencyList?>((ref) {
+  if (ref.watch(userDetailJobSettingProvider) != null &&
+      !ref.watch(listCurrencyProvider).isLoading) {
+    var list = ref.watch(listCurrencyProvider).value;
+    var currency = ref.watch(userDetailJobSettingProvider)?.currency;
+
+    for (var x in list!) {
+      if (currency == x.code) {
+        return x;
+      }
+    }
+  }
+  return CurrencyList();
+});
+
+final provinceChooseJobSettingProvider =
+    StateProvider.autoDispose<ProvinceList?>((ref) => ProvinceList());
+
+final listProvinceChooseJobSettingProvider =
+    StateProvider<List<ProvinceList>>((ref) {
+  if (!ref.watch(listProvinceProvider).isLoading) {
+    List<ProvinceList> list = [];
+    var listProvince = ref.watch(listProvinceProvider).value;
+    var provinceList =
+        ref.watch(userDetailJobSettingProvider)?.workProvince?.split(',');
+
+    if (provinceList!.isNotEmpty) {
+      for (var p in provinceList) {
+        for (var x in listProvince!) {
+          if (p == x.code) {
+            list.add(x);
+          }
+        }
+      }
+    }
+    return list;
+  }
+  return [];
+});
+
+final yearExpericementJobSettingProvider = StateProvider<int>(
+    (ref) => ref.watch(userDetailJobSettingProvider)!.yearExperience ?? 0);
+
+final educationChooseJobSettingProvider =
+    StateProvider<EducationList?>((ref) => EducationList());
+
+final listEducationJobSettingProvider =
+    FutureProvider<List<EducationList>>((ref) => getEducationList());
+
+final listEducationShowJobSettingProvider =
+    StateProvider<List<EducationList>>((ref) {
+  if (ref.watch(userDetailJobSettingProvider) != null) {
+    var education = ref.watch(userDetailJobSettingProvider)?.education;
+    return [...education!];
+  }
+  return [];
+});

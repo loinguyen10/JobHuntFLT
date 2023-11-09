@@ -461,7 +461,7 @@ class JobViewScreen extends ConsumerWidget {
                 onTap: ()=>{
                 Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CompanyInformation(companyId: job.companyId)),
+                MaterialPageRoute(builder: (context) => CompanyInformation(company:job.company!)),
                 )
                 },
                     child: AppBorderFrame(

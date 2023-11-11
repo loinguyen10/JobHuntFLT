@@ -258,7 +258,7 @@ class CompanyInformation extends ConsumerWidget {
               },
               body: TabBarView(
                 children: [
-                  Tab1(company: company!),
+                  Tab1(company: company),
                   Tab2(),
                 ],
               ),
@@ -269,8 +269,8 @@ class CompanyInformation extends ConsumerWidget {
 }
 
 class Tab1 extends ConsumerWidget {
-  Tab1({required company,Key? key}) : super(key: key);
-  CompanyDetail? company;
+  Tab1({required this.company,Key? key}) : super(key: key);
+  CompanyDetail company;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -365,7 +365,7 @@ class Tab1 extends ConsumerWidget {
               children: [
                 Container(
                   margin: EdgeInsets.only(left: 15),
-                  child: Text(Keystring.COMPANY_ADDRESS.tr,
+                  child: Text(company.address.toString(),
                       style: TextStyle(fontSize: 13)),
                 )
               ],

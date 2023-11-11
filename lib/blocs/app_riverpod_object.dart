@@ -627,4 +627,5 @@ StateProvider<bool>((ref) => false);
 final companyInforProvider =
 StateProvider<CompanyDetail>((ref) => CompanyDetail());
 
-
+final listCompanyJobProvider = FutureProvider<List<JobDetail>>(
+    (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));

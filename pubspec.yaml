@@ -93,6 +93,7 @@ flutter:
   assets:
     - assets/image/
     - assets/image/background_company.jpg
+    - assets/image/bannerjoblist.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -136,4 +136,6 @@ class Keystring {
   static const String COMPANY_INTRODUCTION = 'Company_Introduction';
   static const String NEWS_RECRUITMENT = 'News_Recruitment';
   static const String COMPANY_ADDRESS = 'Company_Address';
+  static const String COMPANY_FOllOW = 'Company_Follow';
+  static const String FOllOWING = 'Following';
 }

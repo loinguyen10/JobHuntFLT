@@ -629,3 +629,5 @@ StateProvider<CompanyDetail>((ref) => CompanyDetail());
 
 final listCompanyJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
+
+final isCheckFollowCompany = StateProvider<bool>((ref) => false);

@@ -19,6 +19,7 @@ class CompanyInformation extends ConsumerWidget {
 
     double screenWidth = MediaQuery.of(context).size.width;
     int jobOfCompany = 0;
+    bool isFollow = ref.watch(isCheckFollowCompany);
     return Container(
         decoration: BoxDecoration(
             gradient: Theme.of(context).colorScheme.background == Colors.white
@@ -31,8 +32,8 @@ class CompanyInformation extends ConsumerWidget {
               headerSliverBuilder: (context, isInnerBoxScrolled) {
                 return [
                   SliverAppBar(
-                    backgroundColor:Colors.blue,
-                    expandedHeight: 400.0,
+                    backgroundColor: Colors.blue,
+                    expandedHeight: 460.0,
                     floating: false,
                     pinned: true,
                     leading: GestureDetector(
@@ -40,12 +41,13 @@ class CompanyInformation extends ConsumerWidget {
                         Navigator.of(context).pop();
                       },
                       child: Container(
-                        margin: EdgeInsets.only(left: 15, right: 15, top: 10),
-                        decoration: BoxDecoration(
+                        margin:
+                            const EdgeInsets.only(left: 15, right: 15, top: 10),
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle, // Để tạo viền tròn
                           color: Colors.white, // Màu nền trắng
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_back,
                           color: Colors.black,
                           size: 18,
@@ -55,7 +57,7 @@ class CompanyInformation extends ConsumerWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       title: Visibility(
                         visible: isInnerBoxScrolled,
-                        child: Text('Scrollable TabBar Example'),
+                        child: const Text('Scrollable TabBar Example'),
                       ),
                       background: Container(
                         color: Colors.white,
@@ -73,17 +75,19 @@ class CompanyInformation extends ConsumerWidget {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                                gradient: Theme.of(context).colorScheme.background == Colors.white
+                                                gradient: Theme.of(context)
+                                                            .colorScheme
+                                                            .background ==
+                                                        Colors.white
                                                     ? bgGradientColor0
                                                     : bgGradientColor1),
-                                            child: Container(
-                                              child: SizedBox(
-                                                  height: 300,
-                                                  width: screenWidth,
-                                                  child: Image(
-                                                    image: AssetImage('assets/image/background_company.jpg'),)
-                                              ),
-                                            ),
+                                            child: SizedBox(
+                                                height: 300,
+                                                width: screenWidth,
+                                                child: const Image(
+                                                  image: AssetImage(
+                                                      'assets/image/background_company.jpg'),
+                                                )),
                                           ),
                                           Positioned(
                                             left: 2 * screenWidth / 5,
@@ -92,72 +96,72 @@ class CompanyInformation extends ConsumerWidget {
                                             child: SizedBox(
                                               height: 80,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
+                                                borderRadius:
+                                                    const BorderRadius.only(
                                                   topLeft: Radius.circular(10),
                                                   topRight: Radius.circular(10),
                                                   bottomLeft:
                                                       Radius.circular(10),
                                                   bottomRight:
                                                       Radius.circular(10),
-                                                ), // Điều chỉnh độ bo góc
+                                                ),
                                                 child: Container(
-                                                  color: Colors
-                                                      .blue,
-                                                  child: company!.avatarUrl != ''
+                                                  color: Colors.blue,
+                                                  child: company.avatarUrl != ''
                                                       ? Image.network(
-                                                      company!.avatarUrl ?? '',
-                                                      fit: BoxFit.cover)
-                                                      : Icon(
-                                                    Icons.apartment,
-                                                    size: 96,
-                                                  ),// Màu nền xanh
+                                                          company.avatarUrl ??
+                                                              '',
+                                                          fit: BoxFit.cover)
+                                                      : const Icon(
+                                                          Icons.apartment,
+                                                          size: 96,
+                                                        ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    )
-                                ),
+                                    )),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                     width: screenWidth,
                                     child: Center(
                                         child: Text(
                                       company.fullname.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     )))
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: screenWidth,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.language,
                                         size: 18, // Kích thước của biểu tượng
                                         color: Colors
                                             .black, // Màu sắc của biểu tượng
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 5,
                                       ),
                                       Text(company.web.toString(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                           ))
                                     ],
@@ -165,27 +169,27 @@ class CompanyInformation extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: screenWidth,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.phone,
                                         size: 18, // Kích thước của biểu tượng
                                         color: Colors
                                             .black, // Màu sắc của biểu tượng
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 5,
                                       ),
                                       Text(company.phone.toString(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                           ))
                                     ],
@@ -193,27 +197,27 @@ class CompanyInformation extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: screenWidth,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.email,
                                         size: 18, // Kích thước của biểu tượng
                                         color: Colors
                                             .black, // Màu sắc của biểu tượng
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 5,
                                       ),
                                       Text(company.email.toString(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                           ))
                                     ],
@@ -221,9 +225,48 @@ class CompanyInformation extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: screenWidth,
+                                  height: 55,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: GestureDetector(
+                                      onTap: () => {
+                                        ref
+                                            .read(isCheckFollowCompany.notifier)
+                                            .state = !isFollow
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(width: 1,color:isFollow ? Colors.black : Colors.white),
+                                              color:isFollow? Colors.white : Colors.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0)),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  isFollow ? Icons.check : Icons.add,
+                                                  color: isFollow? Colors.black :Colors.white,
+                                                ),
+                                                SizedBox(width: 5,),
+                                                Text(isFollow ? '${Keystring.FOllOWING.tr}' : '${Keystring.COMPANY_FOllOW.tr}',style: TextStyle(color: isFollow ? Colors.black :Colors.white),)
+                                              ]),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -241,10 +284,7 @@ class CompanyInformation extends ConsumerWidget {
                           ),
                           Tab(
                             child: Text(
-                              Keystring.NEWS_RECRUITMENT.tr +
-                                  ' (' +
-                                  jobOfCompany.toString() +
-                                  ') ',
+                              '${Keystring.NEWS_RECRUITMENT.tr} ($jobOfCompany) ',
                             ),
                           ),
                         ],
@@ -269,116 +309,112 @@ class CompanyInformation extends ConsumerWidget {
 }
 
 class Tab1 extends ConsumerWidget {
-  Tab1({required this.company,Key? key}) : super(key: key);
+  Tab1({required this.company, Key? key}) : super(key: key);
   CompanyDetail company;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isExpanded = ref.watch(isExpandedCompanySeenInforProvider);
-    return Container(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 10,
-              width: screenWidth,
-            ),
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: SizedBox(
-                    child: Text(Keystring.COMPANY_INTRODUCTION.tr,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 10,
-              width: screenWidth,
-            ),
-            Row(
-              children: [
-                Container(
-                  child: SizedBox(
-                    width: screenWidth,
-                    child: Container(
-                      width: 9 * screenWidth / 10,
-                      margin: EdgeInsets.only(left: 15, right: 15),
-                      child: Column(
-                        children: [
-                          Text(
-                            company?.description ?? '',
-                            style: TextStyle(fontSize: 13),
-                            overflow: isExpanded ? null : TextOverflow.ellipsis,
-                            maxLines: isExpanded ? null : 8,
-                          ),
-                          GestureDetector(
-                              onTap: () {
-                                ref
-                                    .read(isExpandedCompanySeenInforProvider
-                                        .notifier)
-                                    .state = !isExpanded;
-                              },
-                              child: Text(
-                                isExpanded
-                                    ? Keystring.COLLAPSE.tr
-                                    : Keystring.SEE_MORE.tr,
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ))
-                        ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
+            width: screenWidth,
+          ),
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: SizedBox(
+                  child: Text(Keystring.COMPANY_INTRODUCTION.tr,
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+            width: screenWidth,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: screenWidth,
+                child: Container(
+                  width: 9 * screenWidth / 10,
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  child: Column(
+                    children: [
+                      Text(
+                        company.description ?? '',
+                        style: const TextStyle(fontSize: 13),
+                        overflow: isExpanded ? null : TextOverflow.ellipsis,
+                        maxLines: isExpanded ? null : 8,
                       ),
-                    ),
+                      GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(
+                                    isExpandedCompanySeenInforProvider.notifier)
+                                .state = !isExpanded;
+                          },
+                          child: Text(
+                            isExpanded
+                                ? Keystring.COLLAPSE.tr
+                                : Keystring.SEE_MORE.tr,
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ))
+                    ],
                   ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 10,
-              width: screenWidth,
-            ),
-            SizedBox(
-              height: 10,
-              width: screenWidth,
-            ),
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(Keystring.COMPANY_ADDRESS.tr,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 10,
-              width: screenWidth,
-            ),
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(company.address.toString(),
-                      style: TextStyle(fontSize: 13)),
-                )
-              ],
-            ),
-          ],
-        ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+            width: screenWidth,
+          ),
+          SizedBox(
+            height: 10,
+            width: screenWidth,
+          ),
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(Keystring.COMPANY_ADDRESS.tr,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold)),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+            width: screenWidth,
+          ),
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(company.address.toString(),
+                    style: const TextStyle(fontSize: 13)),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
 }
 
 class Tab2 extends ConsumerWidget {
-  Tab2({
+  const Tab2({
     Key? key,
     this.itemCount,
   }) : super(key: key);
@@ -390,7 +426,7 @@ class Tab2 extends ConsumerWidget {
     return _data.when(
       data: (data) {
         return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (_, index) {
             String avatar = data[index].company?.avatarUrl ?? '';
@@ -411,7 +447,8 @@ class Tab2 extends ConsumerWidget {
                 ref.read(jobDetailProvider.notifier).state = data[index];
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => JobViewScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const JobViewScreen()),
                 );
               },
               child: AppJobCard(

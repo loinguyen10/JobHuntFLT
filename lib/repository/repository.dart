@@ -17,8 +17,14 @@ import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+<<<<<<< Updated upstream
 import '../model/job_setting.dart';
 import '../value/style.dart';
+=======
+import 'package:http/http.dart' as http;
+
+import '../component/loader_overlay.dart';
+>>>>>>> Stashed changes
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
@@ -53,12 +59,21 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
+<<<<<<< Updated upstream
       'email': 'laingu@jobshunt.info',
       'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
+=======
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
+      'email': emailAddress.trim(),
+      'password': password.trim(),
+>>>>>>> Stashed changes
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -622,6 +637,7 @@ class InsideService {
     }
   }
 
+<<<<<<< Updated upstream
   Future<dynamic> getAllJobTitle() async {
     List<String> list = [];
     Response response = await get(Uri.parse(BASE_URL + "/job/allJobTitle.php"));
@@ -728,4 +744,26 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+=======
+  Future<List<JobDetail>> searchJobs(String name) async {
+    final Map<String, String> params = {'name': name};
+    final Uri uri =
+        Uri.parse(BASE_URL + 'job/allJob.php').replace(queryParameters: params);
+
+    try {
+      Response response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final List result =
+            jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+        return result.map((e) => JobDetail.fromJson(e)).toList();
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print("Error in searchJobs: $e");
+      return [];
+    }
+  }
+>>>>>>> Stashed changes
 }

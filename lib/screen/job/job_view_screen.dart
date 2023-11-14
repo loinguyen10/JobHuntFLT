@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/screen/job/apply_job_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import '../../blocs/app_controller.dart';
@@ -17,7 +18,7 @@ import '../../value/style.dart';
 import '../user/company_information.dart';
 
 class JobViewScreen extends ConsumerWidget {
-  const JobViewScreen({super.key});
+  const JobViewScreen({Key? key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

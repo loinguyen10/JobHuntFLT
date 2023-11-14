@@ -7,16 +7,20 @@ import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/user.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import 'package:jobhunt_ftl/screen/job/job_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
+import 'package:jobhunt_ftl/screen/user/searchScreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_controller.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
+
+import 'package:jobhunt_ftl/repository/repository.dart';
 
 class HomeScreen extends ConsumerWidget {
   @override
@@ -25,9 +29,7 @@ class HomeScreen extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
 
-    return
-        // SafeArea(child:
-        Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: appPrimaryColor,
         actions: [
@@ -72,7 +74,16 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
-          )
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
+            icon: Icon(Icons.search),
+          ),
         ],
         leading: IconButton(
           onPressed: () {
@@ -118,28 +129,6 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(color: Colors.black, width: 1),
-                        ),
-                        elevation: 2,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Icon(
-                                Icons.search,
-                                size: 30,
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Text(
-                                Keystring.SEARCH,
-                                style: textNormalHint,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ),

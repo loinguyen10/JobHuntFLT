@@ -11,6 +11,7 @@ import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
+import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 
 import '../model/company.dart';
@@ -219,5 +220,10 @@ Future<List<ApplicationDetail>> getRecuiterApplication(
 
 Future<List<String>> getAllJobTitle() async {
   final list = await insideService.getAllJobTitle();
+  return list;
+}
+//
+Future<List<FollowDetail>> getYourFollowList(String uid) async {
+  final list = await insideService.getListFavorite(uid);
   return list;
 }

@@ -713,4 +713,55 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+//follow the company
+   void addFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).addFollowCompany(
+            companyId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFavoriteProvider);
+        ref.refresh(turnBookmarkOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+  void removeFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeFollowCompany(
+            companyId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFavoriteProvider);
+        ref.refresh(turnBookmarkOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
 }
+}
+
+ 

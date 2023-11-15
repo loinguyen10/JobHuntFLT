@@ -55,8 +55,10 @@ class InsideService {
     final msg = jsonEncode({
       //'email': 'laingu@jobshunt.info',
       //'password': 'laicutai',
-       'email': 'hungbip@jobshunt.info',
-       'password': 'hung',
+      //  'email': 'hungbip@jobshunt.info',
+      //  'password': 'hung',
+        'email': 'emminh@jobshunt.info',
+       'password': 'minhhoang',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -728,4 +730,53 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+  // Follow Company
+  Future<dynamic> addFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+      'userId': userId,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "profile/add_follower.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+  Future<dynamic> removeFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+      'userId': userId,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/remove_follower.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+   Future<dynamic> getListFollow(String userId) async {
+    final msg = jsonEncode({
+      'userId': userId,
+    });
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/your_follower.php"),
+        body: msg);
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
+      return result.map((e) => FavoriteDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
 }

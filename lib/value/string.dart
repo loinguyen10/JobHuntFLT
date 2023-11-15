@@ -142,6 +142,8 @@ class LocaleString extends Translations {
           'Company_Introduction' :'Company introduction',
           'News_Recruitment' :'News recruitment',
           'Company_Address' :'Company address',
+          'Company_Follow' : 'Follow the company',
+          'Following':'Following',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

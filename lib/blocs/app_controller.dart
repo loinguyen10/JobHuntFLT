@@ -726,8 +726,8 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        ref.refresh(listYourFavoriteProvider);
-        ref.refresh(turnBookmarkOn);
+        ref.refresh(listYourFollowProvider);
+        ref.refresh(turnFollowOn);
         state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');

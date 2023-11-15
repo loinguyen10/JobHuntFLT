@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -68,7 +67,7 @@ class CompanyInformation extends ConsumerWidget {
         }
       },
     );
-    
+
     return Container(
         decoration: BoxDecoration(
             gradient: Theme.of(context).colorScheme.background == Colors.white
@@ -285,24 +284,22 @@ class CompanyInformation extends ConsumerWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: GestureDetector(
-                                      onTap: ()  {
-                                          if (bmCheck) {
-                                            showUnfollowDialog(context, ref);
-                                            } else {
-                                              ref
-                                                  .read(LoginControllerProvider
-                                                      .notifier)
-                                                  .addFollowCompany(
-                                                    follow?.code ?? '0',
-                                                    ref
-                                                            .watch(
-                                                                userLoginProvider)
-                                                            ?.uid ??
-                                                        '0',
-                                                  );
-                                            }
-                                        
-                                
+                                      onTap: () {
+                                        if (bmCheck) {
+                                          showUnfollowDialog(context, ref);
+                                        } else {
+                                          ref
+                                              .read(LoginControllerProvider
+                                                  .notifier)
+                                              .addFollowCompany(
+                                                follow?.code ?? '0',
+                                                ref
+                                                        .watch(
+                                                            userLoginProvider)
+                                                        ?.uid ??
+                                                    '0',
+                                              );
+                                        }
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -402,7 +399,10 @@ class CompanyInformation extends ConsumerWidget {
             borderRadius:
                 BorderRadius.circular(10.0), // Điều chỉnh độ cong của các góc
           ),
-          content: Text('${Keystring.CONTENT_DIALOG_UNFOLLOW.tr}',textAlign: TextAlign.center,),
+          content: Text(
+            '${Keystring.CONTENT_DIALOG_UNFOLLOW.tr}',
+            textAlign: TextAlign.center,
+          ),
           actions: <Widget>[
             Row(
               children: [
@@ -416,10 +416,9 @@ class CompanyInformation extends ConsumerWidget {
                       height: 40,
                       child: Container(
                           alignment: Alignment.center,
-                          decoration:  BoxDecoration(
-                            color: Color(0xFFE4E4E4),
-                            borderRadius: BorderRadius.circular(10)
-                          ),
+                          decoration: BoxDecoration(
+                              color: Color(0xFFE4E4E4),
+                              borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '${Keystring.CANCEL.tr}',
                             style: TextStyle(color: Colors.black, fontSize: 16),
@@ -427,23 +426,28 @@ class CompanyInformation extends ConsumerWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 10,)
-                ,
+                SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   flex: 1,
                   child: GestureDetector(
                     onTap: () {
-                      ref.read(LoginControllerProvider.notifier).removeFollowCompany(follow?.code ?? '0',ref.watch(userLoginProvider)?.uid ??'0',);
+                      ref
+                          .read(LoginControllerProvider.notifier)
+                          .removeFollowCompany(
+                            follow?.code ?? '0',
+                            ref.watch(userLoginProvider)?.uid ?? '0',
+                          );
                       Navigator.of(context).pop();
                     },
                     child: SizedBox(
                       height: 40,
                       child: Container(
-                         alignment: Alignment.center,
+                          alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10)
-                          ),
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '${Keystring.UNFOLLOW.tr}',
                             style: TextStyle(color: Colors.white, fontSize: 16),

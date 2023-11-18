@@ -640,24 +640,24 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
-  final job = ref.watch(followingProvider);
+  final follow = ref.watch(followingProvider);
 
-  List<FollowDetail> listF = [];
+  List<FollowDetail> listFollow = [];
 
   list.maybeWhen(
     data: (data) {
-      listF = data;
+      listFollow = data;
     },
     orElse: () {
-      listF = [];
+      listFollow = [];
     },
   );
 
-  log('listF: ${listF.length}');
+  log('listFollow: ${listFollow.length}');
 
-  for (var i in listF) {
-    if (job!.code == i.companyId) {
-      log('message111: ${job.code} & ${i.companyId} ');
+  for (var i in listFollow) {
+    if (follow!.code == i.companyId) {
+      log('message11111: ${follow.code} & ${i.companyId} ');
       return true;
     }
   }

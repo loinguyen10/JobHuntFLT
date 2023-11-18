@@ -1,5 +1,4 @@
 import 'package:jobhunt_ftl/model/company.dart';
-import 'package:jobhunt_ftl/model/job.dart';
 
 class FollowDetail {
   String? code;
@@ -22,7 +21,7 @@ class FollowDetail {
     data['company_id'] = this.companyId;
     data['user_id'] = this.userId;
     if (this.company != null) {
-      data['job'] = this.company!.toJson();
+      data['company'] = this.company!.toJson();
     }
     return data;
   }

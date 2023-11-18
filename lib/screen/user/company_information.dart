@@ -58,7 +58,7 @@ class CompanyInformation extends ConsumerWidget {
             state is UpdateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
-          log('bm: ${bmCheck}');
+          log('bmfollow: ${bmCheck}');
         }
 
         if (state is CreateThingLoadingEvent ||
@@ -276,9 +276,12 @@ class CompanyInformation extends ConsumerWidget {
                             const SizedBox(
                               height: 10,
                             ),
+
                             Row(
                               children: [
-                                SizedBox(
+                                role != null
+                                    ? role != 'recuiter'
+                                    ? SizedBox(
                                   width: screenWidth,
                                   height: 55,
                                   child: Padding(
@@ -292,7 +295,7 @@ class CompanyInformation extends ConsumerWidget {
                                               .read(LoginControllerProvider
                                                   .notifier)
                                               .addFollowCompany(
-                                                follow?.code ?? '0',
+                                                company?.uid ?? '0',
                                                 ref
                                                         .watch(
                                                             userLoginProvider)
@@ -344,7 +347,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ):SizedBox(height: 0):SizedBox(width: 0,)
                               ],
                             )
                           ],

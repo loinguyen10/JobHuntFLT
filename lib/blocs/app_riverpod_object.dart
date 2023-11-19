@@ -668,5 +668,3 @@ final turnFollowOn = StateProvider<bool>((ref) {
 final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
         (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
-
-

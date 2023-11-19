@@ -14,6 +14,7 @@ import '../../component/app_button.dart';
 import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
+import '../user/company_information.dart';
 
 class JobViewScreen extends ConsumerWidget {
   const JobViewScreen({super.key});
@@ -456,49 +457,57 @@ class JobViewScreen extends ConsumerWidget {
                       height: 0,
                     ),
               role != 'recuiter'
-                  ? AppBorderFrame(
-                      labelText: '',
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        children: [
-                          SizedBox(width: 8),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ClipOval(
-                                  child: SizedBox.fromSize(
-                                    size: Size.fromRadius(56),
-                                    child: job.company!.avatarUrl != ''
-                                        ? Image.network(
-                                            job.company!.avatarUrl ?? '',
-                                            fit: BoxFit.cover)
-                                        : Icon(
-                                            Icons.apartment,
-                                            size: 96,
-                                          ),
+                  ? GestureDetector(
+                onTap: ()=>{
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CompanyInformation(company:job.company!)),
+                )
+                },
+                    child: AppBorderFrame(
+                        labelText: '',
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 8),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ClipOval(
+                                    child: SizedBox.fromSize(
+                                      size: Size.fromRadius(56),
+                                      child: job.company!.avatarUrl != ''
+                                          ? Image.network(
+                                              job.company!.avatarUrl ?? '',
+                                              fit: BoxFit.cover)
+                                          : Icon(
+                                              Icons.apartment,
+                                              size: 96,
+                                            ),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  job.company?.fullname ?? '',
-                                  style: textCompany2JView,
-                                ),
-                              ],
+                                  SizedBox(height: 8),
+                                  Text(
+                                    job.company?.fullname ?? '',
+                                    style: textCompany2JView,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          // SizedBox(width: 12),
-                          // Expanded(
-                          //   child: Container(
-                          //     child: JobCompanySuggestionScreen(),
-                          //   ),
-                          // ),
-                          SizedBox(width: 8),
-                        ],
+                            // SizedBox(width: 12),
+                            // Expanded(
+                            //   child: Container(
+                            //     child: JobCompanySuggestionScreen(),
+                            //   ),
+                            // ),
+                            SizedBox(width: 8),
+                          ],
+                        ),
                       ),
-                    )
+                  )
                   : SizedBox(
                       height: 0,
                     ),

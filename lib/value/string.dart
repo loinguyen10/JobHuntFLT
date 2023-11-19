@@ -139,6 +139,13 @@ class LocaleString extends Translations {
           'Place_Job': 'Place To Find Job',
           'Less_Than': 'Less than',
           'Year': 'Year',
+          'Company_Introduction' :'Company introduction',
+          'News_Recruitment' :'News recruitment',
+          'Company_Address' :'Company address',
+          'Company_Follow' : 'Follow the company',
+          'Following':'Following',
+          'Content_Dialog_Unfollow': 'When you unfollow, you will no longer receive recruitment information from this company. Do you want to continue?',
+          'Unfollow' : 'Unfollow',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

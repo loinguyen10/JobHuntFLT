@@ -630,6 +630,7 @@ StateProvider<CompanyDetail>((ref) => CompanyDetail());
 
 final listCompanyJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
+
 // Follow the company
 final isCheckFollowCompany = StateProvider<bool>((ref) => false);
 
@@ -640,8 +641,7 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
-  final follow = ref.watch(followingProvider);
-
+  final job = ref.watch(jobDetailProvider);
   List<FollowDetail> listFollow = [];
 
   list.maybeWhen(
@@ -654,15 +654,19 @@ final turnFollowOn = StateProvider<bool>((ref) {
   );
 
   log('listFollow: ${listFollow.length}');
+  log('company: ${job?.companyId}');
 
   for (var i in listFollow) {
-    if (follow!.code == i.companyId) {
-      log('message11111: ${follow.code} & ${i.companyId} ');
+    if (job?.companyId == i.companyId) {
+      log('message11111: ${job?.companyId} & ${i.companyId} ');
       return true;
     }
   }
 
   return false;
 });
+final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
+        (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
+
 
 

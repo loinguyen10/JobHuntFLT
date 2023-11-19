@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
+import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
@@ -772,11 +773,10 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
-      return result.map((e) => FavoriteDetail.fromJson(e)).toList();
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['follower'];
+      return result.map((e) => FollowDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
-
 }

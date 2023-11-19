@@ -47,7 +47,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
             log('pro: $profile');
-            log('setting: ${setting.uid} ${setting.job}');
+            // log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
             ref.read(userDetailJobSettingProvider.notifier).state = setting;
           } else if (user.role == 'recuiter') {
@@ -750,8 +750,8 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        ref.refresh(listYourFavoriteProvider);
-        ref.refresh(turnBookmarkOn);
+        ref.refresh(listYourFollowProvider);
+        ref.refresh(turnFollowOn);
         state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');

@@ -26,8 +26,7 @@ class CompanyInformation extends ConsumerWidget {
     final bmCheck = ref.watch(turnFollowOn);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    int jobOfCompany = 0;
-    bool isFollow = ref.watch(isCheckFollowCompany);
+    // bool isFollow = ref.watch(isCheckFollowCompany);
 
     ref.listen<InsideEvent>(
       JobViewControllerProvider,
@@ -334,7 +333,7 @@ class CompanyInformation extends ConsumerWidget {
                                                   width: 5,
                                                 ),
                                                 Text(
-                                                  isFollow
+                                                  bmCheck
                                                       ? '${Keystring.FOllOWING.tr}'
                                                       : '${Keystring.COMPANY_FOllOW.tr}',
                                                   style: TextStyle(
@@ -367,7 +366,7 @@ class CompanyInformation extends ConsumerWidget {
                           ),
                           Tab(
                             child: Text(
-                              '${Keystring.NEWS_RECRUITMENT.tr} ($jobOfCompany) ',
+                              '${Keystring.NEWS_RECRUITMENT.tr} ',
                             ),
                           ),
                         ],
@@ -439,7 +438,7 @@ class CompanyInformation extends ConsumerWidget {
                       ref
                           .read(LoginControllerProvider.notifier)
                           .removeFollowCompany(
-                            follow?.code ?? '0',
+                            company?.uid ?? '0',
                             ref.watch(userLoginProvider)?.uid ?? '0',
                           );
                       Navigator.of(context).pop();
@@ -581,17 +580,17 @@ class Tab1 extends ConsumerWidget {
 class Tab2 extends ConsumerWidget {
   const Tab2({
     Key? key,
-    this.itemCount,
   }) : super(key: key);
-  final int? itemCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listActiveJobProvider);
+    final _data = ref.watch(listJobOfCompanyProvider);
     return _data.when(
       data: (data) {
+        // Future.delayed(const Duration(minutes: 1),() => ref.refresh(listPostJobProvider.future));
+
         return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (_, index) {
             String avatar = data[index].company?.avatarUrl ?? '';
@@ -612,8 +611,7 @@ class Tab2 extends ConsumerWidget {
                 ref.read(jobDetailProvider.notifier).state = data[index];
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const JobViewScreen()),
+                  MaterialPageRoute(builder: (context) => JobViewScreen()),
                 );
               },
               child: AppJobCard(
@@ -626,7 +624,7 @@ class Tab2 extends ConsumerWidget {
               ),
             );
           },
-          itemCount: itemCount ?? (data.length < 3 ? data.length : 3),
+          itemCount: data.length,
         );
       },
       error: (error, stackTrace) => SizedBox(

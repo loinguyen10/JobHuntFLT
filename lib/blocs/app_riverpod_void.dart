@@ -224,6 +224,6 @@ Future<List<String>> getAllJobTitle() async {
 }
 //
 Future<List<FollowDetail>> getYourFollowList(String uid) async {
-  final list = await insideService.getListFavorite(uid);
+  final list = await insideService.getListFollow(uid);
   return list;
 }

@@ -58,10 +58,10 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      'email': 'hungbip@jobshunt.info',
-      'password': 'hung',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -650,4 +650,52 @@ class InsideService {
       return [];
     }
   }
+
+  Future<dynamic> sendOTPtoMail(
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkOTP(
+    String otp,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'otp_code': otp,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/code/api_confirmcode.php"),
+        body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+    Future<dynamic> newPass(
+    String password,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'new_password': password,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/update_password.php"),
+        body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
 }
+

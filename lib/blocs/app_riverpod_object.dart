@@ -563,3 +563,4 @@ final CandidateProfileProvider =
 
 final applicationDetailProvider =
     StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());
+final emailsaveProvider = StateProvider((ref) => '');

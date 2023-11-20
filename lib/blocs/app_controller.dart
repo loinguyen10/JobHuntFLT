@@ -20,6 +20,11 @@ final JobViewControllerProvider =
   return LoginController(ref);
 });
 
+final ChangePassControllerProvider =
+    StateNotifierProvider<LoginController1, InsideEvent>((ref) {
+  return LoginController1(ref);
+});
+
 class LoginController extends StateNotifier<InsideEvent> {
   LoginController(this.ref) : super(const SignInStateEvent());
 
@@ -616,6 +621,112 @@ class LoginController extends StateNotifier<InsideEvent> {
           ref.refresh(listRecuiterTodayApplicationProvider);
           state = const CreateThingSuccessEvent();
         });
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+
+
+
+  
+   void sendOTPtoMail(
+        String mail,
+   
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).sendOTPtoMail(
+          mail
+          );
+log('$result');
+      if (result == 1) {
+          state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+  void checkOTP(
+        String otp,
+        String mail,
+   
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).checkOTP(
+          otp,
+          mail
+          );
+log('$result');
+      if (result == 1) {
+          state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+
+   void newPass(
+        String password,
+        String mail,
+   
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).newPass(
+          password,
+          mail
+          );
+log('$result');
+      if (result == 1) {
+          state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+}
+
+
+
+class LoginController1 extends StateNotifier<InsideEvent> {
+  LoginController1(this.ref) : super(const SignInStateEvent());
+
+  final Ref ref;
+
+   void newPass(
+        String password,
+        String mail,
+   
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).newPass(
+          password,
+          mail
+          );
+log('$result');
+      if (result == 1) {
+          state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');
       }

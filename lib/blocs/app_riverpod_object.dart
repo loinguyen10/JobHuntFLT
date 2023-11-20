@@ -535,6 +535,7 @@ final CandidateProfileProvider =
 final applicationDetailProvider =
     StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());
 
+
 // recommend job
 final userDetailJobSettingProvider =
     StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
@@ -668,3 +669,4 @@ final turnFollowOn = StateProvider<bool>((ref) {
 final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
         (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
+final emailsaveProvider = StateProvider((ref) => '');

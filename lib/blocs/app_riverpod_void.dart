@@ -11,9 +11,11 @@ import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
+import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 
 import '../model/company.dart';
+import '../model/job_setting.dart';
 import '../model/userprofile.dart';
 import '../repository/repository.dart';
 import '../screen/home.dart';
@@ -161,6 +163,17 @@ Future<List<JobDetail>> getSuggestionJobList(String companyId) async {
   return yourJob;
 }
 
+Future<List<JobDetail>> getActiveJobList() async {
+  final list = await insideService.getListJob();
+  List<JobDetail> yourJob = [];
+
+  for (var i in list) {
+    if (i.active == 1) yourJob.add(i);
+  }
+
+  return yourJob;
+}
+
 Future<List<JobDetail>> getRecommendJobList() async {
   final list = await insideService.getListJob();
   List<JobDetail> yourJob = [];
@@ -202,5 +215,15 @@ Future<List<ApplicationDetail>> getCandidateApplication(
 Future<List<ApplicationDetail>> getRecuiterApplication(
     String recuiterId) async {
   final list = await insideService.getRecuiterApplication(recuiterId);
+  return list;
+}
+
+Future<List<String>> getAllJobTitle() async {
+  final list = await insideService.getAllJobTitle();
+  return list;
+}
+//
+Future<List<FollowDetail>> getYourFollowList(String uid) async {
+  final list = await insideService.getListFollow(uid);
   return list;
 }

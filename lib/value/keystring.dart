@@ -124,7 +124,22 @@ class Keystring {
   static const String LIGHT = 'Light';
   static const String DETAIL = 'Detail';
   static const String INTERVIEW_TIME = 'Interview_Time';
-
+  static const String SEE_MORE = "See_more";
+  static const String COLLAPSE = "Collapse";
+  static const String GENDER = 'Gender';
+  static const String MALE = 'Male';
+  static const String FEMALE = 'Female';
+  static const String OTHER = 'Other';
+  static const String PLACE_JOB = 'Place_Job';
+  static const String LESS_THAN = 'Less_Than';
+  static const String YEAR = 'Year';
+  static const String COMPANY_INTRODUCTION = 'Company_Introduction';
+  static const String NEWS_RECRUITMENT = 'News_Recruitment';
+  static const String COMPANY_ADDRESS = 'Company_Address';
+  static const String COMPANY_FOllOW = 'Company_Follow';
+  static const String FOllOWING = 'Following';
+  static const String CONTENT_DIALOG_UNFOLLOW = 'Content_Dialog_Unfollow'; 
+  static const String UNFOLLOW = 'Unfollow'; 
   static const String SEND_OTP = 'Send_OTP';
   static const String Confirm_OTP = 'Account_Authentication';
   static const String OTP_Mail = 'Enter_the_verification_code_sent_to_your_email';
@@ -140,6 +155,4 @@ class Keystring {
   static const String ConfirmCheckbox = 'I_agree_to_change_my_password.';
   static const String Changepass_SuccessNotfication = 'Password_changed_successfully!';
   static const String Changepass_FailNotification = 'Passwords_do_not_match!';
-
-  
 }

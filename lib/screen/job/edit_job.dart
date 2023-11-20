@@ -2,13 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 
 import '../../blocs/app_controller.dart';
@@ -19,10 +16,9 @@ import '../../component/date_dialog.dart';
 import '../../component/edittext.dart';
 import '../../component/loader_overlay.dart';
 import '../../model/address.dart';
-import '../../model/userprofile.dart';
+import '../../model/job_setting.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
-import '../home.dart';
 
 class JobEditScreen extends ConsumerWidget {
   const JobEditScreen({super.key, this.edit = false});
@@ -599,7 +595,7 @@ class JobEditScreen extends ConsumerWidget {
                 },
                 bgColor: appPrimaryColor,
                 height: 64,
-                content: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
                 fontSize: 16,
               ),
               SizedBox(height: 32),

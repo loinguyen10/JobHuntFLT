@@ -59,7 +59,7 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                     onPressed: () {
                       //
                     },
-                    content: Keystring.SEARCH.tr,
+                    label: Keystring.SEARCH.tr,
                     width: MediaQuery.of(context).size.width / 10,
                   ),
                 ],
@@ -331,7 +331,7 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                                                     ApplicationViewFullScreen()),
                                           );
                                         },
-                                        content: Keystring.DETAIL.tr)
+                                        label: Keystring.DETAIL.tr)
                                   ],
                                 )
                               ],

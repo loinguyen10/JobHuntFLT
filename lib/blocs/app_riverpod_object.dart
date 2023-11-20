@@ -8,6 +8,7 @@ import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
+import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
@@ -630,4 +631,40 @@ StateProvider<CompanyDetail>((ref) => CompanyDetail());
 final listCompanyJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
 
+// Follow the company
 final isCheckFollowCompany = StateProvider<bool>((ref) => false);
+
+final followingProvider = StateProvider<FollowDetail?>((ref) => FollowDetail());
+
+final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
+    (ref) => getYourFollowList(ref.watch(userLoginProvider)!.uid ?? '0'));
+
+final turnFollowOn = StateProvider<bool>((ref) {
+  final list = ref.watch(listYourFollowProvider);
+  final job = ref.watch(jobDetailProvider);
+  List<FollowDetail> listFollow = [];
+
+  list.maybeWhen(
+    data: (data) {
+      listFollow = data;
+    },
+    orElse: () {
+      listFollow = [];
+    },
+  );
+
+  log('listFollow: ${listFollow.length}');
+  log('company: ${job?.companyId}');
+
+  for (var i in listFollow) {
+    if (job?.companyId == i.companyId) {
+      log('message11111: ${job?.companyId} & ${i.companyId} ');
+      return true;
+    }
+  }
+
+  return false;
+});
+final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
+        (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
+

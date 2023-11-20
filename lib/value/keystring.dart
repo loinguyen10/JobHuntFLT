@@ -138,4 +138,6 @@ class Keystring {
   static const String COMPANY_ADDRESS = 'Company_Address';
   static const String COMPANY_FOllOW = 'Company_Follow';
   static const String FOllOWING = 'Following';
+  static const String CONTENT_DIALOG_UNFOLLOW = 'Content_Dialog_Unfollow'; 
+  static const String UNFOLLOW = 'Unfollow'; 
 }

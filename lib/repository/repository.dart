@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
+import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
@@ -45,7 +46,7 @@ class InsideService {
   //       throw 'No user found for that email.';
   //     } else if (e.code == 'wrong-password') {
   //       throw 'Wrong password provided for that user.';
-  //     } else {
+  //     } else {p;
   //       throw 'Wrong.';
   //     }
   //   }
@@ -55,10 +56,13 @@ class InsideService {
     final msg = jsonEncode({
       //'email': 'laingu@jobshunt.info',
       //'password': 'laicutai',
-       'email': 'hungbip@jobshunt.info',
-       'password': 'hung',
+      //  'email': 'hungbip@jobshunt.info',
+      //  'password': 'hung',
+        'email': 'emminh@jobshunt.info',
+       'password': 'minhhoang',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
+
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -727,5 +731,53 @@ class InsideService {
         body: msg);
 
     return jsonDecode(response.body)['success'];
+  }
+  // Follow Company
+  Future<dynamic> addFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+      'userId': userId,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "profile/add_follower.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+  Future<dynamic> removeFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+      'userId': userId,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/remove_follower.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+   Future<dynamic> getListFollow(String userId) async {
+    final msg = jsonEncode({
+      'userId': userId,
+    });
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/your_follower.php"),
+        body: msg);
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['follower'];
+      return result.map((e) => FollowDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 }

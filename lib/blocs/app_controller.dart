@@ -47,7 +47,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
             log('pro: $profile');
-            log('setting: ${setting.uid} ${setting.job}');
+            // log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
             ref.read(userDetailJobSettingProvider.notifier).state = setting;
           } else if (user.role == 'recuiter') {
@@ -713,4 +713,55 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+//follow the company
+   void addFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).addFollowCompany(
+            companyId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFollowProvider);
+        ref.refresh(turnFollowOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+  void removeFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeFollowCompany(
+            companyId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFollowProvider);
+        ref.refresh(turnFollowOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
 }
+}
+
+ 

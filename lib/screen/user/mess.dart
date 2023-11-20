@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/screen/user/chatscreen.dart';
 import 'package:jobhunt_ftl/screen/user/search_screen.dart';
 
 import '../../blocs/app_riverpod_void.dart';
 import '../../component/card.dart';
 import '../../value/keystring.dart';
-import '../../value/style.dart'; // Import your necessary Riverpod providers
+import '../../value/style.dart';
 
 class MessScreen extends ConsumerWidget {
   const MessScreen({Key? key}) : super(key: key);
@@ -75,13 +76,22 @@ class JobListWidget extends ConsumerWidget {
                 : Keystring.ARGEEMENT.tr;
             String deadline = data[index].deadline ?? '';
 
-            return AppJobCard(
-              avatar: avatar,
-              name: name,
-              companyName: companyName,
-              province: province,
-              money: money,
-              deadline: deadline,
+            return GestureDetector(
+              onTap: () {
+                // Navigate to the ChatScreen when a job is tapped
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatScreen()),
+                );
+              },
+              child: AppJobCard(
+                avatar: avatar,
+                name: name,
+                companyName: companyName,
+                province: province,
+                money: money,
+                deadline: deadline,
+              ),
             );
           },
           itemCount: data.length,
@@ -102,3 +112,4 @@ class JobListWidget extends ConsumerWidget {
     );
   }
 }
+

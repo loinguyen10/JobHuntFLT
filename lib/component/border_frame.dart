@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppBorderFrame extends StatefulWidget {
   const AppBorderFrame({
     super.key,
-    this.bgColor = Colors.white,
+    this.bgColor,
     this.borderRadius = 8,
     this.labelText = '',
     required this.child,
@@ -12,7 +12,7 @@ class AppBorderFrame extends StatefulWidget {
     this.margin = const EdgeInsets.all(0),
   });
 
-  final Color bgColor;
+  final Color? bgColor;
   final double borderRadius;
   final String labelText;
   final Widget child;
@@ -32,11 +32,11 @@ class _AppBorderFrameState extends State<AppBorderFrame> {
       height: widget.height,
       margin: widget.margin,
       decoration: BoxDecoration(
-          color: widget.bgColor,
+          color: widget.bgColor ?? Theme.of(context).colorScheme.onBackground,
           borderRadius: BorderRadius.circular(widget.borderRadius)),
       child: InputDecorator(
         decoration: InputDecoration(
-          labelStyle: TextStyle(color: Colors.black),
+          labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
           labelText: widget.labelText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),

@@ -84,7 +84,7 @@ class RoleScreen extends ConsumerWidget {
                 onPressed: () {
                   confirmDialog(Keystring.CANDIDATE.tr);
                 },
-                content: Keystring.CANDIDATE.tr,
+                label: Keystring.CANDIDATE.tr,
                 width: MediaQuery.of(context).size.width / 3,
                 fontSize: 16,
                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -96,7 +96,7 @@ class RoleScreen extends ConsumerWidget {
                 onPressed: () {
                   confirmDialog(Keystring.RECUITER.tr);
                 },
-                content: Keystring.RECUITER.tr,
+                label: Keystring.RECUITER.tr,
                 width: MediaQuery.of(context).size.width / 3,
                 fontSize: 16,
                 padding: EdgeInsets.symmetric(vertical: 12),

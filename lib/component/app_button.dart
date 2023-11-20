@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:jobhunt_ftl/value/style.dart';
 
 class AppButton extends StatelessWidget {
   AppButton({
     required this.onPressed,
-    this.content = '',
+    this.label = '',
     this.bgColor = Colors.black,
     this.colorBorder = Colors.white,
     this.textColor = Colors.white,
     this.width = double.infinity,
-    this.height = 40,
+    this.height = ParameterStyle.APP_BUTTON_HEIGHT_NORMAL,
     this.pathIm = '',
-    this.fontSize = 14,
+    this.fontSize = ParameterStyle.FONT_SIZE_NORMAL,
     this.disableBtn = false,
     this.rightIcon,
     this.padding,
-    this.borderRadius = 8,
+    this.borderRadius = ParameterStyle.BORDER_RADIUS_NORMAL,
   });
   final GestureTapCallback onPressed;
-  String content;
+  String label;
   Color bgColor;
   Color textColor;
   double width;
@@ -45,7 +46,7 @@ class AppButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              content,
+              label,
               style: TextStyle(color: textColor, fontSize: fontSize),
             ),
           ],

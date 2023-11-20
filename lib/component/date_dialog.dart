@@ -86,7 +86,7 @@ class DateCustomDialog {
               int.parse(dateChoose.substring(0, 2)), //day
             )
           : DateTime(DateTime.now().year - 16),
-      firstDate: DateTime(2020),
+      firstDate: DateTime(1960),
       lastDate: DateTime(DateTime.now().year + 15, 12, 31),
     );
     if (picked != null) {

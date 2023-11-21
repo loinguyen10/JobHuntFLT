@@ -503,7 +503,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String jobId,
     String userId,
   ) async {
-    state = const CreateThingLoadingEvent();
+    state = const FavoriteLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).addFavorite(
             jobId,
@@ -513,12 +513,12 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (result == 1) {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
-        state = const CreateThingSuccessEvent();
+        state = const FavoriteSuccessEvent();
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        state = const FavoriteErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = FavoriteErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();
@@ -528,7 +528,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String jobId,
     String userId,
   ) async {
-    state = const CreateThingLoadingEvent();
+    state = const FavoriteLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).removeFavorite(
             jobId,
@@ -538,12 +538,12 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (result == 1) {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
-        state = const CreateThingSuccessEvent();
+        state = const FavoriteSuccessEvent();
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        state = const FavoriteErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = FavoriteErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

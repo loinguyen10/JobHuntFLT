@@ -729,6 +729,7 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   // Follow Company
   Future<dynamic> addFollowCompany(
     String companyId,
@@ -744,6 +745,7 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> removeFollowCompany(
     String companyId,
     String userId,
@@ -759,7 +761,8 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
-   Future<dynamic> getListFollow(String userId) async {
+
+  Future<dynamic> getListFollow(String userId) async {
     final msg = jsonEncode({
       'userId': userId,
     });
@@ -777,7 +780,7 @@ class InsideService {
       return [];
     }
   }
-  
+
   Future<dynamic> sendOTPtoMail(
     String mail,
   ) async {
@@ -809,7 +812,7 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-    Future<dynamic> newPass(
+  Future<dynamic> newPass(
     String password,
     String mail,
   ) async {
@@ -818,11 +821,9 @@ class InsideService {
       'new_password': password,
     });
 
-    Response response = await post(
-        Uri.parse(BASE_URL + "/update_password.php"),
-        body: msg);
+    Response response =
+        await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
     log('${jsonDecode(response.body)}a');
     return jsonDecode(response.body)['success'];
   }
 }
-

@@ -49,7 +49,7 @@ class CompanyDetail {
   CompanyDetail.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     avatarUrl = json['avatar_url'];
-    fullname = json['fullname'];
+    fullname = json['full_name'];
     email = json['email'];
     phone = json['phone'];
     web = json['web'];
@@ -63,7 +63,7 @@ class CompanyDetail {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['uid'] = this.uid;
     data['avatar_url'] = this.avatarUrl;
-    data['fullname'] = this.fullname;
+    data['full_name'] = this.fullname;
     data['email'] = this.email;
     data['phone'] = this.phone;
     data['web'] = this.web;

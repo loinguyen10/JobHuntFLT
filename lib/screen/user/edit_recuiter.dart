@@ -13,6 +13,7 @@ import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../component/app_button.dart';
+import '../../component/border_frame.dart';
 import '../../component/edittext.dart';
 import '../../component/loader_overlay.dart';
 import '../../model/address.dart';
@@ -95,13 +96,12 @@ class RecuiterEditScreen extends ConsumerWidget {
           isExpanded: true,
           hint: Text(
             Keystring.SELECT.tr,
-            style: textNormal.copyWith(color: Colors.black),
+            style: textNormal,
           ),
           items: listProvince
               .map((item) => DropdownMenuItem<ProvinceList>(
                     value: item,
-                    child: Text(item.name ?? '',
-                        style: textNormal.copyWith(color: Colors.black)),
+                    child: Text(item.name ?? '', style: textNormal),
                   ))
               .toList(),
           value: provinceChoose?.code != null ? provinceChoose : null,
@@ -128,13 +128,12 @@ class RecuiterEditScreen extends ConsumerWidget {
           isExpanded: true,
           hint: Text(
             Keystring.SELECT.tr,
-            style: textNormal.copyWith(color: Colors.black),
+            style: textNormal,
           ),
           items: listDistrict
               .map((item) => DropdownMenuItem<DistrictList>(
                     value: item,
-                    child: Text(item.fullName ?? '',
-                        style: textNormal.copyWith(color: Colors.black)),
+                    child: Text(item.fullName ?? '', style: textNormal),
                   ))
               .toList(),
           value: districtChoose?.code != null ? districtChoose : null,
@@ -160,13 +159,12 @@ class RecuiterEditScreen extends ConsumerWidget {
           isExpanded: true,
           hint: Text(
             Keystring.SELECT.tr,
-            style: textNormal.copyWith(color: Colors.black),
+            style: textNormal,
           ),
           items: listWard
               .map((item) => DropdownMenuItem<WardList>(
                     value: item,
-                    child: Text(item.fullName ?? '',
-                        style: textNormal.copyWith(color: Colors.black)),
+                    child: Text(item.fullName ?? '', style: textNormal),
                   ))
               .toList(),
           value: wardChoose?.code != null ? wardChoose : null,
@@ -462,75 +460,35 @@ class RecuiterEditScreen extends ConsumerWidget {
                 content: company?.web ?? '',
               ),
               SizedBox(height: 24),
-              Container(
-                color: Colors.white,
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(color: Colors.black),
-                    labelText: Keystring.ADDRESS.tr,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+              AppBorderFrame(
+                labelText: Keystring.ADDRESS.tr,
+                child: Column(
+                  children: [
+                    AppBorderFrame(
+                      labelText: Keystring.PROVINCE.tr,
+                      child: dropProvince(),
                     ),
-                  ),
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.black),
-                            labelText: Keystring.PROVINCE.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.grey),
-                            ),
-                          ),
-                          child: dropProvince(),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.black),
-                            labelText: Keystring.DISTRICT.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.grey),
-                            ),
-                          ),
-                          child: dropDistrict(),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.black),
-                            labelText: Keystring.WARD.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.grey),
-                            ),
-                          ),
-                          child: dropWard(),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      EditTextForm(
-                        onChanged: ((value) {
-                          ref.read(roadCompanyProvider.notifier).state = value;
-                        }),
-                        label: Keystring.ROAD_STREET.tr,
-                        content: company?.address!
-                                .substring(0, company.address!.indexOf(',')) ??
-                            '',
-                      ),
-                    ],
-                  ),
+                    SizedBox(height: 20),
+                    AppBorderFrame(
+                      labelText: Keystring.DISTRICT.tr,
+                      child: dropDistrict(),
+                    ),
+                    SizedBox(height: 20),
+                    AppBorderFrame(
+                      labelText: Keystring.WARD.tr,
+                      child: dropWard(),
+                    ),
+                    SizedBox(height: 20),
+                    EditTextForm(
+                      onChanged: ((value) {
+                        ref.read(roadCompanyProvider.notifier).state = value;
+                      }),
+                      label: Keystring.ROAD_STREET.tr,
+                      content: company?.address!
+                              .substring(0, company.address!.indexOf(',')) ??
+                          '',
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 24),

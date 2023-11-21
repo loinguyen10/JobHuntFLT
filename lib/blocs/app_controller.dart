@@ -54,7 +54,9 @@ class LoginController extends StateNotifier<InsideEvent> {
             log('pro: $profile');
             // log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
-            ref.read(userDetailJobSettingProvider.notifier).state = setting;
+            if (setting != null) {
+              ref.read(userDetailJobSettingProvider.notifier).state = setting;
+            }
           } else if (user.role == 'recuiter') {
             log('recuiter');
             final company =
@@ -204,7 +206,7 @@ class LoginController extends StateNotifier<InsideEvent> {
           ref.read(companyProfileProvider.notifier).state = company;
           state = const CreateThingSuccessEvent();
         } else {
-          state = const CreateThingErrorEvent(error: 'error');
+          state = const CreateThingErrorEvent(error: 'error1');
         }
       } else {
         FormData formData = FormData.fromMap({
@@ -235,10 +237,10 @@ class LoginController extends StateNotifier<InsideEvent> {
             ref.read(companyProfileProvider.notifier).state = company;
             state = const CreateThingSuccessEvent();
           } else {
-            state = const CreateThingErrorEvent(error: 'error');
+            state = const CreateThingErrorEvent(error: 'error2');
           }
         } else {
-          state = const CreateThingErrorEvent(error: 'error');
+          state = const CreateThingErrorEvent(error: 'error3');
         }
       }
     } catch (e) {
@@ -317,14 +319,21 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const UpdateThingLoadingEvent();
     try {
-      log('avatar: ${avatar_url}');
-      FormData formData = FormData.fromMap({
-        "uploadedfile": await MultipartFile.fromFile(avatar_url,
-            filename: "img_id${uid}_company_profile_avatar.jpg")
-      });
-      Response response = await Dio()
-          .post(BASE_URL + 'company/upload_company_avatar.php', data: formData);
-      if (jsonDecode(response.data)['success'] == 1) {
+      bool check = true;
+      if (avatar_url.substring(0, 8) != 'https://') {
+        FormData formData = FormData.fromMap({
+          "uploadedfile": await MultipartFile.fromFile(avatar_url,
+              filename: "img_id${uid}_user_profile_avatar.jpg")
+        });
+        Response response = await Dio().post(
+            "$BASE_URL/profile/upload_profile_avatar.php",
+            data: formData);
+        log('$response');
+        if (jsonDecode(response.data)['success'] != 1) {
+          check = false;
+        }
+      }
+      if (check) {
         final result = await ref.read(authRepositoryProvider).updateCompany(
               uid,
               full_name,

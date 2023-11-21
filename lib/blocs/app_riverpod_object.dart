@@ -535,7 +535,6 @@ final CandidateProfileProvider =
 final applicationDetailProvider =
     StateProvider<ApplicationDetail?>((ref) => ApplicationDetail());
 
-
 // recommend job
 final userDetailJobSettingProvider =
     StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
@@ -584,10 +583,13 @@ final listProvinceChooseJobSettingProvider =
   if (!ref.watch(listProvinceProvider).isLoading) {
     List<ProvinceList> list = [];
     var listProvince = ref.watch(listProvinceProvider).value;
-    var provinceList =
-        ref.watch(userDetailJobSettingProvider)?.workProvince?.split(',');
+    var workProvinceValue =
+        ref.watch(userDetailJobSettingProvider)?.workProvince;
+    var provinceList = workProvinceValue?.split(',');
 
-    if (provinceList!.isNotEmpty) {
+    log('message: $workProvinceValue and $provinceList');
+
+    if (workProvinceValue != null && provinceList!.isNotEmpty) {
       for (var p in provinceList) {
         for (var x in listProvince!) {
           if (p == x.code) {
@@ -595,8 +597,8 @@ final listProvinceChooseJobSettingProvider =
           }
         }
       }
+      return list;
     }
-    return list;
   }
   return [];
 });
@@ -623,11 +625,10 @@ final listEducationShowJobSettingProvider =
 // final userDetailJobSettingProvider =
 //     StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
 //company infor
-final isExpandedCompanySeenInforProvider =
-StateProvider<bool>((ref) => false);
+final isExpandedCompanySeenInforProvider = StateProvider<bool>((ref) => false);
 
 final companyInforProvider =
-StateProvider<CompanyDetail>((ref) => CompanyDetail());
+    StateProvider<CompanyDetail>((ref) => CompanyDetail());
 
 final listCompanyJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
@@ -666,7 +667,7 @@ final turnFollowOn = StateProvider<bool>((ref) {
 
   return false;
 });
-final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
-        (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
+final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>((ref) =>
+    getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
 final emailsaveProvider = StateProvider((ref) => '');

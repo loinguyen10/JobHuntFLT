@@ -9,6 +9,7 @@ import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/editcontroller.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
+import 'package:jobhunt_ftl/screen/login_register/forgotpassword.dart';
 import 'package:jobhunt_ftl/screen/login_register/register_screen.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
@@ -168,9 +169,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(Keystring.FORGET_PASS.tr),
-                            ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ));
                           },
                           child: Text(
                             Keystring.FORGET_PASS.tr,

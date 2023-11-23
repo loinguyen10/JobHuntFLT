@@ -54,15 +54,12 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      //'email': 'laingu@jobshunt.info',
-      //'password': 'laicutai',
-      //  'email': 'hungbip@jobshunt.info',
-      //  'password': 'hung',
-        'email': 'emminh@jobshunt.info',
-       'password': 'minhhoang',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
-
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -732,6 +729,7 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   // Follow Company
   Future<dynamic> addFollowCompany(
     String companyId,
@@ -747,6 +745,7 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> removeFollowCompany(
     String companyId,
     String userId,
@@ -762,7 +761,8 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
-   Future<dynamic> getListFollow(String userId) async {
+
+  Future<dynamic> getListFollow(String userId) async {
     final msg = jsonEncode({
       'userId': userId,
     });
@@ -779,5 +779,51 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> sendOTPtoMail(
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkOTP(
+    String otp,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'otp_code': otp,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/code/api_confirmcode.php"),
+        body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> newPass(
+    String password,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'new_password': password,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
   }
 }

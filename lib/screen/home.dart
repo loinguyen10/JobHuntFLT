@@ -159,10 +159,12 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 style: textJobHome,
                               ),
                               GestureDetector(
-                                onTap: ()=>{
+                                onTap: () => {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Job_Recommend_User(title: Keystring.RECOMMEND_JOB.tr,)),
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobRecommendUser()),
                                   )
                                 },
                                 child: Text(

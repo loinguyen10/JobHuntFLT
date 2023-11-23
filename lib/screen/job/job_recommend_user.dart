@@ -6,17 +6,13 @@ import '../../blocs/app_riverpod_void.dart';
 import '../../component/card.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
-import 'edit_job.dart';
 import 'job_view_screen.dart';
 
-class Job_Recommend_User extends ConsumerWidget {
-  Job_Recommend_User({required this.title, Key? key}) : super(key: key);
-  String title;
+class JobRecommendUser extends ConsumerWidget {
+  const JobRecommendUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    final role = ref.watch(userLoginProvider)?.role;
     final _data = ref.watch(listActiveJobProvider);
     return Container(
       decoration: BoxDecoration(
@@ -30,26 +26,8 @@ class Job_Recommend_User extends ConsumerWidget {
             children: [
               AppBar(
                 backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-                title: Text(title),
+                title: Text(Keystring.RECOMMEND_JOB.tr),
                 elevation: 0,
-                actions: [
-                  role == 'recuiter'
-                      ? Container(
-                          margin: EdgeInsets.only(right: 8),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        JobEditScreen(edit: true)),
-                              );
-                            },
-                            child: Icon(Icons.edit),
-                          ),
-                        )
-                      : SizedBox(width: 0),
-                ],
               ),
               _data.when(
                 data: (data) {

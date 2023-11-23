@@ -22,8 +22,11 @@ import '../model/job_setting.dart';
 import '../value/style.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
+// String BASE_URL = 'https://localhost/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
+// String BASE_IMG_URL = 'https://localhost/app_auth/img/';
 String BASE_CV_URL = 'https://jobshunt.info/app_auth/cv/';
+// String BASE_CV_URL = 'https://localhost/app_auth/cv/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -58,19 +61,21 @@ class InsideService {
       //'password': 'laicutai',
       //  'email': 'hungbip@jobshunt.info',
       //  'password': 'hung',
-        'email': 'emminh@jobshunt.info',
-       'password': 'minhhoang',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      //   'email': 'emminh@jobshunt.info',
+      //  'password': 'minhhoang',
+      'email': emailAddress.trim(),
+      'password': password.trim(),
 
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
     //   'Accept': 'application/json',
     // };
+    log('BASE_URL + "login.php" ${BASE_URL + "login.php"}');
     Response response = await post(Uri.parse(BASE_URL + "login.php"),
         // headers: requestHeaders,
         body: msg);
+
     log('ket qua login00: ${response.statusCode}');
     log('ket qua login: ${jsonDecode(response.body)}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {

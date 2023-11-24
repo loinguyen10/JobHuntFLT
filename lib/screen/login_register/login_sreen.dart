@@ -9,6 +9,7 @@ import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/editcontroller.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
+import 'package:jobhunt_ftl/screen/login_register/forgotpassword.dart';
 import 'package:jobhunt_ftl/screen/login_register/register_screen.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
@@ -25,11 +26,26 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+
+  void initState() {
+    super.initState();
+    loadEaP();
+  }
+
+  Future<void> loadEaP() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    ref.read(emailLoginProvider.notifier).state =
+        prefs.getString('saveEmail') ?? '';
+    emailEditingController.text = prefs.getString('saveEmail') ?? '';
+    ref.read(passwordLoginProvider.notifier).state =
+        prefs.getString('savePassword') ?? '';
+    passwordEditingController.text = prefs.getString('savePassword') ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailEditingController = TextEditingController();
-    TextEditingController passwordEditingController = TextEditingController();
-
     ref.listen<InsideEvent>(
       LoginControllerProvider,
       (previous, state) {
@@ -86,18 +102,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       prefs.setString('saveEmail', ref.watch(emailLoginProvider));
       prefs.setString('savePassword', ref.watch(passwordLoginProvider));
     }
-
-    Future<void> loadEaP() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      ref.read(emailLoginProvider.notifier).state =
-          prefs.getString('saveEmail') ?? '';
-      emailEditingController.text = prefs.getString('saveEmail') ?? '';
-      ref.read(passwordLoginProvider.notifier).state =
-          prefs.getString('savePassword') ?? '';
-      passwordEditingController.text = prefs.getString('savePassword') ?? '';
-    }
-
-    // loadEaP();
 
     return SafeArea(
       child: Scaffold(
@@ -168,9 +172,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(Keystring.FORGET_PASS.tr),
-                            ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ));
                           },
                           child: Text(
                             Keystring.FORGET_PASS.tr,

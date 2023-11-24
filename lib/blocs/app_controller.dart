@@ -20,6 +20,11 @@ final JobViewControllerProvider =
   return LoginController(ref);
 });
 
+final ChangePassControllerProvider =
+    StateNotifierProvider<LoginController1, InsideEvent>((ref) {
+  return LoginController1(ref);
+});
+
 class LoginController extends StateNotifier<InsideEvent> {
   LoginController(this.ref) : super(const SignInStateEvent());
 
@@ -46,10 +51,14 @@ class LoginController extends StateNotifier<InsideEvent> {
             final setting = await ref
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
+
             log('pro: $profile');
-            log('setting: ${setting.uid} ${setting.job}');
+
+            // log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
-            ref.read(userDetailJobSettingProvider.notifier).state = setting;
+            if (setting != null) {
+              ref.read(userDetailJobSettingProvider.notifier).state = setting;
+            }
           } else if (user.role == 'recuiter') {
             log('recuiter');
             final company =
@@ -199,7 +208,7 @@ class LoginController extends StateNotifier<InsideEvent> {
           ref.read(companyProfileProvider.notifier).state = company;
           state = const CreateThingSuccessEvent();
         } else {
-          state = const CreateThingErrorEvent(error: 'error');
+          state = const CreateThingErrorEvent(error: 'error1');
         }
       } else {
         FormData formData = FormData.fromMap({
@@ -230,10 +239,10 @@ class LoginController extends StateNotifier<InsideEvent> {
             ref.read(companyProfileProvider.notifier).state = company;
             state = const CreateThingSuccessEvent();
           } else {
-            state = const CreateThingErrorEvent(error: 'error');
+            state = const CreateThingErrorEvent(error: 'error2');
           }
         } else {
-          state = const CreateThingErrorEvent(error: 'error');
+          state = const CreateThingErrorEvent(error: 'error3');
         }
       }
     } catch (e) {
@@ -254,14 +263,22 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const UpdateThingLoadingEvent();
     try {
-      FormData formData = FormData.fromMap({
-        "uploadedfile": await MultipartFile.fromFile(avatar_url,
-            filename: "img_id${uid}_user_profile_avatar.jpg")
-      });
-      Response response = await Dio()
-          .post("$BASE_URL/profile/upload_profile_avatar.php", data: formData);
-      log('$response');
-      if (jsonDecode(response.data)['success'] == 1) {
+      bool check = true;
+      if (avatar_url.substring(0, 8) != 'https://') {
+        FormData formData = FormData.fromMap({
+          "uploadedfile": await MultipartFile.fromFile(avatar_url,
+              filename: "img_id${uid}_user_profile_avatar.jpg")
+        });
+        Response response = await Dio().post(
+            "$BASE_URL/profile/upload_profile_avatar.php",
+            data: formData);
+        log('$response');
+        if (jsonDecode(response.data)['success'] != 1) {
+          check = false;
+        }
+      }
+
+      if (check) {
         final result = await ref.read(authRepositoryProvider).updateProfile(
               uid,
               full_name,
@@ -304,14 +321,21 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const UpdateThingLoadingEvent();
     try {
-      log('avatar: ${avatar_url}');
-      FormData formData = FormData.fromMap({
-        "uploadedfile": await MultipartFile.fromFile(avatar_url,
-            filename: "img_id${uid}_company_profile_avatar.jpg")
-      });
-      Response response = await Dio()
-          .post(BASE_URL + 'company/upload_company_avatar.php', data: formData);
-      if (jsonDecode(response.data)['success'] == 1) {
+      bool check = true;
+      if (avatar_url.substring(0, 8) != 'https://') {
+        FormData formData = FormData.fromMap({
+          "uploadedfile": await MultipartFile.fromFile(avatar_url,
+              filename: "img_id${uid}_user_profile_avatar.jpg")
+        });
+        Response response = await Dio().post(
+            "$BASE_URL/profile/upload_profile_avatar.php",
+            data: formData);
+        log('$response');
+        if (jsonDecode(response.data)['success'] != 1) {
+          check = false;
+        }
+      }
+      if (check) {
         final result = await ref.read(authRepositoryProvider).updateCompany(
               uid,
               full_name,
@@ -481,7 +505,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String jobId,
     String userId,
   ) async {
-    state = const CreateThingLoadingEvent();
+    state = const FavoriteLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).addFavorite(
             jobId,
@@ -491,12 +515,12 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (result == 1) {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
-        state = const CreateThingSuccessEvent();
+        state = const FavoriteSuccessEvent();
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        state = const FavoriteErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = FavoriteErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();
@@ -506,7 +530,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String jobId,
     String userId,
   ) async {
-    state = const CreateThingLoadingEvent();
+    state = const FavoriteLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).removeFavorite(
             jobId,
@@ -516,12 +540,12 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (result == 1) {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
-        state = const CreateThingSuccessEvent();
+        state = const FavoriteSuccessEvent();
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        state = const FavoriteErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = FavoriteErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();
@@ -597,6 +621,45 @@ class LoginController extends StateNotifier<InsideEvent> {
           ref.refresh(listRecuiterTodayApplicationProvider);
           state = const CreateThingSuccessEvent();
         });
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void sendOTPtoMail(
+    String mail,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).sendOTPtoMail(mail);
+      log('$result');
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void checkOTP(
+    String otp,
+    String mail,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).checkOTP(otp, mail);
+      log('$result');
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');
       }
@@ -709,6 +772,105 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = UpdateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void newPass(
+    String password,
+    String mail,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).newPass(password, mail);
+      log('$result');
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+//follow the company
+  void addFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).addFollowCompany(
+            companyId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFollowProvider);
+        ref.refresh(turnFollowOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void removeFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    state = const CreateThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeFollowCompany(
+            companyId,
+            userId,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourFollowProvider);
+        ref.refresh(turnFollowOn);
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+}
+
+class LoginController1 extends StateNotifier<InsideEvent> {
+  LoginController1(this.ref) : super(const SignInStateEvent());
+
+  final Ref ref;
+
+  void newPass(
+    String password,
+    String mail,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).newPass(password, mail);
+      log('$result');
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

@@ -7,19 +7,22 @@ import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/user.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import 'package:jobhunt_ftl/screen/job/job_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
 import 'package:jobhunt_ftl/screen/user/mess.dart';
-
+import 'package:jobhunt_ftl/screen/user/searchScreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_controller.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
 import 'job/job_recommend_user.dart';
+
+import 'package:jobhunt_ftl/repository/repository.dart';
 
 class HomeScreen extends ConsumerWidget {
   @override
@@ -72,6 +75,15 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
+            icon: Icon(Icons.search),
           ),
         ],
         leading: IconButton(
@@ -165,33 +177,53 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                           Keystring.RECOMMEND_JOB.tr,
                           style: textJobHome,
                         ),
-                        GestureDetector(
-                          onTap: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    Job_Recommend_User(title: Keystring.RECOMMEND_JOB.tr),
-                              ),
-                            )
-                          },
-                          child: Text(
-                            '${Keystring.VIEW_ALL.tr} ➤    ',
-                            style: textNormalBold,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                     SizedBox(
                       height: 4,
                     ),
-                    Card(
-                      shape: Border.all(color: Colors.white, width: 2),
-                      elevation: 5,
-                      child: Container(
-                        decoration: BoxDecoration(color: Colors.white),
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: const JobRecommendListScreen(),
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                Keystring.RECOMMEND_JOB.tr,
+                                style: textJobHome,
+                              ),
+                              GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobRecommendUser()),
+                                  )
+                                },
+                                child: Text(
+                                  '${Keystring.VIEW_ALL.tr} ➤    ',
+                                  style: textNormalBold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Card(
+                            shape: Border.all(color: Colors.white, width: 2),
+                            // margin: EdgeInsets.all(8),
+                            elevation: 5,
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: const JobRecommendListScreen(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

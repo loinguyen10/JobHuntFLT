@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/blocs/app_controller.dart';
+import 'package:jobhunt_ftl/blocs/app_event.dart';
+import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import '../../blocs/app_riverpod_object.dart';
@@ -16,10 +21,52 @@ class CompanyInformation extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final companyInfor = ref.watch(companyProfileProvider);
+    final role = ref.watch(userLoginProvider)?.role;
+    final follow = ref.watch(followingProvider);
+    final bmCheck = ref.watch(turnFollowOn);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    int jobOfCompany = 0;
-    bool isFollow = ref.watch(isCheckFollowCompany);
+    // bool isFollow = ref.watch(isCheckFollowCompany);
+
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+          Loader.hide();
+          log('error4');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(Keystring.UNSUCCESSFUL.tr),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingSuccessEvent ||
+            state is UpdateThingSuccessEvent) {
+          Loader.hide();
+          log('c-success');
+          log('bmfollow: ${bmCheck}');
+        }
+
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
+
     return Container(
         decoration: BoxDecoration(
             gradient: Theme.of(context).colorScheme.background == Colors.white
@@ -230,41 +277,87 @@ class CompanyInformation extends ConsumerWidget {
                             ),
                             Row(
                               children: [
-                                SizedBox(
-                                  width: screenWidth,
-                                  height: 55,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: GestureDetector(
-                                      onTap: () => {
-                                        ref
-                                            .read(isCheckFollowCompany.notifier)
-                                            .state = !isFollow
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(width: 1,color:isFollow ? Colors.black : Colors.white),
-                                              color:isFollow? Colors.white : Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0)),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  isFollow ? Icons.check : Icons.add,
-                                                  color: isFollow? Colors.black :Colors.white,
+                                role != null
+                                    ? role != 'recuiter'
+                                        ? SizedBox(
+                                            width: screenWidth,
+                                            height: 55,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (bmCheck) {
+                                                    showUnfollowDialog(
+                                                        context, ref);
+                                                  } else {
+                                                    ref
+                                                        .read(
+                                                            LoginControllerProvider
+                                                                .notifier)
+                                                        .addFollowCompany(
+                                                          company?.uid ?? '0',
+                                                          ref
+                                                                  .watch(
+                                                                      userLoginProvider)
+                                                                  ?.uid ??
+                                                              '0',
+                                                        );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            width: 1,
+                                                            color: bmCheck
+                                                                ? Colors.black
+                                                                : Colors.white),
+                                                        color: bmCheck
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0)),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            bmCheck
+                                                                ? Icons.check
+                                                                : Icons.add,
+                                                            color: bmCheck
+                                                                ? Colors.black
+                                                                : Colors.white,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Text(
+                                                            bmCheck
+                                                                ? '${Keystring.FOllOWING.tr}'
+                                                                : '${Keystring.COMPANY_FOllOW.tr}',
+                                                            style: TextStyle(
+                                                                color: bmCheck
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors
+                                                                        .white),
+                                                          )
+                                                        ]),
+                                                  ),
                                                 ),
-                                                SizedBox(width: 5,),
-                                                Text(isFollow ? '${Keystring.FOllOWING.tr}' : '${Keystring.COMPANY_FOllOW.tr}',style: TextStyle(color: isFollow ? Colors.black :Colors.white),)
-                                              ]),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(height: 0)
+                                    : SizedBox(
+                                        width: 0,
+                                      )
                               ],
                             )
                           ],
@@ -284,7 +377,7 @@ class CompanyInformation extends ConsumerWidget {
                           ),
                           Tab(
                             child: Text(
-                              '${Keystring.NEWS_RECRUITMENT.tr} ($jobOfCompany) ',
+                              '${Keystring.NEWS_RECRUITMENT.tr} ',
                             ),
                           ),
                         ],
@@ -299,12 +392,94 @@ class CompanyInformation extends ConsumerWidget {
               body: TabBarView(
                 children: [
                   Tab1(company: company),
-                  Tab2(),
+                  const Tab2(),
                 ],
               ),
             ),
           ),
         ));
+  }
+
+  void showUnfollowDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // bool isFollow = ref.watch(isCheckFollowCompany);
+        final follow = ref.watch(followingProvider);
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(10.0),
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10.0), // Điều chỉnh độ cong của các góc
+          ),
+          content: Text(
+            '${Keystring.CONTENT_DIALOG_UNFOLLOW.tr}',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFE4E4E4),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            '${Keystring.CANCEL.tr}',
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                          )),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      ref
+                          .read(LoginControllerProvider.notifier)
+                          .removeFollowCompany(
+                            company?.uid ?? '0',
+                            ref.watch(userLoginProvider)?.uid ?? '0',
+                          );
+                      Navigator.of(context).pop();
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            '${Keystring.UNFOLLOW.tr}',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          )),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    ).then((value) {
+      if (value != null && value) {
+        print('User unfollowed');
+      } else {
+        print('User canceled unfollow');
+      }
+    });
   }
 }
 
@@ -416,17 +591,17 @@ class Tab1 extends ConsumerWidget {
 class Tab2 extends ConsumerWidget {
   const Tab2({
     Key? key,
-    this.itemCount,
   }) : super(key: key);
-  final int? itemCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listActiveJobProvider);
+    final _data = ref.watch(listJobOfCompanyProvider);
     return _data.when(
       data: (data) {
+        // Future.delayed(const Duration(minutes: 1),() => ref.refresh(listPostJobProvider.future));
+
         return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (_, index) {
             String avatar = data[index].company?.avatarUrl ?? '';
@@ -447,8 +622,7 @@ class Tab2 extends ConsumerWidget {
                 ref.read(jobDetailProvider.notifier).state = data[index];
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const JobViewScreen()),
+                  MaterialPageRoute(builder: (context) => JobViewScreen()),
                 );
               },
               child: AppJobCard(
@@ -461,7 +635,7 @@ class Tab2 extends ConsumerWidget {
               ),
             );
           },
-          itemCount: itemCount ?? (data.length < 3 ? data.length : 3),
+          itemCount: data.length,
         );
       },
       error: (error, stackTrace) => SizedBox(

@@ -118,7 +118,7 @@ class Keystring {
   static const String ENGLISH = 'English';
   static const String VIETNAMESE = 'Vietnamese';
   static const String THEME = 'Theme';
-  static const String UPGRAPE = 'Upgrape';
+  static const String UPGRADE = 'Upgrade';
   static const String ALL_APPLICATIONS = 'All_Appications';
   static const String DARK = 'Dark';
   static const String LIGHT = 'Light';
@@ -149,10 +149,23 @@ class Keystring {
   static const String OTP_fail = 'OTP_fail';
   static const String Resend_OTP = 'Resend_OTP';
   static const String password_fail = 'Password_fail';
-  static const String Changepass = 'Change_Password';
+  static const String  Changepass = 'Change_Password';
   static const String NewPass = 'New_Password';
   static const String Confirmpass = 'Confirm_Password';
   static const String ConfirmCheckbox = 'I_agree_to_change_my_password.';
   static const String Changepass_SuccessNotfication = 'Password_changed_successfully!';
   static const String Changepass_FailNotification = 'Passwords_do_not_match!';
+  static const String One_month = 'one_month';
+  static const String PAYMENT = 'Payment';
+  static const String Three_month = 'three_month';
+  static const String Six_month = 'six_month';
+  static const String One_year = 'one_year';
+  static const String Exchange_day = 'only';
+  static const String Exchange_day_1 = 'per_days';
+  static const String Update_account_line1 = 'Update_account_line1';
+  static const String Update_account_line2 = 'Update_account_line2';
+  static const String Order = 'Order';
+  static const String Payment_status1 = 'Payment_done';
+  static const String Payment_status2 = 'You_will';
+  
 }

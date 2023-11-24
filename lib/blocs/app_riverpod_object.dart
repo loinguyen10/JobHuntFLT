@@ -554,10 +554,10 @@ final listAllTitleJobSettingProvider =
     FutureProvider<List<String>>((ref) => getAllJobTitle());
 
 final minSalaryJobSettingProvider = StateProvider<int>(
-    (ref) => ref.watch(userDetailJobSettingProvider)!.minSalary ?? 0);
+    (ref) => ref.watch(userDetailJobSettingProvider)?.minSalary ?? 0);
 
 final maxSalaryJobSettingProvider = StateProvider<int>(
-    (ref) => ref.watch(userDetailJobSettingProvider)!.maxSalary ?? 0);
+    (ref) => ref.watch(userDetailJobSettingProvider)?.maxSalary ?? 0);
 
 final currencyChooseJobSettingProvider =
     StateProvider.autoDispose<CurrencyList?>((ref) {
@@ -603,8 +603,8 @@ final listProvinceChooseJobSettingProvider =
   return [];
 });
 
-final yearExpericementJobSettingProvider = StateProvider<int>(
-    (ref) => ref.watch(userDetailJobSettingProvider)!.yearExperience ?? 0);
+final yearExpericementJobSettingProvider = StateProvider(
+    (ref) => ref.watch(userDetailJobSettingProvider)?.yearExperience ?? 0);
 
 final educationChooseJobSettingProvider =
     StateProvider<EducationList?>((ref) => EducationList());
@@ -671,3 +671,8 @@ final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>((ref) =>
     getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
 final emailsaveProvider = StateProvider((ref) => '');
+//
+final itemPayMentProvider =
+StateProvider<int>((ref) => 1);
+final isitemPayMentProvider =
+StateProvider<bool>((ref) => false);

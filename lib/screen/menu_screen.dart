@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/upgrape_screen.dart';
@@ -12,12 +13,14 @@ import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
+import 'package:jobhunt_ftl/screen/user/follow_company_list.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
 import 'job/recuiter_application_screen.dart';
+import 'login_register/changepass_isloged.dart';
 import 'login_register/login_sreen.dart';
 
 class MenuScreen extends ConsumerWidget {
@@ -297,7 +300,12 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                            ref.invalidate(listYourFollowProvider);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FollowCompanyScreen()),
+                            );
                           },
                           child: Card(
                             shadowColor: Colors.grey,
@@ -422,7 +430,7 @@ class MenuScreen extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UpgrapePremiumScreen()),
+                          builder: (context) => payment_main_layout()),
                     );
                   },
                   child: Card(
@@ -444,7 +452,42 @@ class MenuScreen extends ConsumerWidget {
                             width: 16,
                           ),
                           Text(
-                            Keystring.UPGRAPE.tr,
+                            Keystring.UPGRADE.tr,
+                            style: textMenu,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangePassword_isloged()),
+                    );
+                  },
+                  child: Card(
+                    shadowColor: Colors.grey,
+                    shape: Border.all(color: Colors.white, width: 2),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    elevation: 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.password,
+                            size: 32,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.Changepass.tr,
                             style: textMenu,
                           ),
                         ],

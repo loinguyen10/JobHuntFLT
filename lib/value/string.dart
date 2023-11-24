@@ -124,7 +124,7 @@ class LocaleString extends Translations {
           'English': 'English',
           'Vietnamese': 'Vietnamese',
           'Theme': 'Theme',
-          'Upgrape': 'Upgrape',
+          'Upgrade': 'Upgrade',
           'All_Appications': 'All Appications',
           'Dark': 'Dark',
           'Light': 'Light',
@@ -161,6 +161,19 @@ class LocaleString extends Translations {
           'I_agree_to_change_my_password.':'I agree to change my password.',
           'Password_changed_successfully!':'Password changed successfully!',
           'Passwords_do_not_match!' : 'Passwords do not match!',
+          'Payment':'Payment',
+          'one_month':'Month',
+          'three_month':'3 Month',
+          'six_month':'6 Month',
+          'one_year':'year',
+          'only':'only',
+          'per_day':'per day',
+          'Update_account_line1':'Update account to Premium',
+          'Update_account_line2':'Choose Your bundle',
+          'Oder':'Oder',
+          'Payment_done':'Payment done Successfully',
+          'You_will':'You will be redirected to the home page shortly\nor click here to return to home page'
+
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

@@ -270,3 +270,11 @@ class JobCompanySuggestionScreen extends ConsumerWidget {
     );
   }
 }
+class JobBestWithUser extends ConsumerWidget{
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SingleChildScrollView(
+
+    );
+  }
+}

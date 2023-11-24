@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:jobhunt_ftl/value/style.dart';
 
@@ -127,6 +128,7 @@ class SettingScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

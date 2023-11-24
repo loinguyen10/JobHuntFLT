@@ -51,7 +51,9 @@ class LoginController extends StateNotifier<InsideEvent> {
             final setting = await ref
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
+
             log('pro: $profile');
+
             // log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
             if (setting != null) {
@@ -503,7 +505,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String jobId,
     String userId,
   ) async {
-    state = const CreateThingLoadingEvent();
+    state = const FavoriteLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).addFavorite(
             jobId,
@@ -513,12 +515,12 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (result == 1) {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
-        state = const CreateThingSuccessEvent();
+        state = const FavoriteSuccessEvent();
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        state = const FavoriteErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = FavoriteErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();
@@ -528,7 +530,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String jobId,
     String userId,
   ) async {
-    state = const CreateThingLoadingEvent();
+    state = const FavoriteLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).removeFavorite(
             jobId,
@@ -538,12 +540,12 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (result == 1) {
         ref.refresh(listYourFavoriteProvider);
         ref.refresh(turnBookmarkOn);
-        state = const CreateThingSuccessEvent();
+        state = const FavoriteSuccessEvent();
       } else {
-        state = const CreateThingErrorEvent(error: 'error');
+        state = const FavoriteErrorEvent(error: 'error');
       }
     } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
+      state = FavoriteErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

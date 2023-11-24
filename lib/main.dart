@@ -11,6 +11,7 @@ import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
 import 'package:jobhunt_ftl/value/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jobhunt_ftl/screen/user/searchScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

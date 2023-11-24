@@ -5,20 +5,22 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
+import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../../value/style.dart';
-class ChangePassword extends ConsumerStatefulWidget {
-  const  ChangePassword ( {super.key,required this.email});
+class ChangePassword_isloged extends ConsumerStatefulWidget {
+  const  ChangePassword_isloged ( {super.key});
 
-final String email;
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChangePasswordState();
 }
 
-class _ChangePasswordState extends ConsumerState<ChangePassword> {
+class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
 
   bool isPasswordHidden = true;
   bool _isCheckboxChecked = false;
@@ -27,6 +29,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
   String password= "";
   @override
   Widget build(BuildContext context) {
+
     ref.listen<InsideEvent>(
       ChangePassControllerProvider,
       (previous, state) {
@@ -57,7 +60,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LoginScreen(),
+                builder: (context) => HomeScreen(),
               ));
         ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -166,9 +169,10 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
   }
 
   void changePassword() {
+    final email = ref.watch(userLoginProvider)?.email;
   if (isPasswordsMatch) {
     password = _emailController.text;
-    ref.read(ChangePassControllerProvider.notifier).newPass(password, widget.email);
+    ref.read(ChangePassControllerProvider.notifier).newPass(password,email??'');
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

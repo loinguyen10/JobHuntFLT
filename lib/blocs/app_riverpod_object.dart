@@ -670,3 +670,8 @@ final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
         (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
 final emailsaveProvider = StateProvider((ref) => '');
+//
+final itemPayMentProvider =
+StateProvider<int>((ref) => 1);
+final isitemPayMentProvider =
+StateProvider<bool>((ref) => false);

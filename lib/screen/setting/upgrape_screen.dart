@@ -17,7 +17,7 @@ class UpgrapePremiumScreen extends ConsumerWidget {
           child: Column(
             children: [
               AppBar(
-                title: Text(Keystring.UPGRAPE.tr),
+                title: Text(Keystring.UPGRADE.tr),
                 backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
                 foregroundColor: Theme.of(context).colorScheme.primary,

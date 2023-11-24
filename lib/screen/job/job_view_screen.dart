@@ -28,10 +28,10 @@ class JobViewScreen extends ConsumerWidget {
 
     //listen
     ref.listen<InsideEvent>(
-      JobViewControllerProvider,
+      LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+        if (state is FavoriteErrorEvent) {
           Loader.hide();
           log('error4');
           showDialog(
@@ -52,15 +52,13 @@ class JobViewScreen extends ConsumerWidget {
           );
         }
 
-        if (state is CreateThingSuccessEvent ||
-            state is UpdateThingSuccessEvent) {
+        if (state is FavoriteSuccessEvent) {
           Loader.hide();
           log('c-success');
           log('bm: ${bmCheck}');
         }
 
-        if (state is CreateThingLoadingEvent ||
-            state is UpdateThingLoadingEvent) {
+        if (state is FavoriteLoadingEvent) {
           Loader.show(context);
         }
       },
@@ -459,13 +457,15 @@ class JobViewScreen extends ConsumerWidget {
                     ),
               role != 'recuiter'
                   ? GestureDetector(
-                onTap: ()=>{
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CompanyInformation(companyId: job.companyId)),
-                )
-                },
-                    child: AppBorderFrame(
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CompanyInformation(company: job.company!)),
+                        )
+                      },
+                      child: AppBorderFrame(
                         labelText: '',
                         margin: EdgeInsets.symmetric(horizontal: 8),
                         child: Row(
@@ -508,7 +508,7 @@ class JobViewScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                  )
+                    )
                   : SizedBox(
                       height: 0,
                     ),

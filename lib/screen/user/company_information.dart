@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/blocs/app_controller.dart';
+import 'package:jobhunt_ftl/blocs/app_event.dart';
+import 'package:jobhunt_ftl/component/loader_overlay.dart';
+import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../blocs/app_riverpod_void.dart';
@@ -8,211 +14,483 @@ import '../../component/card.dart';
 import '../../value/style.dart';
 import '../job/job_view_screen.dart';
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   runApp(ProviderScope(
-//       child: Scaffold(
-//           body:  CompanyInfor()
-//       )
-//   ));
-// }
-
 class CompanyInformation extends ConsumerWidget {
-  CompanyInformation({required this.companyId, Key? key}) : super(key: key);
-  var companyId;
+  CompanyInformation({required this.company, Key? key}) : super(key: key);
+  CompanyDetail company;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final companyInfor = ref.watch(companyProfileProvider);
+    final role = ref.watch(userLoginProvider)?.role;
+    final follow = ref.watch(followingProvider);
+    final bmCheck = ref.watch(turnFollowOn);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    int jobOfCompany = 0;
+    // bool isFollow = ref.watch(isCheckFollowCompany);
+
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+          Loader.hide();
+          log('error4');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(Keystring.UNSUCCESSFUL.tr),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingSuccessEvent ||
+            state is UpdateThingSuccessEvent) {
+          Loader.hide();
+          log('c-success');
+          log('bmfollow: ${bmCheck}');
+        }
+
+        if (state is CreateThingLoadingEvent ||
+            state is UpdateThingLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
+
     return Container(
-      decoration: BoxDecoration(
-          gradient: Theme.of(context).colorScheme.background == Colors.white
-              ? bgGradientColor0
-              : bgGradientColor1),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppBar(
-                backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-                elevation: 0,
-                leading: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(left: 15, right: 15, top: 10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle, // Để tạo viền tròn
-                      color: Colors.white, // Màu nền trắng
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
+        child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            body: NestedScrollView(
+              headerSliverBuilder: (context, isInnerBoxScrolled) {
+                return [
+                  SliverAppBar(
+                    backgroundColor: Colors.blue,
+                    expandedHeight: 460.0,
+                    floating: false,
+                    pinned: true,
+                    leading: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        margin:
+                            const EdgeInsets.only(left: 15, right: 15, top: 10),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle, // Để tạo viền tròn
+                          color: Colors.white, // Màu nền trắng
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                          size: 18,
+                        ),
+                      ),
                     ),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                      size: 18,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Visibility(
+                        visible: isInnerBoxScrolled,
+                        child: const Text('Scrollable TabBar Example'),
+                      ),
+                      background: Container(
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                    flex: 2,
+                                    child: SizedBox(
+                                      width: screenWidth,
+                                      height: 300,
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                gradient: Theme.of(context)
+                                                            .colorScheme
+                                                            .background ==
+                                                        Colors.white
+                                                    ? bgGradientColor0
+                                                    : bgGradientColor1),
+                                            child: SizedBox(
+                                                height: 300,
+                                                width: screenWidth,
+                                                child: const Image(
+                                                  image: AssetImage(
+                                                      'assets/image/background_company.jpg'),
+                                                )),
+                                          ),
+                                          Positioned(
+                                            left: 2 * screenWidth / 5,
+                                            right: 2 * screenWidth / 5,
+                                            bottom: 0,
+                                            child: SizedBox(
+                                              height: 80,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                                child: Container(
+                                                  color: Colors.blue,
+                                                  child: company.avatarUrl != ''
+                                                      ? Image.network(
+                                                          company.avatarUrl ??
+                                                              '',
+                                                          fit: BoxFit.cover)
+                                                      : const Icon(
+                                                          Icons.apartment,
+                                                          size: 96,
+                                                        ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                    width: screenWidth,
+                                    child: Center(
+                                        child: Text(
+                                      company.fullname.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    )))
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: screenWidth,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.language,
+                                        size: 18, // Kích thước của biểu tượng
+                                        color: Colors
+                                            .black, // Màu sắc của biểu tượng
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(company.web.toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: screenWidth,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.phone,
+                                        size: 18, // Kích thước của biểu tượng
+                                        color: Colors
+                                            .black, // Màu sắc của biểu tượng
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(company.phone.toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: screenWidth,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.email,
+                                        size: 18, // Kích thước của biểu tượng
+                                        color: Colors
+                                            .black, // Màu sắc của biểu tượng
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(company.email.toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                role != null
+                                    ? role != 'recuiter'
+                                        ? SizedBox(
+                                            width: screenWidth,
+                                            height: 55,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (bmCheck) {
+                                                    showUnfollowDialog(
+                                                        context, ref);
+                                                  } else {
+                                                    ref
+                                                        .read(
+                                                            LoginControllerProvider
+                                                                .notifier)
+                                                        .addFollowCompany(
+                                                          company?.uid ?? '0',
+                                                          ref
+                                                                  .watch(
+                                                                      userLoginProvider)
+                                                                  ?.uid ??
+                                                              '0',
+                                                        );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            width: 1,
+                                                            color: bmCheck
+                                                                ? Colors.black
+                                                                : Colors.white),
+                                                        color: bmCheck
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0)),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            bmCheck
+                                                                ? Icons.check
+                                                                : Icons.add,
+                                                            color: bmCheck
+                                                                ? Colors.black
+                                                                : Colors.white,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Text(
+                                                            bmCheck
+                                                                ? '${Keystring.FOllOWING.tr}'
+                                                                : '${Keystring.COMPANY_FOllOW.tr}',
+                                                            style: TextStyle(
+                                                                color: bmCheck
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors
+                                                                        .white),
+                                                          )
+                                                        ]),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(height: 0)
+                                    : SizedBox(
+                                        width: 0,
+                                      )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverPersistentHeader(
+                    delegate: SliverTabBarDelegate(
+                      TabBar(
+                        indicatorColor: Colors.blue,
+                        unselectedLabelColor: Colors.grey,
+                        labelColor: Colors.blue,
+                        tabs: [
+                          Tab(
+                            child: Text(Keystring.COMPANY_INTRODUCTION.tr),
+                          ),
+                          Tab(
+                            child: Text(
+                              '${Keystring.NEWS_RECRUITMENT.tr} ',
+                            ),
+                          ),
+                        ],
+                        onTap: (index) {},
+                      ),
+                    ),
+                    floating: false,
+                    pinned: true,
+                  ),
+                ];
+              },
+              body: TabBarView(
+                children: [
+                  Tab1(company: company),
+                  const Tab2(),
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
+
+  void showUnfollowDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // bool isFollow = ref.watch(isCheckFollowCompany);
+        final follow = ref.watch(followingProvider);
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(10.0),
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10.0), // Điều chỉnh độ cong của các góc
+          ),
+          content: Text(
+            '${Keystring.CONTENT_DIALOG_UNFOLLOW.tr}',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFE4E4E4),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            '${Keystring.CANCEL.tr}',
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                          )),
                     ),
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        width: screenWidth,
-                        height: 215,
-                        child: Stack(
-                          children: [
-                            Container(
-                              color: Colors.red,
-                              child: SizedBox(
-                                  height: 200,
-                                  width: screenWidth,
-                                  child: Container()),
-                            ),
-                            Positioned(
-                              left: 2 * screenWidth / 5,
-                              right: 2 * screenWidth / 5,
-                              bottom: 0,
-                              child: SizedBox(
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                  ), // Điều chỉnh độ bo góc
-                                  child: Container(
-                                    color: Colors.blue, // Màu nền xanh
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Container(
-                      width: screenWidth,
-                      child: Center(
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      ref
+                          .read(LoginControllerProvider.notifier)
+                          .removeFollowCompany(
+                            company?.uid ?? '0',
+                            ref.watch(userLoginProvider)?.uid ?? '0',
+                          );
+                      Navigator.of(context).pop();
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                        'Công ty Cổ phần Atomi Digital',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )))
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: screenWidth,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.language,
-                          size: 18, // Kích thước của biểu tượng
-                          color: Colors.black, // Màu sắc của biểu tượng
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(companyId.toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                            ))
-                      ],
+                            '${Keystring.UNFOLLOW.tr}',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          )),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: screenWidth,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.phone,
-                          size: 18, // Kích thước của biểu tượng
-                          color: Colors.black, // Màu sắc của biểu tượng
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(companyId.toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                            ))
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Container(
-                      width: screenWidth,
-                      child: Center(
-                          child: Text(
-                        'Công ty Cổ phần Atomi Digital',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )))
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TabBar(tabs: [
-                Tab(
-                    text: Keystring.COMPANY_INTRODUCTION +
-                        ' (' +
-                        jobOfCompany.toString() +
-                        ')'),
-                Tab(text: Keystring.NEWS_RECRUITMENT),
-              ]),
-              TabBarView(children: [
-                Tab1(),
-                // Tab2(),
-              ]),
-            ],
-          ),
-        ),
-      ),
-    );
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    ).then((value) {
+      if (value != null && value) {
+        print('User unfollowed');
+      } else {
+        print('User canceled unfollow');
+      }
+    });
   }
 }
 
 class Tab1 extends ConsumerWidget {
-  Tab1({Key? key}) : super(key: key);
-
+  Tab1({required this.company, Key? key}) : super(key: key);
+  CompanyDetail company;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isExpanded = ref.watch(isExpandedCompanySeenInforProvider);
-    return Container(
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -222,8 +500,14 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Text(Keystring.COMPANY_INTRODUCTION,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: SizedBox(
+                  child: Text(Keystring.COMPANY_INTRODUCTION.tr,
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
+                ),
+              )
             ],
           ),
           SizedBox(
@@ -232,55 +516,44 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Expanded(
-                  child: Container(
-                child: SizedBox(
-                  height: 500,
-                  width: screenWidth,
-                  child: Container(
-                    width: 9 * screenWidth / 10,
-                    margin: EdgeInsets.only(left: 15),
-                    child: Column(
-                      children: [
-                        Text(
-                          'The Blood of Youth (2022),xem phim The Blood of Youth (2022),The Blood of Youth (2022) xem phim,The Blood of Youth (2022) lồng tiếng,The Blood of Youth (2022) thuyết minh,The Blood of Youth (2022) vietsub,Thiếu Niên Ca Hành,xem phim Thiếu Niên Ca Hành,Thiếu Niên Ca Hành xem phim,Thiếu Niên Ca Hành thuyết minh,Thiếu Niên Ca Hành vietsub,Thiếu Niên Ca Hành lồng tiếng,Thiếu Niên Ca Hành tập 1,Thiếu Niên Ca Hành tập 2,Thiếu Niên Ca Hành tập 3,Thiếu Niên Ca Hành tập 4,Thiếu Niên Ca Hành tập 5,Thiếu Niên Ca Hành tập 6,Thiếu Niên Ca Hành tập 7,Thiếu Niên Ca Hành tập 8,Thiếu Niên Ca Hành tập 9,Thiếu Niên Ca Hành tập 10,Thiếu Niên Ca Hành tập 11,Thiếu Niên Ca Hành tập 12,Thiếu Niên Ca Hành tập 13,Thiếu Niên Ca Hành tập 14,Thiếu Niên Ca Hành tập 15,Thiếu Niên Ca Hành tập 16,Thiếu Niên Ca Hành tập 17,Thiếu Niên Ca Hành tập 18,Thiếu Niên Ca Hành tập 19,Thiếu Niên Ca Hành tập 20,Thiếu Niên Ca Hành tập 21,Thiếu Niên Ca Hành tập 22,Thiếu Niên Ca Hành tập 23,Thiếu Niên Ca Hành tập 24,Thiếu Niên Ca Hành tập 25,Thiếu Niên Ca Hành tập 26,Thiếu Niên Ca Hành tập 27,Thiếu Niên Ca Hành tập 28,Thiếu Niên Ca Hành tập 29,Thiếu Niên Ca Hành tập 30,Thiếu Niên Ca Hành tập 31,Thiếu Niên Ca Hành tập 32,Thiếu Niên Ca Hành tập 33,Thiếu Niên Ca Hành tập 34,Thiếu Niên Ca Hành tập 35,Thiếu Niên Ca Hành tập 36,Thiếu Niên Ca Hành tập 37,Thiếu Niên Ca Hành tập 38,Thiếu Niên Ca Hành tập 39,Thiếu Niên Ca Hành tập 40',
-                          style: TextStyle(fontSize: 13),
-                          overflow: isExpanded ? null : TextOverflow.ellipsis,
-                          maxLines: isExpanded ? null : 10,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              ref
-                                  .read(isExpandedCompanySeenInforProvider
-                                      .notifier)
-                                  .state = !isExpanded;
-                            },
-                            child: Text(
-                              isExpanded
-                                  ? Keystring.COLLAPSE.tr
-                                  : Keystring.SEE_MORE.tr,
-                              style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ))
-                      ],
-                    ),
+              SizedBox(
+                width: screenWidth,
+                child: Container(
+                  width: 9 * screenWidth / 10,
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  child: Column(
+                    children: [
+                      Text(
+                        company.description ?? '',
+                        style: const TextStyle(fontSize: 13),
+                        overflow: isExpanded ? null : TextOverflow.ellipsis,
+                        maxLines: isExpanded ? null : 8,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(
+                                    isExpandedCompanySeenInforProvider.notifier)
+                                .state = !isExpanded;
+                          },
+                          child: Text(
+                            isExpanded
+                                ? Keystring.COLLAPSE.tr
+                                : Keystring.SEE_MORE.tr,
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ))
+                    ],
                   ),
                 ),
-              )),
+              )
             ],
           ),
           SizedBox(
             height: 10,
             width: screenWidth,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: SizedBox(
-              height: 1,
-              width: screenWidth,
-            ),
           ),
           SizedBox(
             height: 10,
@@ -288,8 +561,12 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Text(Keystring.COMPANY_ADDRESS,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(Keystring.COMPANY_ADDRESS.tr,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold)),
+              )
             ],
           ),
           SizedBox(
@@ -298,7 +575,11 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Text(Keystring.COMPANY_ADDRESS, style: TextStyle(fontSize: 13))
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(company.address.toString(),
+                    style: const TextStyle(fontSize: 13)),
+              )
             ],
           ),
         ],
@@ -306,64 +587,95 @@ class Tab1 extends ConsumerWidget {
     );
   }
 }
-// class Tab2 extends ConsumerWidget{
-//   Tab2({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final _data = ref.watch(listRecommendJobProvider);
 
-//     return _data.when(
-//       data: (data) {
-//         return ListView.builder(
-//           physics: NeverScrollableScrollPhysics(),
-//           shrinkWrap: true,
-//           itemBuilder: (_, index) {
-//             String avatar = data[index].company?.avatarUrl ?? '';
-//             String name = data[index].name ?? '';
-//             String companyName = data[index].company?.fullname ?? '';
-//             String province = getProvinceName(
-//                 data[index]
-//                     .address!
-//                     .substring(data[index].address!.lastIndexOf(',') + 1),
-//                 ref);
-//             String money = data[index].maxSalary != -1
-//                 ? '${data[index].maxSalary} ${data[index].currency}'
-//                 : Keystring.ARGEEMENT.tr;
-//             String deadline = data[index].deadline ?? '';
+class Tab2 extends ConsumerWidget {
+  const Tab2({
+    Key? key,
+  }) : super(key: key);
 
-//             return GestureDetector(
-//               onTap: () {
-//                 ref.read(jobDetailProvider.notifier).state = data[index];
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => JobViewScreen()),
-//                 );
-//               },
-//               child: AppJobCard(
-//                 avatar: avatar,
-//                 name: name,
-//                 companyName: companyName,
-//                 province: province,
-//                 money: money,
-//                 deadline: deadline,
-//               ),
-//             );
-//           },
-//           itemCount: data.length < 3 ? data.length : 3,
-//         );
-//       },
-//       error: (error, stackTrace) => SizedBox(
-//         height: 160,
-//         child: Center(
-//           child: Text(Keystring.NO_DATA.tr),
-//         ),
-//       ),
-//       loading: () => const SizedBox(
-//         height: 160,
-//         child: Center(
-//           child: CircularProgressIndicator(),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _data = ref.watch(listJobOfCompanyProvider);
+    return _data.when(
+      data: (data) {
+        // Future.delayed(const Duration(minutes: 1),() => ref.refresh(listPostJobProvider.future));
+
+        return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (_, index) {
+            String avatar = data[index].company?.avatarUrl ?? '';
+            String name = data[index].name ?? '';
+            String companyName = data[index].company?.fullname ?? '';
+            String province = getProvinceName(
+                data[index]
+                    .address!
+                    .substring(data[index].address!.lastIndexOf(',') + 1),
+                ref);
+            String money = data[index].maxSalary != -1
+                ? '${data[index].maxSalary} ${data[index].currency}'
+                : Keystring.ARGEEMENT.tr;
+            String deadline = data[index].deadline ?? '';
+
+            return GestureDetector(
+              onTap: () {
+                ref.read(jobDetailProvider.notifier).state = data[index];
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => JobViewScreen()),
+                );
+              },
+              child: AppJobCard(
+                avatar: avatar,
+                name: name,
+                companyName: companyName,
+                province: province,
+                money: money,
+                deadline: deadline,
+              ),
+            );
+          },
+          itemCount: data.length,
+        );
+      },
+      error: (error, stackTrace) => SizedBox(
+        height: 160,
+        child: Center(
+          child: Text(Keystring.NO_DATA.tr),
+        ),
+      ),
+      loading: () => const SizedBox(
+        height: 160,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+}
+
+class SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  SliverTabBarDelegate(this.tabBar);
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(SliverTabBarDelegate oldDelegate) {
+    return false;
+  }
+}

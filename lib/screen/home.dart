@@ -19,6 +19,7 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import '../blocs/app_controller.dart';
 import '../component/loader_overlay.dart';
 import '../value/style.dart';
+import 'job/job_recommend_user.dart';
 
 import 'package:jobhunt_ftl/repository/repository.dart';
 
@@ -146,9 +147,19 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 Keystring.RECOMMEND_JOB.tr,
                                 style: textJobHome,
                               ),
-                              Text(
-                                '${Keystring.VIEW_ALL.tr} ➤    ',
-                                style: textNormalBold,
+                              GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobRecommendUser()),
+                                  )
+                                },
+                                child: Text(
+                                  '${Keystring.VIEW_ALL.tr} ➤    ',
+                                  style: textNormalBold,
+                                ),
                               ),
                             ],
                           ),

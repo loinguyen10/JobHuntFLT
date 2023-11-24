@@ -58,7 +58,7 @@ class _AppEditControllerState extends State<EditTextController> {
       width: widget.width,
       child: TextFormField(
         // inputFormatters: widget.textInputFormater,
-        style: TextStyle(fontSize: 15),
+        style: TextStyle(fontSize: 15, color: Colors.black),
         controller: widget.controller,
         autofocus: widget.autoFocus,
         maxLines: widget.maxLines,
@@ -73,6 +73,7 @@ class _AppEditControllerState extends State<EditTextController> {
             fillColor: Colors.white,
             labelText: widget.label,
             hintText: widget.hintText,
+            focusColor: Colors.black,
             hintStyle: TextStyle(color: Colors.grey),
             labelStyle: TextStyle(color: widget.textColor),
             // errorText: '',

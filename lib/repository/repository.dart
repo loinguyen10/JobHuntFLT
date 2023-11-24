@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
+import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
@@ -52,7 +53,7 @@ class InsideService {
   //       throw 'No user found for that email.';
   //     } else if (e.code == 'wrong-password') {
   //       throw 'Wrong password provided for that user.';
-  //     } else {
+  //     } else {p;
   //       throw 'Wrong.';
   //     }
   //   }
@@ -736,24 +737,100 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<List<JobDetail>> searchJobs(String name) async {
-    final Map<String, String> params = {'name': name};
-    final Uri uri =
-        Uri.parse(BASE_URL + 'job/allJob.php').replace(queryParameters: params);
+  // Follow Company
+  Future<dynamic> addFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+      'userId': userId,
+    });
 
-    try {
-      Response response = await http.get(uri);
+    Response response =
+        await post(Uri.parse(BASE_URL + "profile/add_follower.php"), body: msg);
 
-      if (response.statusCode == 200) {
-        final List result =
-            jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
-        return result.map((e) => JobDetail.fromJson(e)).toList();
-      } else {
-        return [];
-      }
-    } catch (e) {
-      print("Error in searchJobs: $e");
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> removeFollowCompany(
+    String companyId,
+    String userId,
+  ) async {
+    final msg = jsonEncode({
+      'companyId': companyId,
+      'userId': userId,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/remove_follower.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getListFollow(String userId) async {
+    final msg = jsonEncode({
+      'userId': userId,
+    });
+    Response response = await post(
+        Uri.parse(BASE_URL + "profile/your_follower.php"),
+        body: msg);
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['follower'];
+      return result.map((e) => FollowDetail.fromJson(e)).toList();
+    } else {
       return [];
     }
+  }
+
+  Future<dynamic> sendOTPtoMail(
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkOTP(
+    String otp,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'otp_code': otp,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/code/api_confirmcode.php"),
+        body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> newPass(
+    String password,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'new_password': password,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
   }
 }

@@ -490,6 +490,7 @@ class Tab1 extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isExpanded = ref.watch(isExpandedCompanySeenInforProvider);
+    log(company.toString());
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

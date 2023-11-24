@@ -49,6 +49,8 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^21.2.3
   syncfusion_flutter_core: ^21.2.3
   dio: ^5.3.0
+  flutter_inappwebview: ^5.8.0
+  flutter_svg: ^2.0.9
   path_provider: ^2.0.15
   firebase_core: ^2.15.1
   firebase_auth: ^4.9.0
@@ -92,8 +94,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/image/
+    - assets/image/check.png
     - assets/image/background_company.jpg
     - assets/image/bannerjoblist.jpg
+    - assets/image/card.svg
+    - assets/image/card.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

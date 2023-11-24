@@ -12,6 +12,7 @@ import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
+import 'package:jobhunt_ftl/screen/user/follow_company_list.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_riverpod_object.dart';
@@ -297,7 +298,12 @@ class MenuScreen extends ConsumerWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                            ref.invalidate(listYourFollowProvider);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FollowCompanyScreen()),
+                            );
                           },
                           child: Card(
                             shadowColor: Colors.grey,

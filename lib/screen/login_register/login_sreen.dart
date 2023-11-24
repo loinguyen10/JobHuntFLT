@@ -26,11 +26,26 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+
+  void initState() {
+    super.initState();
+    loadEaP();
+  }
+
+  Future<void> loadEaP() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    ref.read(emailLoginProvider.notifier).state =
+        prefs.getString('saveEmail') ?? '';
+    emailEditingController.text = prefs.getString('saveEmail') ?? '';
+    ref.read(passwordLoginProvider.notifier).state =
+        prefs.getString('savePassword') ?? '';
+    passwordEditingController.text = prefs.getString('savePassword') ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailEditingController = TextEditingController();
-    TextEditingController passwordEditingController = TextEditingController();
-
     ref.listen<InsideEvent>(
       LoginControllerProvider,
       (previous, state) {
@@ -87,18 +102,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       prefs.setString('saveEmail', ref.watch(emailLoginProvider));
       prefs.setString('savePassword', ref.watch(passwordLoginProvider));
     }
-
-    Future<void> loadEaP() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      ref.read(emailLoginProvider.notifier).state =
-          prefs.getString('saveEmail') ?? '';
-      emailEditingController.text = prefs.getString('saveEmail') ?? '';
-      ref.read(passwordLoginProvider.notifier).state =
-          prefs.getString('savePassword') ?? '';
-      passwordEditingController.text = prefs.getString('savePassword') ?? '';
-    }
-
-    // loadEaP();
 
     return SafeArea(
       child: Scaffold(

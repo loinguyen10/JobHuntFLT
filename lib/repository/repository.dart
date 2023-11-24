@@ -21,9 +21,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/job_setting.dart';
 import '../value/style.dart';
 
+import 'package:http/http.dart' as http;
+
+import '../component/loader_overlay.dart';
+
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
 String BASE_CV_URL = 'https://jobshunt.info/app_auth/cv/';
+// String BASE_URL = 'https://localhost/app_auth/api/auth/';
+// String BASE_IMG_URL = 'https://localhost/app_auth/img/';
+// String BASE_CV_URL = 'https://localhost/app_auth/cv/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -54,12 +61,12 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',

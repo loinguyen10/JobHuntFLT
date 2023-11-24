@@ -195,7 +195,7 @@ class CompanyInformation extends ConsumerWidget {
               ]),
               TabBarView(children: [
                 Tab1(),
-                Tab2(),
+                // Tab2(),
               ]),
             ],
           ),
@@ -276,7 +276,7 @@ class Tab1 extends ConsumerWidget {
             width: screenWidth,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 5,right: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5),
             child: SizedBox(
               height: 1,
               width: screenWidth,
@@ -298,8 +298,7 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Text(Keystring.COMPANY_ADDRESS,
-                  style: TextStyle(fontSize: 13))
+              Text(Keystring.COMPANY_ADDRESS, style: TextStyle(fontSize: 13))
             ],
           ),
         ],
@@ -307,64 +306,64 @@ class Tab1 extends ConsumerWidget {
     );
   }
 }
-class Tab2 extends ConsumerWidget{
-  Tab2({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listRecommendJobProvider);
+// class Tab2 extends ConsumerWidget{
+//   Tab2({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final _data = ref.watch(listRecommendJobProvider);
 
-    return _data.when(
-      data: (data) {
-        return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (_, index) {
-            String avatar = data[index].company?.avatarUrl ?? '';
-            String name = data[index].name ?? '';
-            String companyName = data[index].company?.fullname ?? '';
-            String province = getProvinceName(
-                data[index]
-                    .address!
-                    .substring(data[index].address!.lastIndexOf(',') + 1),
-                ref);
-            String money = data[index].maxSalary != -1
-                ? '${data[index].maxSalary} ${data[index].currency}'
-                : Keystring.ARGEEMENT.tr;
-            String deadline = data[index].deadline ?? '';
+//     return _data.when(
+//       data: (data) {
+//         return ListView.builder(
+//           physics: NeverScrollableScrollPhysics(),
+//           shrinkWrap: true,
+//           itemBuilder: (_, index) {
+//             String avatar = data[index].company?.avatarUrl ?? '';
+//             String name = data[index].name ?? '';
+//             String companyName = data[index].company?.fullname ?? '';
+//             String province = getProvinceName(
+//                 data[index]
+//                     .address!
+//                     .substring(data[index].address!.lastIndexOf(',') + 1),
+//                 ref);
+//             String money = data[index].maxSalary != -1
+//                 ? '${data[index].maxSalary} ${data[index].currency}'
+//                 : Keystring.ARGEEMENT.tr;
+//             String deadline = data[index].deadline ?? '';
 
-            return GestureDetector(
-              onTap: () {
-                ref.read(jobDetailProvider.notifier).state = data[index];
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => JobViewScreen()),
-                );
-              },
-              child: AppJobCard(
-                avatar: avatar,
-                name: name,
-                companyName: companyName,
-                province: province,
-                money: money,
-                deadline: deadline,
-              ),
-            );
-          },
-          itemCount: data.length < 3 ? data.length : 3,
-        );
-      },
-      error: (error, stackTrace) => SizedBox(
-        height: 160,
-        child: Center(
-          child: Text(Keystring.NO_DATA.tr),
-        ),
-      ),
-      loading: () => const SizedBox(
-        height: 160,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
-}
+//             return GestureDetector(
+//               onTap: () {
+//                 ref.read(jobDetailProvider.notifier).state = data[index];
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => JobViewScreen()),
+//                 );
+//               },
+//               child: AppJobCard(
+//                 avatar: avatar,
+//                 name: name,
+//                 companyName: companyName,
+//                 province: province,
+//                 money: money,
+//                 deadline: deadline,
+//               ),
+//             );
+//           },
+//           itemCount: data.length < 3 ? data.length : 3,
+//         );
+//       },
+//       error: (error, stackTrace) => SizedBox(
+//         height: 160,
+//         child: Center(
+//           child: Text(Keystring.NO_DATA.tr),
+//         ),
+//       ),
+//       loading: () => const SizedBox(
+//         height: 160,
+//         child: Center(
+//           child: CircularProgressIndicator(),
+//         ),
+//       ),
+//     );
+//   }
+// }

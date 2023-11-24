@@ -617,11 +617,5 @@ final listEducationShowJobSettingProvider =
   return [];
 });
 
-
-final userDetailJobSettingProvider =
-    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
 //company infor
-final isExpandedCompanySeenInforProvider =
-StateProvider<bool>((ref) => false);
-
-
+final isExpandedCompanySeenInforProvider = StateProvider<bool>((ref) => false);

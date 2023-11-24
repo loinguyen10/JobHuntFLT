@@ -26,7 +26,9 @@ import 'package:http/http.dart' as http;
 import '../component/loader_overlay.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
+// String BASE_URL = 'https://localhost/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
+// String BASE_IMG_URL = 'https://localhost/app_auth/img/';
 String BASE_CV_URL = 'https://jobshunt.info/app_auth/cv/';
 // String BASE_URL = 'https://localhost/app_auth/api/auth/';
 // String BASE_IMG_URL = 'https://localhost/app_auth/img/';
@@ -72,9 +74,11 @@ class InsideService {
     //   'Content-type': 'application/json',
     //   'Accept': 'application/json',
     // };
+    log('BASE_URL + "login.php" ${BASE_URL + "login.php"}');
     Response response = await post(Uri.parse(BASE_URL + "login.php"),
         // headers: requestHeaders,
         body: msg);
+
     log('ket qua login00: ${response.statusCode}');
     log('ket qua login: ${jsonDecode(response.body)}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {

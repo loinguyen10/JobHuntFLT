@@ -278,7 +278,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     SizedBox(height: 8.0),
                     InkWell(
                       onTap: () {
-                        resetCall(ref);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ));
                       },
                       child: Text(
                         Keystring.USING_APP_WITHOUT.tr,

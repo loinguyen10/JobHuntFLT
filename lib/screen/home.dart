@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -201,10 +199,10 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               ],
                             ),
                           )
-                        : SizedBox(height: -24),
+                        : SizedBox(height: 0),
                     //
                     SizedBox(
-                      height: 24,
+                      height: widget.profile != null ? 24 : 0,
                     ),
                     Container(
                       margin: EdgeInsets.all(8),

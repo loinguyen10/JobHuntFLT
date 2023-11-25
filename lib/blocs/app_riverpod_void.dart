@@ -87,7 +87,6 @@ void resetCall(WidgetRef ref) {
   ref.read(userLoginProvider.notifier).state = null;
   ref.read(userProfileProvider.notifier).state = null;
   ref.read(companyProfileProvider.notifier).state = null;
-  Get.offAll(HomeScreen());
 }
 
 Future<List<CompanyDetail>> getCompanyList() async {

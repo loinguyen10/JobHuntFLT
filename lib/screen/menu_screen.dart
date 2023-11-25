@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
@@ -31,24 +32,24 @@ class MenuScreen extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
 
-    void showD() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text('Please sign in.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(Keystring.OK.tr),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    // void showD() {
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return AlertDialog(
+    //         content: Text('Please sign in.'),
+    //         actions: <Widget>[
+    //           TextButton(
+    //             onPressed: () {
+    //               Navigator.pop(context);
+    //             },
+    //             child: Text(Keystring.OK.tr),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
+    // }
 
     return Scaffold(
       // appBar: AppBar(
@@ -103,398 +104,434 @@ class MenuScreen extends ConsumerWidget {
                 SizedBox(
                   height: 32,
                 ),
-                ////
-                InkWell(
-                  onTap: () {
-                    log('click profile');
-                    if (profile != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditProfileScreenNew(
-                                  edit: true,
-                                )),
-                      );
-                    } else if (company != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RecuiterEditScreen(
-                                  edit: true,
-                                )),
-                      );
-                    } else {
-                      showD();
-                    }
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
+                profile == null && company == null
+                    ? SizedBox(
+                        height: 0,
+                      )
+                    : Column(
                         children: [
-                          Icon(
-                            Icons.account_circle_outlined,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.YOUR_PROFILE.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.markunread_outlined,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.YOUR_INBOX.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                company == null
-                    ? Column(children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CVChooseScreen()),
-                            );
-                          },
-                          child: Card(
-                            shadowColor: Colors.grey,
-                            shape: Border.all(color: Colors.white, width: 2),
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            elevation: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.description_outlined,
-                                    size: 32,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    Keystring.YOUR_CV.tr,
-                                    style: textMenu,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            ref.invalidate(StatusCheckProvider);
-                            ref.invalidate(listCandidateApplicationProvider);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => YourJobStatusScreen()),
-                            );
-                          },
-                          child: Card(
-                            shadowColor: Colors.grey,
-                            shape: Border.all(color: Colors.white, width: 2),
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            elevation: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.briefcase,
-                                    size: 32,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    Keystring.YOUR_JOB_STATUS.tr,
-                                    style: textMenu,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            ref.invalidate(listYourFavoriteProvider);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => YourJobSavedScreen()),
-                            );
-                          },
-                          child: Card(
-                            shadowColor: Colors.grey,
-                            shape: Border.all(color: Colors.white, width: 2),
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            elevation: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.save_outlined,
-                                    size: 32,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    Keystring.YOUR_JOB_SAVED.tr,
-                                    style: textMenu,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            ref.invalidate(listYourFollowProvider);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FollowCompanyScreen()),
-                            );
-                          },
-                          child: Card(
-                            shadowColor: Colors.grey,
-                            shape: Border.all(color: Colors.white, width: 2),
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            elevation: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.apartment_outlined,
-                                    size: 32,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    Keystring.YOUR_FOLLOWING_COMPANY.tr,
-                                    style: textMenu,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            log('click profile');
-                            if (profile != null) {
-                              bool edit = false;
-                              ref.refresh(listAllTitleJobSettingProvider);
-                              if (ref.watch(userDetailJobSettingProvider) !=
-                                  null) {
-                                edit = true;
+                          InkWell(
+                            onTap: () {
+                              log('click profile');
+                              if (profile != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditProfileScreenNew(
+                                            edit: true,
+                                          )),
+                                );
+                              } else if (company != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RecuiterEditScreen(
+                                            edit: true,
+                                          )),
+                                );
                               }
+                            },
+                            child: Card(
+                              shadowColor: Colors.grey,
+                              shape: Border.all(color: Colors.white, width: 2),
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              elevation: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.account_circle_outlined,
+                                      size: 32,
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      Keystring.YOUR_PROFILE.tr,
+                                      style: textMenu,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // Navigator.push(context,MaterialPageRoute(uilder: (context) => // ),);
+                            },
+                            child: Card(
+                              shadowColor: Colors.grey,
+                              shape: Border.all(color: Colors.white, width: 2),
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              elevation: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.markunread_outlined,
+                                      size: 32,
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      Keystring.YOUR_INBOX.tr,
+                                      style: textMenu,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          company == null
+                              ? Column(children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CVChooseScreen()),
+                                      );
+                                    },
+                                    child: Card(
+                                      shadowColor: Colors.grey,
+                                      shape: Border.all(
+                                          color: Colors.white, width: 2),
+                                      margin: EdgeInsets.symmetric(vertical: 4),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                        padding: EdgeInsets.all(20),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.description_outlined,
+                                              size: 32,
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Text(
+                                              Keystring.YOUR_CV.tr,
+                                              style: textMenu,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ref.invalidate(StatusCheckProvider);
+                                      ref.invalidate(
+                                          listCandidateApplicationProvider);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                YourJobStatusScreen()),
+                                      );
+                                    },
+                                    child: Card(
+                                      shadowColor: Colors.grey,
+                                      shape: Border.all(
+                                          color: Colors.white, width: 2),
+                                      margin: EdgeInsets.symmetric(vertical: 4),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                        padding: EdgeInsets.all(20),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.briefcase,
+                                              size: 32,
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Text(
+                                              Keystring.YOUR_JOB_STATUS.tr,
+                                              style: textMenu,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ref.invalidate(listYourFavoriteProvider);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                YourJobSavedScreen()),
+                                      );
+                                    },
+                                    child: Card(
+                                      shadowColor: Colors.grey,
+                                      shape: Border.all(
+                                          color: Colors.white, width: 2),
+                                      margin: EdgeInsets.symmetric(vertical: 4),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                        padding: EdgeInsets.all(20),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.save_outlined,
+                                              size: 32,
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Text(
+                                              Keystring.YOUR_JOB_SAVED.tr,
+                                              style: textMenu,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ref.invalidate(listYourFollowProvider);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FollowCompanyScreen()),
+                                      );
+                                    },
+                                    child: Card(
+                                      shadowColor: Colors.grey,
+                                      shape: Border.all(
+                                          color: Colors.white, width: 2),
+                                      margin: EdgeInsets.symmetric(vertical: 4),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                        padding: EdgeInsets.all(20),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.apartment_outlined,
+                                              size: 32,
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Text(
+                                              Keystring
+                                                  .YOUR_FOLLOWING_COMPANY.tr,
+                                              style: textMenu,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      log('click profile');
+                                      if (profile != null) {
+                                        bool edit = false;
+                                        ref.refresh(
+                                            listAllTitleJobSettingProvider);
+                                        if (ref.watch(
+                                                userDetailJobSettingProvider) !=
+                                            null) {
+                                          edit = true;
+                                        }
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobRecommendSettingScreen(
+                                                    edit: edit,
+                                                  )),
+                                        );
+                                      }
+                                    },
+                                    child: Card(
+                                      shadowColor: Colors.grey,
+                                      shape: Border.all(
+                                          color: Colors.white, width: 2),
+                                      margin: EdgeInsets.symmetric(vertical: 4),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                        padding: EdgeInsets.all(20),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.settings_outlined,
+                                              size: 32,
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Text(
+                                              Keystring
+                                                  .JOB_RECOMMEND_SETTING.tr,
+                                              style: textMenu,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ])
+                              : GestureDetector(
+                                  onTap: () {
+                                    ref.invalidate(StatusCheckProvider);
+                                    ref.invalidate(
+                                        listRecuiterApplicationProvider);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AllAppicationRecuiterScreen()),
+                                    );
+                                  },
+                                  child: Card(
+                                    shadowColor: Colors.grey,
+                                    shape: Border.all(
+                                        color: Colors.white, width: 2),
+                                    margin: EdgeInsets.symmetric(vertical: 4),
+                                    elevation: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .background),
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.description_outlined,
+                                            size: 32,
+                                          ),
+                                          SizedBox(
+                                            width: 16,
+                                          ),
+                                          Text(
+                                            Keystring.ALL_APPLICATIONS.tr,
+                                            style: textMenu,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                          GestureDetector(
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        JobRecommendSettingScreen(
-                                          edit: edit,
-                                        )),
+                                        payment_main_layout()),
                               );
-                            } else {
-                              showD();
-                            }
-                          },
-                          child: Card(
-                            shadowColor: Colors.grey,
-                            shape: Border.all(color: Colors.white, width: 2),
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            elevation: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.settings_outlined,
-                                    size: 32,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    Keystring.JOB_RECOMMEND_SETTING.tr,
-                                    style: textMenu,
-                                  ),
-                                ],
+                            },
+                            child: Card(
+                              shadowColor: Colors.grey,
+                              shape: Border.all(color: Colors.white, width: 2),
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              elevation: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.upgrade,
+                                      size: 32,
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      Keystring.UPGRADE.tr,
+                                      style: textMenu,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ])
-                    : GestureDetector(
-                        onTap: () {
-                          ref.invalidate(StatusCheckProvider);
-                          ref.invalidate(listRecuiterApplicationProvider);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AllAppicationRecuiterScreen()),
-                          );
-                        },
-                        child: Card(
-                          shadowColor: Colors.grey,
-                          shape: Border.all(color: Colors.white, width: 2),
-                          margin: EdgeInsets.symmetric(vertical: 4),
-                          elevation: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).colorScheme.background),
-                            padding: EdgeInsets.all(20),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.description_outlined,
-                                  size: 32,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChangePassword_isloged()),
+                              );
+                            },
+                            child: Card(
+                              shadowColor: Colors.grey,
+                              shape: Border.all(color: Colors.white, width: 2),
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              elevation: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.password,
+                                      size: 32,
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      Keystring.Changepass.tr,
+                                      style: textMenu,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Text(
-                                  Keystring.ALL_APPLICATIONS.tr,
-                                  style: textMenu,
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => payment_main_layout()),
-                    );
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.upgrade,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.UPGRADE.tr,
-                            style: textMenu,
-                          ),
+                          )
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ChangePassword_isloged()),
-                    );
-                  },
-                  child: Card(
-                    shadowColor: Colors.grey,
-                    shape: Border.all(color: Colors.white, width: 2),
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background),
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.password,
-                            size: 32,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            Keystring.Changepass.tr,
-                            style: textMenu,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -545,26 +582,17 @@ class MenuScreen extends ConsumerWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                if (profile == null && company == null) {
-                                  // SystemChannels.platform.invokeMethod<void>(
-                                  //     'SystemNavigator.pop');
-                                  Get.offAll(LoginScreen());
-                                } else {
+                                resetCall(ref);
+                                if (profile != null || company != null) {
                                   Loader.show(context);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LoginScreen(),
-                                      ));
                                   ref.read(emailLoginProvider.notifier).state =
                                       '';
                                   ref
                                       .read(passwordLoginProvider.notifier)
                                       .state = '';
-                                  ref.read(userLoginProvider.notifier).state =
-                                      null;
                                   Loader.hide();
                                 }
+                                Get.offAll(() => const LoginScreen());
                               },
                               child: const Text('YES'),
                             ),
@@ -604,10 +632,6 @@ class MenuScreen extends ConsumerWidget {
                 SizedBox(
                   height: 32,
                 ),
-                // Text(Keystring.APP_NAME.tr),
-                // SizedBox(
-                //   height: 32,
-                // ),
               ],
             ),
           ),

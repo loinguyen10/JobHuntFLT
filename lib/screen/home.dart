@@ -13,7 +13,7 @@ import 'package:jobhunt_ftl/screen/menu_screen.dart';
 import 'package:jobhunt_ftl/screen/user/searchScreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import '../value/style.dart';
-import 'job/job_recommend_user.dart';
+import 'job/viewall_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   @override
@@ -160,13 +160,15 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                           ),
                           Card(
                             shape: Border.all(color: Colors.white, width: 2),
-                            // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobRecommendListScreen(),
+                              child: const JobRecommendListScreen(itemCount: 3),
                             ),
                           ),
                         ],
@@ -187,9 +189,19 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 Keystring.BEST_JOB.tr,
                                 style: textJobHome,
                               ),
-                              Text(
-                                '${Keystring.VIEW_ALL.tr} ➤    ',
-                                style: textNormalBold,
+                              GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobBestAllScreen()),
+                                  )
+                                },
+                                child: Text(
+                                  '${Keystring.VIEW_ALL.tr} ➤    ',
+                                  style: textNormalBold,
+                                ),
                               ),
                             ],
                           ),
@@ -201,10 +213,13 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobBestListScreen(),
+                              child: const JobBestListScreen(itemCount: 3),
                             ),
                           ),
                         ],
@@ -225,9 +240,19 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 Keystring.VERIFIED_COMPANIES.tr,
                                 style: textJobHome,
                               ),
-                              Text(
-                                '${Keystring.VIEW_ALL.tr} ➤    ',
-                                style: textNormalBold,
+                              GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CompanyVerifyScreen()),
+                                  )
+                                },
+                                child: Text(
+                                  '${Keystring.VIEW_ALL.tr} ➤    ',
+                                  style: textNormalBold,
+                                ),
                               ),
                             ],
                           ),
@@ -239,10 +264,13 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const CompanyPremiumScreen(),
+                              child: const CompanyPremiumScreen(itemCount: 3),
                             ),
                           ),
                         ],

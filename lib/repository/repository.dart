@@ -63,12 +63,12 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      // 'email': 'laingu@jobshunt.info',
-      // 'password': 'laicutai',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -836,5 +836,39 @@ class InsideService {
         await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
     log('${jsonDecode(response.body)}a');
     return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getJobsRecommend(String uid) async {
+    final msg = jsonEncode({
+      'uid': uid,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "job/job_recommend_for_user.php"),
+        body: msg);
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      if (result.isNotEmpty) {
+        return result.map((e) => JobDetail.fromJson(e)).toList();
+      }
+    }
+
+    return [];
+  }
+
+  Future<dynamic> getListJobActive() async {
+    Response response = await get(Uri.parse(BASE_URL + "job/allJobActive.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      return result.map((e) => JobDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
   }
 }

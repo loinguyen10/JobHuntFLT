@@ -9,9 +9,12 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../model/company.dart';
 import '../../value/style.dart';
+import 'company_information.dart';
 
 class CompanyPremiumScreen extends ConsumerWidget {
-  const CompanyPremiumScreen({super.key});
+  const CompanyPremiumScreen({super.key, this.itemCount});
+
+  final int? itemCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,7 +43,13 @@ class CompanyPremiumScreen extends ConsumerWidget {
 
                   return GestureDetector(
                     onTap: () {
-                      //
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CompanyInformation(
+                              company: listCompanyPremium[index],
+                            ),
+                          ));
                     },
                     child: AppCompanyCard(
                       avatar: avatar,
@@ -52,7 +61,7 @@ class CompanyPremiumScreen extends ConsumerWidget {
                 },
                 itemCount: listCompanyPremium.length < 3
                     ? listCompanyPremium.length
-                    : 3,
+                    : (itemCount ?? listCompanyPremium.length),
               )
             : SizedBox(
                 height: 160,

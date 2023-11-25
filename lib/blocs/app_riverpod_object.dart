@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:ui';
-
 import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/application.dart';
@@ -45,15 +42,12 @@ final listJobProvider = FutureProvider<List<JobDetail>>((ref) => getJobList());
 final listActiveJobProvider =
     FutureProvider<List<JobDetail>>((ref) => getActiveJobList());
 
-// final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
-//   (ref) {
-//     final listActive = getActiveJobList();
-
-//   },
-// );
+final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
+  (ref) => getRecommendJobList(ref.watch(userLoginProvider)?.uid ?? '0'),
+);
 
 final listPostJobProvider = FutureProvider<List<JobDetail>>(
-    (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
+    (ref) => getPostedJobList(ref.watch(companyProfileProvider)?.uid ?? '0'));
 
 final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
     getSuggestionJobList(ref.watch(jobDetailProvider)!.companyId ?? '0'));
@@ -672,7 +666,5 @@ final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>((ref) =>
 
 final emailsaveProvider = StateProvider((ref) => '');
 //
-final itemPayMentProvider =
-StateProvider<int>((ref) => 1);
-final isitemPayMentProvider =
-StateProvider<bool>((ref) => false);
+final itemPayMentProvider = StateProvider<int>((ref) => 1);
+final isitemPayMentProvider = StateProvider<bool>((ref) => false);

@@ -135,6 +135,21 @@ String getDistrictName(String code, WidgetRef ref) {
   return name;
 }
 
+String getWardName(String code, WidgetRef ref) {
+  String name = '';
+  ref.watch(listWardProvider).when(
+        data: (_data) {
+          for (var i in _data) {
+            if (code == i.code) name = i.name ?? '';
+          }
+        },
+        error: (error, stackTrace) => (),
+        loading: () => (),
+      );
+  log('$code & $name');
+  return name;
+}
+
 Future<List<JobDetail>> getJobList() async {
   final list = await insideService.getListJob();
   log('list: ${list.length}');
@@ -164,25 +179,13 @@ Future<List<JobDetail>> getSuggestionJobList(String companyId) async {
 }
 
 Future<List<JobDetail>> getActiveJobList() async {
-  final list = await insideService.getListJob();
-  List<JobDetail> yourJob = [];
-
-  for (var i in list) {
-    if (i.active == 1) yourJob.add(i);
-  }
-
-  return yourJob;
+  final list = await insideService.getListJobActive();
+  return list;
 }
 
-Future<List<JobDetail>> getRecommendJobList() async {
-  final list = await insideService.getListJob();
-  List<JobDetail> yourJob = [];
-
-  for (var i in list) {
-    if (i.active == 1) yourJob.add(i);
-  }
-
-  return yourJob;
+Future<List<JobDetail>> getRecommendJobList(String uid) async {
+  final list = await insideService.getJobsRecommend(uid);
+  return list;
 }
 
 Future<List<CVDetail>> getYourCVList(String userId) async {
@@ -222,6 +225,7 @@ Future<List<String>> getAllJobTitle() async {
   final list = await insideService.getAllJobTitle();
   return list;
 }
+
 //
 Future<List<FollowDetail>> getYourFollowList(String uid) async {
   final list = await insideService.getListFollow(uid);

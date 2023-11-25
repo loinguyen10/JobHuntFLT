@@ -12,6 +12,7 @@ import 'package:jobhunt_ftl/screen/job/job_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
 import 'package:jobhunt_ftl/screen/user/searchScreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
+import '../model/userprofile.dart';
 import '../value/style.dart';
 import 'job/viewall_screen.dart';
 
@@ -68,15 +69,6 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
-              );
-            },
-            icon: Icon(Icons.search),
-          ),
         ],
         leading: IconButton(
           onPressed: () {
@@ -88,15 +80,19 @@ class HomeScreen extends ConsumerWidget {
           icon: Icon(Icons.menu),
         ),
       ),
-      body: ScreenHome(company: company),
+      body: ScreenHome(
+        company: company,
+        profile: profile,
+      ),
     );
     // );
   }
 }
 
 class ScreenHome extends ConsumerStatefulWidget {
-  const ScreenHome({super.key, this.company});
+  const ScreenHome({super.key, this.company, this.profile});
   final CompanyDetail? company;
+  final UserProfileDetail? profile;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ScreenHome();
@@ -116,64 +112,96 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        log('click search');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen()),
+                        );
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(color: Colors.black, width: 1),
                         ),
+                        elevation: 2,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Icon(
+                                Icons.search,
+                                size: 30,
+                              ),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                Keystring.SEARCH,
+                                style: textNormalHint,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(
                       height: 32,
                     ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                Keystring.RECOMMEND_JOB.tr,
-                                style: textJobHome,
-                              ),
-                              GestureDetector(
-                                onTap: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            JobRecommendUser()),
-                                  )
-                                },
-                                child: Text(
-                                  '${Keystring.VIEW_ALL.tr} ➤    ',
-                                  style: textNormalBold,
+                    widget.profile != null
+                        ? Container(
+                            margin: EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Keystring.RECOMMEND_JOB.tr,
+                                      style: textJobHome,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobRecommendUser()),
+                                        )
+                                      },
+                                      child: Text(
+                                        '${Keystring.VIEW_ALL.tr} ➤    ',
+                                        style: textNormalBold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Card(
-                            shape: Border.all(color: Colors.white, width: 2),
-                            elevation: 5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobRecommendListScreen(itemCount: 3),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Card(
+                                  shape:
+                                      Border.all(color: Colors.white, width: 2),
+                                  elevation: 5,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: const JobRecommendListScreen(
+                                        itemCount: 3),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                          )
+                        : SizedBox(height: -24),
                     //
                     SizedBox(
                       height: 24,

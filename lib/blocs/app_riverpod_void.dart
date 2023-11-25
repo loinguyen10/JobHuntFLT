@@ -150,6 +150,15 @@ String getWardName(String code, WidgetRef ref) {
   return name;
 }
 
+String getReduceZeroMoney(String money) {
+  String reduce = '';
+  switch (money) {
+    case '':
+  }
+  log('$money & $reduce');
+  return reduce;
+}
+
 Future<List<JobDetail>> getJobList() async {
   final list = await insideService.getListJob();
   log('list: ${list.length}');

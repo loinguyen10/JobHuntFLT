@@ -29,7 +29,7 @@ class CompanyInformation extends ConsumerWidget {
     // bool isFollow = ref.watch(isCheckFollowCompany);
 
     ref.listen<InsideEvent>(
-      JobViewControllerProvider,
+      LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
         if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
@@ -275,78 +275,89 @@ class CompanyInformation extends ConsumerWidget {
                             const SizedBox(
                               height: 10,
                             ),
-
                             Row(
                               children: [
                                 role != null
                                     ? role != 'recuiter'
-                                    ? SizedBox(
-                                  width: screenWidth,
-                                  height: 55,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        if (bmCheck) {
-                                          showUnfollowDialog(context, ref);
-                                        } else {
-                                          ref
-                                              .read(LoginControllerProvider
-                                                  .notifier)
-                                              .addFollowCompany(
-                                                company?.uid ?? '0',
-                                                ref
-                                                        .watch(
-                                                            userLoginProvider)
-                                                        ?.uid ??
-                                                    '0',
-                                              );
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1,
-                                                  color: bmCheck
-                                                      ? Colors.black
-                                                      : Colors.white),
-                                              color: bmCheck
-                                                  ? Colors.white
-                                                  : Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0)),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  bmCheck
-                                                      ? Icons.check
-                                                      : Icons.add,
-                                                  color: bmCheck
-                                                      ? Colors.black
-                                                      : Colors.white,
+                                        ? SizedBox(
+                                            width: screenWidth,
+                                            height: 55,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (bmCheck) {
+                                                    showUnfollowDialog(
+                                                        context, ref);
+                                                  } else {
+                                                    ref
+                                                        .read(
+                                                            LoginControllerProvider
+                                                                .notifier)
+                                                        .addFollowCompany(
+                                                          company?.uid ?? '0',
+                                                          ref
+                                                                  .watch(
+                                                                      userLoginProvider)
+                                                                  ?.uid ??
+                                                              '0',
+                                                        );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            width: 1,
+                                                            color: bmCheck
+                                                                ? Colors.black
+                                                                : Colors.white),
+                                                        color: bmCheck
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0)),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            bmCheck
+                                                                ? Icons.check
+                                                                : Icons.add,
+                                                            color: bmCheck
+                                                                ? Colors.black
+                                                                : Colors.white,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Text(
+                                                            bmCheck
+                                                                ? '${Keystring.FOllOWING.tr}'
+                                                                : '${Keystring.COMPANY_FOllOW.tr}',
+                                                            style: TextStyle(
+                                                                color: bmCheck
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors
+                                                                        .white),
+                                                          )
+                                                        ]),
+                                                  ),
                                                 ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  bmCheck
-                                                      ? '${Keystring.FOllOWING.tr}'
-                                                      : '${Keystring.COMPANY_FOllOW.tr}',
-                                                  style: TextStyle(
-                                                      color: bmCheck
-                                                          ? Colors.black
-                                                          : Colors.white),
-                                                )
-                                              ]),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ):SizedBox(height: 0):SizedBox(width: 0,)
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(height: 0)
+                                    : SizedBox(
+                                        width: 0,
+                                      )
                               ],
                             )
                           ],
@@ -479,6 +490,7 @@ class Tab1 extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isExpanded = ref.watch(isExpandedCompanySeenInforProvider);
+    log(company.toString());
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

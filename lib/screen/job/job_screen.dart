@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/card.dart';
-import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/screen/job/job_view_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../blocs/app_riverpod_void.dart';
-import '../../model/company.dart';
 
 class JobRecommendListScreen extends ConsumerWidget {
   const JobRecommendListScreen({
@@ -21,7 +19,7 @@ class JobRecommendListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listActiveJobProvider);
+    final _data = ref.watch(listRecommendJobProvider);
 
     return _data.when(
       data: (data) {
@@ -60,7 +58,7 @@ class JobRecommendListScreen extends ConsumerWidget {
               ),
             );
           },
-          itemCount: itemCount ?? (data.length < 3 ? data.length : 3),
+          itemCount: data.length < 3 ? data.length : (itemCount ?? data.length),
         );
       },
       error: (error, stackTrace) => SizedBox(
@@ -128,7 +126,7 @@ class JobBestListScreen extends ConsumerWidget {
               ),
             );
           },
-          itemCount: itemCount ?? (data.length < 3 ? data.length : 3),
+          itemCount: data.length < 3 ? data.length : (itemCount ?? data.length),
         );
       },
       error: (error, stackTrace) => SizedBox(
@@ -270,11 +268,10 @@ class JobCompanySuggestionScreen extends ConsumerWidget {
     );
   }
 }
-class JobBestWithUser extends ConsumerWidget{
+
+class JobBestWithUser extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-
-    );
+    return SingleChildScrollView();
   }
 }

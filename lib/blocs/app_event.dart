@@ -146,3 +146,26 @@ class AddTitleErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class FavoriteLoadingEvent extends InsideEvent {
+  const FavoriteLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FavoriteSuccessEvent extends InsideEvent {
+  const FavoriteSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FavoriteErrorEvent extends InsideEvent {
+  const FavoriteErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

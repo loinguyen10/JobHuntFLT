@@ -1,23 +1,18 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/model/company.dart';
-import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import 'package:jobhunt_ftl/screen/job/job_screen.dart';
 import 'package:jobhunt_ftl/screen/menu_screen.dart';
+import 'package:jobhunt_ftl/screen/user/searchScreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-
-import '../blocs/app_controller.dart';
-import '../component/loader_overlay.dart';
+import '../model/userprofile.dart';
 import '../value/style.dart';
-import 'job/job_recommend_user.dart';
+import 'job/viewall_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   @override
@@ -26,9 +21,7 @@ class HomeScreen extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
 
-    return
-        // SafeArea(child:
-        Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: appPrimaryColor,
         actions: [
@@ -73,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
-          )
+          ),
         ],
         leading: IconButton(
           onPressed: () {
@@ -85,15 +78,19 @@ class HomeScreen extends ConsumerWidget {
           icon: Icon(Icons.menu),
         ),
       ),
-      body: ScreenHome(company: company),
+      body: ScreenHome(
+        company: company,
+        profile: profile,
+      ),
     );
     // );
   }
 }
 
 class ScreenHome extends ConsumerStatefulWidget {
-  const ScreenHome({super.key, this.company});
+  const ScreenHome({super.key, this.company, this.profile});
   final CompanyDetail? company;
+  final UserProfileDetail? profile;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ScreenHome();
@@ -113,7 +110,11 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        log('click search');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen()),
+                        );
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -147,6 +148,62 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                     SizedBox(
                       height: 32,
                     ),
+                    widget.profile != null
+                        ? Container(
+                            margin: EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Keystring.RECOMMEND_JOB.tr,
+                                      style: textJobHome,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobRecommendUser()),
+                                        )
+                                      },
+                                      child: Text(
+                                        '${Keystring.VIEW_ALL.tr} ➤    ',
+                                        style: textNormalBold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Card(
+                                  shape:
+                                      Border.all(color: Colors.white, width: 2),
+                                  elevation: 5,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: const JobRecommendListScreen(
+                                        itemCount: 3),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox(height: 0),
+                    //
+                    SizedBox(
+                      height: widget.profile != null ? 24 : 0,
+                    ),
                     Container(
                       margin: EdgeInsets.all(8),
                       child: Column(
@@ -155,14 +212,16 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                Keystring.RECOMMEND_JOB.tr,
+                                Keystring.BEST_JOB.tr,
                                 style: textJobHome,
                               ),
                               GestureDetector(
-                                onTap: ()=>{
+                                onTap: () => {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Job_Recommend_User(title: Keystring.RECOMMEND_JOB.tr,)),
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobBestAllScreen()),
                                   )
                                 },
                                 child: Text(
@@ -180,48 +239,13 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobRecommendListScreen(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    //
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                Keystring.BEST_JOB.tr,
-                                style: textJobHome,
-                              ),
-                              Text(
-                                '${Keystring.VIEW_ALL.tr} ➤    ',
-                                style: textNormalBold,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Card(
-                            shape: Border.all(color: Colors.white, width: 2),
-                            // margin: EdgeInsets.all(8),
-                            elevation: 5,
-                            child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobBestListScreen(),
+                              child: const JobBestListScreen(itemCount: 3),
                             ),
                           ),
                         ],
@@ -242,9 +266,19 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 Keystring.VERIFIED_COMPANIES.tr,
                                 style: textJobHome,
                               ),
-                              Text(
-                                '${Keystring.VIEW_ALL.tr} ➤    ',
-                                style: textNormalBold,
+                              GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CompanyVerifyScreen()),
+                                  )
+                                },
+                                child: Text(
+                                  '${Keystring.VIEW_ALL.tr} ➤    ',
+                                  style: textNormalBold,
+                                ),
                               ),
                             ],
                           ),
@@ -256,10 +290,13 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             // margin: EdgeInsets.all(8),
                             elevation: 5,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const CompanyPremiumScreen(),
+                              child: const CompanyPremiumScreen(itemCount: 3),
                             ),
                           ),
                         ],

@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:ui';
-
 import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/application.dart';
@@ -20,14 +17,12 @@ import 'app_riverpod_void.dart';
 
 final emailLoginProvider = StateProvider((ref) => '');
 final passwordLoginProvider = StateProvider((ref) => '');
-final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
-final userProfileProvider =
-    StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
+final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
+final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
 final checkboxRememberProvider = StateProvider.autoDispose((ref) => false);
 
-final companyProfileProvider =
-    StateProvider<CompanyDetail?>((ref) => CompanyDetail());
+final companyProfileProvider = StateProvider<CompanyDetail?>((ref) => null);
 
 final jobDetailProvider = StateProvider<JobDetail?>((ref) => JobDetail());
 
@@ -45,18 +40,15 @@ final listJobProvider = FutureProvider<List<JobDetail>>((ref) => getJobList());
 final listActiveJobProvider =
     FutureProvider<List<JobDetail>>((ref) => getActiveJobList());
 
-// final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
-//   (ref) {
-//     final listActive = getActiveJobList();
-
-//   },
-// );
+final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
+  (ref) => getRecommendJobList(ref.watch(userLoginProvider)?.uid ?? '0'),
+);
 
 final listPostJobProvider = FutureProvider<List<JobDetail>>(
-    (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
+    (ref) => getPostedJobList(ref.watch(companyProfileProvider)?.uid ?? '0'));
 
 final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
-    getSuggestionJobList(ref.watch(jobDetailProvider)!.companyId ?? '0'));
+    getSuggestionJobList(ref.watch(jobDetailProvider)?.companyId ?? '0'));
 
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
@@ -554,10 +546,10 @@ final listAllTitleJobSettingProvider =
     FutureProvider<List<String>>((ref) => getAllJobTitle());
 
 final minSalaryJobSettingProvider = StateProvider<int>(
-    (ref) => ref.watch(userDetailJobSettingProvider)!.minSalary ?? 0);
+    (ref) => ref.watch(userDetailJobSettingProvider)?.minSalary ?? 0);
 
 final maxSalaryJobSettingProvider = StateProvider<int>(
-    (ref) => ref.watch(userDetailJobSettingProvider)!.maxSalary ?? 0);
+    (ref) => ref.watch(userDetailJobSettingProvider)?.maxSalary ?? 0);
 
 final currencyChooseJobSettingProvider =
     StateProvider.autoDispose<CurrencyList?>((ref) {
@@ -583,10 +575,13 @@ final listProvinceChooseJobSettingProvider =
   if (!ref.watch(listProvinceProvider).isLoading) {
     List<ProvinceList> list = [];
     var listProvince = ref.watch(listProvinceProvider).value;
-    var provinceList =
-        ref.watch(userDetailJobSettingProvider)?.workProvince?.split(',');
+    var workProvinceValue =
+        ref.watch(userDetailJobSettingProvider)?.workProvince;
+    var provinceList = workProvinceValue?.split(',');
 
-    if (provinceList!.isNotEmpty) {
+    log('message: $workProvinceValue and $provinceList');
+
+    if (workProvinceValue != null && provinceList!.isNotEmpty) {
       for (var p in provinceList) {
         for (var x in listProvince!) {
           if (p == x.code) {
@@ -594,14 +589,14 @@ final listProvinceChooseJobSettingProvider =
           }
         }
       }
+      return list;
     }
-    return list;
   }
   return [];
 });
 
-final yearExpericementJobSettingProvider = StateProvider<int>(
-    (ref) => ref.watch(userDetailJobSettingProvider)!.yearExperience ?? 0);
+final yearExpericementJobSettingProvider = StateProvider(
+    (ref) => ref.watch(userDetailJobSettingProvider)?.yearExperience ?? 0);
 
 final educationChooseJobSettingProvider =
     StateProvider<EducationList?>((ref) => EducationList());
@@ -622,11 +617,10 @@ final listEducationShowJobSettingProvider =
 // final userDetailJobSettingProvider =
 //     StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
 //company infor
-final isExpandedCompanySeenInforProvider =
-StateProvider<bool>((ref) => false);
+final isExpandedCompanySeenInforProvider = StateProvider<bool>((ref) => false);
 
 final companyInforProvider =
-StateProvider<CompanyDetail>((ref) => CompanyDetail());
+    StateProvider<CompanyDetail>((ref) => CompanyDetail());
 
 final listCompanyJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
@@ -665,6 +659,10 @@ final turnFollowOn = StateProvider<bool>((ref) {
 
   return false;
 });
-final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>(
-        (ref) => getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
+final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>((ref) =>
+    getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
+final emailsaveProvider = StateProvider((ref) => '');
+//
+final itemPayMentProvider = StateProvider<int>((ref) => 1);
+final isitemPayMentProvider = StateProvider<bool>((ref) => false);

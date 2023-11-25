@@ -21,11 +21,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/job_setting.dart';
 import '../value/style.dart';
 
+import 'package:http/http.dart' as http;
+
+import '../component/loader_overlay.dart';
+
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 // String BASE_URL = 'https://localhost/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
 // String BASE_IMG_URL = 'https://localhost/app_auth/img/';
 String BASE_CV_URL = 'https://jobshunt.info/app_auth/cv/';
+// String BASE_URL = 'https://localhost/app_auth/api/auth/';
+// String BASE_IMG_URL = 'https://localhost/app_auth/img/';
 // String BASE_CV_URL = 'https://localhost/app_auth/cv/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
@@ -57,15 +63,12 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      //'email': 'laingu@jobshunt.info',
-      //'password': 'laicutai',
-      //  'email': 'hungbip@jobshunt.info',
-      //  'password': 'hung',
-      //   'email': 'emminh@jobshunt.info',
-      //  'password': 'minhhoang',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
-
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -737,6 +740,7 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   // Follow Company
   Future<dynamic> addFollowCompany(
     String companyId,
@@ -752,6 +756,7 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> removeFollowCompany(
     String companyId,
     String userId,
@@ -767,7 +772,8 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
-   Future<dynamic> getListFollow(String userId) async {
+
+  Future<dynamic> getListFollow(String userId) async {
     final msg = jsonEncode({
       'userId': userId,
     });
@@ -781,6 +787,86 @@ class InsideService {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['follower'];
       return result.map((e) => FollowDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> sendOTPtoMail(
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkOTP(
+    String otp,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'otp_code': otp,
+      'type_code': 'RePassOTP',
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/code/api_confirmcode.php"),
+        body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> newPass(
+    String password,
+    String mail,
+  ) async {
+    final msg = jsonEncode({
+      'email': mail,
+      'new_password': password,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
+    log('${jsonDecode(response.body)}a');
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getJobsRecommend(String uid) async {
+    final msg = jsonEncode({
+      'uid': uid,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "job/job_recommend_for_user.php"),
+        body: msg);
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      if (result.isNotEmpty) {
+        return result.map((e) => JobDetail.fromJson(e)).toList();
+      }
+    }
+
+    return [];
+  }
+
+  Future<dynamic> getListJobActive() async {
+    Response response = await get(Uri.parse(BASE_URL + "job/allJobActive.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      return result.map((e) => JobDetail.fromJson(e)).toList();
     } else {
       return [];
     }

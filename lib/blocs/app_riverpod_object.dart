@@ -17,14 +17,12 @@ import 'app_riverpod_void.dart';
 
 final emailLoginProvider = StateProvider((ref) => '');
 final passwordLoginProvider = StateProvider((ref) => '');
-final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
-final userProfileProvider =
-    StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
+final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
+final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
 final checkboxRememberProvider = StateProvider.autoDispose((ref) => false);
 
-final companyProfileProvider =
-    StateProvider<CompanyDetail?>((ref) => CompanyDetail());
+final companyProfileProvider = StateProvider<CompanyDetail?>((ref) => null);
 
 final jobDetailProvider = StateProvider<JobDetail?>((ref) => JobDetail());
 
@@ -50,7 +48,7 @@ final listPostJobProvider = FutureProvider<List<JobDetail>>(
     (ref) => getPostedJobList(ref.watch(companyProfileProvider)?.uid ?? '0'));
 
 final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
-    getSuggestionJobList(ref.watch(jobDetailProvider)!.companyId ?? '0'));
+    getSuggestionJobList(ref.watch(jobDetailProvider)?.companyId ?? '0'));
 
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());

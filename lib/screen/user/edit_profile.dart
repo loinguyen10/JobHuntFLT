@@ -20,7 +20,6 @@ import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../blocs/app_riverpod_void.dart';
 import '../../component/edittext.dart';
-import '../../model/userprofile.dart';
 import '../../value/style.dart';
 import '../home.dart';
 
@@ -562,11 +561,11 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                     // }
 
                     // log('${eduImport.substring(0, eduImport.length - 1)}');
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} ');
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose.code} + ${districtChoose.code} + ${wardChoose.code} + ${ref.watch(dateBirthProvider)} ');
                     if (!widget.edit) {
                       log("click done");
                       ref.read(LoginControllerProvider.notifier).createProfile(
-                            user!.uid ?? '0',
+                            user.uid ?? '0',
                             ref.watch(fullNameProfileProvider),
                             ref.watch(avatarProfileProvider),
                             ref.watch(emailProfileProvider),
@@ -578,7 +577,7 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                     } else {
                       log("click update");
                       ref.read(LoginControllerProvider.notifier).updateProfile(
-                            user!.uid ?? '0',
+                            user.uid ?? '0',
                             ref.watch(fullNameProfileProvider),
                             ref.watch(avatarProfileProvider),
                             ref.watch(emailProfileProvider),

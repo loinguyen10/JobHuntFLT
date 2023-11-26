@@ -169,3 +169,35 @@ class FavoriteErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class CreateOTPSuccessEvent extends InsideEvent {
+  const CreateOTPSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ReCreateOTPEvent extends InsideEvent {
+  const ReCreateOTPEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CreateOTPEmailExistEvent extends InsideEvent {
+  const CreateOTPEmailExistEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class CreateOTPErrorEvent extends InsideEvent {
+  const CreateOTPErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

@@ -63,12 +63,12 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -794,32 +794,34 @@ class InsideService {
 
   Future<dynamic> sendOTPtoMail(
     String mail,
+    String typeCode,
   ) async {
     final msg = jsonEncode({
       'email': mail,
-      'type_code': 'RePassOTP',
+      'type_code': typeCode,
     });
 
     Response response =
         await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
-    log('${jsonDecode(response.body)}a');
+    log('Show OTP to Mail: ${jsonDecode(response.body)}');
     return jsonDecode(response.body)['success'];
   }
 
   Future<dynamic> checkOTP(
     String otp,
     String mail,
+    String typeCode,
   ) async {
     final msg = jsonEncode({
       'email': mail,
       'otp_code': otp,
-      'type_code': 'RePassOTP',
+      'type_code': typeCode,
     });
 
     Response response = await post(
         Uri.parse(BASE_URL + "/code/api_confirmcode.php"),
         body: msg);
-    log('${jsonDecode(response.body)}a');
+    log('Show OTP check: ${jsonDecode(response.body)}');
     return jsonDecode(response.body)['success'];
   }
 

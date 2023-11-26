@@ -354,7 +354,6 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       AppAutocompleteEditText(
-                        borderSelected: Colors.transparent,
                         listSuggestion: listTitleJob,
                         onSelected: (value) {
                           if (!listJob.any((x) => x == value)) {

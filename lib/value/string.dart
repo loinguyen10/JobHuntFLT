@@ -175,7 +175,14 @@ class LocaleString extends Translations {
           'Oder': 'Oder',
           'Payment_done': 'Payment done Successfully',
           'You_will':
-              'You will be redirected to the home page shortly\nor click here to return to home page'
+              'You will be redirected to the home page shortly\nor click here to return to home page',
+          'Continue': 'Continue',
+          'Pls_Email_And_Check':
+              'Please add your email and check the Terms and Conditions',
+          'Email_Exist':
+              'This email has exist in JobsHunt. Do you want to sign in?',
+          'Sign_Up_Failed': 'Sign Up Failed',
+          'Yes': 'Yes',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

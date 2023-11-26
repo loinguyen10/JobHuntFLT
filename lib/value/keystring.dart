@@ -44,7 +44,7 @@ class Keystring {
   static const String GUEST = 'Guest';
   static const String SUCCESSFUL = 'Successful';
   static const String UNSUCCESSFUL = 'Unsuccessful';
-  static const String NOT_FULL_DATA = 'No_Full_Data';
+  static const String NOT_FULL_DATA = 'Not_Full_Data';
   static const String SIGN_IN_WITH = 'Sign_In_With';
   static const String DONT_HAVE_ACC = 'Dont_Have_Acc';
   static const String SIGN_UP_NOW = 'Sign_Up_Now';
@@ -169,4 +169,9 @@ class Keystring {
   static const String Order = 'Order';
   static const String Payment_status1 = 'Payment_done';
   static const String Payment_status2 = 'You_will';
+  static const String CONTINUE = 'Continue';
+  static const String PLS_EMAIL_AND_CHECK = 'Pls_Email_And_Check';
+  static const String EMAIL_EXIST = 'Email_Exist';
+  static const String SIGN_IN_FAILED = 'Sign_In_Failed';
+  static const String YES = 'Yes';
 }

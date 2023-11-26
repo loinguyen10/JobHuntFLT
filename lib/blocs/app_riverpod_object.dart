@@ -666,3 +666,7 @@ final emailsaveProvider = StateProvider((ref) => '');
 //
 final itemPayMentProvider = StateProvider<int>((ref) => 1);
 final isitemPayMentProvider = StateProvider<bool>((ref) => false);
+
+final emailRegisterProvider = StateProvider((ref) => '');
+final passwordRegisterProvider = StateProvider((ref) => '');
+final timerProvider = StateProvider((ref) => 10);

@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
+import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../../value/style.dart';
 import '../user/edit_profile.dart';
 
-class RoleScreen extends ConsumerWidget {
+class RoleScreen extends StatefulWidget {
   const RoleScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<RoleScreen> createState() => _RoleScreenState();
+}
+
+class _RoleScreenState extends State<RoleScreen> {
+  @override
+  void dispose() {
+    super.dispose();
+    Get.offAll(() => LoginScreen());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     void confirmDialog(String role) {
       showDialog(
         context: context,

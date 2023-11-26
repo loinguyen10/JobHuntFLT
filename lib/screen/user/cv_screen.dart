@@ -35,40 +35,6 @@ class CVChooseScreen extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CVCreateScreen()),
-                  );
-                },
-                child: Card(
-                  shadowColor: Colors.grey,
-                  shape: Border.all(color: Colors.white, width: 2),
-                  margin: EdgeInsets.symmetric(vertical: 4),
-                  elevation: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background),
-                    padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.post_add,
-                          size: 32,
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          Keystring.CREATE_CV.tr,
-                          style: textMenu,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
                   ref.refresh(cvUploadProvider);
                   Navigator.push(
                     context,

@@ -117,7 +117,7 @@ class JobBestListScreen extends ConsumerWidget {
                     .substring(data[index].address!.lastIndexOf(',') + 1),
                 ref);
             String money = data[index].maxSalary != -1
-                ? '${data[index].maxSalary} ${data[index].currency}'
+                ? '${getReduceZeroMoney(data[index].maxSalary ?? 0)} ${data[index].currency}'
                 : Keystring.ARGEEMENT.tr;
             String deadline = data[index].deadline ?? '';
 

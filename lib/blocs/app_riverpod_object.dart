@@ -332,7 +332,7 @@ final listYourCVProvider = FutureProvider<List<CVDetail>>(
     (ref) => getYourCVList(ref.watch(userLoginProvider)!.uid ?? '0'));
 
 final lastNumberCVProvider = StateProvider<int>((ref) {
-  final list = ref.watch(listAllCVProvider);
+  final list = ref.watch(listYourCVProvider);
   if (list != null && list.value!.isNotEmpty) {
     return int.parse(list.value!.last.code ?? '0');
   }

@@ -276,7 +276,7 @@ class CompanyInformation extends ConsumerWidget {
                             Row(
                               children: [
                                 role != null
-                                    ? role != 'recuiter'
+                                    ? role != 'recruiter'
                                         ? SizedBox(
                                             width: screenWidth,
                                             height: 55,

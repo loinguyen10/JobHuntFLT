@@ -98,7 +98,7 @@ class JobViewScreen extends ConsumerWidget {
                 backgroundColor: const Color.fromARGB(0, 255, 255, 255),
                 elevation: 0,
                 actions: [
-                  role == 'recuiter'
+                  role == 'recruiter'
                       ? Container(
                           margin: EdgeInsets.only(right: 8),
                           child: InkWell(
@@ -156,7 +156,7 @@ class JobViewScreen extends ConsumerWidget {
                           height: 16,
                         ),
                         role != null
-                            ? role != 'recuiter'
+                            ? role != 'recruiter'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -478,9 +478,9 @@ class JobViewScreen extends ConsumerWidget {
                     ],
                   )),
               SizedBox(
-                height: role != 'recuiter' ? 24 : 0,
+                height: role != 'recruiter' ? 24 : 0,
               ),
-              role != 'recuiter'
+              role != 'recruiter'
                   ? AppBorderFrame(
                       labelText: '',
                       margin: EdgeInsets.symmetric(horizontal: 8),

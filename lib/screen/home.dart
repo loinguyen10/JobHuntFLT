@@ -185,7 +185,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                       Border.all(color: Colors.white, width: 2),
                                   elevation: 5,
                                   child: Container(
-                                    height: 256,
+                                    height: 224,
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context)

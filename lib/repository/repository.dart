@@ -63,8 +63,8 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
+      'email': 'emminh@jobshunt.info',
+      'password': 'minhhoang',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
       // 'email': emailAddress.trim(),
@@ -467,12 +467,12 @@ class InsideService {
       'cv_url': cv,
       'user_id': userId,
       'type': type,
-      'create_date': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
+      'create_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
     log('cv: $cv\n userid: $userId\n type: $type');
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/cv/create_cv.php"), body: msg);
+        await post(Uri.parse(BASE_URL + "cv/create_cv.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -872,5 +872,18 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> removeCV(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "cv/remove_cv.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

@@ -55,7 +55,7 @@ class Keystring {
   static const String READ_ACCEPTED = 'Read_Accepted';
   static const String Terms_Conditions = 'Terms_Conditions';
   static const String CANDIDATE = 'Candidate';
-  static const String RECUITER = 'Recuiter';
+  static const String RECRUITER = 'Recruiter';
   static const String REMEMBER = 'Remember';
   static const String FORGET_PASS = 'Forget_Pass';
   static const String NEED_SAME_PASS = 'Need_Same_Pass';
@@ -178,4 +178,5 @@ class Keystring {
   static const String MILLIONS = 'Millions';
   static const String BILLIONS = 'Billions';
   static const String No_Experience_Required = 'No_Experience_Required';
+  static const String DELETE = 'Delete';
 }

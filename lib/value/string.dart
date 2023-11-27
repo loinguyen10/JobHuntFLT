@@ -61,7 +61,7 @@ class LocaleString extends Translations {
           'Read_Accepted': 'I have read and accepted to the',
           'Terms_Conditions': 'Terms and Conditions',
           'Candidate': 'Candidate',
-          'Recuiter': 'Recuiter',
+          'Recruiter': 'Recruiter',
           'Remember': 'Remember',
           'Forget_Pass': 'Forget Password',
           'Need_Same_Pass': 'Two Passwords must be same',
@@ -187,6 +187,7 @@ class LocaleString extends Translations {
           'Millions': 'Millions',
           'Billions': 'Billions',
           'No_Experience_Required': 'No Experience Required',
+          'Delete': 'Delete',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

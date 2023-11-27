@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/screen/user/viewcv.dart';
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
+import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 
@@ -336,6 +337,51 @@ class CVManagerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _data = ref.watch(listYourCVProvider);
 
+    void deleteDialog(String code) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(Keystring.DELETE.tr),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(LoginControllerProvider.notifier).removeCV(code);
+                },
+                child: const Text('YES'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    ref.listen<InsideEvent>(
+      LoginControllerProvider,
+      (previous, state) {
+        log('pre - state : $previous - $state');
+        if (state is RemoveCVErrorEvent) {
+          Loader.hide();
+          log('error');
+        }
+
+        if (state is RemoveCVSuccessEvent) {
+          Loader.hide();
+          log('c-success');
+        }
+
+        if (state is ThingLoadingEvent) {
+          Loader.show(context);
+        }
+      },
+    );
+
     return SafeArea(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
@@ -374,6 +420,8 @@ class CVManagerScreen extends ConsumerWidget {
                                       )),
                             );
                           },
+                          onLongPress: () =>
+                              deleteDialog(data[index].code ?? '0'),
                           title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

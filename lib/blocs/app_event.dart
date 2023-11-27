@@ -201,3 +201,19 @@ class CreateOTPErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class RemoveCVSuccessEvent extends InsideEvent {
+  const RemoveCVSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveCVErrorEvent extends InsideEvent {
+  const RemoveCVErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

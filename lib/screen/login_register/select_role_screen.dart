@@ -44,7 +44,7 @@ class _RoleScreenState extends State<RoleScreen> {
                           MaterialPageRoute(
                             builder: (context) => EditProfileScreenNew(),
                           ));
-                    } else if (role == Keystring.RECUITER.tr) {
+                    } else if (role == Keystring.RECRUITER.tr) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -105,9 +105,9 @@ class _RoleScreenState extends State<RoleScreen> {
               // ),
               AppButton(
                 onPressed: () {
-                  confirmDialog(Keystring.RECUITER.tr);
+                  confirmDialog(Keystring.RECRUITER.tr);
                 },
-                label: Keystring.RECUITER.tr,
+                label: Keystring.RECRUITER.tr,
                 width: MediaQuery.of(context).size.width / 3,
                 fontSize: 16,
                 padding: EdgeInsets.symmetric(vertical: 12),

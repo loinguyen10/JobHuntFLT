@@ -37,21 +37,41 @@ class SearchScreen extends ConsumerWidget {
     final _data = ref.watch(listActiveJobProvider);
     final TextEditingController _searchController = TextEditingController();
 
+    String removeDiacritics(String input) {
+      return input
+          .replaceAll(RegExp(r'[àáâãäåảạấẩẫậăắằẳẵặ]'), 'a')
+          .replaceAll(RegExp(r'[èéêëẻẽẹêếểễệ]'), 'e')
+          .replaceAll(RegExp(r'[ìíîïĩị]'), 'i')
+          .replaceAll(RegExp(r'[òóôõöộốỗọỏổơớờởỡợ]'), 'o')
+          .replaceAll(RegExp(r'[ùúûüụủũưứửự]'), 'u')
+          .replaceAll(RegExp(r'[ýÿỷỹỵ]'), 'y')
+          .replaceAll(RegExp(r'[ÀÁÂÃÄÅẢÃẠẤẦẪẨẬĂẮẰẲẴẶ]'), 'A')
+          .replaceAll(RegExp(r'[ÈÉÊËEẺẼẸẾỀỄỂỆ]'), 'E')
+          .replaceAll(RegExp(r'[ÌÍÎÏỈĨỊ]'), 'I')
+          .replaceAll(RegExp(r'[ÒÓÔÕÖỎÕỌỐỒỔỖỘƠỚỜỞỠỢ]'), 'O')
+          .replaceAll(RegExp(r'[ÙÚÛÜỦŨỤỦƯỨỬỮỰ]'), 'U')
+          .replaceAll(RegExp(r'[ÝŸỲỶỸỴ]'), 'Y');
+    }
+
     void performSearch(
         String searchTerm, List<JobDetail> allJobs, WidgetRef ref) {
-      print('Performing search with term: $searchTerm');
+      print('Thực hiện tìm kiếm với từ khóa: $searchTerm');
 
       if (searchTerm.isEmpty) {
         ref.read(searchResultProvider.notifier).updateSearchResult([]);
         return;
       }
 
+      final normalizedSearchTerm = removeDiacritics(searchTerm.toLowerCase());
+
       final List<JobDetail> searchResult = allJobs.where((job) {
-        return (job.name?.toLowerCase().contains(searchTerm.toLowerCase()) ??
-            false);
+        final normalizedJobName =
+            removeDiacritics(job.name?.toLowerCase() ?? '');
+
+        return normalizedJobName.contains(normalizedSearchTerm);
       }).toList();
 
-      print('Search result: ${searchResult.map((job) => job.name)}');
+      print('Kết quả tìm kiếm: ${searchResult.map((job) => job.name)}');
 
       ref.read(searchResultProvider.notifier).updateSearchResult(searchResult);
       Navigator.pushReplacement(
@@ -63,6 +83,16 @@ class SearchScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appPrimaryColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            _searchController.clear();
+            ref.read(searchResultProvider.notifier).updateSearchResult([]);
+
+            // Sử dụng Navigator để quay lại màn hình trước đó
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SafeArea(
         child: Builder(
@@ -109,6 +139,9 @@ class SearchScreen extends ConsumerWidget {
                         },
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: appPrimaryColor,
+                    ),
                     child: Text('Tìm kiếm'),
                   ),
                   _data.when(

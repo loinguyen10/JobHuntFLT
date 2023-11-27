@@ -133,9 +133,8 @@ class Keystring {
   static const String PLACE_JOB = 'Place_Job';
   static const String LESS_THAN = 'Less_Than';
   static const String YEAR = 'Year';
-  static const String COMPANY_INTRODUCTION = 'Company_Introduction';
+  static const String INTRODUCTION = 'Introduction';
   static const String NEWS_RECRUITMENT = 'News_Recruitment';
-  static const String COMPANY_ADDRESS = 'Company_Address';
   static const String COMPANY_FOllOW = 'Company_Follow';
   static const String FOllOWING = 'Following';
   static const String CONTENT_DIALOG_UNFOLLOW = 'Content_Dialog_Unfollow';
@@ -157,13 +156,11 @@ class Keystring {
   static const String Changepass_SuccessNotfication =
       'Password_changed_successfully!';
   static const String Changepass_FailNotification = 'Passwords_do_not_match!';
-  static const String One_month = 'one_month';
+  static const String Month = 'Month';
   static const String PAYMENT = 'Payment';
-  static const String Three_month = 'three_month';
-  static const String Six_month = 'six_month';
-  static const String One_year = 'one_year';
-  static const String Exchange_day = 'only';
-  static const String Exchange_day_1 = 'per_days';
+  static const String Year = 'Year';
+  static const String ONLY = 'Only';
+  static const String DAY = 'Day';
   static const String Update_account_line1 = 'Update_account_line1';
   static const String Update_account_line2 = 'Update_account_line2';
   static const String Order = 'Order';
@@ -174,4 +171,11 @@ class Keystring {
   static const String EMAIL_EXIST = 'Email_Exist';
   static const String SIGN_IN_FAILED = 'Sign_In_Failed';
   static const String YES = 'Yes';
+  static const String NO = 'No';
+  static const String HEADQUARTER = 'Headquarter';
+  static const String CHECK = 'Check';
+  static const String THOUSANDS = 'Thousands';
+  static const String MILLIONS = 'Millions';
+  static const String BILLIONS = 'Billions';
+  static const String No_Experience_Required = 'No_Experience_Required';
 }

@@ -12,10 +12,10 @@ import '../../blocs/app_riverpod_void.dart';
 class JobRecommendListScreen extends ConsumerWidget {
   const JobRecommendListScreen({
     super.key,
-    this.itemCount,
+    required this.homeMode,
   });
 
-  final int? itemCount;
+  final bool homeMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +24,10 @@ class JobRecommendListScreen extends ConsumerWidget {
     return _data.when(
       data: (data) {
         return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: homeMode
+              ? ClampingScrollPhysics()
+              : NeverScrollableScrollPhysics(),
+          scrollDirection: homeMode ? Axis.horizontal : Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (_, index) {
             String avatar = data[index].company?.avatarUrl ?? '';
@@ -36,7 +39,7 @@ class JobRecommendListScreen extends ConsumerWidget {
                     .substring(data[index].address!.lastIndexOf(',') + 1),
                 ref);
             String money = data[index].maxSalary != -1
-                ? '${data[index].maxSalary} ${data[index].currency}'
+                ? '${getReduceZeroMoney(data[index].maxSalary ?? 0)} ${data[index].currency}'
                 : Keystring.ARGEEMENT.tr;
             String deadline = data[index].deadline ?? '';
 
@@ -48,17 +51,27 @@ class JobRecommendListScreen extends ConsumerWidget {
                   MaterialPageRoute(builder: (context) => JobViewScreen()),
                 );
               },
-              child: AppJobCard(
-                avatar: avatar,
-                name: name,
-                companyName: companyName,
-                province: province,
-                money: money,
-                deadline: deadline,
-              ),
+              child: homeMode
+                  ? AppJobHomeCard(
+                      avatar: avatar,
+                      name: name,
+                      companyName: companyName,
+                      province: province,
+                      money: money,
+                      deadline: deadline,
+                    )
+                  : AppJobCard(
+                      avatar: avatar,
+                      name: name,
+                      companyName: companyName,
+                      province: province,
+                      money: money,
+                      deadline: deadline,
+                    ),
             );
           },
-          itemCount: data.length < 3 ? data.length : (itemCount ?? data.length),
+          itemCount:
+              data.length < 5 ? data.length : (homeMode ? 5 : data.length),
         );
       },
       error: (error, stackTrace) => SizedBox(

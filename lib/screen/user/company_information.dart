@@ -182,9 +182,7 @@ class CompanyInformation extends ConsumerWidget {
                                     child: Center(
                                         child: Text(
                                       company.fullname.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
+                                      style: textTitleTab1Company,
                                     )))
                               ],
                             ),
@@ -209,7 +207,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                       Text(company.web.toString(),
                                           style: const TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 14,
                                           ))
                                     ],
                                   ),
@@ -237,7 +235,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                       Text(company.phone.toString(),
                                           style: const TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 14,
                                           ))
                                     ],
                                   ),
@@ -265,7 +263,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                       Text(company.email.toString(),
                                           style: const TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 14,
                                           ))
                                     ],
                                   ),
@@ -373,7 +371,7 @@ class CompanyInformation extends ConsumerWidget {
                         labelColor: Colors.blue,
                         tabs: [
                           Tab(
-                            child: Text(Keystring.COMPANY_INTRODUCTION.tr),
+                            child: Text(Keystring.INFORMATION.tr),
                           ),
                           Tab(
                             child: Text(
@@ -491,6 +489,23 @@ class Tab1 extends ConsumerWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isExpanded = ref.watch(isExpandedCompanySeenInforProvider);
     log(company.toString());
+
+    final address = company.address!;
+    final last = address.lastIndexOf(',');
+    String addressRoad = address.substring(
+        0, address.lastIndexOf(',', address.lastIndexOf(',', last - 1) - 1));
+    String addressWard = getWardName(
+        address.substring(
+            address.lastIndexOf(',', address.lastIndexOf(',', last - 1) - 1) +
+                1,
+            address.lastIndexOf(',', last - 1)),
+        ref);
+    String addressDistrict = getDistrictName(
+        address.substring(
+            address.lastIndexOf(',', last - 1) + 1, address.lastIndexOf(',')),
+        ref);
+    String addressProvince = getProvinceName(address.substring(last + 1), ref);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -504,9 +519,10 @@ class Tab1 extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(left: 15),
                 child: SizedBox(
-                  child: Text(Keystring.COMPANY_INTRODUCTION.tr,
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    Keystring.INTRODUCTION.tr,
+                    style: textTitleTab1Company,
+                  ),
                 ),
               )
             ],
@@ -521,12 +537,12 @@ class Tab1 extends ConsumerWidget {
                 width: screenWidth,
                 child: Container(
                   width: 9 * screenWidth / 10,
-                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
                       Text(
                         company.description ?? '',
-                        style: const TextStyle(fontSize: 13),
+                        style: textNormal,
                         overflow: isExpanded ? null : TextOverflow.ellipsis,
                         maxLines: isExpanded ? null : 8,
                       ),
@@ -563,10 +579,8 @@ class Tab1 extends ConsumerWidget {
           Row(
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: Text(Keystring.COMPANY_ADDRESS.tr,
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold)),
+                margin: const EdgeInsets.only(left: 16),
+                child: Text(Keystring.ADDRESS.tr, style: textTitleTab1Company),
               )
             ],
           ),
@@ -576,10 +590,13 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: Text(company.address.toString(),
-                    style: const TextStyle(fontSize: 13)),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16),
+                  child: Text(
+                      '$addressRoad, $addressWard, $addressDistrict, $addressProvince',
+                      style: textNormal),
+                ),
               )
             ],
           ),

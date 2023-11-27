@@ -185,6 +185,8 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                       Border.all(color: Colors.white, width: 2),
                                   elevation: 5,
                                   child: Container(
+                                    height: 256,
+                                    width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -193,7 +195,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8.0),
                                     child: const JobRecommendListScreen(
-                                        itemCount: 3),
+                                        homeMode: true),
                                   ),
                                 ),
                               ],

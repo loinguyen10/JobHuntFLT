@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
@@ -72,7 +73,7 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: Colors.red),
+                          border: Border.all(width: 2, color: appPrimaryColor),
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                       child: Text(
                         widget.province,
@@ -186,7 +187,8 @@ class _AppJobCardState extends State<AppJobCard> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                          border: Border.all(width: 1.5, color: Colors.grey),
+                          border:
+                              Border.all(width: 1.5, color: appPrimaryColor),
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                       child: Text(
                         widget.province,
@@ -479,5 +481,150 @@ class _AppCandidateProfileCardState extends State<AppCandidateProfileCard> {
         ],
       ),
     );
+  }
+}
+
+class AppJobHomeCard extends StatefulWidget {
+  const AppJobHomeCard({
+    super.key,
+    required this.avatar,
+    required this.name,
+    required this.companyName,
+    required this.province,
+    required this.money,
+    required this.deadline,
+  });
+
+  final String avatar;
+  final String name;
+  final String companyName;
+  final String province;
+  final String money;
+  final String deadline;
+
+  @override
+  State<AppJobHomeCard> createState() => _AppJobHomeCardState();
+}
+
+class _AppJobHomeCardState extends State<AppJobHomeCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        constraints: BoxConstraints.tightForFinite(width: 400),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            border: Border.all(
+                width: 1, color: Theme.of(context).colorScheme.outline),
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                ClipOval(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(40), // Image radius
+                    child: widget.avatar != ''
+                        ? Image.network(
+                            widget.avatar,
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.no_accounts_outlined,
+                            size: 80,
+                          ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.name,
+                        overflow: TextOverflow.fade,
+                        maxLines: 3,
+                        style: textNameVCompany,
+                      ),
+                      SizedBox(height: 12),
+                      Text(
+                        widget.companyName,
+                        overflow: TextOverflow.fade,
+                        maxLines: 3,
+                        style: textCompanyJView,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1.5, color: appPrimaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.place,
+                          color: appPrimaryColor,
+                          size: 24,
+                        ),
+                        Text(
+                          widget.province,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: Colors.green),
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.monetization_on,
+                          color: Colors.green,
+                          size: 24,
+                        ),
+                        Text(
+                          widget.money,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.timelapse,
+                  color: Colors.red,
+                  size: 24,
+                ),
+                SizedBox(width: 8),
+                Text('${Keystring.Deadline.tr}: ${widget.deadline}'),
+              ],
+            ),
+          ],
+        ));
   }
 }

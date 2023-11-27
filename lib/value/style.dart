@@ -38,6 +38,8 @@ final textStatus2View =
     TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold);
 final textNormal2 =
     TextStyle(fontSize: ParameterStyle.FONT_SIZE_NORMAL, color: Colors.white);
+final textTitleTab1Company =
+    TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
 //color
 final appPrimaryColor = Color(0xff00A3FF);

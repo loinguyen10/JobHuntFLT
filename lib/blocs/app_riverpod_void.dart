@@ -13,6 +13,7 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../model/company.dart';
 import '../model/job_setting.dart';
@@ -124,7 +125,15 @@ String getDistrictName(String code, WidgetRef ref) {
   ref.watch(listDistrictProvider).when(
         data: (_data) {
           for (var i in _data) {
-            if (code == i.code) name = i.name ?? '';
+            if (code == i.code) {
+              if (Get.locale!.languageCode == 'vi') {
+                name = i.fullName ?? '';
+              }
+              if (Get.locale!.languageCode == 'en') {
+                name = i.name ?? '';
+              }
+              break;
+            }
           }
         },
         error: (error, stackTrace) => (),
@@ -139,7 +148,15 @@ String getWardName(String code, WidgetRef ref) {
   ref.watch(listWardProvider).when(
         data: (_data) {
           for (var i in _data) {
-            if (code == i.code) name = i.name ?? '';
+            if (code == i.code) {
+              if (Get.locale!.languageCode == 'vi') {
+                name = i.fullName ?? '';
+              }
+              if (Get.locale!.languageCode == 'en') {
+                name = i.name ?? '';
+              }
+              break;
+            }
           }
         },
         error: (error, stackTrace) => (),
@@ -149,12 +166,23 @@ String getWardName(String code, WidgetRef ref) {
   return name;
 }
 
-String getReduceZeroMoney(String money) {
-  String reduce = '';
+String getReduceZeroMoney(int money) {
+  String reduce = money.toString();
+
   switch (money) {
-    case '':
+    case >= 1000 && <= 9 * 100000:
+      reduce =
+          "${(money / 1000).toStringAsFixed(money % 1000000 == 0 ? 0 : 1)} ${Keystring.THOUSANDS.tr}";
+      break;
+    case >= 1000000 && <= 9 * 100000000:
+      reduce =
+          "${(money / 1000000).toStringAsFixed(money % 1000000 == 0 ? 0 : 1)} ${Keystring.MILLIONS.tr}";
+      break;
+    case >= 1000000000:
+      reduce =
+          "${(money / 1000000000).toStringAsFixed(money % 1000000 == 0 ? 0 : 1)} ${Keystring.BILLIONS.tr}";
+      break;
   }
-  log('$money & $reduce');
   return reduce;
 }
 

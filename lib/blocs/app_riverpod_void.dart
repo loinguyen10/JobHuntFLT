@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart';
@@ -17,9 +19,7 @@ import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../model/company.dart';
 import '../model/job_setting.dart';
-import '../model/userprofile.dart';
 import '../repository/repository.dart';
-import '../screen/home.dart';
 import 'app_riverpod_object.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -184,6 +184,41 @@ String getReduceZeroMoney(int money) {
       break;
   }
   return reduce;
+}
+
+bool checkPassword(String password) {
+  bool check = true;
+  bool count = false;
+  String mess = Keystring.PASSWORD.tr;
+
+  if (password.trim().isEmpty) {
+    check = false;
+    mess = Keystring.PLS_ENTER_PASSWORD.tr;
+  } else {
+    if (password.trim().length < 6) {
+      check = false;
+      mess += ' ${Keystring.NEED_6P_CHAR.tr.toLowerCase()}';
+      count = true;
+    }
+    if (password.trim().contains(' ')) {
+      check = false;
+      if (count) mess += " ${Keystring.AND.tr.toLowerCase()}";
+      mess += ' ${Keystring.NO_SPACE.tr.toLowerCase()}';
+    }
+  }
+
+  if (!check) {
+    Fluttertoast.showToast(
+        msg: "$mess.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  return check;
 }
 
 Future<List<JobDetail>> getJobList() async {

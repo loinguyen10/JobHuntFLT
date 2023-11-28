@@ -63,10 +63,10 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'emminh@jobshunt.info',
-      'password': 'minhhoang',
-      // 'email': 'hungbip@jobshunt.info',
-      // 'password': 'hung',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
+      'email': 'hungbip@jobshunt.info',
+      'password': 'hung',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -817,6 +817,8 @@ class InsideService {
       'otp_code': otp,
       'type_code': typeCode,
     });
+
+    log(msg);
 
     Response response = await post(
         Uri.parse(BASE_URL + "/code/api_confirmcode.php"),

@@ -64,7 +64,7 @@ class payment_main_layout extends ConsumerWidget {
               : "6 ${Keystring.Month.tr}",
           price: 72000,
           type: 3),
-      Product(title: Keystring.Year.tr, price: 140000, type: 4),
+      Product(title: Keystring.YEAR.tr, price: 140000, type: 4),
     ];
 
     int selectedIdxSize = ref.watch(itemPayMentProvider);

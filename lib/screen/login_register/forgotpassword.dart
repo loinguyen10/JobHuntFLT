@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
@@ -53,20 +54,23 @@ class ForgotPasswordScreen extends ConsumerWidget {
                           ),
                           onPressed: isResendButtonEnabled
                               ? () {
-                            ref.read(emailsaveProvider.notifier).state = emailController.text;
-                            ref.read(LoginControllerProvider.notifier).sendOTPtoMail(email);
+                                  ref.read(emailsaveProvider.notifier).state =
+                                      emailController.text;
+                                  ref
+                                      .read(LoginControllerProvider.notifier)
+                                      .sendOTPtoMail(email);
 
-                            log('Resend OTP button pressed');
-                            setState(() {
-                              isResendButtonEnabled = false;
-                            });
+                                  log('Resend OTP button pressed');
+                                  setState(() {
+                                    isResendButtonEnabled = false;
+                                  });
 
-                            Future.delayed(Duration(seconds: 60), () {
-                              setState(() {
-                                isResendButtonEnabled = true;
-                              });
-                            });
-                          }
+                                  Future.delayed(Duration(seconds: 60), () {
+                                    setState(() {
+                                      isResendButtonEnabled = true;
+                                    });
+                                  });
+                                }
                               : null,
                           child: Text(Keystring.Resend_OTP.tr),
                         ),
@@ -78,7 +82,9 @@ class ForgotPasswordScreen extends ConsumerWidget {
                             otp = otpController.text;
                             log(otp + "otp");
                             log(email + "mail");
-                            ref.read(JobViewControllerProvider.notifier).checkOTP(otp, email);
+                            ref
+                                .read(JobViewControllerProvider.notifier)
+                                .checkOTP(otp, email);
                             Navigator.pop(context);
                           },
                           child: Text('OK'),
@@ -96,7 +102,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
 
     ref.listen<InsideEvent>(
       LoginControllerProvider,
-          (previous, state) {
+      (previous, state) {
         log('pre - state : $previous - $state');
         if (state is CreateThingErrorEvent) {
           Loader.hide();
@@ -134,7 +140,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
     //getotp
     ref.listen<InsideEvent>(
       JobViewControllerProvider,
-          (previous, state) {
+      (previous, state) {
         log('pre - state : $previous - $state');
         if (state is CreateThingErrorEvent) {
           Loader.hide();
@@ -178,7 +184,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appPrimaryColor,
-        title: Text(Keystring.ForgotPass.tr),
+        title: Text(Keystring.FORGET_PASS.tr),
         centerTitle: true,
       ),
       body: Padding(
@@ -195,7 +201,6 @@ class ForgotPasswordScreen extends ConsumerWidget {
               textColor: Colors.black,
               label: Keystring.EMAIL.tr,
               hintText: Keystring.EMAIL.tr,
-
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -209,19 +214,25 @@ class ForgotPasswordScreen extends ConsumerWidget {
               onPressed: () {
                 // Kiểm tra tính hợp lệ của địa chỉ email trước khi gửi OTP
                 if (emailController.text.trim().isEmpty ||
-                    !RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(emailController.text)) {
+                    !RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                        .hasMatch(emailController.text)) {
                   // Hiển thị thông báo lỗi nếu địa chỉ email không hợp lệ
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Địa chỉ email không hợp lệ'),
+                  Fluttertoast.showToast(
+                      msg: Keystring.EMAIL_VALIDATION.tr,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
                       backgroundColor: Colors.red,
-                    ),
-                  );
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 } else {
                   // Gửi OTP khi địa chỉ email hợp lệ
-                  ref.read(emailsaveProvider.notifier).state = emailController.text;
+                  ref.read(emailsaveProvider.notifier).state =
+                      emailController.text;
                   log(email);
-                  ref.read(LoginControllerProvider.notifier).sendOTPtoMail(email);
+                  ref
+                      .read(LoginControllerProvider.notifier)
+                      .sendOTPtoMail(email);
                 }
               },
               child: Text(Keystring.Get_OTP.tr),

@@ -8,8 +8,8 @@ class ApplicationDetail {
   String? candidateId;
   String? companyId;
   String? sendTime;
-  String? apporve;
-  String? apporveTime;
+  String? approve;
+  String? approveTime;
   String? interviewTime;
   JobDetail? job;
   UserProfileDetail? candidate;
@@ -21,8 +21,8 @@ class ApplicationDetail {
       this.candidateId,
       this.companyId,
       this.sendTime,
-      this.apporve,
-      this.apporveTime,
+      this.approve,
+      this.approveTime,
       this.interviewTime,
       this.job,
       this.candidate});
@@ -34,8 +34,8 @@ class ApplicationDetail {
     candidateId = json['candidate_id'];
     companyId = json['company_id'];
     sendTime = json['send_time'];
-    apporve = json['apporve'];
-    apporveTime = json['apporve_time'];
+    approve = json['approve'];
+    approveTime = json['approve_time'];
     interviewTime = json['interview_time'];
     job = json['job'] != null ? new JobDetail.fromJson(json['job']) : null;
     candidate = json['candidate'] != null
@@ -51,8 +51,8 @@ class ApplicationDetail {
     data['candidate_id'] = this.candidateId;
     data['company_id'] = this.companyId;
     data['send_time'] = this.sendTime;
-    data['apporve'] = this.apporve;
-    data['apporve_time'] = this.apporveTime;
+    data['approve'] = this.approve;
+    data['approve_time'] = this.approveTime;
     data['interview_time'] = this.interviewTime;
     // if (this.job != null) {
     //   data['job'] = this.job!.toJson();

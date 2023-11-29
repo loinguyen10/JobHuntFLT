@@ -113,7 +113,7 @@ class LocaleString extends Translations {
           'View_CV': 'View CV',
           'View_Selected_CV': 'View Your Selected CV',
           'Confirm': 'Confirm',
-          'Apporve': 'Apporve',
+          'Approve': 'Approve',
           'Reject': 'Reject',
           'Company': 'Company',
           'Sent_Time': 'Sent Time',

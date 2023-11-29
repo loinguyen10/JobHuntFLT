@@ -612,15 +612,15 @@ class LoginController extends StateNotifier<InsideEvent> {
     state = const ThingStateEvent();
   }
 
-  void apporveApplication(
+  void approveApplication(
     String code,
-    String apporve,
+    String approve,
   ) async {
     state = const ThingLoadingEvent();
     try {
-      final result = await ref.read(authRepositoryProvider).apporveApplication(
+      final result = await ref.read(authRepositoryProvider).approveApplication(
             code,
-            apporve,
+            approve,
           );
 
       if (result == 1) {

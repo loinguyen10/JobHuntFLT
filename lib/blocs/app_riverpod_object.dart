@@ -380,7 +380,7 @@ final listCandidateApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) =>
         getCandidateApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
 
-final listCandidateApporveApplicationProvider =
+final listCandidateApproveApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) {
   final listAll = ref.watch(listCandidateApplicationProvider);
   List<ApplicationDetail> list = [];
@@ -388,7 +388,7 @@ final listCandidateApporveApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '1') list.add(i);
+        if (i.approve == '1') list.add(i);
       }
     },
     orElse: () {
@@ -407,7 +407,7 @@ final listCandidateRejectApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '0') list.add(i);
+        if (i.approve == '0') list.add(i);
       }
     },
     orElse: () {
@@ -426,7 +426,7 @@ final listCandidateWaitingApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == null || i.apporve == '') list.add(i);
+        if (i.approve == null || i.approve == '') list.add(i);
       }
     },
     orElse: () {
@@ -442,7 +442,7 @@ final StatusCheckProvider = StateProvider((ref) => '');
 final listRecuiterApplicationProvider = FutureProvider<List<ApplicationDetail>>(
     (ref) => getRecuiterApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
 
-final listRecuiterApporveApplicationProvider =
+final listRecuiterApproveApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) {
   final listAll = ref.watch(listRecuiterApplicationProvider);
   List<ApplicationDetail> list = [];
@@ -450,7 +450,7 @@ final listRecuiterApporveApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '1') list.add(i);
+        if (i.approve == '1') list.add(i);
       }
     },
     orElse: () {
@@ -469,7 +469,7 @@ final listRecuiterRejectApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '0') list.add(i);
+        if (i.approve == '0') list.add(i);
       }
     },
     orElse: () {
@@ -488,7 +488,7 @@ final listRecuiterWaitingApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == null || i.apporve == '') list.add(i);
+        if (i.approve == null || i.approve == '') list.add(i);
       }
     },
     orElse: () {
@@ -508,7 +508,7 @@ final listRecuiterTodayApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if ((i.apporve == null || i.apporve == '') &&
+        if ((i.approve == null || i.approve == '') &&
             i.sendTime!.substring(0, i.sendTime!.indexOf(' ')) == now) {
           log('messageTime: ${i.sendTime} - $now');
           list.add(i);
@@ -680,4 +680,23 @@ final listJobTagCompanyProvider = StateProvider<List<String>>((ref) {
     return [...job!];
   }
   return [];
+});
+
+final listActivePostJobCompanyProvider = FutureProvider<List<JobDetail>>((ref) {
+  final listAll = ref.watch(listPostJobProvider);
+  List<JobDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.active == 1) {
+          list.add(i);
+        }
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+  return list;
 });

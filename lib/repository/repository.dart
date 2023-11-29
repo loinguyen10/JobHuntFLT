@@ -579,14 +579,14 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> apporveApplication(
+  Future<dynamic> approveApplication(
     String code,
-    String apporve,
+    String approve,
   ) async {
     final msg = jsonEncode({
       'code': code,
-      'apporve': apporve,
-      'apporve_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
+      'approve': approve,
+      'approve_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
 
     Response response = await post(

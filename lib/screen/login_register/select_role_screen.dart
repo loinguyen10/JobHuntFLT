@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
+import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../../value/style.dart';
 import '../user/edit_profile.dart';
 
-class RoleScreen extends ConsumerWidget {
+class RoleScreen extends StatefulWidget {
   const RoleScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<RoleScreen> createState() => _RoleScreenState();
+}
+
+class _RoleScreenState extends State<RoleScreen> {
+  @override
+  void dispose() {
+    super.dispose();
+    Get.offAll(() => LoginScreen());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     void confirmDialog(String role) {
       showDialog(
         context: context,
@@ -33,7 +44,7 @@ class RoleScreen extends ConsumerWidget {
                           MaterialPageRoute(
                             builder: (context) => EditProfileScreenNew(),
                           ));
-                    } else if (role == Keystring.RECUITER.tr) {
+                    } else if (role == Keystring.RECRUITER.tr) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -94,9 +105,9 @@ class RoleScreen extends ConsumerWidget {
               // ),
               AppButton(
                 onPressed: () {
-                  confirmDialog(Keystring.RECUITER.tr);
+                  confirmDialog(Keystring.RECRUITER.tr);
                 },
-                label: Keystring.RECUITER.tr,
+                label: Keystring.RECRUITER.tr,
                 width: MediaQuery.of(context).size.width / 3,
                 fontSize: 16,
                 padding: EdgeInsets.symmetric(vertical: 12),

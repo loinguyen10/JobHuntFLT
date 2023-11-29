@@ -142,6 +142,9 @@ final emailCompanyProvider = StateProvider((ref) =>
     '');
 
 final websiteCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.web ?? "");
+
+final taxCodeCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
 
 final phoneCompanyProvider =
@@ -670,3 +673,11 @@ final isitemPayMentProvider = StateProvider<bool>((ref) => false);
 final emailRegisterProvider = StateProvider((ref) => '');
 final passwordRegisterProvider = StateProvider((ref) => '');
 final timerProvider = StateProvider((ref) => 10);
+
+final listJobTagCompanyProvider = StateProvider<List<String>>((ref) {
+  if (ref.watch(companyProfileProvider) != null) {
+    var job = ref.watch(companyProfileProvider)?.job?.split(',');
+    return [...job!];
+  }
+  return [];
+});

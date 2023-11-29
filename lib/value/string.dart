@@ -190,6 +190,12 @@ class LocaleString extends Translations {
           'Need_6p_Char': 'Need more than 6 characters',
           'No_Space': 'Doesn\'t use space',
           'And': 'and',
+          'Phone_Less_11': 'Phone number can\'t have more than 11 numbers',
+          'Phone_More_9': 'Phone number must have more than 9 numbers',
+          'Chat': 'Chat',
+          'Active_Job': 'Active Job',
+          'Tax_Code': 'Tax Code',
+          'Tax_Code_Must_10': 'Tax code must have 10 numbers',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

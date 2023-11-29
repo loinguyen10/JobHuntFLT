@@ -245,6 +245,7 @@ class InsideService {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -256,11 +257,12 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
+      'tax_code': taxcode,
       'description': description,
       'job': job,
       'level': 'Basic',
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job ');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/create_company.php"),
@@ -305,6 +307,7 @@ class InsideService {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -316,10 +319,11 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
+      'tax_code': taxcode,
       'description': description,
       'job': job,
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job ');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/update_company.php"),

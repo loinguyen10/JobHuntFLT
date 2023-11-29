@@ -80,7 +80,7 @@ class CompanyInformation extends ConsumerWidget {
               headerSliverBuilder: (context, isInnerBoxScrolled) {
                 return [
                   SliverAppBar(
-                    backgroundColor: appPrimaryColor,
+                    backgroundColor: Colors.blue,
                     expandedHeight: 460.0,
                     floating: false,
                     pinned: true,
@@ -154,7 +154,7 @@ class CompanyInformation extends ConsumerWidget {
                                                       Radius.circular(10),
                                                 ),
                                                 child: Container(
-                                                  color: appPrimaryColor,
+                                                  color: Colors.blue,
                                                   child: company.avatarUrl != ''
                                                       ? Image.network(
                                                           company.avatarUrl ??
@@ -183,7 +183,9 @@ class CompanyInformation extends ConsumerWidget {
                                     child: Center(
                                         child: Text(
                                       company.fullname.toString(),
-                                      style: textTitleTab1Company,
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
                                     )))
                               ],
                             ),
@@ -208,7 +210,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                       Text(company.web.toString(),
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ))
                                     ],
                                   ),
@@ -236,7 +238,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                       Text(company.phone.toString(),
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ))
                                     ],
                                   ),
@@ -264,7 +266,7 @@ class CompanyInformation extends ConsumerWidget {
                                       ),
                                       Text(company.email.toString(),
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ))
                                     ],
                                   ),
@@ -277,7 +279,7 @@ class CompanyInformation extends ConsumerWidget {
                             Row(
                               children: [
                                 role != null
-                                    ? role != 'recruiter'
+                                    ? role != 'recuiter'
                                         ? SizedBox(
                                             width: screenWidth,
                                             height: 55,
@@ -316,7 +318,7 @@ class CompanyInformation extends ConsumerWidget {
                                                                 : Colors.white),
                                                         color: bmCheck
                                                             ? Colors.white
-                                                            : appPrimaryColor,
+                                                            : Colors.blue,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.0)),
@@ -367,12 +369,12 @@ class CompanyInformation extends ConsumerWidget {
                   SliverPersistentHeader(
                     delegate: SliverTabBarDelegate(
                       TabBar(
-                        indicatorColor: appPrimaryColor,
+                        indicatorColor: Colors.blue,
                         unselectedLabelColor: Colors.grey,
-                        labelColor: appPrimaryColor,
+                        labelColor: Colors.blue,
                         tabs: [
                           Tab(
-                            child: Text(Keystring.INFORMATION.tr),
+                            child: Text(Keystring.COMPANY_INTRODUCTION.tr),
                           ),
                           Tab(
                             child: Text(
@@ -458,7 +460,7 @@ class CompanyInformation extends ConsumerWidget {
                       child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: appPrimaryColor,
+                              color: Colors.blue,
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '${Keystring.UNFOLLOW.tr}',
@@ -490,23 +492,6 @@ class Tab1 extends ConsumerWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isExpanded = ref.watch(isExpandedCompanySeenInforProvider);
     log(company.toString());
-
-    final address = company.address!;
-    final last = address.lastIndexOf(',');
-    String addressRoad = address.substring(
-        0, address.lastIndexOf(',', address.lastIndexOf(',', last - 1) - 1));
-    String addressWard = getWardName(
-        address.substring(
-            address.lastIndexOf(',', address.lastIndexOf(',', last - 1) - 1) +
-                1,
-            address.lastIndexOf(',', last - 1)),
-        ref);
-    String addressDistrict = getDistrictName(
-        address.substring(
-            address.lastIndexOf(',', last - 1) + 1, address.lastIndexOf(',')),
-        ref);
-    String addressProvince = getProvinceName(address.substring(last + 1), ref);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -520,10 +505,9 @@ class Tab1 extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(left: 15),
                 child: SizedBox(
-                  child: Text(
-                    Keystring.INTRODUCTION.tr,
-                    style: textTitleTab1Company,
-                  ),
+                  child: Text(Keystring.COMPANY_INTRODUCTION.tr,
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
                 ),
               )
             ],
@@ -538,12 +522,12 @@ class Tab1 extends ConsumerWidget {
                 width: screenWidth,
                 child: Container(
                   width: 9 * screenWidth / 10,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.only(left: 15, right: 15),
                   child: Column(
                     children: [
                       Text(
                         company.description ?? '',
-                        style: textNormal,
+                        style: const TextStyle(fontSize: 13),
                         overflow: isExpanded ? null : TextOverflow.ellipsis,
                         maxLines: isExpanded ? null : 8,
                       ),
@@ -558,8 +542,8 @@ class Tab1 extends ConsumerWidget {
                             isExpanded
                                 ? Keystring.COLLAPSE.tr
                                 : Keystring.SEE_MORE.tr,
-                            style: TextStyle(
-                              color: appPrimaryColor,
+                            style: const TextStyle(
+                              color: Colors.blue,
                               decoration: TextDecoration.underline,
                             ),
                           ))
@@ -580,8 +564,10 @@ class Tab1 extends ConsumerWidget {
           Row(
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 16),
-                child: Text(Keystring.ADDRESS.tr, style: textTitleTab1Company),
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(Keystring.COMPANY_ADDRESS.tr,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold)),
               )
             ],
           ),
@@ -591,13 +577,10 @@ class Tab1 extends ConsumerWidget {
           ),
           Row(
             children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 16),
-                  child: Text(
-                      '$addressRoad, $addressWard, $addressDistrict, $addressProvince',
-                      style: textNormal),
-                ),
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(company.address.toString(),
+                    style: const TextStyle(fontSize: 13)),
               )
             ],
           ),
@@ -617,6 +600,8 @@ class Tab2 extends ConsumerWidget {
     final _data = ref.watch(listJobOfCompanyProvider);
     return _data.when(
       data: (data) {
+        // Future.delayed(const Duration(minutes: 1),() => ref.refresh(listPostJobProvider.future));
+
         return ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,

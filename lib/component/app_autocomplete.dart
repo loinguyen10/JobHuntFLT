@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:jobhunt_ftl/component/border_frame.dart';
+import 'package:jobhunt_ftl/component/edittext.dart';
 
 class AppAutocompleteEditText extends StatefulWidget {
   AppAutocompleteEditText({

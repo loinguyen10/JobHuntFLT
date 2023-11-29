@@ -1,35 +1,35 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
-import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
-import 'package:jobhunt_ftl/component/edittext.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
+import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../../value/style.dart';
-
 class ChangePassword_isloged extends ConsumerStatefulWidget {
-  const ChangePassword_isloged({super.key});
+  const  ChangePassword_isloged ( {super.key});
+
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChangePasswordState();
 }
 
 class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
+
   bool isPasswordHidden = true;
   bool _isCheckboxChecked = false;
-  final TextEditingController _emailController = TextEditingController();
+ final TextEditingController _emailController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  String password = "";
+  String password= "";
   @override
   Widget build(BuildContext context) {
+
     ref.listen<InsideEvent>(
       ChangePassControllerProvider,
       (previous, state) {
@@ -41,7 +41,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                content: Text(Keystring.Something_Wrong.tr),
+                content: Text(Keystring.password_fail.tr),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
@@ -57,19 +57,18 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
 
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
-          Fluttertoast.showToast(
-              msg: Keystring.Changepass_SuccessNotfication.tr,
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0);
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => HomeScreen(),
               ));
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(Keystring.Changepass_SuccessNotfication.tr),
+          
+        ),
+      );
+       
         }
 
         if (state is ThingLoadingEvent) {
@@ -89,27 +88,9 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            EditTextForm(
-              obscureText: true,
-              showEye: true,
-              onChanged: ((value) {
-                _emailController.text = value;
-              }),
-              textColor: Colors.black,
-              label: Keystring.NewPass.tr,
-              hintText: Keystring.NewPass.tr,
-            ),
+            buildPasswordField(Keystring.NewPass.tr, _emailController),
             SizedBox(height: 16.0),
-            EditTextForm(
-              obscureText: true,
-              showEye: true,
-              onChanged: ((value) {
-                confirmPasswordController.text = value;
-              }),
-              textColor: Colors.black,
-              label: Keystring.Confirmpass.tr,
-              hintText: Keystring.Confirmpass.tr,
-            ),
+            buildPasswordField(Keystring.Confirmpass.tr, confirmPasswordController),
             SizedBox(height: 16.0),
             buildCheckbox(),
             SizedBox(height: 16.0),
@@ -127,8 +108,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
       decoration: InputDecoration(
         labelText: label,
         suffixIcon: IconButton(
-          icon:
-              Icon(isPasswordHidden ? Icons.visibility : Icons.visibility_off),
+          icon: Icon(isPasswordHidden ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
             setState(() {
               isPasswordHidden = !isPasswordHidden;
@@ -147,6 +127,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
     );
   }
 
+
   Widget buildCheckbox() {
     return Row(
       children: [
@@ -163,7 +144,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
     );
   }
 
-  Widget buildChangePasswordButton() {
+ Widget buildChangePasswordButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: appPrimaryColor,
@@ -189,22 +170,17 @@ class _ChangePasswordState extends ConsumerState<ChangePassword_isloged> {
 
   void changePassword() {
     final email = ref.watch(userLoginProvider)?.email;
-    if (isPasswordsMatch) {
-      password = _emailController.text;
-      if (checkPassword(password)) {
-        ref
-            .read(ChangePassControllerProvider.notifier)
-            .newPass(password, email ?? '');
-      }
-    } else {
-      Fluttertoast.showToast(
-          msg: Keystring.NEED_SAME_PASS.tr,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
+  if (isPasswordsMatch) {
+    password = _emailController.text;
+    ref.read(ChangePassControllerProvider.notifier).newPass(password,email??'');
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(Keystring.Changepass_FailNotification.tr),
+      ),
+    );
   }
+}
+
+
 }

@@ -354,6 +354,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       AppAutocompleteEditText(
+                        borderSelected: Colors.transparent,
                         listSuggestion: listTitleJob,
                         onSelected: (value) {
                           if (!listJob.any((x) => x == value)) {
@@ -632,9 +633,8 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           backgroundColor: Colors.red,
                           textColor: Colors.white,
                           fontSize: 16.0);
-                    } else {
-                      done();
                     }
+                    done();
                   },
                   label: Keystring.DONE.tr,
                 ),

@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
+import 'package:path/path.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
-
-import 'app_riverpod_void.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 
 final LoginControllerProvider =
     StateNotifierProvider<LoginController, InsideEvent>((ref) {
@@ -57,9 +59,8 @@ class LoginController extends StateNotifier<InsideEvent> {
             if (setting != null) {
               ref.read(userDetailJobSettingProvider.notifier).state = setting;
             }
-            ref.watch(listYourCVProvider);
-          } else if (user.role == 'recruiter') {
-            log('recruiter');
+          } else if (user.role == 'recuiter') {
+            log('recuiter');
             final company =
                 await ref.read(authRepositoryProvider).getCompany(user.uid);
             log('company: $company');
@@ -90,7 +91,8 @@ class LoginController extends StateNotifier<InsideEvent> {
         final user =
             await ref.read(authRepositoryProvider).login(email, password);
         ref.read(userLoginProvider.notifier).state = user;
-        ref.refresh(emailRegisterProvider);
+        // ref.read(userProfileProvider.notifier).state = null;
+        // ref.read(companyProfileProvider.notifier).state = null;
         state = const SignUpSuccessEvent();
       } else {
         state = const SignUpErrorEvent(error: 'Register Failed');
@@ -181,7 +183,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
-    String taxcode,
     String description,
     String job,
   ) async {
@@ -196,7 +197,6 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
-              taxcode,
               description,
               job,
             );
@@ -228,7 +228,6 @@ class LoginController extends StateNotifier<InsideEvent> {
                 phone,
                 address,
                 website,
-                taxcode,
                 description,
                 job,
               );
@@ -317,7 +316,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
-    String taxcode,
     String description,
     String job,
   ) async {
@@ -346,7 +344,6 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
-              taxcode,
               description,
               job,
             );
@@ -489,14 +486,10 @@ class LoginController extends StateNotifier<InsideEvent> {
       Response response =
           await Dio().post(BASE_URL + 'cv/upload_cv.php', data: formData);
       if (jsonDecode(response.data)['success'] == 1) {
-        String url = '${BASE_CV_URL}${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
+        String url = '${BASE_CV_URL}/${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
         final result =
             await ref.read(authRepositoryProvider).addCV(url, uid, 'upload');
-        if (result == 1) {
-          state = const CreateThingSuccessEvent();
-        } else {
-          state = const CreateThingErrorEvent(error: 'Failed');
-        }
+        state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'Failed');
       }
@@ -643,9 +636,7 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const ThingLoadingEvent();
     try {
-      final result = await ref
-          .read(authRepositoryProvider)
-          .sendOTPtoMail(mail, 'RePassOTP');
+      final result = await ref.read(authRepositoryProvider).sendOTPtoMail(mail);
       log('$result');
       if (result == 1) {
         state = const CreateThingSuccessEvent();
@@ -665,9 +656,7 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const ThingLoadingEvent();
     try {
-      final result = await ref
-          .read(authRepositoryProvider)
-          .checkOTP(otp, mail, 'RePassOTP');
+      final result = await ref.read(authRepositoryProvider).checkOTP(otp, mail);
       log('$result');
       if (result == 1) {
         state = const CreateThingSuccessEvent();
@@ -736,7 +725,6 @@ class LoginController extends StateNotifier<InsideEvent> {
               .read(authRepositoryProvider)
               .getJobRecommendSetting(uid);
           ref.read(userDetailJobSettingProvider.notifier).state = setting;
-          ref.refresh(listRecommendJobProvider);
         } else {
           state = const CreateThingErrorEvent(error: 'error');
         }
@@ -778,7 +766,6 @@ class LoginController extends StateNotifier<InsideEvent> {
             await ref.read(authRepositoryProvider).getJobRecommendSetting(uid);
         log('setting: $setting');
         ref.read(userDetailJobSettingProvider.notifier).state = setting;
-        ref.invalidate(listRecommendJobProvider);
         state = const UpdateThingSuccessEvent();
       } else {
         state = const UpdateThingErrorEvent(error: 'error');
@@ -857,79 +844,6 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());
-    }
-
-    state = const ThingStateEvent();
-  }
-
-  void sendOTPtoMail1(
-    String mail,
-    bool mode,
-  ) async {
-    state = const ThingLoadingEvent();
-    try {
-      final result = await ref
-          .read(authRepositoryProvider)
-          .sendOTPtoMail(mail, 'RegisterOTP');
-      log('$result');
-      if (result == 1) {
-        if (mode) {
-          state = const CreateOTPSuccessEvent();
-        } else {
-          state = const ReCreateOTPEvent();
-        }
-      } else if (result == 2) {
-        state = const CreateOTPEmailExistEvent(error: 'email exist');
-      } else {
-        state = const CreateOTPErrorEvent(error: 'error');
-      }
-    } catch (e) {
-      state = CreateOTPErrorEvent(error: e.toString());
-    }
-
-    state = const ThingStateEvent();
-  }
-
-  void checkOTP1(
-    String otp,
-    String mail,
-  ) async {
-    state = const ThingLoadingEvent();
-    try {
-      final result = await ref
-          .read(authRepositoryProvider)
-          .checkOTP(otp, mail, 'RegisterOTP');
-      log('$result');
-      if (result == 1) {
-        state = const CreateThingSuccessEvent();
-      } else {
-        log('message');
-        state = const CreateThingErrorEvent(error: 'error');
-      }
-    } catch (e) {
-      state = CreateThingErrorEvent(error: e.toString());
-    }
-
-    state = const ThingStateEvent();
-  }
-
-  void removeCV(
-    String code,
-  ) async {
-    state = const ThingLoadingEvent();
-    try {
-      final result = await ref.read(authRepositoryProvider).removeCV(
-            code,
-          );
-
-      if (result == 1) {
-        ref.refresh(listYourCVProvider);
-        state = const RemoveCVSuccessEvent();
-      } else {
-        state = const RemoveCVErrorEvent(error: 'error');
-      }
-    } catch (e) {
-      state = RemoveCVErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

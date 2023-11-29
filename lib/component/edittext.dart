@@ -90,49 +90,47 @@ class _AppEdittextState extends State<EditTextForm> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
 
         decoration: InputDecoration(
-          filled: true,
-          fillColor: Theme.of(context).colorScheme.inversePrimary,
-          labelText: widget.label,
-          hintText: widget.hintText,
-          // hintStyle: TextStyle(color: Colors.grey),
-          labelStyle: TextStyle(
-            color: widget.textColor ?? Theme.of(context).colorScheme.primary,
-          ),
-          // errorText: '',
-          border: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          suffixIcon: widget.showEye != null && widget.showEye == true
-              ? IconButton(
-                  icon: Icon(
-                    widget.obscureText
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: appPrimaryColor,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      widget.obscureText = !widget.obscureText;
-                    });
-                    log('bool: ${widget.obscureText}');
-                  },
-                )
-              : null,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 1,
-              color: widget.borderSelected ??
-                  Theme.of(context).colorScheme.primary,
+            filled: true,
+            fillColor: Theme.of(context).colorScheme.inversePrimary,
+            labelText: widget.label,
+            hintText: widget.hintText,
+            // hintStyle: TextStyle(color: Colors.grey),
+            labelStyle: TextStyle(
+              color: widget.textColor ?? Theme.of(context).colorScheme.primary,
             ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          counterText: '',
-        ),
+            // errorText: '',
+            border: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            suffixIcon: widget.showEye != null && widget.showEye == true
+                ? IconButton(
+                    icon: Icon(
+                      widget.obscureText
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: appPrimaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        widget.obscureText = !widget.obscureText;
+                      });
+                      log('bool: ${widget.obscureText}');
+                    },
+                  )
+                : null,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 1,
+                color: widget.borderSelected ??
+                    Theme.of(context).colorScheme.primary,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            )),
       ),
     );
   }

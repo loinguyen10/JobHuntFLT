@@ -24,7 +24,7 @@ class JobRecommendUser extends StatelessWidget {
           ),
           backgroundColor: Colors.transparent,
           body: const SingleChildScrollView(
-            child: JobRecommendListScreen(homeMode: false),
+            child: JobRecommendListScreen(),
           ),
         ),
       ),

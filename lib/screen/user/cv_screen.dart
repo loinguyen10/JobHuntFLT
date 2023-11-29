@@ -13,7 +13,6 @@ import 'package:jobhunt_ftl/screen/user/viewcv.dart';
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
-import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 
@@ -33,6 +32,40 @@ class CVChooseScreen extends ConsumerWidget {
                 backgroundColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
                 foregroundColor: Theme.of(context).colorScheme.primary,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CVCreateScreen()),
+                  );
+                },
+                child: Card(
+                  shadowColor: Colors.grey,
+                  shape: Border.all(color: Colors.white, width: 2),
+                  margin: EdgeInsets.symmetric(vertical: 4),
+                  elevation: 2,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background),
+                    padding: EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.post_add,
+                          size: 32,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          Keystring.CREATE_CV.tr,
+                          style: textMenu,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               GestureDetector(
                 onTap: () {
@@ -337,51 +370,6 @@ class CVManagerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _data = ref.watch(listYourCVProvider);
 
-    void deleteDialog(String code) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(Keystring.DELETE.tr),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref.read(LoginControllerProvider.notifier).removeCV(code);
-                },
-                child: const Text('YES'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-
-    ref.listen<InsideEvent>(
-      LoginControllerProvider,
-      (previous, state) {
-        log('pre - state : $previous - $state');
-        if (state is RemoveCVErrorEvent) {
-          Loader.hide();
-          log('error');
-        }
-
-        if (state is RemoveCVSuccessEvent) {
-          Loader.hide();
-          log('c-success');
-        }
-
-        if (state is ThingLoadingEvent) {
-          Loader.show(context);
-        }
-      },
-    );
-
     return SafeArea(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
@@ -420,8 +408,6 @@ class CVManagerScreen extends ConsumerWidget {
                                       )),
                             );
                           },
-                          onLongPress: () =>
-                              deleteDialog(data[index].code ?? '0'),
                           title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

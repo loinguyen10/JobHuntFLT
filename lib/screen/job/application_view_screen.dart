@@ -142,12 +142,12 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                       onPressed: () {
                         ref
                             .read(LoginControllerProvider.notifier)
-                            .apporveApplication(
+                            .approveApplication(
                               application.code ?? '0',
                               '1',
                             );
                       },
-                      label: Keystring.APPORVE.tr,
+                      label: Keystring.APPROVE.tr,
                       bgColor: Colors.green,
                       textColor: Colors.white,
                       colorBorder: Colors.green,
@@ -161,7 +161,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                       onPressed: () {
                         ref
                             .read(LoginControllerProvider.notifier)
-                            .apporveApplication(
+                            .approveApplication(
                               application.code ?? '0',
                               '0',
                             );

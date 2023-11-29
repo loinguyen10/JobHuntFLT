@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +24,14 @@ class HomeScreen extends ConsumerWidget {
     // final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
+
+    if (company != null) {
+      ref.watch(listRecuiterTodayApplicationProvider);
+      log('cv today: ${ref.watch(listRecuiterTodayApplicationProvider).value?.length}');
+
+      ref.watch(listActivePostJobCompanyProvider);
+      log('job active: ${ref.watch(listActivePostJobCompanyProvider).value?.length}');
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -328,13 +338,24 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               AppSquareHomeCard(
                                 icon: Icons.description_outlined,
                                 title: Keystring.CV_Today.tr,
-                                count: '0',
+                                count: ref
+                                        .watch(
+                                            listRecuiterTodayApplicationProvider)
+                                        .value
+                                        ?.length
+                                        .toString() ??
+                                    '0',
                                 bgColor: Colors.greenAccent,
                               ),
                               AppSquareHomeCard(
                                 icon: CupertinoIcons.briefcase,
                                 title: Keystring.ACTIVE_JOB.tr,
-                                count: '0',
+                                count: ref
+                                        .watch(listActivePostJobCompanyProvider)
+                                        .value
+                                        ?.length
+                                        .toString() ??
+                                    '0',
                                 bgColor: Colors.redAccent,
                               ),
                             ],

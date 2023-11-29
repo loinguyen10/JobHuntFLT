@@ -107,7 +107,7 @@ class Keystring {
   static const String VIEW_CV = 'View_CV';
   static const String VIEW_SELECTED_CV = 'View_Selected_CV';
   static const String CONFIRM = 'Confirm';
-  static const String APPORVE = 'Apporve';
+  static const String APPROVE = 'Approve';
   static const String REJECT = 'Reject';
   static const String COMPANY = 'Company';
   static const String SENT_TIME = 'Sent_Time';

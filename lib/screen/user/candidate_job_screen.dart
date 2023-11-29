@@ -1,18 +1,31 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
+import 'package:jobhunt_ftl/component/app_button.dart';
+import 'package:jobhunt_ftl/component/app_small_button.dart';
 import 'package:jobhunt_ftl/component/card.dart';
+import 'package:jobhunt_ftl/screen/user/viewcv.dart';
 
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 import '../job/job_view_screen.dart';
 
-class YourJobStatusScreen extends ConsumerWidget {
+class YourJobStatusScreen extends ConsumerStatefulWidget {
   const YourJobStatusScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _YourJobStatusScreenState();
+}
+
+class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final sizePhone = MediaQuery.of(context).size;
+
     var _data = ref.watch(listCandidateApplicationProvider);
 
     final statusCheck = ref.watch(StatusCheckProvider);
@@ -32,6 +45,7 @@ class YourJobStatusScreen extends ConsumerWidget {
       child: Container(
           color: Theme.of(context).colorScheme.secondary,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppBar(
                 title: Text(Keystring.YOUR_JOB_STATUS.tr),
@@ -131,148 +145,310 @@ class YourJobStatusScreen extends ConsumerWidget {
                 ],
               ),
               SizedBox(height: 16),
-              _data.when(
-                data: (data) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      String name = data[index].job!.name ?? '';
-                      String company = data[index].job!.company!.fullname ?? '';
-                      String apporve = data[index].apporve ?? '';
-                      String sentTime = data[index].sendTime ?? '';
-                      String time = apporve.isEmpty
-                          ? sentTime
-                          : data[index].apporveTime ?? '';
+              Expanded(
+                child: SingleChildScrollView(
+                  child: _data.when(
+                    data: (data) {
+                      return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (_, index) {
+                          String avatarCompany =
+                              data[index].job!.company!.avatarUrl ?? '';
+                          String name = data[index].job!.name ?? '';
+                          String company =
+                              data[index].job!.company!.fullname ?? '';
+                          String apporve = data[index].apporve ?? '';
+                          String sentTime = data[index].sendTime ?? '';
+                          String interviewTime =
+                              data[index].interviewTime ?? '';
+                          String time = apporve.isEmpty
+                              ? sentTime
+                              : data[index].apporveTime ?? '';
 
-                      return Container(
-                        decoration: BoxDecoration(
-                            color: apporve == ''
-                                ? Colors.white
-                                : const Color.fromARGB(160, 158, 158, 158),
-                            border: Border.all(
-                              width: 1,
-                              color: apporve == '' ? Colors.grey : Colors.black,
-                            )),
-                        child: ExpansionTile(
-                          textColor: apporve == ''
-                              ? Colors.black
-                              : apporve == '1'
-                                  ? Color.fromARGB(255, 0, 150, 0)
-                                  : Color.fromARGB(255, 255, 0, 0),
-                          collapsedTextColor: apporve == ''
-                              ? Colors.black
-                              : apporve == '1'
-                                  ? Color.fromARGB(255, 0, 150, 0)
-                                  : Color.fromARGB(255, 255, 0, 0),
-                          tilePadding:
-                              EdgeInsets.only(left: 16, top: 2, bottom: 2),
-                          childrenPadding: EdgeInsetsDirectional.symmetric(
-                              horizontal: 6, vertical: 12),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 13,
-                                child: Text(
-                                  (index + 1).toString(),
-                                  overflow: TextOverflow.fade,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  name,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 4,
-                                child: Text(
-                                  time,
-                                  overflow: TextOverflow.fade,
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
-                            ],
-                          ),
-                          trailing: Icon(null),
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(height: 8),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          2.2,
-                                      child: Text(
-                                        '${Keystring.COMPANY.tr}: ${company.toUpperCase()}',
-                                        style: textNormal,
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                                color: apporve == ''
+                                    ? Colors.white
+                                    : apporve == '1'
+                                        ? Color.fromARGB(75, 0, 150, 0)
+                                        : Color.fromARGB(75, 255, 0, 0),
+                                border: Border.all(
+                                  width: 1,
+                                  color: apporve == ''
+                                      ? Colors.grey
+                                      : Colors.black,
+                                )),
+                            child: ExpansionTile(
+                              textColor: apporve == ''
+                                  ? Colors.black
+                                  : apporve == '1'
+                                      ? Color.fromARGB(255, 0, 150, 0)
+                                      : Color.fromARGB(255, 255, 0, 0),
+                              collapsedTextColor: apporve == ''
+                                  ? Colors.black
+                                  : apporve == '1'
+                                      ? Color.fromARGB(255, 0, 150, 0)
+                                      : Color.fromARGB(255, 255, 0, 0),
+                              tilePadding:
+                                  EdgeInsets.only(left: 16, top: 2, bottom: 2),
+                              childrenPadding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: 6, vertical: 12),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: sizePhone.width / 13,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: SizedBox.fromSize(
+                                        size: Size.fromRadius(16),
+                                        child: avatarCompany.isNotEmpty
+                                            ? Image.network(avatarCompany,
+                                                fit: BoxFit.cover)
+                                            : Icon(
+                                                Icons.apartment,
+                                                size: 32,
+                                              ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          2.5,
-                                      child: Text(
-                                        '${Keystring.SENT_TIME.tr}: ${sentTime}',
-                                        textAlign: TextAlign.right,
-                                        style: textNormal,
-                                      ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      name,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${Keystring.STATUS.tr}:',
-                                      style: textNormal,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      apporve == ''
-                                          ? Keystring.WAITING.tr.toUpperCase()
-                                          : apporve == '1'
-                                              ? Keystring.APPORVE.tr
-                                                  .toUpperCase()
-                                              : Keystring.REJECT.tr
-                                                  .toUpperCase(),
+                                  ),
+                                  SizedBox(
+                                    width: sizePhone.width / 4,
+                                    child: Text(
+                                      time,
+                                      overflow: TextOverflow.fade,
+                                      textAlign: TextAlign.right,
                                       style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: apporve == ''
-                                            ? Colors.black
-                                            : apporve == '1'
-                                                ? Color.fromARGB(255, 0, 150, 0)
-                                                : Color.fromARGB(
-                                                    255, 255, 0, 0),
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: Icon(null),
+                              children: [
+                                Column(
+                                  children: [
+                                    SizedBox(height: 8),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: sizePhone.width / 2,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '${Keystring.COMPANY.tr}:',
+                                                style: textNormal.copyWith(
+                                                  color: Colors.grey.shade700,
+                                                ),
+                                              ),
+                                              Text(
+                                                company.toUpperCase(),
+                                                style: textNormalBold,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: sizePhone.width / 2.5,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                '${Keystring.SENT_TIME.tr}:',
+                                                style: textNormal.copyWith(
+                                                  color: Colors.grey.shade700,
+                                                ),
+                                              ),
+                                              Text(
+                                                sentTime.toUpperCase(),
+                                                style: textNormalBold,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 4),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${Keystring.STATUS.tr}:',
+                                              style: textNormal.copyWith(
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(
+                                              apporve == ''
+                                                  ? Keystring.WAITING.tr
+                                                      .toUpperCase()
+                                                  : apporve == '1'
+                                                      ? Keystring.APPORVE.tr
+                                                          .toUpperCase()
+                                                      : Keystring.REJECT.tr
+                                                          .toUpperCase(),
+                                              style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold,
+                                                color: apporve == ''
+                                                    ? Colors.black
+                                                    : apporve == '1'
+                                                        ? Color.fromARGB(
+                                                            255, 0, 150, 0)
+                                                        : Color.fromARGB(
+                                                            255, 255, 0, 0),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: sizePhone.width / 2.5,
+                                          child: interviewTime.isNotEmpty
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      '${Keystring.INTERVIEW_TIME.tr}:',
+                                                      style:
+                                                          textNormal.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      interviewTime
+                                                          .toUpperCase(),
+                                                      style: textNormalBold
+                                                          .copyWith(
+                                                        color: Color.fromARGB(
+                                                            255, 0, 150, 0),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              : null,
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 8, top: 24),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            apporve == '1'
+                                                ? AppSmallButton(
+                                                    onPressed: () {
+                                                      //
+                                                    },
+                                                    label: Keystring.CHAT.tr,
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 4),
+                                                    width: sizePhone.width / 4,
+                                                    bgColor: Colors
+                                                        .blueAccent.shade100,
+                                                    icon: Icon(
+                                                        Icons.chat_outlined),
+                                                  )
+                                                : SizedBox(width: 0),
+                                            AppSmallButton(
+                                              onPressed: () {
+                                                ref
+                                                    .read(jobDetailProvider
+                                                        .notifier)
+                                                    .state = data[index].job!;
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          JobViewScreen()),
+                                                );
+                                              },
+                                              label: Keystring.VIEW_JOB.tr,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 4),
+                                              width: sizePhone.width / 4,
+                                              icon: Icon(
+                                                CupertinoIcons.briefcase,
+                                                color: Colors.black,
+                                              ),
+                                              bgColor:
+                                                  Colors.amberAccent.shade100,
+                                              textColor: Colors.black,
+                                            ),
+                                            AppSmallButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewCVScreen(
+                                                            cv: data[index]
+                                                                    .cvUrl ??
+                                                                '',
+                                                          )),
+                                                );
+                                              },
+                                              label: Keystring.VIEW_CV.tr,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 4),
+                                              width: sizePhone.width / 4,
+                                              icon: Icon(
+                                                Icons.description_outlined,
+                                              ),
+                                              bgColor: Colors.grey.shade700,
+                                            ),
+                                          ],
+                                        )),
                                   ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          );
+                        },
+                        itemCount: data.length,
                       );
                     },
-                    itemCount: data.length,
-                  );
-                },
-                error: (error, stackTrace) => SizedBox(
-                  height: 160,
-                  child: Center(
-                    child: Text(Keystring.NO_DATA.tr),
-                  ),
-                ),
-                loading: () => const SizedBox(
-                  height: 160,
-                  child: Center(
-                    child: CircularProgressIndicator(),
+                    error: (error, stackTrace) => SizedBox(
+                      height: 160,
+                      child: Center(
+                        child: Text(Keystring.NO_DATA.tr),
+                      ),
+                    ),
+                    loading: () => const SizedBox(
+                      height: 160,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -314,7 +490,7 @@ class YourJobSavedScreen extends ConsumerWidget {
                           data[index].job!.company!.fullname ?? '';
                       String? deadline = data[index].job!.deadline ?? '';
                       String? money = data[index].job!.maxSalary != -1
-                          ? '${data[index].job!.maxSalary} ${data[index].job!.currency}'
+                          ? '${getReduceZeroMoney(data[index].job!.maxSalary ?? 0)} ${data[index].job!.currency}'
                           : Keystring.ARGEEMENT.tr;
                       bool active = data[index].job!.active == 1 ? true : false;
 
@@ -324,14 +500,17 @@ class YourJobSavedScreen extends ConsumerWidget {
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         elevation: 5,
                         child: GestureDetector(
-                          onTap: () {
-                            ref.read(jobDetailProvider.notifier).state =
-                                data[index].job!;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => JobViewScreen()));
-                          },
+                          onTap: active
+                              ? () {
+                                  ref.read(jobDetailProvider.notifier).state =
+                                      data[index].job!;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              JobViewScreen()));
+                                }
+                              : null,
                           child: AppFavoriteCard(
                             avatar: avatar,
                             name: name,

@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 
+import 'app_riverpod_void.dart';
+
 final LoginControllerProvider =
     StateNotifierProvider<LoginController, InsideEvent>((ref) {
   return LoginController(ref);
@@ -55,8 +57,9 @@ class LoginController extends StateNotifier<InsideEvent> {
             if (setting != null) {
               ref.read(userDetailJobSettingProvider.notifier).state = setting;
             }
-          } else if (user.role == 'recuiter') {
-            log('recuiter');
+            ref.watch(listYourCVProvider);
+          } else if (user.role == 'recruiter') {
+            log('recruiter');
             final company =
                 await ref.read(authRepositoryProvider).getCompany(user.uid);
             log('company: $company');
@@ -178,6 +181,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -192,6 +196,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
+              taxcode,
               description,
               job,
             );
@@ -223,6 +228,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 phone,
                 address,
                 website,
+                taxcode,
                 description,
                 job,
               );
@@ -311,6 +317,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -339,6 +346,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
+              taxcode,
               description,
               job,
             );
@@ -481,10 +489,14 @@ class LoginController extends StateNotifier<InsideEvent> {
       Response response =
           await Dio().post(BASE_URL + 'cv/upload_cv.php', data: formData);
       if (jsonDecode(response.data)['success'] == 1) {
-        String url = '${BASE_CV_URL}/${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
+        String url = '${BASE_CV_URL}${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
         final result =
             await ref.read(authRepositoryProvider).addCV(url, uid, 'upload');
-        state = const CreateThingSuccessEvent();
+        if (result == 1) {
+          state = const CreateThingSuccessEvent();
+        } else {
+          state = const CreateThingErrorEvent(error: 'Failed');
+        }
       } else {
         state = const CreateThingErrorEvent(error: 'Failed');
       }
@@ -724,6 +736,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               .read(authRepositoryProvider)
               .getJobRecommendSetting(uid);
           ref.read(userDetailJobSettingProvider.notifier).state = setting;
+          ref.refresh(listRecommendJobProvider);
         } else {
           state = const CreateThingErrorEvent(error: 'error');
         }
@@ -765,6 +778,7 @@ class LoginController extends StateNotifier<InsideEvent> {
             await ref.read(authRepositoryProvider).getJobRecommendSetting(uid);
         log('setting: $setting');
         ref.read(userDetailJobSettingProvider.notifier).state = setting;
+        ref.invalidate(listRecommendJobProvider);
         state = const UpdateThingSuccessEvent();
       } else {
         state = const UpdateThingErrorEvent(error: 'error');
@@ -894,6 +908,28 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void removeCV(
+    String code,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeCV(
+            code,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourCVProvider);
+        state = const RemoveCVSuccessEvent();
+      } else {
+        state = const RemoveCVErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = RemoveCVErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

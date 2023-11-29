@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
@@ -185,7 +187,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                       Border.all(color: Colors.white, width: 2),
                                   elevation: 5,
                                   child: Container(
-                                    height: 256,
+                                    height: 224,
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context)
@@ -320,26 +322,22 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                       margin: EdgeInsets.all(8),
                       child: Column(
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              Keystring.CV_Today.tr,
-                              style: textJobHome,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Card(
-                            elevation: 5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const ApplicationTodayRecuiterScreen(),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              AppSquareHomeCard(
+                                icon: Icons.description_outlined,
+                                title: Keystring.CV_Today.tr,
+                                count: '0',
+                                bgColor: Colors.greenAccent,
+                              ),
+                              AppSquareHomeCard(
+                                icon: CupertinoIcons.briefcase,
+                                title: Keystring.ACTIVE_JOB.tr,
+                                count: '0',
+                                bgColor: Colors.redAccent,
+                              ),
+                            ],
                           ),
                         ],
                       ),

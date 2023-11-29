@@ -63,10 +63,10 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
-      // 'email': 'hungbip@jobshunt.info',
-      // 'password': 'hung',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
+      'email': 'hungbip@jobshunt.info',
+      'password': 'hung',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -245,6 +245,7 @@ class InsideService {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -256,11 +257,12 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
+      'tax_code': taxcode,
       'description': description,
       'job': job,
       'level': 'Basic',
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job ');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/create_company.php"),
@@ -305,6 +307,7 @@ class InsideService {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -316,10 +319,11 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
+      'tax_code': taxcode,
       'description': description,
       'job': job,
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job ');
+    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/update_company.php"),
@@ -467,12 +471,12 @@ class InsideService {
       'cv_url': cv,
       'user_id': userId,
       'type': type,
-      'create_date': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
+      'create_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
     log('cv: $cv\n userid: $userId\n type: $type');
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/cv/create_cv.php"), body: msg);
+        await post(Uri.parse(BASE_URL + "cv/create_cv.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -818,6 +822,8 @@ class InsideService {
       'type_code': typeCode,
     });
 
+    log(msg);
+
     Response response = await post(
         Uri.parse(BASE_URL + "/code/api_confirmcode.php"),
         body: msg);
@@ -872,5 +878,18 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> removeCV(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response =
+        await post(Uri.parse(BASE_URL + "cv/remove_cv.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

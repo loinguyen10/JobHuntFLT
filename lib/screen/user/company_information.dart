@@ -79,7 +79,7 @@ class CompanyInformation extends ConsumerWidget {
               headerSliverBuilder: (context, isInnerBoxScrolled) {
                 return [
                   SliverAppBar(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: appPrimaryColor,
                     expandedHeight: 460.0,
                     floating: false,
                     pinned: true,
@@ -153,7 +153,7 @@ class CompanyInformation extends ConsumerWidget {
                                                       Radius.circular(10),
                                                 ),
                                                 child: Container(
-                                                  color: Colors.blue,
+                                                  color: appPrimaryColor,
                                                   child: company.avatarUrl != ''
                                                       ? Image.network(
                                                           company.avatarUrl ??
@@ -276,7 +276,7 @@ class CompanyInformation extends ConsumerWidget {
                             Row(
                               children: [
                                 role != null
-                                    ? role != 'recuiter'
+                                    ? role != 'recruiter'
                                         ? SizedBox(
                                             width: screenWidth,
                                             height: 55,
@@ -315,7 +315,7 @@ class CompanyInformation extends ConsumerWidget {
                                                                 : Colors.white),
                                                         color: bmCheck
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : appPrimaryColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.0)),
@@ -366,9 +366,9 @@ class CompanyInformation extends ConsumerWidget {
                   SliverPersistentHeader(
                     delegate: SliverTabBarDelegate(
                       TabBar(
-                        indicatorColor: Colors.blue,
+                        indicatorColor: appPrimaryColor,
                         unselectedLabelColor: Colors.grey,
-                        labelColor: Colors.blue,
+                        labelColor: appPrimaryColor,
                         tabs: [
                           Tab(
                             child: Text(Keystring.INFORMATION.tr),
@@ -457,7 +457,7 @@ class CompanyInformation extends ConsumerWidget {
                       child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Colors.blue,
+                              color: appPrimaryColor,
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '${Keystring.UNFOLLOW.tr}',
@@ -557,8 +557,8 @@ class Tab1 extends ConsumerWidget {
                             isExpanded
                                 ? Keystring.COLLAPSE.tr
                                 : Keystring.SEE_MORE.tr,
-                            style: const TextStyle(
-                              color: Colors.blue,
+                            style: TextStyle(
+                              color: appPrimaryColor,
                               decoration: TextDecoration.underline,
                             ),
                           ))
@@ -616,8 +616,6 @@ class Tab2 extends ConsumerWidget {
     final _data = ref.watch(listJobOfCompanyProvider);
     return _data.when(
       data: (data) {
-        // Future.delayed(const Duration(minutes: 1),() => ref.refresh(listPostJobProvider.future));
-
         return ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,

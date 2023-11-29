@@ -4,19 +4,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
-import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-import 'package:quiver/async.dart';
-
-import '../../blocs/app_riverpod_void.dart';
 import '../../component/edittext.dart';
 import '../../value/style.dart';
 
@@ -60,9 +55,19 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
               fontSize: 16.0);
         }
 
+        if (state is CreateOTPSuccessEvent) {
+          Loader.hide();
+          log('success');
+          _showOTPDialog();
+        }
+
+        if (state is ReCreateOTPEvent) {
+          Loader.hide();
+          log('recreate');
+        }
+
         if (state is CreateOTPEmailExistEvent) {
           Loader.hide();
-          log('error');
           showDialog(
             context: context,
             builder: (context) {
@@ -86,17 +91,6 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
               );
             },
           );
-        }
-
-        if (state is CreateOTPSuccessEvent) {
-          Loader.hide();
-          log('success');
-          _showOTPDialog();
-        }
-
-        if (state is ReCreateOTPEvent) {
-          Loader.hide();
-          log('recreate');
         }
 
         if (state is ThingLoadingEvent) {
@@ -348,6 +342,7 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
               EditTextForm(
                 onChanged: ((value) {
                   otpUp = value;
+                  log('$otpUp va $value');
                 }),
                 textColor: Colors.black,
                 hintText: 'OTP',
@@ -533,42 +528,7 @@ class _PasswordRegisterScreenState
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
-                  SizedBox(height: 120.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        Keystring.HAVE_ACC.tr,
-                        style: textNormal,
-                      ),
-                      SizedBox(width: 4),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          Keystring.SIGN_IN_NOW.tr,
-                          style: textJobHome,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(Keystring.OR.tr),
-                  SizedBox(height: 8.0),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ));
-                    },
-                    child: Text(
-                      Keystring.USING_APP_WITHOUT.tr,
-                      style: textCV,
-                    ),
-                  )
+                  SizedBox(height: 156.0),
                 ],
               ),
             ),

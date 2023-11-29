@@ -48,7 +48,7 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
                       fit: BoxFit.cover,
                     )
                   : Icon(
-                      Icons.no_accounts_outlined,
+                      Icons.apartment,
                       size: 80,
                     ),
             ),
@@ -183,35 +183,51 @@ class _AppJobCardState extends State<AppJobCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 1.5, color: appPrimaryColor),
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Text(
-                        widget.province,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.place,
+                          color: appPrimaryColor,
+                          size: 20,
+                        ),
+                        Text(
+                          widget.province,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                        ),
+                      ],
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: Colors.green),
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Text(
-                        widget.money,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.monetization_on,
+                          color: Colors.green,
+                          size: 20,
+                        ),
+                        Text(
+                          widget.money,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 SizedBox(height: 12),
-                Text('${Keystring.Deadline.tr}: ${widget.deadline}'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.timelapse,
+                      color: Colors.red,
+                      size: 20,
+                    ),
+                    SizedBox(width: 8),
+                    Text('${Keystring.Deadline.tr}: ${widget.deadline}'),
+                  ],
+                ),
               ],
             ),
           )
@@ -317,7 +333,7 @@ class _AppFavoriteCardState extends State<AppFavoriteCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      // margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Colors.black),
         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -510,7 +526,7 @@ class _AppJobHomeCardState extends State<AppJobHomeCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: BoxConstraints.tightForFinite(width: 400),
+        width: 300,
         margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.inversePrimary,
@@ -564,49 +580,37 @@ class _AppJobHomeCardState extends State<AppJobHomeCard> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 4),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1.5, color: appPrimaryColor),
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.place,
-                          color: appPrimaryColor,
-                          size: 24,
-                        ),
-                        Text(
-                          widget.province,
-                          overflow: TextOverflow.fade,
-                          maxLines: 3,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.place,
+                        color: appPrimaryColor,
+                        size: 20,
+                      ),
+                      Text(
+                        widget.province,
+                        overflow: TextOverflow.fade,
+                        maxLines: 3,
+                      ),
+                    ],
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2, color: Colors.green),
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.monetization_on,
-                          color: Colors.green,
-                          size: 24,
-                        ),
-                        Text(
-                          widget.money,
-                          overflow: TextOverflow.fade,
-                          maxLines: 3,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.monetization_on,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                      Text(
+                        widget.money,
+                        overflow: TextOverflow.fade,
+                        maxLines: 3,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -618,7 +622,7 @@ class _AppJobHomeCardState extends State<AppJobHomeCard> {
                 Icon(
                   Icons.timelapse,
                   color: Colors.red,
-                  size: 24,
+                  size: 20,
                 ),
                 SizedBox(width: 8),
                 Text('${Keystring.Deadline.tr}: ${widget.deadline}'),
@@ -626,5 +630,74 @@ class _AppJobHomeCardState extends State<AppJobHomeCard> {
             ),
           ],
         ));
+  }
+}
+
+class AppSquareHomeCard extends StatefulWidget {
+  const AppSquareHomeCard({
+    super.key,
+    required this.title,
+    required this.count,
+    required this.icon,
+    this.bgColor = Colors.black,
+  });
+
+  final Color bgColor;
+  final String title;
+  final String count;
+  final IconData icon;
+
+  @override
+  State<AppSquareHomeCard> createState() => _AppSquareHomeCardState();
+}
+
+class _AppSquareHomeCardState extends State<AppSquareHomeCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 7,
+      shadowColor: Colors.black,
+      child: Container(
+        width: 163,
+        height: 102,
+        padding: EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              widget.bgColor,
+              widget.bgColor,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              widget.title,
+              style: textJobHome,
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  widget.icon,
+                ),
+                Text(
+                  widget.count,
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

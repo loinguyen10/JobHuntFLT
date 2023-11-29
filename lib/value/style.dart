@@ -42,7 +42,7 @@ final textTitleTab1Company =
     TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
 //color
-final appPrimaryColor = Color(0xff00A3FF);
+final appPrimaryColor = Color(0xffFF5F00);
 final bgPrimaryColor0 = Color(0xffEEEEEE);
 final bgPrimaryColor1 = Color(0xff404040);
 final appHintColor = Color.fromARGB(0, 238, 238, 238);
@@ -51,7 +51,7 @@ final bgGradientColor0 = LinearGradient(
   end: Alignment.bottomCenter,
   colors: <Color>[
     appPrimaryColor,
-    Color(0xffA0DDFF),
+    Color(0xffFF7D00),
     Colors.white,
     Colors.white,
     Colors.white,

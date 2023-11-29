@@ -4,9 +4,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
-import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
-import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/screen/job/apply_job_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import '../../blocs/app_controller.dart';
@@ -98,7 +96,7 @@ class JobViewScreen extends ConsumerWidget {
                 backgroundColor: const Color.fromARGB(0, 255, 255, 255),
                 elevation: 0,
                 actions: [
-                  role == 'recuiter'
+                  role == 'recruiter'
                       ? Container(
                           margin: EdgeInsets.only(right: 8),
                           child: InkWell(
@@ -124,7 +122,7 @@ class JobViewScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(48),
                     child: SizedBox.fromSize(
                       size: Size.fromRadius(72),
-                      child: job!.company!.avatarUrl != ''
+                      child: job.company!.avatarUrl != ''
                           ? Image.network(job.company!.avatarUrl ?? '',
                               fit: BoxFit.cover)
                           : Icon(
@@ -156,7 +154,7 @@ class JobViewScreen extends ConsumerWidget {
                           height: 16,
                         ),
                         role != null
-                            ? role != 'recuiter'
+                            ? role != 'recruiter'
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -478,9 +476,9 @@ class JobViewScreen extends ConsumerWidget {
                     ],
                   )),
               SizedBox(
-                height: role != 'recuiter' ? 24 : 0,
+                height: role != 'recruiter' ? 24 : 0,
               ),
-              role != 'recuiter'
+              role != 'recruiter'
                   ? AppBorderFrame(
                       labelText: '',
                       margin: EdgeInsets.symmetric(horizontal: 8),

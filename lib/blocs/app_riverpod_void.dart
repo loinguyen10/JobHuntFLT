@@ -239,3 +239,8 @@ Future<List<FollowDetail>> getYourFollowList(String uid) async {
   final list = await insideService.getListFollow(uid);
   return list;
 }
+Future<List<CompanyDetail>> getCompanyListUid(String uid) async {
+  final list = await insideService.getCompany(uid);
+  log('list: ${list.length}');
+  return list;
+}

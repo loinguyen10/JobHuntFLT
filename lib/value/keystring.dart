@@ -169,4 +169,5 @@ class Keystring {
   static const String Order = 'Order';
   static const String Payment_status1 = 'Payment_done';
   static const String Payment_status2 = 'You_will';
+  static const String MESSAGE = 'Message';
 }

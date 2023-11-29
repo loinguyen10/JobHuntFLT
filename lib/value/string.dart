@@ -175,7 +175,8 @@ class LocaleString extends Translations {
           'Oder': 'Oder',
           'Payment_done': 'Payment done Successfully',
           'You_will':
-              'You will be redirected to the home page shortly\nor click here to return to home page'
+              'You will be redirected to the home page shortly\nor click here to return to home page',
+          'Message':'Message'
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

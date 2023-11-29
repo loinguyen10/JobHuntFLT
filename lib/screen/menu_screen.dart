@@ -23,6 +23,7 @@ import '../value/style.dart';
 import 'job/recuiter_application_screen.dart';
 import 'login_register/changepass_isloged.dart';
 import 'login_register/login_sreen.dart';
+import 'setting/message_user_recruiter.dart';
 
 class MenuScreen extends ConsumerWidget {
   const MenuScreen({super.key});
@@ -351,6 +352,47 @@ class MenuScreen extends ConsumerWidget {
                                             Text(
                                               Keystring
                                                   .YOUR_FOLLOWING_COMPANY.tr,
+                                              style: textMenu,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ref.invalidate(listYourFollowProvider);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MessageScreen(companyUid: "6")),
+                                      );
+                                    },
+                                    child: Card(
+                                      shadowColor: Colors.grey,
+                                      shape: Border.all(
+                                          color: Colors.white, width: 2),
+                                      margin: EdgeInsets.symmetric(vertical: 4),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                        padding: EdgeInsets.all(20),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.messenger,
+                                              size: 32,
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Text(
+                                              Keystring
+                                                  .MESSAGE.tr,
                                               style: textMenu,
                                             ),
                                           ],

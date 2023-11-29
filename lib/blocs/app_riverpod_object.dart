@@ -636,6 +636,7 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
   final job = ref.watch(jobDetailProvider);
+
   List<FollowDetail> listFollow = [];
 
   list.maybeWhen(
@@ -666,3 +667,5 @@ final emailsaveProvider = StateProvider((ref) => '');
 //
 final itemPayMentProvider = StateProvider<int>((ref) => 1);
 final isitemPayMentProvider = StateProvider<bool>((ref) => false);
+//Message
+final isShowTimeProvider = StateProvider<bool>((ref) => false);

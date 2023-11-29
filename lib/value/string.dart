@@ -196,6 +196,8 @@ class LocaleString extends Translations {
           'Active_Job': 'Active Job',
           'Tax_Code': 'Tax Code',
           'Tax_Code_Must_10': 'Tax code must have 10 numbers',
+          'Message':'Message'
+
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

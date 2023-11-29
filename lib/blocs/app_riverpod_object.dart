@@ -639,6 +639,7 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
   final job = ref.watch(jobDetailProvider);
+
   List<FollowDetail> listFollow = [];
 
   list.maybeWhen(
@@ -681,3 +682,5 @@ final listJobTagCompanyProvider = StateProvider<List<String>>((ref) {
   }
   return [];
 });
+
+final isShowTimeProvider = StateProvider<bool>((ref) => false);

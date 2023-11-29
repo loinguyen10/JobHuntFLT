@@ -186,4 +186,5 @@ class Keystring {
   static const String ACTIVE_JOB = 'Active_Job';
   static const String TAX_CODE = 'Tax_Code';
   static const String TAX_CODE_MUST_10 = 'Tax_Code_Must_10';
+  static const String MESSAGE = 'Message';
 }

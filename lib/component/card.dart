@@ -48,7 +48,7 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
                       fit: BoxFit.cover,
                     )
                   : Icon(
-                      Icons.no_accounts_outlined,
+                      Icons.apartment,
                       size: 80,
                     ),
             ),
@@ -333,7 +333,7 @@ class _AppFavoriteCardState extends State<AppFavoriteCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      // margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Colors.black),
         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -630,5 +630,74 @@ class _AppJobHomeCardState extends State<AppJobHomeCard> {
             ),
           ],
         ));
+  }
+}
+
+class AppSquareHomeCard extends StatefulWidget {
+  const AppSquareHomeCard({
+    super.key,
+    required this.title,
+    required this.count,
+    required this.icon,
+    this.bgColor = Colors.black,
+  });
+
+  final Color bgColor;
+  final String title;
+  final String count;
+  final IconData icon;
+
+  @override
+  State<AppSquareHomeCard> createState() => _AppSquareHomeCardState();
+}
+
+class _AppSquareHomeCardState extends State<AppSquareHomeCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 7,
+      shadowColor: Colors.black,
+      child: Container(
+        width: 163,
+        height: 102,
+        padding: EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              widget.bgColor,
+              widget.bgColor,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background,
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              widget.title,
+              style: textJobHome,
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  widget.icon,
+                ),
+                Text(
+                  widget.count,
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

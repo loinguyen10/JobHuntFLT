@@ -123,6 +123,7 @@ class MenuScreen extends ConsumerWidget {
                                           )),
                                 );
                               } else if (company != null) {
+                                ref.invalidate(listJobTagCompanyProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -363,8 +364,9 @@ class MenuScreen extends ConsumerWidget {
                                       log('click profile');
                                       if (profile != null) {
                                         bool edit = false;
-                                        ref.refresh(
+                                        ref.invalidate(
                                             listAllTitleJobSettingProvider);
+                                        ref.invalidate(listJob2SettingProvider);
                                         if (ref.watch(
                                                 userDetailJobSettingProvider) !=
                                             null) {

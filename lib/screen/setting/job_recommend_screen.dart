@@ -632,8 +632,9 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           backgroundColor: Colors.red,
                           textColor: Colors.white,
                           fontSize: 16.0);
+                    } else {
+                      done();
                     }
-                    done();
                   },
                   label: Keystring.DONE.tr,
                 ),

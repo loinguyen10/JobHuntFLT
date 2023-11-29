@@ -4,9 +4,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
-import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
-import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/screen/job/apply_job_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import '../../blocs/app_controller.dart';
@@ -124,7 +122,7 @@ class JobViewScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(48),
                     child: SizedBox.fromSize(
                       size: Size.fromRadius(72),
-                      child: job!.company!.avatarUrl != ''
+                      child: job.company!.avatarUrl != ''
                           ? Image.network(job.company!.avatarUrl ?? '',
                               fit: BoxFit.cover)
                           : Icon(

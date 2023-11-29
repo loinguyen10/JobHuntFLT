@@ -181,6 +181,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -195,6 +196,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
+              taxcode,
               description,
               job,
             );
@@ -226,6 +228,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 phone,
                 address,
                 website,
+                taxcode,
                 description,
                 job,
               );
@@ -314,6 +317,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -342,6 +346,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
+              taxcode,
               description,
               job,
             );
@@ -773,7 +778,7 @@ class LoginController extends StateNotifier<InsideEvent> {
             await ref.read(authRepositoryProvider).getJobRecommendSetting(uid);
         log('setting: $setting');
         ref.read(userDetailJobSettingProvider.notifier).state = setting;
-        ref.refresh(listRecommendJobProvider);
+        ref.invalidate(listRecommendJobProvider);
         state = const UpdateThingSuccessEvent();
       } else {
         state = const UpdateThingErrorEvent(error: 'error');

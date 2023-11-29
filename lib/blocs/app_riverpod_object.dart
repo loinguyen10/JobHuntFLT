@@ -142,6 +142,9 @@ final emailCompanyProvider = StateProvider((ref) =>
     '');
 
 final websiteCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.web ?? "");
+
+final taxCodeCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
 
 final phoneCompanyProvider =
@@ -332,7 +335,7 @@ final listYourCVProvider = FutureProvider<List<CVDetail>>(
     (ref) => getYourCVList(ref.watch(userLoginProvider)!.uid ?? '0'));
 
 final lastNumberCVProvider = StateProvider<int>((ref) {
-  final list = ref.watch(listAllCVProvider);
+  final list = ref.watch(listYourCVProvider);
   if (list != null && list.value!.isNotEmpty) {
     return int.parse(list.value!.last.code ?? '0');
   }
@@ -667,5 +670,17 @@ final emailsaveProvider = StateProvider((ref) => '');
 //
 final itemPayMentProvider = StateProvider<int>((ref) => 1);
 final isitemPayMentProvider = StateProvider<bool>((ref) => false);
-//Message
+
+final emailRegisterProvider = StateProvider((ref) => '');
+final passwordRegisterProvider = StateProvider((ref) => '');
+final timerProvider = StateProvider((ref) => 10);
+
+final listJobTagCompanyProvider = StateProvider<List<String>>((ref) {
+  if (ref.watch(companyProfileProvider) != null) {
+    var job = ref.watch(companyProfileProvider)?.job?.split(',');
+    return [...job!];
+  }
+  return [];
+});
+
 final isShowTimeProvider = StateProvider<bool>((ref) => false);

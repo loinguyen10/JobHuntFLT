@@ -659,7 +659,6 @@ class _AppSquareHomeCardState extends State<AppSquareHomeCard> {
       shadowColor: Colors.black,
       child: Container(
         width: 163,
-        height: 102,
         padding: EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(

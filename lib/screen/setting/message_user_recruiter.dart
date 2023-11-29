@@ -1,30 +1,49 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/blocs/app_controller.dart';
+import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/model/user.dart';
+import 'package:jobhunt_ftl/value/style.dart';
 
 import '../../blocs/app_riverpod_object.dart';
 import 'package:intl/intl.dart';
+
+import '../../model/conversation.dart';
+import '../../value/keystring.dart';
 class MessageScreen extends ConsumerWidget {
-  MessageScreen({required this.companyUid, Key? key})
+  MessageScreen({required this.company, Key? key})
       : super(key: key);
-  String companyUid;
+  CompanyDetail company;
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final TextEditingController _messageController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isShowTime = ref.watch(isShowTimeProvider);
     final user = ref.watch(userProfileProvider);
-    final company = ref.watch(companyProfileProvider);
+    final avatar = company.avatarUrl??"";
     String? uid = user!.uid;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: appPrimaryColor,
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(company!.avatarUrl.toString()),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: SizedBox.fromSize(
+                size: Size.fromRadius(16),
+                child: avatar.isNotEmpty
+                    ? Image.network(avatar,
+                    fit: BoxFit.cover)
+                    : Icon(
+                  Icons.apartment,
+                  size: 32,
+                ),
+              ),
             ),
             SizedBox(width: 10), // Để tạo khoảng cách giữa avatar và tiêu đề
             Text(
@@ -33,23 +52,23 @@ class MessageScreen extends ConsumerWidget {
             ),
           ],
         ),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            child: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-              size: 18,
-            ),
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     Navigator.of(context).pop();
+        //   },
+        //   child: Container(
+        //     margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
+        //     decoration: const BoxDecoration(
+        //       shape: BoxShape.circle,
+        //       color: Colors.white,
+        //     ),
+        //     child: const Icon(
+        //       Icons.arrow_back,
+        //       color: Colors.black,
+        //       size: 18,
+        //     ),
+        //   ),
+        // ),
       ),
       body:Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -73,8 +92,8 @@ class MessageScreen extends ConsumerWidget {
                   }).toList();
                   // Lọc tin nhắn theo điều kiện bạn muốn
                   List<Map<String, dynamic>> filteredMessages = messages.where((message) {
-                    return (message['senderUid'] == uid && message['receiverUid'] == companyUid) ||
-                        (message['senderUid'] == companyUid && message['receiverUid'] == uid);
+                    return (message['senderUid'] == uid && message['receiverUid'] == company.uid) ||
+                        (message['senderUid'] == company.uid && message['receiverUid'] == uid);
                   }).toList();
 
                   return ListView.builder(
@@ -98,7 +117,7 @@ class MessageScreen extends ConsumerWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: filteredMessages[index]['senderUid'] == uid
-                                      ? Colors.blue
+                                      ? appPrimaryColor
                                       : Colors.grey,
                                   borderRadius: BorderRadius.circular(28.0),
                                 ),
@@ -156,11 +175,11 @@ class MessageScreen extends ConsumerWidget {
                         onPressed: () {
                           String message = _messageController.text;
                           if(!message.isEmpty){
-                            sendMessage(message,uid!,companyUid);
+                            sendMessage(message,uid!,company.uid.toString());
                             _messageController.clear();
                           }
                         },
-                        icon: Icon(Icons.send,color: Colors.blue),
+                        icon: Icon(Icons.send,color: appPrimaryColor),
                       ),
                     ],
                   ),
@@ -178,8 +197,8 @@ class MessageScreen extends ConsumerWidget {
 
       Map<String, dynamic> messageData = {
         'content': content,
-        'senderUid': senderUid,
-        'receiverUid': receiverUid,
+        'userUid': senderUid,
+        'companyUid': receiverUid,
         'timestamp': timestamp,
       };
 
@@ -189,6 +208,14 @@ class MessageScreen extends ConsumerWidget {
           .add(messageData);
 
       print('Đã gửi tin nhắn thành công');
+      Map<String, dynamic> conversationData = {
+        'userUid': senderUid,
+        'companyUid': receiverUid,
+        'timestamp': timestamp,
+      };
+      await FirebaseFirestore.instance
+          .collection('conversation')
+          .add(conversationData);
     } catch (e) {
       print('Lỗi khi gửi tin nhắn: $e');
     }
@@ -207,5 +234,166 @@ class MessageScreen extends ConsumerWidget {
     } else {
       return DateFormat.yMd().add_Hm().format(messageTime);
     }
+  }
+}
+class Conversation extends ConsumerStatefulWidget {
+  const Conversation({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _Conversation();
+}
+
+class _Conversation extends ConsumerState<Conversation> {
+
+  @override
+  Widget build(BuildContext context) {
+    final user = ref.watch(userProfileProvider);
+
+    List<CompanyDetail> listCompany = [];
+
+    final listCompanyData = ref.watch(listCompanyProvider);
+
+    listCompanyData.when(
+      data: (_data) {
+        listCompany.addAll(_data);
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    String? uid = user!.uid;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Keystring.YOUR_INBOX.tr),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body:   Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => SearchScreen()),
+              // );
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(color: Colors.black, width: 1),
+              ),
+              elevation: 2,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Icon(
+                      Icons.search,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Text(
+                      Keystring.SEARCH,
+                      style: textNormalHint,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 7,
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection('conversation')
+                    .where('senderUid')
+                    .orderBy('timestamp', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Đã xảy ra lỗi: ${snapshot.error}');
+                  } else {
+                    List<Map<String, dynamic>> conversations = snapshot.data!.docs
+                        .map((DocumentSnapshot<Map<String, dynamic>> doc) {
+                      return doc.data()!;
+                    }).toList();
+                   
+                    List<Map<String, dynamic>> filteredconversations = conversations.where((message) {
+                      return (message['userUid'] == uid || message['userUid'] == uid);
+                    }).toList();
+                    // for(var i in filteredconversations){
+                    //   final conversation = ConversationModel(
+                    //     companyUid: i['companyUid'],
+                    //     userUid: i['userUid'],
+                    //     timestamps: i['timestamps'],
+                    //     content: i['content'],
+                    //   );
+                    //   print(conversation.companyUid!+conversation.timestamps.toString());
+                    // }
+
+                    print('filteredconversations'+filteredconversations.length.toString());
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: filteredconversations.length,
+                      itemBuilder: (context, index) {
+
+                        String avatar = '';
+                        String name = '';
+
+                        for(var c in listCompany){
+                          if(filteredconversations[index]['companyUid'] == c.uid){
+                            print('idid: ${filteredconversations[index]['companyUid']} & ${c.uid}');
+                            avatar = c.avatarUrl??'';
+                            name = c.fullname??'';
+                          }
+                        }
+
+
+
+                        return ListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          tileColor: Colors.transparent,
+                          title: GestureDetector(
+
+                            onTap: () {
+
+                            },
+                            child:Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(16),
+                                    child: avatar.isNotEmpty
+                                        ? Image.network(avatar,
+                                        fit: BoxFit.cover)
+                                        : Icon(
+                                      Icons.apartment,
+                                      size: 32,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              )
+          )
+        ],
+      )
+    );
   }
 }

@@ -63,10 +63,10 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      // 'email': 'laingu@jobshunt.info',
-      // 'password': 'laicutai',
-      'email': 'hungbip@jobshunt.info',
-      'password': 'hung',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
       // 'email': emailAddress.trim(),

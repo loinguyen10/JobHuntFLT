@@ -12,6 +12,7 @@ import 'package:jobhunt_ftl/screen/user/viewcv.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 import '../job/job_view_screen.dart';
+import '../setting/message_user_recruiter.dart';
 
 class YourJobStatusScreen extends ConsumerStatefulWidget {
   const YourJobStatusScreen({super.key});
@@ -366,7 +367,13 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                             apporve == '1'
                                                 ? AppSmallButton(
                                                     onPressed: () {
-                                                      //
+                                                      Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        MessageScreen(company: data[index].job!.company!),
+                                                              )
+                                                      );
                                                     },
                                                     label: Keystring.CHAT.tr,
                                                     margin:

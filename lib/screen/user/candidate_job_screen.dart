@@ -4,11 +4,9 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
-import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/app_small_button.dart';
 import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/screen/user/viewcv.dart';
-
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 import '../job/job_view_screen.dart';
@@ -60,7 +58,7 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                     child: GestureDetector(
                       onTap: () {
                         if (statusCheck == 'waiting') {
-                          ref.refresh(StatusCheckProvider);
+                          ref.invalidate(StatusCheckProvider);
                         } else {
                           ref.read(StatusCheckProvider.notifier).state =
                               'waiting';
@@ -118,7 +116,7 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                     child: GestureDetector(
                       onTap: () {
                         if (statusCheck == 'reject') {
-                          ref.refresh(StatusCheckProvider);
+                          ref.invalidate(StatusCheckProvider);
                         } else {
                           ref.read(StatusCheckProvider.notifier).state =
                               'reject';
@@ -182,16 +180,9 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                       : Colors.black,
                                 )),
                             child: ExpansionTile(
-                              textColor: approve == ''
-                                  ? Colors.black
-                                  : approve == '1'
-                                      ? Color.fromARGB(255, 0, 150, 0)
-                                      : Color.fromARGB(255, 255, 0, 0),
-                              collapsedTextColor: approve == ''
-                                  ? Colors.black
-                                  : approve == '1'
-                                      ? Color.fromARGB(255, 0, 150, 0)
-                                      : Color.fromARGB(255, 255, 0, 0),
+                              textColor:
+                                  approve == '' ? Colors.black : Colors.black38,
+                              collapsedTextColor: Colors.black,
                               tilePadding:
                                   EdgeInsets.only(left: 16, top: 2, bottom: 2),
                               childrenPadding: EdgeInsetsDirectional.symmetric(
@@ -368,12 +359,15 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                                 ? AppSmallButton(
                                                     onPressed: () {
                                                       Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        MessageScreen(company: data[index].job!.company!),
-                                                              )
-                                                      );
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                MessageScreen(
+                                                                    company: data[
+                                                                            index]
+                                                                        .job!
+                                                                        .company!),
+                                                          ));
                                                     },
                                                     label: Keystring.CHAT.tr,
                                                     margin:

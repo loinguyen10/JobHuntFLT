@@ -217,6 +217,7 @@ class RemoveCVErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
 class GetCompanySuccessEvent extends InsideEvent {
   const GetCompanySuccessEvent();
 
@@ -226,6 +227,22 @@ class GetCompanySuccessEvent extends InsideEvent {
 
 class GetCompanyErrorEvent extends InsideEvent {
   const GetCompanyErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class GetListSuccessEvent extends InsideEvent {
+  const GetListSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetListErrorEvent extends InsideEvent {
+  const GetListErrorEvent({this.error});
 
   final String? error;
 

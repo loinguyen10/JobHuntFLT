@@ -675,26 +675,29 @@ class _AppSquareHomeCardState extends State<AppSquareHomeCard> {
             ],
           ),
         ),
-        child: Column(
-          children: [
-            Text(
-              widget.title,
-              style: textJobHome,
-            ),
-            SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(
-                  widget.icon,
-                ),
-                Text(
-                  widget.count,
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ],
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: [
+              Text(
+                widget.title,
+                style: textJobHome,
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    widget.icon,
+                  ),
+                  Text(
+                    widget.count,
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

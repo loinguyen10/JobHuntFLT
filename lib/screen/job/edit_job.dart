@@ -28,7 +28,6 @@ class JobEditScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String filePath = '';
-    CurrencyList? vndCurrency;
 
     final user = ref.watch(userLoginProvider);
     final company = ref.watch(companyProfileProvider);
@@ -36,11 +35,9 @@ class JobEditScreen extends ConsumerWidget {
 
     final listProvinceData = ref.watch(listProvinceProvider);
     final listDistrictData = ref.watch(listDistrictProvider);
-    final listCurrencyData = ref.watch(listCurrencyProvider);
 
     final provinceChoose = ref.watch(provinceJobProvider);
     final districtChoose = ref.watch(districtJobProvider);
-    final currencyChoose = ref.watch(jobCurrencyProvider);
     final jobTypeChoose = ref.watch(jobTypeChooseProvider);
 
     final jobDeadline = ref.watch(jobDeadlineProvider);
@@ -49,7 +46,6 @@ class JobEditScreen extends ConsumerWidget {
 
     List<ProvinceList> listProvince = [];
     List<DistrictList> listDistrict = [];
-    List<CurrencyList> listCurrency = [];
     List<String> listJobType = [
       Keystring.INTERN.tr,
       Keystring.PART_TIME.tr,
@@ -76,19 +72,6 @@ class JobEditScreen extends ConsumerWidget {
               listDistrict.sort((a, b) => a.name!.compareTo(b.name!));
             }
           }
-        }
-      },
-      error: (error, stackTrace) => null,
-      loading: () => const CircularProgressIndicator(),
-    );
-
-    listCurrencyData.when(
-      data: (_data) {
-        listCurrency.addAll(_data);
-        listCurrency.sort((a, b) => a.code!.compareTo(b.code!));
-
-        for (var i in _data) {
-          if (i.code == 'VND') vndCurrency = i;
         }
       },
       error: (error, stackTrace) => null,
@@ -155,33 +138,6 @@ class JobEditScreen extends ConsumerWidget {
       );
     }
 
-    DropdownButtonHideUnderline dropCurrency() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listCurrency
-              .map((item) => DropdownMenuItem<CurrencyList>(
-                    value: item,
-                    child: Text('${item.symbol ?? ''}  ${item.code ?? ''}',
-                        style: textNormal),
-                  ))
-              .toList(),
-          value: currencyChoose?.code != null ? currencyChoose : null,
-          onChanged: (value) {
-            ref.read(jobCurrencyProvider.notifier).state = value;
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
-
     DropdownButtonHideUnderline dropJobType() {
       return DropdownButtonHideUnderline(
         child: DropdownButton2(
@@ -221,11 +177,10 @@ class JobEditScreen extends ConsumerWidget {
 
 //void
     void doneButton() {
-      log('${company!.uid} + ${ref.watch(jobNameProvider)} + ${ref.watch(jobMinSalaryProvider)} + ${ref.watch(jobMaxSalaryProvider)} + ${currencyChoose!.code} + ${provinceChoose!.code} + ${districtChoose!.code} + ${ref.watch(jobYearExperienceProvider)}  + ${jobTypeChoose!} + ${ref.watch(jobNumberCandidateProvider)}  + ${ref.watch(jobDescriptionProvider)} + ${ref.watch(jobCandidateRequirementProvider)} + ${ref.watch(jobBenefitProvider)} + ${ref.watch(jobTagProvider)} + ${jobDeadline}');
+      log('${company!.uid} + ${ref.watch(jobNameProvider)} + ${ref.watch(jobMinSalaryProvider)} + ${ref.watch(jobMaxSalaryProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${ref.watch(jobYearExperienceProvider)}  + ${jobTypeChoose!} + ${ref.watch(jobNumberCandidateProvider)}  + ${ref.watch(jobDescriptionProvider)} + ${ref.watch(jobCandidateRequirementProvider)} + ${ref.watch(jobBenefitProvider)} + ${ref.watch(jobTagProvider)} + ${jobDeadline}');
       if (ref.watch(jobNameProvider).isNotEmpty &&
           !ref.watch(jobMinSalaryProvider).isNaN &&
           !ref.watch(jobMaxSalaryProvider).isNaN &&
-          currencyChoose.code != null &&
           !ref.watch(jobYearExperienceProvider).isNaN &&
           jobTypeChoose != null &&
           !ref.watch(jobNumberCandidateProvider).isNaN &&
@@ -244,7 +199,6 @@ class JobEditScreen extends ConsumerWidget {
                 company.uid ?? '0',
                 ref.watch(jobMinSalaryProvider),
                 ref.watch(jobMaxSalaryProvider),
-                currencyChoose.code ?? '',
                 ref.watch(jobYearExperienceProvider),
                 jobTypeChoose,
                 ref.watch(jobNumberCandidateProvider),
@@ -264,7 +218,6 @@ class JobEditScreen extends ConsumerWidget {
                 company.uid ?? '0',
                 ref.watch(jobMinSalaryProvider),
                 ref.watch(jobMaxSalaryProvider),
-                currencyChoose.code ?? '',
                 ref.watch(jobYearExperienceProvider),
                 jobTypeChoose,
                 ref.watch(jobNumberCandidateProvider),
@@ -428,13 +381,6 @@ class JobEditScreen extends ConsumerWidget {
                                   label: Keystring.MAX_SALARY.tr,
                                 ),
                               ),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: AppBorderFrame(
-                                  labelText: Keystring.CURRENCY.tr,
-                                  child: dropCurrency(),
-                                ),
-                              ),
                             ],
                           )
                         : SizedBox(height: 0),
@@ -587,7 +533,6 @@ class JobEditScreen extends ConsumerWidget {
                   if (salaryActive == false) {
                     ref.read(jobMinSalaryProvider.notifier).state = -1;
                     ref.read(jobMaxSalaryProvider.notifier).state = -1;
-                    ref.read(jobCurrencyProvider.notifier).state = vndCurrency;
                     doneButton();
                   } else {
                     doneButton();

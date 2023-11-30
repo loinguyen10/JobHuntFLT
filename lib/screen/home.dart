@@ -26,11 +26,8 @@ class HomeScreen extends ConsumerWidget {
     final company = ref.watch(companyProfileProvider);
 
     if (company != null) {
-      ref.watch(listRecuiterTodayApplicationProvider);
-      log('cv today: ${ref.watch(listRecuiterTodayApplicationProvider).value?.length}');
-
+      ref.watch(listRecuiterMonthApplicationProvider);
       ref.watch(listActivePostJobCompanyProvider);
-      log('job active: ${ref.watch(listActivePostJobCompanyProvider).value?.length}');
     }
 
     return Scaffold(
@@ -337,10 +334,10 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             children: [
                               AppSquareHomeCard(
                                 icon: Icons.description_outlined,
-                                title: Keystring.CV_Today.tr,
+                                title: Keystring.CV_Month.tr,
                                 count: ref
                                         .watch(
-                                            listRecuiterTodayApplicationProvider)
+                                            listRecuiterMonthApplicationProvider)
                                         .value
                                         ?.length
                                         .toString() ??

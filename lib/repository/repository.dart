@@ -63,20 +63,20 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
     //   'Accept': 'application/json',
     // };
-    log('BASE_URL + "login.php" ${BASE_URL + "login.php"}');
+
     Response response = await post(Uri.parse(BASE_URL + "login.php"),
         // headers: requestHeaders,
         body: msg);
@@ -353,7 +353,6 @@ class InsideService {
     String companyId,
     int minSalary,
     int maxSalary,
-    String currency,
     int yearExperience,
     int typeJob,
     int numberCandidate,
@@ -370,7 +369,7 @@ class InsideService {
       'companyId': companyId,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': currency,
+      'currency': 'VND',
       'yearExperience': yearExperience,
       'typeJob': typeJob,
       'numberCandidate': numberCandidate,
@@ -383,7 +382,7 @@ class InsideService {
       'active': active,
       'level': 'Basic',
     });
-    log('name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\ncurrency: $currency\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
+    log('name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
 
     Response response =
         await post(Uri.parse(BASE_URL + "/job/create_job.php"), body: msg);
@@ -397,7 +396,6 @@ class InsideService {
     String companyId,
     int minSalary,
     int maxSalary,
-    String currency,
     int yearExperience,
     int typeJob,
     int numberCandidate,
@@ -415,7 +413,7 @@ class InsideService {
       'companyId': companyId,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': currency,
+      'currency': 'VND',
       'yearExperience': yearExperience,
       'typeJob': typeJob,
       'numberCandidate': numberCandidate,
@@ -428,7 +426,7 @@ class InsideService {
       'active': active,
       'level': 'Basic',
     });
-    log('code: $code\n name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\ncurrency: $currency\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
+    log('code: $code\n name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
 
     Response response =
         await post(Uri.parse(BASE_URL + "/job/update_job.php"), body: msg);
@@ -588,7 +586,6 @@ class InsideService {
     final msg = jsonEncode({
       'code': code,
       'approve': approve,
-      'approve_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
     });
 
     Response response = await post(
@@ -619,9 +616,17 @@ class InsideService {
     }
   }
 
-  Future<dynamic> getRecuiterApplication(String companyId) async {
+  Future<dynamic> getRecuiterApplication(
+    String companyId,
+    String searchWord,
+    String approve,
+    String sentTime,
+  ) async {
     final msg = jsonEncode({
       'companyId': companyId,
+      'search_word': searchWord,
+      'approve': approve,
+      'sent_time': sentTime,
     });
 
     Response response = await post(
@@ -891,6 +896,22 @@ class InsideService {
 
     Response response =
         await post(Uri.parse(BASE_URL + "cv/remove_cv.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> updateInterviewTimeApplication(
+    String code,
+    String interviewTime,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+      'interview_time': interviewTime,
+    });
+
+    Response response = await post(
+        Uri.parse(BASE_URL + "/application/update_interview_application.php"),
+        body: msg);
 
     return jsonDecode(response.body)['success'];
   }

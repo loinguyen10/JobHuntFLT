@@ -9,7 +9,6 @@ import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
-import 'package:jobhunt_ftl/screen/setting/upgrape_screen.dart';
 import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
@@ -165,7 +164,11 @@ class MenuScreen extends ConsumerWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context,MaterialPageRoute(builder: (context) => Conversation() ),);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Conversation()),
+                              );
                             },
                             child: Card(
                               shadowColor: Colors.grey,
@@ -458,9 +461,8 @@ class MenuScreen extends ConsumerWidget {
                                 ])
                               : GestureDetector(
                                   onTap: () {
-                                    ref.invalidate(StatusCheckProvider);
                                     ref.invalidate(
-                                        listRecuiterApplicationProvider);
+                                        getListRecuiterApplicationProvider);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

@@ -1,184 +1,272 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/app_small_button.dart';
+import 'package:jobhunt_ftl/component/date_dialog.dart';
 import 'package:jobhunt_ftl/component/edittext.dart';
+import 'package:jobhunt_ftl/component/loader_overlay.dart';
 
+import '../../blocs/app_controller.dart';
+import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 import 'application_view_screen.dart';
 
-class AllAppicationRecuiterScreen extends ConsumerWidget {
+class AllAppicationRecuiterScreen extends ConsumerStatefulWidget {
   const AllAppicationRecuiterScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AllAppicationRecuiterScreenState();
+}
+
+class _AllAppicationRecuiterScreenState
+    extends ConsumerState<AllAppicationRecuiterScreen> {
+  var textEditingController = TextEditingController();
+  bool focusCheck = false;
+  String statusCheck = '';
+
+  @override
+  Widget build(BuildContext context) {
     final sizePhone = MediaQuery.of(context).size;
-    var _data = ref.watch(listRecuiterApplicationProvider);
+    var list = ref.watch(listRecuiterApplicationProvider);
 
-    final statusCheck = ref.watch(StatusCheckProvider);
+    ref.listen<InsideEvent>(LoginControllerProvider, (previous, state) {
+      log('pre - state : $previous - $state');
 
-    if (statusCheck == '') _data = ref.watch(listRecuiterApplicationProvider);
-    if (statusCheck == 'waiting') {
-      _data = ref.watch(listRecuiterWaitingApplicationProvider);
-    }
-    if (statusCheck == 'approve') {
-      _data = ref.watch(listRecuiterApproveApplicationProvider);
-    }
-    if (statusCheck == 'reject') {
-      _data = ref.watch(listRecuiterRejectApplicationProvider);
+      if (state == GetListErrorEvent()) {
+        Loader.hide();
+        log('error');
+        Fluttertoast.showToast(
+          msg: Keystring.OTP_fail.tr,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+
+      if (state == GetListSuccessEvent()) {
+        Loader.hide();
+        log('success');
+        setState(() {});
+      }
+
+      if (state == ThingLoadingEvent()) {
+        Loader.show(context);
+      }
+    });
+
+    void searchDone() {
+      ref
+          .read(LoginControllerProvider.notifier)
+          .getRecuiterApplicationWithSetting(
+            '',
+            statusCheck,
+            ref.watch(dateSearchProvider),
+          );
     }
 
-    return Container(
-      color: Theme.of(context).colorScheme.secondary,
-      child: SafeArea(
-        child: Column(
-          children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              foregroundColor: Theme.of(context).colorScheme.primary,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: EditTextForm(
-                      onChanged: (value) {
-                        //
-                      },
-                      label: Keystring.SEARCH.tr,
-                      hintText: Keystring.SEARCH.tr,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  AppButton(
-                    onPressed: () {
-                      //
-                    },
-                    label: Keystring.SEARCH.tr,
-                    width: sizePhone.width / 10,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Row(
+    return StatefulBuilder(
+      builder: (context, mSetState) {
+        return Container(
+          color: Theme.of(context).colorScheme.secondary,
+          child: SafeArea(
+            child: Column(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (statusCheck == 'waiting') {
-                        ref.invalidate(StatusCheckProvider);
-                      } else {
-                        ref.read(StatusCheckProvider.notifier).state =
-                            'waiting';
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 4),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.5, color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Colors.grey,
+                AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: EditText2Form(
+                          onChanged: (value) {
+                            textEditingController.text = value;
+                            log(textEditingController.text);
+                            mSetState(
+                              () {},
+                            );
+                          },
+                          autoFocus: focusCheck,
+                          controller: textEditingController,
+                          label: Keystring.SEARCH.tr,
+                          hintText: Keystring.SEARCH.tr,
+                          suffixIcon: textEditingController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                  ),
+                                  onPressed: () {
+                                    mSetState(() {
+                                      log('hello');
+                                      log('text: ${textEditingController.text}');
+                                      textEditingController.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
                       ),
-                      child: Text(
-                        Keystring.WAITING.tr,
-                        textAlign: TextAlign.center,
-                        style: statusCheck == 'waiting'
-                            ? textStatus2View
-                            : textStatusView,
+                      SizedBox(
+                        width: 8,
                       ),
-                    ),
+                      DateCustomDialog().searchDate(context, ref),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      AppButton(
+                        onPressed: () {
+                          searchDone();
+                          mSetState(() {
+                            focusCheck = false;
+                            FocusScope.of(context).unfocus();
+                          });
+                        },
+                        label: Keystring.SEARCH.tr,
+                        width: sizePhone.width / 10,
+                        bgColor: appPrimaryColor,
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (statusCheck == 'approve') {
-                        ref.invalidate(StatusCheckProvider);
-                      } else {
-                        ref.read(StatusCheckProvider.notifier).state =
-                            'approve';
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 4),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.5, color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Colors.green,
-                      ),
-                      child: Text(
-                        Keystring.APPROVE.tr,
-                        textAlign: TextAlign.center,
-                        style: statusCheck == 'approve'
-                            ? textStatus2View
-                            : textStatusView,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (statusCheck == 'reject') {
-                        ref.invalidate(StatusCheckProvider);
-                      } else {
-                        ref.read(StatusCheckProvider.notifier).state = 'reject';
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 4),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.5, color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Colors.red,
-                      ),
-                      child: Text(
-                        Keystring.REJECT.tr,
-                        textAlign: TextAlign.center,
-                        style: statusCheck == 'reject'
-                            ? textStatus2View
-                            : textStatusView,
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (statusCheck == 'waiting') {
+                            statusCheck = '';
+                          } else {
+                            statusCheck = 'waiting';
+                          }
+                          searchDone();
+                          mSetState(() {
+                            focusCheck = false;
+                            FocusScope.of(context).unfocus();
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 4),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1.5, color: Colors.black),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: Colors.grey,
+                          ),
+                          child: Text(
+                            Keystring.WAITING.tr,
+                            textAlign: TextAlign.center,
+                            style: statusCheck == 'waiting'
+                                ? textStatus2View
+                                : textStatusView,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (statusCheck == 'approve') {
+                            statusCheck = '';
+                          } else {
+                            statusCheck = 'approve';
+                          }
+                          searchDone();
+                          mSetState(() {
+                            focusCheck = false;
+                            FocusScope.of(context).unfocus();
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 4),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1.5, color: Colors.black),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: Colors.green,
+                          ),
+                          child: Text(
+                            Keystring.APPROVE.tr,
+                            textAlign: TextAlign.center,
+                            style: statusCheck == 'approve'
+                                ? textStatus2View
+                                : textStatusView,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (statusCheck == 'reject') {
+                            statusCheck = '';
+                          } else {
+                            statusCheck = 'reject';
+                          }
+                          searchDone();
+                          mSetState(() {
+                            focusCheck = false;
+                            FocusScope.of(context).unfocus();
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 4),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1.5, color: Colors.black),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: Colors.red,
+                          ),
+                          child: Text(
+                            Keystring.REJECT.tr,
+                            textAlign: TextAlign.center,
+                            style: statusCheck == 'reject'
+                                ? textStatus2View
+                                : textStatusView,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                child: _data.when(
-                  data: (data) {
-                    return ListView.builder(
+                SizedBox(height: 16),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (_, index) {
-                        String avatarCompany =
-                            data[index].job!.company!.avatarUrl ?? '';
-                        String name = data[index].job!.name ?? '';
-                        String company =
-                            data[index].job!.company!.fullname ?? '';
-                        String approve = data[index].approve ?? '';
-                        String sentTime = data[index].sendTime ?? '';
-                        String interviewTime = data[index].interviewTime ?? '';
+                        String avatarCandidate =
+                            list[index].candidate!.avatarUrl ?? '';
+                        String name = list[index].job!.name ?? '';
+                        String candidate =
+                            list[index].candidate!.fullName ?? '';
+                        String approve = list[index].approve ?? '';
+                        String sentTime = list[index].sendTime ?? '';
+                        String interviewTime = list[index].interviewTime ?? '';
                         String time = approve.isEmpty
                             ? sentTime
-                            : data[index].approveTime ?? '';
+                            : list[index].approveTime ?? '';
 
                         return Container(
                           margin: EdgeInsets.only(bottom: 8),
@@ -194,16 +282,9 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                                     approve == '' ? Colors.grey : Colors.black,
                               )),
                           child: ExpansionTile(
-                            textColor: approve == ''
-                                ? Colors.black
-                                : approve == '1'
-                                    ? Color.fromARGB(255, 0, 150, 0)
-                                    : Color.fromARGB(255, 255, 0, 0),
-                            collapsedTextColor: approve == ''
-                                ? Colors.black
-                                : approve == '1'
-                                    ? Color.fromARGB(255, 0, 150, 0)
-                                    : Color.fromARGB(255, 255, 0, 0),
+                            textColor:
+                                approve == '' ? Colors.black : Colors.black38,
+                            collapsedTextColor: Colors.black,
                             tilePadding:
                                 EdgeInsets.only(left: 16, top: 2, bottom: 2),
                             childrenPadding: EdgeInsetsDirectional.symmetric(
@@ -217,11 +298,11 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(16),
                                     child: SizedBox.fromSize(
                                       size: Size.fromRadius(16),
-                                      child: avatarCompany.isNotEmpty
-                                          ? Image.network(avatarCompany,
+                                      child: avatarCandidate.isNotEmpty
+                                          ? Image.network(avatarCandidate,
                                               fit: BoxFit.cover)
                                           : Icon(
-                                              Icons.apartment,
+                                              Icons.no_accounts,
                                               size: 32,
                                             ),
                                     ),
@@ -263,13 +344,13 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '${Keystring.COMPANY.tr}:',
+                                              '${Keystring.CANDIDATE.tr}:',
                                               style: textNormal.copyWith(
                                                 color: Colors.grey.shade700,
                                               ),
                                             ),
                                             Text(
-                                              company.toUpperCase(),
+                                              candidate.toUpperCase(),
                                               style: textNormalBold,
                                             ),
                                           ],
@@ -333,13 +414,29 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                                       ),
                                       SizedBox(
                                         width: sizePhone.width / 2.5,
-                                        child: interviewTime.isEmpty
-                                            ? Text('')
-                                            : Text(
-                                                '${Keystring.INTERVIEW_TIME.tr}: ${interviewTime}',
-                                                textAlign: TextAlign.right,
-                                                style: textNormal,
-                                              ),
+                                        child: interviewTime.isNotEmpty
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '${Keystring.INTERVIEW_TIME.tr}:',
+                                                    style: textNormal.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    interviewTime.toUpperCase(),
+                                                    style:
+                                                        textNormalBold.copyWith(
+                                                      color: Color.fromARGB(
+                                                          255, 0, 150, 0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : null,
                                       ),
                                     ],
                                   ),
@@ -371,12 +468,14 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                                                   .read(
                                                       applicationDetailProvider
                                                           .notifier)
-                                                  .state = data[index];
+                                                  .state = list[index];
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ApplicationViewFullScreen()),
+                                                        ApplicationViewFullScreen(
+                                                          recruiter: true,
+                                                        )),
                                               );
                                             },
                                             label: Keystring.DETAIL.tr,
@@ -399,168 +498,15 @@ class AllAppicationRecuiterScreen extends ConsumerWidget {
                           ),
                         );
                       },
-                      itemCount: data.length,
-                    );
-                  },
-                  error: (error, stackTrace) => SizedBox(
-                    height: 160,
-                    child: Center(
-                      child: Text(Keystring.NO_DATA.tr),
-                    ),
-                  ),
-                  loading: () => const SizedBox(
-                    height: 160,
-                    child: Center(
-                      child: CircularProgressIndicator(),
+                      itemCount: list.length,
                     ),
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-//
-class ApplicationTodayRecuiterScreen extends ConsumerStatefulWidget {
-  const ApplicationTodayRecuiterScreen({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ApplicationTodayRecuiterScreenState();
-}
-
-class _ApplicationTodayRecuiterScreenState
-    extends ConsumerState<ApplicationTodayRecuiterScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final sizePhone = MediaQuery.of(context).size;
-    final data = ref.watch(listRecuiterTodayApplicationProvider);
-
-    // if (ref.watch(userLoginProvider) != null &&
-    //     ref.watch(userLoginProvider)!.role == 'recuiter') {
-    //   Timer.periodic(Duration(seconds: 15), (Timer t) {
-    //     ref.invalidate(listRecuiterApplicationProvider);
-    //     log('refresh ne');
-    //   });
-    // }
-
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: sizePhone.width / 4,
-                child: Text(
-                  Keystring.CANDIDATE.tr,
-                  textAlign: TextAlign.center,
-                  style: textNormalBold,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  Keystring.Name_Job.tr,
-                  textAlign: TextAlign.center,
-                  style: textNormalBold,
-                ),
-              ),
-              SizedBox(
-                width: sizePhone.width / 4,
-                child: Text(
-                  Keystring.SENT_TIME.tr,
-                  textAlign: TextAlign.center,
-                  style: textNormalBold,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        data.when(
-          skipLoadingOnRefresh: true,
-          data: (data) {
-            return ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (_, index) {
-                String name = data[index].job!.name ?? '';
-                String nameCandidate = data[index].candidate!.fullName ?? '';
-                String sentTime = data[index].sendTime ?? '';
-
-                return Card(
-                  elevation: 4,
-                  child: ListTile(
-                    onTap: () {
-                      ref.read(applicationDetailProvider.notifier).state =
-                          data[index];
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ApplicationViewFullScreen()),
-                      );
-                    },
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: sizePhone.width / 4,
-                          child: Text(
-                            nameCandidate,
-                            overflow: TextOverflow.fade,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            name,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(
-                          width: sizePhone.width / 4,
-                          child: Text(
-                            sentTime,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              itemCount: data.length,
-            );
-          },
-          error: (error, stackTrace) => SizedBox(
-            height: 160,
-            child: Center(
-              child: Text(Keystring.NO_DATA.tr),
+              ],
             ),
           ),
-          loading: () => const SizedBox(
-            height: 160,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        ),
-        data.value?.length == 0
-            ? SizedBox(
-                height: 160,
-                child: Center(
-                  child: Text(Keystring.NO_DATA.tr),
-                ),
-              )
-            : SizedBox(height: 0),
-      ],
+        );
+      },
     );
   }
 }

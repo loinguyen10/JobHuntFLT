@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/card.dart';
+import 'package:jobhunt_ftl/component/custom_page_route.dart';
 import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
@@ -46,30 +47,41 @@ class HomeScreen extends ConsumerWidget {
                   SizedBox(
                     width: 16,
                   ),
-                  ClipOval(
-                    child: SizedBox.fromSize(
-                      size: Size.fromRadius(24), // Image radius
-                      child: profile != null || company != null
-                          ? profile?.avatarUrl != null &&
-                                  profile?.avatarUrl != ''
-                              ? Image.network(
-                                  profile?.avatarUrl ?? '',
-                                  fit: BoxFit.cover,
-                                )
-                              : company?.avatarUrl != null &&
-                                      company?.avatarUrl != ''
-                                  ? Image.network(
-                                      company?.avatarUrl ?? '',
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Icon(
-                                      Icons.no_accounts_outlined,
-                                      size: 48,
-                                    )
-                          : Icon(
-                              Icons.no_accounts_outlined,
-                              size: 48,
-                            ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: profile?.level == 'Premium'
+                            ? Colors.yellow
+                            : Colors.transparent,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: SizedBox.fromSize(
+                        size: Size.fromRadius(24), // Image radius
+                        child: profile != null || company != null
+                            ? profile?.avatarUrl != null &&
+                                    profile?.avatarUrl != ''
+                                ? Image.network(
+                                    profile?.avatarUrl ?? '',
+                                    fit: BoxFit.cover,
+                                  )
+                                : company?.avatarUrl != null &&
+                                        company?.avatarUrl != ''
+                                    ? Image.network(
+                                        company?.avatarUrl ?? '',
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Icon(
+                                        Icons.no_accounts_outlined,
+                                        size: 48,
+                                      )
+                            : Icon(
+                                Icons.no_accounts_outlined,
+                                size: 48,
+                              ),
+                      ),
                     ),
                   ),
                 ],
@@ -79,9 +91,12 @@ class HomeScreen extends ConsumerWidget {
         ],
         leading: IconButton(
           onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => MenuScreen()),
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MenuScreen()),
+              SlidePageRoute(child: MenuScreen()),
             );
           },
           icon: Icon(Icons.menu),

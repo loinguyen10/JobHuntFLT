@@ -190,4 +190,6 @@ class Keystring {
   static const String EDIT = 'Edit';
   static const String SET_DATE = 'Set_Date';
   static const String SET_TIME = 'Set_Time';
+  static const String PREMIUM = 'Premium';
+  static const String BASIC = 'Basic';
 }

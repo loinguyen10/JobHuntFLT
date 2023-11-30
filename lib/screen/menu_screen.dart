@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
+import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
@@ -55,51 +56,89 @@ class MenuScreen extends ConsumerWidget {
       // appBar: AppBar(
       //   backgroundColor: appHintColor,
       // ),
-      body: SafeArea(
-        child: Container(
-          color: Theme.of(context).colorScheme.secondary,
-          height: MediaQuery.of(context).size.height,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor2
+                : bgGradientColor1),
+        child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
                   height: 48,
                 ),
-                ClipOval(
-                  child: SizedBox.fromSize(
-                    size: Size.fromRadius(56), // Image radius
-                    child: profile != null || company != null
-                        ? profile?.avatarUrl != null && profile?.avatarUrl != ''
-                            ? Image.network(
-                                profile?.avatarUrl ?? '',
-                                fit: BoxFit.cover,
-                              )
-                            : company?.avatarUrl != null &&
-                                    company?.avatarUrl != ''
-                                ? Image.network(
-                                    company?.avatarUrl ?? '',
-                                    fit: BoxFit.cover,
-                                  )
-                                : Icon(
-                                    Icons.no_accounts_outlined,
-                                    size: 112,
-                                  )
-                        : Icon(
-                            Icons.no_accounts_outlined,
-                            size: 112,
-                          ),
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: profile?.level == 'Premium'
+                          ? Colors.yellow
+                          : Colors.transparent,
+                      width: 4.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: SizedBox.fromSize(
+                      size: Size.fromRadius(56), // Image radius
+                      child: profile != null || company != null
+                          ? profile?.avatarUrl != null &&
+                                  profile?.avatarUrl != ''
+                              ? Image.network(
+                                  profile?.avatarUrl ?? '',
+                                  fit: BoxFit.cover,
+                                )
+                              : company?.avatarUrl != null &&
+                                      company?.avatarUrl != ''
+                                  ? Image.network(
+                                      company?.avatarUrl ?? '',
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Icon(
+                                      Icons.no_accounts_outlined,
+                                      size: 112,
+                                    )
+                          : Icon(
+                              Icons.no_accounts_outlined,
+                              size: 112,
+                            ),
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 24,
                 ),
-                Text(
-                  profile == null && company == null
-                      ? Keystring.GUEST.tr
-                      : profile != null
-                          ? profile.fullName ?? ''
-                          : company?.fullname ?? '',
-                  style: textNameMenu,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        profile == null && company == null
+                            ? Keystring.GUEST.tr
+                            : profile != null
+                                ? profile.fullName ?? ''
+                                : company?.fullname ?? '',
+                        style: textNameMenu,
+                      ),
+                      SizedBox(height: 8),
+                      profile?.level == 'Premium'
+                          ? AppTagCard(
+                              child: Text(Keystring.PREMIUM.tr),
+                              bgColor: Colors.yellow,
+                              borderColor: Colors.grey,
+                            )
+                          : AppTagCard(
+                              child: Text(
+                                Keystring.BASIC.tr,
+                                style: TextStyle(color: Colors.black45),
+                              ),
+                              bgColor: Colors.grey.shade300,
+                              borderColor: Colors.black54,
+                            ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 32,

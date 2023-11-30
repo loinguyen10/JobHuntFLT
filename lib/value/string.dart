@@ -200,6 +200,8 @@ class LocaleString extends Translations {
           'Edit': 'Edit',
           'Set_Time': 'Set Time',
           'Set_Date': 'Set Date',
+          'Premium': 'Premium',
+          'Basic': 'Basic',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

@@ -359,15 +359,13 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                                 ? AppSmallButton(
                                                     onPressed: () {
                                                       Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                MessageScreen(
-                                                                    company: data[
-                                                                            index]
-                                                                        .job!
-                                                                        .company!),
-                                                          ));
+
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        MessageScreen(Uid: data[index].job!.company!.uid??'tùng nà'),
+                                                              ));
+
                                                     },
                                                     label: Keystring.CHAT.tr,
                                                     margin:

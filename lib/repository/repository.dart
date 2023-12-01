@@ -896,6 +896,20 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
+  Future<dynamic> getListUserProfile() async {
+    Response response =
+        await get(Uri.parse(BASE_URL + "profile/getall_profile.php"));
+    log('ket qua getProfile: ${response.statusCode}');
+    log('ket qua getProfile: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['profile'];
+      return result.map((e) => UserProfileDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
   Future<dynamic> updateInterviewTimeApplication(
     String code,
     String interviewTime,

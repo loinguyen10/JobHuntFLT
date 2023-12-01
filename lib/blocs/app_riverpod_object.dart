@@ -685,3 +685,5 @@ final listJobSearchProvider = StateProvider<List<JobDetail>>((ref) => []);
 final numberJobSearchProvider = StateProvider<int>((ref) => 0);
 
 // final todayJobSearchProvider = StateProvider((ref) => '');
+final listUserProfilevider =
+    FutureProvider<List<UserProfileDetail>>((ref) => getUserProfileList());

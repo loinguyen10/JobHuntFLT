@@ -14,19 +14,65 @@ import '../../blocs/app_riverpod_object.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/conversation.dart';
+import '../../model/userprofile.dart';
 import '../../value/keystring.dart';
+
 class MessageScreen extends ConsumerWidget {
-  MessageScreen({required this.company, Key? key})
-      : super(key: key);
-  CompanyDetail company;
+  MessageScreen({required this.Uid, Key? key}) : super(key: key);
+  final Uid;
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final TextEditingController _messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isShowTime = ref.watch(isShowTimeProvider);
-    final user = ref.watch(userProfileProvider);
-    final avatar = company.avatarUrl??"";
-    String? uid = user!.uid;
+    final user = ref.watch(userLoginProvider);
+    String avatar = '';
+    String name = '';
+    String? uid = user?.uid;
+    String? role = user?.role;
+    String? receiverUid = Uid;
+    List<CompanyDetail> listCompany = [];
+    List<UserProfileDetail> listUser = [];
+    print('sendUid'+Uid);
+    if (role == 'candidate') {
+      final listCompanyData = ref.watch(listCompanyProvider);
+      listCompanyData.when(
+        data: (_data) {
+          listCompany.addAll(_data);
+        },
+        error: (error, stackTrace) => null,
+        loading: () => const CircularProgressIndicator(),
+      );
+      for (var c in listCompany) {
+        if (Uid ==
+            c.uid) {
+          print(
+              'idid: ${Uid} & ${c.uid}');
+          avatar = c.avatarUrl ?? '';
+          name = c.fullname ?? '';
+        }
+      }
+    } else if (role == 'recruiter') {
+      final listProfileData = ref.watch(listUserProfilevider);
+
+      listProfileData.when(
+        data: (_data) {
+          listUser.addAll(_data);
+        },
+        error: (error, stackTrace) => null,
+        loading: () => const CircularProgressIndicator(),
+      );
+      for (var c in listUser) {
+        if (Uid ==
+            c.uid) {
+          print(
+              'idid: ${Uid} & ${c.uid}');
+          avatar = c.avatarUrl ?? '';
+          name = c.displayName ?? '';
+        }
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appPrimaryColor,
@@ -37,17 +83,16 @@ class MessageScreen extends ConsumerWidget {
               child: SizedBox.fromSize(
                 size: Size.fromRadius(16),
                 child: avatar.isNotEmpty
-                    ? Image.network(avatar,
-                    fit: BoxFit.cover)
+                    ? Image.network(avatar, fit: BoxFit.cover)
                     : Icon(
-                  Icons.apartment,
-                  size: 32,
-                ),
+                        Icons.apartment,
+                        size: 32,
+                      ),
               ),
             ),
             SizedBox(width: 10), // Để tạo khoảng cách giữa avatar và tiêu đề
             Text(
-              company!.fullname.toString(),
+              name,
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -70,83 +115,90 @@ class MessageScreen extends ConsumerWidget {
         //   ),
         // ),
       ),
-      body:Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Expanded(
-            flex: 7,
-            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance
-                  .collection('chats')
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Đã xảy ra lỗi: ${snapshot.error}');
-                } else {
-                  List<Map<String, dynamic>> messages = snapshot.data!.docs
-                      .map((DocumentSnapshot<Map<String, dynamic>> doc) {
-                    return doc.data()!;
-                  }).toList();
-                  // Lọc tin nhắn theo điều kiện bạn muốn
-                  List<Map<String, dynamic>> filteredMessages = messages.where((message) {
-                    return (message['senderUid'] == uid && message['receiverUid'] == company.uid) ||
-                        (message['senderUid'] == company.uid && message['receiverUid'] == uid);
-                  }).toList();
+              flex: 7,
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection('chats')
+                    .orderBy('timestamp', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Đã xảy ra lỗi: ${snapshot.error}');
+                  } else {
+                    List<Map<String, dynamic>> messages = snapshot.data!.docs
+                        .map((DocumentSnapshot<Map<String, dynamic>> doc) {
+                      return doc.data()!;
+                    }).toList();
+                    List<Map<String, dynamic>> filteredMessages =
+                        messages.where((message) {
+                      if (role == 'candidate') {
+                        return (message['userUid'] == uid &&
+                            message['companyUid'] == receiverUid);
+                      } else {
+                        return (message['companyUid'] == uid &&
+                            message['userUid'] == receiverUid);
+                      }
+                    }).toList();
 
-                  return ListView.builder(
-                    reverse: true,
-                    itemCount: filteredMessages.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        tileColor: Colors.transparent,
-                        title: GestureDetector(
-                          onTap: () {
-                            ref.read(isShowTimeProvider.notifier).state = !isShowTime;
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: filteredMessages[index]['senderUid'] == uid
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: filteredMessages[index]['senderUid'] == uid
-                                      ? appPrimaryColor
-                                      : Colors.grey,
-                                  borderRadius: BorderRadius.circular(28.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    filteredMessages[index]['content'],
-                                    style: TextStyle(color: Colors.white),
+                    return ListView.builder(
+                      reverse: true,
+                      itemCount: filteredMessages.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          tileColor: Colors.transparent,
+                          title: GestureDetector(
+                            onTap: () {
+                              ref.read(isShowTimeProvider.notifier).state =
+                                  !isShowTime;
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: filteredMessages[index]['send'] == role
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: filteredMessages[index]['send'] == role
+                                        ? appPrimaryColor
+                                        : Colors.grey,
+                                    borderRadius: BorderRadius.circular(28.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      filteredMessages[index]['content'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ),
-                              ),
-
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        subtitle: isShowTime
-                            ? Text(
-                          textAlign: TextAlign.center,
-                          formattedTimestamp(filteredMessages[index]['timestamp']),
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                        )
-                            : null,
-                      );
-                    },
-                  );
-                }
-              },
-            )
-          ),
+                          subtitle: isShowTime
+                              ? Text(
+                                  textAlign: TextAlign.center,
+                                  formattedTimestamp(
+                                      filteredMessages[index]['timestamp']),
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 12),
+                                )
+                              : null,
+                        );
+                      },
+                    );
+                  }
+                },
+              )),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -174,12 +226,18 @@ class MessageScreen extends ConsumerWidget {
                       IconButton(
                         onPressed: () {
                           String message = _messageController.text;
-                          if(!message.isEmpty){
-                            sendMessage(message,uid!,company.uid.toString());
+                          if (!message.isEmpty) {
+                            if (role == 'candidate') {
+                              sendMessage(message, uid ?? '',
+                                  receiverUid.toString(), role ?? '');
+                            } else if (role == 'recruiter') {
+                              sendMessage(message, receiverUid.toString(),
+                                  uid ?? '', role ?? '');
+                            }
                             _messageController.clear();
                           }
                         },
-                        icon: Icon(Icons.send,color: appPrimaryColor),
+                        icon: Icon(Icons.send, color: appPrimaryColor),
                       ),
                     ],
                   ),
@@ -191,51 +249,107 @@ class MessageScreen extends ConsumerWidget {
       ),
     );
   }
-  void sendMessage(String content, String senderUid, String receiverUid) async {
+
+  void sendMessage(
+      String content, String senderUid, String receiverUid, String role) async {
     try {
       Timestamp timestamp = Timestamp.now();
+      // if (role == 'candidate') {
+        Map<String, dynamic> messageData = {
+          'content': content,
+          'userUid': senderUid,
+          'companyUid': receiverUid,
+          'send': role,
+          'timestamp': timestamp,
+        };
+        await FirebaseFirestore.instance.collection('chats').add(messageData);
 
-      Map<String, dynamic> messageData = {
-        'content': content,
-        'userUid': senderUid,
-        'companyUid': receiverUid,
-        'timestamp': timestamp,
-      };
-
-      // Gửi dữ liệu tin nhắn lên Firestore
-      await FirebaseFirestore.instance
-          .collection('chats')
-          .add(messageData);
-
-      print('Đã gửi tin nhắn thành công');
-      Map<String, dynamic> conversationData = {
-        'userUid': senderUid,
-        'companyUid': receiverUid,
-        'timestamp': timestamp,
-      };
-      await FirebaseFirestore.instance
-          .collection('conversation')
-          .add(conversationData);
+        print('Đã gửi tin nhắn thành công'+senderUid+'&&'+receiverUid);
+        AddConversation(senderUid, receiverUid, content, timestamp,role);
+      // } else if (role == 'recruiter') {
+      //   Map<String, dynamic> messageData = {
+      //     'content': content,
+      //     'userUid': receiverUid,
+      //     'companyUid': senderUid,
+      //     'timestamp': timestamp,
+      //   };
+      //   await FirebaseFirestore.instance.collection('chats').add(messageData);
+      //
+      //   print('Đã gửi tin nhắn thành công'+senderUid+'&&'+receiverUid);
+      //   AddConversation(receiverUid, senderUid, content, timestamp,role);
+      // }
     } catch (e) {
       print('Lỗi khi gửi tin nhắn: $e');
     }
   }
+
   String formattedTimestamp(Timestamp timestamp) {
     DateTime currentTime = DateTime.now();
     DateTime messageTime = timestamp.toDate();
     Duration difference = currentTime.difference(messageTime);
     if (difference.inMinutes < 1) {
       return "Vừa xong";
-    } else if(difference.inHours<1){
+    } else if (difference.inHours < 1) {
       return "${difference.inMinutes} phút trước";
-    }
-    else if (difference.inHours < 24) {
+    } else if (difference.inHours < 24) {
       return "${difference.inHours} giờ trước";
     } else {
       return DateFormat.yMd().add_Hm().format(messageTime);
     }
   }
+
+  void AddConversation(String userUid, String companyUid, String content,
+      Timestamp timestamp,String role) async {
+    CollectionReference conversationCollection =
+        FirebaseFirestore.instance.collection('conversation');
+
+      // if(role=='candidate'){
+        QuerySnapshot<Object?> existingData = await conversationCollection
+            .where('userUid', isEqualTo: userUid)
+            .where('companyUid', isEqualTo: companyUid)
+            .get();
+        if (existingData.docs.isNotEmpty) {
+          QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+          await conversationCollection.doc(existingDoc.id).update({
+            'userUid': userUid,
+            'companyUid': companyUid,
+            'content': content,
+            'timestamp': timestamp,
+          });
+        } else {
+          Map<String, dynamic> conversationData = {
+            'userUid': userUid,
+            'companyUid': companyUid,
+            'content': content,
+            'timestamp': timestamp,
+          };
+          await conversationCollection.add(conversationData);
+        }
+      // }else if(role == 'recruiter'){
+      //   QuerySnapshot<Object?> existingData = await conversationCollection
+      //       .where('userUid', isEqualTo: companyUid)
+      //       .where('companyUid', isEqualTo: userUid)
+      //       .get();
+      //   if (existingData.docs.isNotEmpty) {
+      //     QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+      //     await conversationCollection.doc(existingDoc.id).update({
+      //       'userUid': companyUid,
+      //       'companyUid': userUid,
+      //       'content': content,
+      //       'timestamp': timestamp,
+      //     });
+      //   } else {
+      //     Map<String, dynamic> conversationData = {
+      //       'content': content,
+      //       'timestamp': timestamp,
+      //     };
+      //     await conversationCollection.add(conversationData);
+      //   }
+      // }
+    print('UserId'+userUid+'companyId'+companyUid);
+  }
 }
+
 class Conversation extends ConsumerStatefulWidget {
   const Conversation({super.key});
 
@@ -244,14 +358,15 @@ class Conversation extends ConsumerStatefulWidget {
 }
 
 class _Conversation extends ConsumerState<Conversation> {
-
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProfileProvider);
-
+    final user = ref.watch(userLoginProvider);
+    String? uid = user!.uid;
+    String? role = user?.role;
     List<CompanyDetail> listCompany = [];
-
+    List<UserProfileDetail> listUserProfile = [];
     final listCompanyData = ref.watch(listCompanyProvider);
+
 
     listCompanyData.when(
       data: (_data) {
@@ -261,139 +376,180 @@ class _Conversation extends ConsumerState<Conversation> {
       loading: () => const CircularProgressIndicator(),
     );
 
-    String? uid = user!.uid;
+    final listProfileData = ref.watch(listUserProfilevider);
+
+    listProfileData.when(
+      data: (_data) {
+        listUserProfile.addAll(_data);
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    String formattedTimestamp(Timestamp timestamp) {
+      DateTime messageTime = timestamp.toDate();
+      return DateFormat.Hm().format(messageTime);
+    }
     return Scaffold(
-      appBar: AppBar(
-        title: Text(Keystring.YOUR_INBOX.tr),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        elevation: 0,
-        foregroundColor: Theme.of(context).colorScheme.primary,
-      ),
-      body:   Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => SearchScreen()),
-              // );
-            },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                side: BorderSide(color: Colors.black, width: 1),
-              ),
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Icon(
-                      Icons.search,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text(
-                      Keystring.SEARCH,
-                      style: textNormalHint,
-                    ),
-                  ],
+        appBar: AppBar(
+          title: Text(Keystring.YOUR_INBOX.tr),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          elevation: 0,
+          foregroundColor: Theme.of(context).colorScheme.primary,
+        ),
+        body: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => SearchScreen()),
+                // );
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(color: Colors.black, width: 1),
+                ),
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 16,
+                      ),
+                      Icon(
+                        Icons.search,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      Text(
+                        Keystring.SEARCH,
+                        style: textNormalHint,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 7,
-              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: FirebaseFirestore.instance
-                    .collection('conversation')
-                    .where('senderUid')
-                    .orderBy('timestamp', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Đã xảy ra lỗi: ${snapshot.error}');
-                  } else {
-                    List<Map<String, dynamic>> conversations = snapshot.data!.docs
-                        .map((DocumentSnapshot<Map<String, dynamic>> doc) {
-                      return doc.data()!;
-                    }).toList();
-                   
-                    List<Map<String, dynamic>> filteredconversations = conversations.where((message) {
-                      return (message['userUid'] == uid || message['userUid'] == uid);
-                    }).toList();
-                    // for(var i in filteredconversations){
-                    //   final conversation = ConversationModel(
-                    //     companyUid: i['companyUid'],
-                    //     userUid: i['userUid'],
-                    //     timestamps: i['timestamps'],
-                    //     content: i['content'],
-                    //   );
-                    //   print(conversation.companyUid!+conversation.timestamps.toString());
-                    // }
+            Expanded(
+                flex: 7,
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: FirebaseFirestore.instance
+                      .collection('conversation')
+                      .where('senderUid')
+                      .orderBy('timestamp', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Đã xảy ra lỗi: ${snapshot.error}');
+                    } else {
+                      List<Map<String, dynamic>> conversations = snapshot
+                          .data!.docs
+                          .map((DocumentSnapshot<Map<String, dynamic>> doc) {
+                        return doc.data()!;
+                      }).toList();
 
-                    print('filteredconversations'+filteredconversations.length.toString());
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: filteredconversations.length,
-                      itemBuilder: (context, index) {
-
-                        String avatar = '';
-                        String name = '';
-
-                        for(var c in listCompany){
-                          if(filteredconversations[index]['companyUid'] == c.uid){
-                            print('idid: ${filteredconversations[index]['companyUid']} & ${c.uid}');
-                            avatar = c.avatarUrl??'';
-                            name = c.fullname??'';
-                          }
+                      List<Map<String, dynamic>> filteredconversations =
+                      conversations.where((message) {
+                        if (role == 'candidate') {
+                          return message['userUid'] == uid;
+                        } else {
+                          return message['companyUid'] == uid;
                         }
+                      }).toList();
 
+                      print('filteredconversations' +
+                          filteredconversations.length.toString());
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: filteredconversations.length,
+                        itemBuilder: (context, index) {
+                          String avatar = '';
+                          String name = '';
+                          if(role == 'candidate'){
+                            for (var c in listCompany) {
+                              if (filteredconversations[index]['companyUid'] ==
+                                  c.uid) {
+                                print(
+                                    'idid: ${filteredconversations[index]['companyUid']} & ${c.uid}');
+                                avatar = c.avatarUrl ?? '';
+                                name = c.fullname ?? '';
+                              }
+                            }
+                          }else if(role == 'recruiter'){
+                            for (var c in listUserProfile) {
+                              if (filteredconversations[index]['userUid'] ==
+                                  c.uid) {
+                                print(
+                                    'idid: ${filteredconversations[index]['userUid']} & ${c.uid}');
+                                avatar = c.avatarUrl ?? '';
+                                name = c.displayName ?? '';
+                              }
+                            }
+                          }
 
-
-                        return ListTile(
-                          contentPadding: EdgeInsets.all(0),
-                          tileColor: Colors.transparent,
-                          title: GestureDetector(
-
-                            onTap: () {
-
-                            },
-                            child:Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: SizedBox.fromSize(
-                                    size: Size.fromRadius(16),
-                                    child: avatar.isNotEmpty
-                                        ? Image.network(avatar,
-                                        fit: BoxFit.cover)
-                                        : Icon(
-                                      Icons.apartment,
-                                      size: 32,
+                          return ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            tileColor: Colors.transparent,
+                            title: GestureDetector(
+                                onTap: () {
+                                  if(role=='candidate'){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              MessageScreen(Uid: filteredconversations[index]['companyUid']??'tùng nà'),
+                                        ));
+                                  }else if(role == 'recruiter')
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MessageScreen(Uid: filteredconversations[index]['userUid']??'tùng nà'),
+                                      ));
+                                },
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: SizedBox.fromSize(
+                                        size: Size.fromRadius(32),
+                                        child: avatar.isNotEmpty
+                                            ? Image.network(avatar,
+                                                fit: BoxFit.cover)
+                                            : Icon(
+                                                Icons.apartment,
+                                                size: 32,
+                                              ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
-              )
-          )
-        ],
-      )
-    );
+                                    Column(
+                                      children: [
+                                        Container(child: Text(name)),
+                                        Row(children: [
+                                          SizedBox(width: 10),
+                                          Text(filteredconversations[index]['content']),
+                                          SizedBox(width: 10),
+                                          Text(formattedTimestamp(filteredconversations[index]['timestamp'])),
+                                        ],)
+                                      ],
+                                    )
+                                  ],
+                                )),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ))
+          ],
+        ));
   }
 }

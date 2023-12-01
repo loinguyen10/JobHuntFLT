@@ -378,7 +378,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String companyId,
     int minSalary,
     int maxSalary,
-    String currency,
     int yearExperience,
     int typeJob,
     int numberCandidate,
@@ -397,7 +396,6 @@ class LoginController extends StateNotifier<InsideEvent> {
             companyId,
             minSalary,
             maxSalary,
-            currency,
             yearExperience,
             typeJob,
             numberCandidate,
@@ -428,7 +426,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String companyId,
     int minSalary,
     int maxSalary,
-    String currency,
     int yearExperience,
     int typeJob,
     int numberCandidate,
@@ -448,7 +445,6 @@ class LoginController extends StateNotifier<InsideEvent> {
             companyId,
             minSalary,
             maxSalary,
-            currency,
             yearExperience,
             typeJob,
             numberCandidate,
@@ -624,10 +620,7 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        Future.delayed(Duration(seconds: 3), () {
-          ref.refresh(listRecuiterTodayApplicationProvider);
-          state = const CreateThingSuccessEvent();
-        });
+        state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');
       }
@@ -930,6 +923,62 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = RemoveCVErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void getRecuiterApplicationWithSetting(
+    searchWord,
+    statusCheck,
+    sentTime,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      String approve = '';
+      if (statusCheck == 'approve') approve = '1';
+      if (statusCheck == 'reject') approve = '0';
+      if (statusCheck == 'waiting') approve = 'null';
+
+      log('message approve: $approve');
+      log('message sendtime: $sentTime');
+
+      final result =
+          await ref.read(authRepositoryProvider).getRecuiterApplication(
+                ref.watch(userLoginProvider)!.uid ?? '0',
+                searchWord,
+                approve,
+                sentTime,
+              );
+
+      ref.read(listRecuiterApplicationProvider.notifier).state = result;
+      state = const GetListSuccessEvent();
+    } catch (e) {
+      state = GetListErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void updateInterviewApplication(
+    String code,
+    String interviewTime,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).updateInterviewTimeApplication(
+                code,
+                interviewTime,
+              );
+
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

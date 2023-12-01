@@ -72,6 +72,24 @@ final bgGradientColor1 = LinearGradient(
   tileMode: TileMode.mirror,
 );
 
+final bgGradientColor2 = LinearGradient(
+  begin: Alignment.topRight,
+  end: Alignment.bottomCenter,
+  colors: <Color>[
+    appPrimaryColor,
+    Color(0xffFF7D00),
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+  tileMode: TileMode.mirror,
+);
+
 //style
 final dropDownButtonStyle1 = ButtonStyleData(
   padding: EdgeInsets.symmetric(horizontal: 8),

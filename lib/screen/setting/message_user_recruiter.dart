@@ -31,20 +31,11 @@ class MessageScreen extends ConsumerWidget {
     String name = '';
     String? uid = user?.uid;
     String? role = user?.role;
-    String? receiverUid = '';
+    String? receiverUid = Uid;
     List<CompanyDetail> listCompany = [];
-    List<UserDetail> listUser = [];
-    final profile;
+    List<UserProfileDetail> listUser = [];
+    print('sendUid'+Uid);
     if (role == 'candidate') {
-      // profile =
-      //     ref.watch(authRepositoryProvider).getProfile(user!.uid.toString());
-      // ref.read(userProfileProvider.notifier).state =
-      //     profile as UserProfileDetail;
-      // avatar = profile!.avatarUrl!;
-      // name = profile.fullName.toString();
-      // receiverUid = profile.uid.toString();
-  
-
       final listCompanyData = ref.watch(listCompanyProvider);
       listCompanyData.when(
         data: (_data) {
@@ -63,14 +54,24 @@ class MessageScreen extends ConsumerWidget {
         }
       }
     } else if (role == 'recruiter') {
-      // profile =
-      //     ref.watch(authRepositoryProvider).getCompany(user!.uid.toString());
-      // ref.read(companyProfileProvider.notifier).state =
-      //     profile as CompanyDetail?;
-      // avatar = profile!.avatarUrl!;
-      // name = profile.fullname.toString();
-      // receiverUid = profile.uid.toString();
-      // final listUserData = ref.watch(list)
+      final listProfileData = ref.watch(listUserProfilevider);
+
+      listProfileData.when(
+        data: (_data) {
+          listUser.addAll(_data);
+        },
+        error: (error, stackTrace) => null,
+        loading: () => const CircularProgressIndicator(),
+      );
+      for (var c in listUser) {
+        if (Uid ==
+            c.uid) {
+          print(
+              'idid: ${Uid} & ${c.uid}');
+          avatar = c.avatarUrl ?? '';
+          name = c.displayName ?? '';
+        }
+      }
     }
     return Scaffold(
       appBar: AppBar(
@@ -159,28 +160,17 @@ class MessageScreen extends ConsumerWidget {
                             },
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: role == 'candidate'
-                                  ? filteredMessages[index]['userUid'] == uid
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start
-                                  : filteredMessages[index]['companyUid'] == uid
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
+                              crossAxisAlignment: filteredMessages[index]['send'] == role
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 8),
                                   decoration: BoxDecoration(
-                                    color: role == 'candidate'
-                                        ? filteredMessages[index]['userUid'] ==
-                                                uid
-                                            ? appPrimaryColor
-                                            : Colors.grey
-                                        : filteredMessages[index]
-                                                    ['companyUid'] ==
-                                                uid
-                                            ? appPrimaryColor
-                                            : Colors.grey,
+                                    color: filteredMessages[index]['send'] == role
+                                        ? appPrimaryColor
+                                        : Colors.grey,
                                     borderRadius: BorderRadius.circular(28.0),
                                   ),
                                   child: Padding(
@@ -264,29 +254,30 @@ class MessageScreen extends ConsumerWidget {
       String content, String senderUid, String receiverUid, String role) async {
     try {
       Timestamp timestamp = Timestamp.now();
-      if (role == 'candidate') {
+      // if (role == 'candidate') {
         Map<String, dynamic> messageData = {
           'content': content,
           'userUid': senderUid,
           'companyUid': receiverUid,
+          'send': role,
           'timestamp': timestamp,
         };
         await FirebaseFirestore.instance.collection('chats').add(messageData);
 
-        print('Đã gửi tin nhắn thành công');
-        AddConversation(senderUid, receiverUid, content, timestamp);
-      } else if (role == '') {
-        Map<String, dynamic> messageData = {
-          'content': content,
-          'userUid': receiverUid,
-          'companyUid': senderUid,
-          'timestamp': timestamp,
-        };
-        await FirebaseFirestore.instance.collection('chats').add(messageData);
-
-        print('Đã gửi tin nhắn thành công');
-        AddConversation(receiverUid, senderUid, content, timestamp);
-      }
+        print('Đã gửi tin nhắn thành công'+senderUid+'&&'+receiverUid);
+        AddConversation(senderUid, receiverUid, content, timestamp,role);
+      // } else if (role == 'recruiter') {
+      //   Map<String, dynamic> messageData = {
+      //     'content': content,
+      //     'userUid': receiverUid,
+      //     'companyUid': senderUid,
+      //     'timestamp': timestamp,
+      //   };
+      //   await FirebaseFirestore.instance.collection('chats').add(messageData);
+      //
+      //   print('Đã gửi tin nhắn thành công'+senderUid+'&&'+receiverUid);
+      //   AddConversation(receiverUid, senderUid, content, timestamp,role);
+      // }
     } catch (e) {
       print('Lỗi khi gửi tin nhắn: $e');
     }
@@ -308,31 +299,54 @@ class MessageScreen extends ConsumerWidget {
   }
 
   void AddConversation(String userUid, String companyUid, String content,
-      Timestamp timestamp) async {
+      Timestamp timestamp,String role) async {
     CollectionReference conversationCollection =
         FirebaseFirestore.instance.collection('conversation');
 
-    QuerySnapshot<Object?> existingData = await conversationCollection
-        .where('userUid', isEqualTo: userUid)
-        .where('companyUid', isEqualTo: companyUid)
-        .get();
-
-    if (existingData.docs.isNotEmpty) {
-      // Dữ liệu đã tồn tại, thực hiện cập nhật
-      QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
-      await conversationCollection.doc(existingDoc.id).update({
-        'timestamp': timestamp,
-        'content': content,
-      });
-    } else {
-      Map<String, dynamic> conversationData = {
-        'userUid': userUid,
-        'companyUid': companyUid,
-        'content': content,
-        'timestamp': timestamp,
-      };
-      await conversationCollection.add(conversationData);
-    }
+      // if(role=='candidate'){
+        QuerySnapshot<Object?> existingData = await conversationCollection
+            .where('userUid', isEqualTo: userUid)
+            .where('companyUid', isEqualTo: companyUid)
+            .get();
+        if (existingData.docs.isNotEmpty) {
+          QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+          await conversationCollection.doc(existingDoc.id).update({
+            'userUid': userUid,
+            'companyUid': companyUid,
+            'content': content,
+            'timestamp': timestamp,
+          });
+        } else {
+          Map<String, dynamic> conversationData = {
+            'userUid': userUid,
+            'companyUid': companyUid,
+            'content': content,
+            'timestamp': timestamp,
+          };
+          await conversationCollection.add(conversationData);
+        }
+      // }else if(role == 'recruiter'){
+      //   QuerySnapshot<Object?> existingData = await conversationCollection
+      //       .where('userUid', isEqualTo: companyUid)
+      //       .where('companyUid', isEqualTo: userUid)
+      //       .get();
+      //   if (existingData.docs.isNotEmpty) {
+      //     QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+      //     await conversationCollection.doc(existingDoc.id).update({
+      //       'userUid': companyUid,
+      //       'companyUid': userUid,
+      //       'content': content,
+      //       'timestamp': timestamp,
+      //     });
+      //   } else {
+      //     Map<String, dynamic> conversationData = {
+      //       'content': content,
+      //       'timestamp': timestamp,
+      //     };
+      //     await conversationCollection.add(conversationData);
+      //   }
+      // }
+    print('UserId'+userUid+'companyId'+companyUid);
   }
 }
 
@@ -346,11 +360,13 @@ class Conversation extends ConsumerStatefulWidget {
 class _Conversation extends ConsumerState<Conversation> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProfileProvider);
-
+    final user = ref.watch(userLoginProvider);
+    String? uid = user!.uid;
+    String? role = user?.role;
     List<CompanyDetail> listCompany = [];
-
+    List<UserProfileDetail> listUserProfile = [];
     final listCompanyData = ref.watch(listCompanyProvider);
+
 
     listCompanyData.when(
       data: (_data) {
@@ -360,7 +376,20 @@ class _Conversation extends ConsumerState<Conversation> {
       loading: () => const CircularProgressIndicator(),
     );
 
-    String? uid = user!.uid;
+    final listProfileData = ref.watch(listUserProfilevider);
+
+    listProfileData.when(
+      data: (_data) {
+        listUserProfile.addAll(_data);
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    String formattedTimestamp(Timestamp timestamp) {
+      DateTime messageTime = timestamp.toDate();
+      return DateFormat.Hm().format(messageTime);
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text(Keystring.YOUR_INBOX.tr),
@@ -428,9 +457,12 @@ class _Conversation extends ConsumerState<Conversation> {
                       }).toList();
 
                       List<Map<String, dynamic>> filteredconversations =
-                          conversations.where((message) {
-                        return (message['userUid'] == uid ||
-                            message['userUid'] == uid);
+                      conversations.where((message) {
+                        if (role == 'candidate') {
+                          return message['userUid'] == uid;
+                        } else {
+                          return message['companyUid'] == uid;
+                        }
                       }).toList();
 
                       print('filteredconversations' +
@@ -441,14 +473,25 @@ class _Conversation extends ConsumerState<Conversation> {
                         itemBuilder: (context, index) {
                           String avatar = '';
                           String name = '';
-
-                          for (var c in listCompany) {
-                            if (filteredconversations[index]['companyUid'] ==
-                                c.uid) {
-                              print(
-                                  'idid: ${filteredconversations[index]['companyUid']} & ${c.uid}');
-                              avatar = c.avatarUrl ?? '';
-                              name = c.fullname ?? '';
+                          if(role == 'candidate'){
+                            for (var c in listCompany) {
+                              if (filteredconversations[index]['companyUid'] ==
+                                  c.uid) {
+                                print(
+                                    'idid: ${filteredconversations[index]['companyUid']} & ${c.uid}');
+                                avatar = c.avatarUrl ?? '';
+                                name = c.fullname ?? '';
+                              }
+                            }
+                          }else if(role == 'recruiter'){
+                            for (var c in listUserProfile) {
+                              if (filteredconversations[index]['userUid'] ==
+                                  c.uid) {
+                                print(
+                                    'idid: ${filteredconversations[index]['userUid']} & ${c.uid}');
+                                avatar = c.avatarUrl ?? '';
+                                name = c.displayName ?? '';
+                              }
                             }
                           }
 
@@ -457,7 +500,20 @@ class _Conversation extends ConsumerState<Conversation> {
                             tileColor: Colors.transparent,
                             title: GestureDetector(
                                 onTap: () {
-
+                                  if(role=='candidate'){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              MessageScreen(Uid: filteredconversations[index]['companyUid']??'tùng nà'),
+                                        ));
+                                  }else if(role == 'recruiter')
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MessageScreen(Uid: filteredconversations[index]['userUid']??'tùng nà'),
+                                      ));
                                 },
                                 child: Row(
                                   children: [
@@ -476,10 +532,12 @@ class _Conversation extends ConsumerState<Conversation> {
                                     ),
                                     Column(
                                       children: [
-                                        Container(child: Text('Name')),
+                                        Container(child: Text(name)),
                                         Row(children: [
-                                          Text('message'),
-                                          Text('time'),
+                                          SizedBox(width: 10),
+                                          Text(filteredconversations[index]['content']),
+                                          SizedBox(width: 10),
+                                          Text(formattedTimestamp(filteredconversations[index]['timestamp'])),
                                         ],)
                                       ],
                                     )

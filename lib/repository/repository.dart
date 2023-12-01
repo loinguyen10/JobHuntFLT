@@ -868,12 +868,12 @@ class InsideService {
 
   Future<dynamic> getListUserProfile() async {
     Response response =
-    await get(Uri.parse(BASE_URL + "company/allCompany.php"));
-    log('ket qua get: ${response.statusCode}');
-    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    await get(Uri.parse(BASE_URL + "profile/getall_profile.php"));
+    log('ket qua getProfile: ${response.statusCode}');
+    log('ket qua getProfile: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-      jsonDecode(utf8.decode(response.bodyBytes))['data']['company'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['profile'];
       return result.map((e) => UserProfileDetail.fromJson(e)).toList();
     } else {
       return [];

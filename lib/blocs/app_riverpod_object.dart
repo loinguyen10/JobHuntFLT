@@ -680,3 +680,5 @@ final dateTimeInterviewApplicationProvider = StateProvider.autoDispose((ref) =>
         ? ref.watch(timeInterviewApplicationProvider).substring(
             0, ref.watch(timeInterviewApplicationProvider).indexOf(' '))
         : '');
+final listUserProfilevider =
+FutureProvider<List<UserProfileDetail>>((ref) => getUserProfileList());

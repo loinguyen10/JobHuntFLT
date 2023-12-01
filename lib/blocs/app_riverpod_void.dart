@@ -15,6 +15,7 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../model/company.dart';
@@ -315,5 +316,10 @@ Future<List<FollowDetail>> getYourFollowList(String uid) async {
 Future<List<CompanyDetail>> getCompanyListUid(String uid) async {
   final list = await insideService.getCompany(uid);
   log('list: ${list.length}');
+  return list;
+}
+Future<List<UserProfileDetail>> getUserProfileList() async {
+  final list = await insideService.getListUserProfile();
+  log('listProfile: ${list.length}');
   return list;
 }

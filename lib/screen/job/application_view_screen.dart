@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:jobhunt_ftl/component/date_dialog.dart';
 
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
@@ -18,14 +21,37 @@ import '../home.dart';
 import '../user/viewcv.dart';
 import 'job_view_screen.dart';
 
-class ApplicationViewFullScreen extends ConsumerWidget {
-  const ApplicationViewFullScreen({super.key});
+class ApplicationViewFullScreen extends ConsumerStatefulWidget {
+  const ApplicationViewFullScreen({
+    super.key,
+    required this.recruiter,
+  });
+  final bool recruiter;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ApplicationViewFullScreenState();
+}
+
+class _ApplicationViewFullScreenState
+    extends ConsumerState<ApplicationViewFullScreen> {
+  @override
+  Widget build(BuildContext context) {
     final application = ref.watch(applicationDetailProvider);
     final job = application!.job;
     final candidate = application.candidate;
+
+    void showInterviewTime(bool edit) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return InterviewTimeDialog(
+            code: application.code ?? '0',
+            edit: edit,
+          );
+        },
+      );
+    }
 
     //listen
     ref.listen<InsideEvent>(
@@ -34,7 +60,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
         log('pre - state : $previous - $state');
         if (state is CreateThingErrorEvent) {
           Loader.hide();
-          log('error2');
+          log('error-apply');
           Fluttertoast.showToast(
               msg: Keystring.UNSUCCESSFUL.tr,
               toastLength: Toast.LENGTH_SHORT,
@@ -47,7 +73,9 @@ class ApplicationViewFullScreen extends ConsumerWidget {
 
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
-          log('c-success1');
+          log('c-success-apply');
+          ref.invalidate(getListRecuiterApplicationProvider);
+          Get.back();
           Fluttertoast.showToast(
               msg: Keystring.SUCCESSFUL.tr,
               toastLength: Toast.LENGTH_SHORT,
@@ -56,21 +84,20 @@ class ApplicationViewFullScreen extends ConsumerWidget {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
-          Get.offAll(HomeScreen());
         }
 
-        if (state is CreateThingLoadingEvent) {
+        if (state is ThingLoadingEvent) {
           Loader.show(context);
         }
       },
     );
 
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: Theme.of(context).colorScheme.background == Colors.white
-                ? bgGradientColor0
-                : bgGradientColor1),
+    return Container(
+      decoration: BoxDecoration(
+          gradient: Theme.of(context).colorScheme.background == Colors.white
+              ? bgGradientColor0
+              : bgGradientColor1),
+      child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -78,6 +105,7 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 foregroundColor: Colors.white,
+                title: Text(Keystring.DETAIL.tr),
               ),
               SizedBox(height: 32),
               AppJobCard(
@@ -134,54 +162,283 @@ class ApplicationViewFullScreen extends ConsumerWidget {
                 height: 56,
               ),
               SizedBox(height: 40),
-              Row(
-                children: [
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: AppButton(
-                      onPressed: () {
-                        ref
-                            .read(LoginControllerProvider.notifier)
-                            .apporveApplication(
-                              application.code ?? '0',
-                              '1',
-                            );
-                      },
-                      label: Keystring.APPORVE.tr,
-                      bgColor: Colors.green,
-                      textColor: Colors.white,
-                      colorBorder: Colors.green,
-                      borderRadius: 16,
-                      height: 56,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: AppButton(
-                      onPressed: () {
-                        ref
-                            .read(LoginControllerProvider.notifier)
-                            .apporveApplication(
-                              application.code ?? '0',
-                              '0',
-                            );
-                      },
-                      label: Keystring.REJECT.tr,
-                      bgColor: Colors.red,
-                      textColor: Colors.white,
-                      colorBorder: Colors.red,
-                      borderRadius: 16,
-                      height: 56,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                ],
-              ),
+              widget.recruiter
+                  ? Container(
+                      child: application.approve == null ||
+                              application.approve == ''
+                          ? Row(
+                              children: [
+                                SizedBox(width: 16),
+                                Expanded(
+                                  child: AppButton(
+                                    onPressed: () {
+                                      showInterviewTime(false);
+                                    },
+                                    label: Keystring.APPROVE.tr,
+                                    bgColor: Colors.green,
+                                    textColor: Colors.white,
+                                    colorBorder: Colors.green,
+                                    borderRadius: 16,
+                                    height: 56,
+                                  ),
+                                ),
+                                SizedBox(width: 16),
+                                Expanded(
+                                  child: AppButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text(Keystring.CONFIRM.tr),
+                                          content: Text(Keystring.CONFIRM.tr),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                ref
+                                                    .read(
+                                                        LoginControllerProvider
+                                                            .notifier)
+                                                    .approveApplication(
+                                                      application.code ?? '0',
+                                                      '0',
+                                                    );
+                                                Navigator.pop(context);
+                                              },
+                                              child:
+                                                  Text(Keystring.ThatsRight.tr),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(Keystring.CANCEL.tr),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    label: Keystring.REJECT.tr,
+                                    bgColor: Colors.red,
+                                    textColor: Colors.white,
+                                    colorBorder: Colors.red,
+                                    borderRadius: 16,
+                                    height: 56,
+                                  ),
+                                ),
+                                SizedBox(width: 16),
+                              ],
+                            )
+                          : application.approve == '1'
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${Keystring.INTERVIEW_TIME.tr}:',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            application.interviewTime ?? '',
+                                            style: textNormalBold.copyWith(
+                                              fontSize: 20,
+                                              color: Color.fromARGB(
+                                                  255, 0, 150, 0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width / 3,
+                                      child: AppButton(
+                                        onPressed: () {
+                                          ref.invalidate(
+                                              timeInterviewApplicationProvider);
+                                          showInterviewTime(true);
+                                        },
+                                        label: Keystring.EDIT.tr,
+                                        bgColor: appPrimaryColor,
+                                        borderRadius: 16,
+                                        height: 56,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(height: 0),
+                    )
+                  : SizedBox(height: 0),
               SizedBox(height: 32),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class InterviewTimeDialog extends ConsumerStatefulWidget {
+  const InterviewTimeDialog({
+    super.key,
+    required this.code,
+    required this.edit,
+  });
+
+  final String code;
+  final bool edit;
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _InterviewTimeDialogState();
+}
+
+class _InterviewTimeDialogState extends ConsumerState<InterviewTimeDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final date = ref.watch(dateTimeInterviewApplicationProvider);
+    final time = ref.watch(timeTimeInterviewApplicationProvider);
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return AlertDialog(
+          title: Text(Keystring.INTERVIEW_TIME.tr),
+          content: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  Keystring.SET_DATE.tr,
+                  style: textNormalBold.copyWith(color: Colors.grey),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        date,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      DateCustomDialog().setDateInterview(context, ref),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  Keystring.SET_TIME.tr,
+                  style: textNormalBold.copyWith(color: Colors.grey),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        time,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      DateCustomDialog().setTimeInterview(context, ref),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                if (date.isEmpty || time.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg: Keystring.NOT_FULL_DATA.tr,
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(Keystring.CONFIRM.tr),
+                      content: Text(Keystring.CONFIRM.tr),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            ref
+                                    .read(timeInterviewApplicationProvider.notifier)
+                                    .state =
+                                '${ref.watch(dateTimeInterviewApplicationProvider)} ${ref.watch(timeTimeInterviewApplicationProvider)}';
+
+                            log('date new: ${ref.watch(timeInterviewApplicationProvider)}');
+
+                            if (!widget.edit) {
+                              ref
+                                  .read(LoginControllerProvider.notifier)
+                                  .approveApplication(
+                                    widget.code,
+                                    '1',
+                                  );
+                              Navigator.pop(context);
+                            }
+
+                            ref
+                                .read(LoginControllerProvider.notifier)
+                                .updateInterviewApplication(
+                                  widget.code,
+                                  ref.watch(timeInterviewApplicationProvider),
+                                );
+
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: Text(Keystring.ThatsRight.tr),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(Keystring.CANCEL.tr),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+              child: Icon(Icons.check),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.close),
+            ),
+          ],
+        );
+      },
     );
   }
 }

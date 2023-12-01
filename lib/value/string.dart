@@ -74,7 +74,7 @@ class LocaleString extends Translations {
           'Website': 'Website',
           'Description': 'Description',
           'OK': 'OK',
-          'CV_Today': 'Applied CV Today',
+          'CV_Month': 'CVs of this month',
           'Posted_Jobs': 'Your Posted Jobs',
           'Company_Name': 'Name of Company',
           'Name_Job': 'Name of Job',
@@ -113,7 +113,7 @@ class LocaleString extends Translations {
           'View_CV': 'View CV',
           'View_Selected_CV': 'View Your Selected CV',
           'Confirm': 'Confirm',
-          'Apporve': 'Apporve',
+          'Approve': 'Approve',
           'Reject': 'Reject',
           'Company': 'Company',
           'Sent_Time': 'Sent Time',
@@ -196,8 +196,12 @@ class LocaleString extends Translations {
           'Active_Job': 'Active Job',
           'Tax_Code': 'Tax Code',
           'Tax_Code_Must_10': 'Tax code must have 10 numbers',
-          'Message':'Message'
-
+          'Message': 'Message',
+          'Edit': 'Edit',
+          'Set_Time': 'Set Time',
+          'Set_Date': 'Set Date',
+          'Premium': 'Premium',
+          'Basic': 'Basic',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

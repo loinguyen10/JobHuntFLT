@@ -4,11 +4,9 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
-import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/app_small_button.dart';
 import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/screen/user/viewcv.dart';
-
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 import '../job/job_view_screen.dart';
@@ -35,8 +33,8 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
     if (statusCheck == 'waiting') {
       _data = ref.watch(listCandidateWaitingApplicationProvider);
     }
-    if (statusCheck == 'apporve') {
-      _data = ref.watch(listCandidateApporveApplicationProvider);
+    if (statusCheck == 'approve') {
+      _data = ref.watch(listCandidateApproveApplicationProvider);
     }
     if (statusCheck == 'reject') {
       _data = ref.watch(listCandidateRejectApplicationProvider);
@@ -60,7 +58,7 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                     child: GestureDetector(
                       onTap: () {
                         if (statusCheck == 'waiting') {
-                          ref.refresh(StatusCheckProvider);
+                          ref.invalidate(StatusCheckProvider);
                         } else {
                           ref.read(StatusCheckProvider.notifier).state =
                               'waiting';
@@ -88,11 +86,11 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        if (statusCheck == 'apporve') {
-                          ref.refresh(StatusCheckProvider);
+                        if (statusCheck == 'approve') {
+                          ref.invalidate(StatusCheckProvider);
                         } else {
                           ref.read(StatusCheckProvider.notifier).state =
-                              'apporve';
+                              'approve';
                         }
                       },
                       child: Container(
@@ -105,9 +103,9 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                           color: Colors.green,
                         ),
                         child: Text(
-                          Keystring.APPORVE.tr,
+                          Keystring.APPROVE.tr,
                           textAlign: TextAlign.center,
-                          style: statusCheck == 'apporve'
+                          style: statusCheck == 'approve'
                               ? textStatus2View
                               : textStatusView,
                         ),
@@ -118,7 +116,7 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                     child: GestureDetector(
                       onTap: () {
                         if (statusCheck == 'reject') {
-                          ref.refresh(StatusCheckProvider);
+                          ref.invalidate(StatusCheckProvider);
                         } else {
                           ref.read(StatusCheckProvider.notifier).state =
                               'reject';
@@ -159,39 +157,32 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                           String name = data[index].job!.name ?? '';
                           String company =
                               data[index].job!.company!.fullname ?? '';
-                          String apporve = data[index].apporve ?? '';
+                          String approve = data[index].approve ?? '';
                           String sentTime = data[index].sendTime ?? '';
                           String interviewTime =
                               data[index].interviewTime ?? '';
-                          String time = apporve.isEmpty
+                          String time = approve.isEmpty
                               ? sentTime
-                              : data[index].apporveTime ?? '';
+                              : data[index].approveTime ?? '';
 
                           return Container(
                             margin: EdgeInsets.only(bottom: 8),
                             decoration: BoxDecoration(
-                                color: apporve == ''
+                                color: approve == ''
                                     ? Colors.white
-                                    : apporve == '1'
+                                    : approve == '1'
                                         ? Color.fromARGB(75, 0, 150, 0)
                                         : Color.fromARGB(75, 255, 0, 0),
                                 border: Border.all(
                                   width: 1,
-                                  color: apporve == ''
+                                  color: approve == ''
                                       ? Colors.grey
                                       : Colors.black,
                                 )),
                             child: ExpansionTile(
-                              textColor: apporve == ''
-                                  ? Colors.black
-                                  : apporve == '1'
-                                      ? Color.fromARGB(255, 0, 150, 0)
-                                      : Color.fromARGB(255, 255, 0, 0),
-                              collapsedTextColor: apporve == ''
-                                  ? Colors.black
-                                  : apporve == '1'
-                                      ? Color.fromARGB(255, 0, 150, 0)
-                                      : Color.fromARGB(255, 255, 0, 0),
+                              textColor:
+                                  approve == '' ? Colors.black : Colors.black38,
+                              collapsedTextColor: Colors.black,
                               tilePadding:
                                   EdgeInsets.only(left: 16, top: 2, bottom: 2),
                               childrenPadding: EdgeInsetsDirectional.symmetric(
@@ -305,20 +296,20 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              apporve == ''
+                                              approve == ''
                                                   ? Keystring.WAITING.tr
                                                       .toUpperCase()
-                                                  : apporve == '1'
-                                                      ? Keystring.APPORVE.tr
+                                                  : approve == '1'
+                                                      ? Keystring.APPROVE.tr
                                                           .toUpperCase()
                                                       : Keystring.REJECT.tr
                                                           .toUpperCase(),
                                               style: TextStyle(
                                                 fontSize: 22,
                                                 fontWeight: FontWeight.bold,
-                                                color: apporve == ''
+                                                color: approve == ''
                                                     ? Colors.black
-                                                    : apporve == '1'
+                                                    : approve == '1'
                                                         ? Color.fromARGB(
                                                             255, 0, 150, 0)
                                                         : Color.fromARGB(
@@ -364,16 +355,17 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            apporve == '1'
+                                            approve == '1'
                                                 ? AppSmallButton(
                                                     onPressed: () {
                                                       Navigator.push(
+
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
                                                                         MessageScreen(Uid: data[index].job!.company!.uid),
-                                                              )
-                                                      );
+                                                              ));
+
                                                     },
                                                     label: Keystring.CHAT.tr,
                                                     margin:

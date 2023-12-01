@@ -68,7 +68,7 @@ class Keystring {
   static const String WEBSITE = 'Website';
   static const String DESCRIPTION = 'Description';
   static const String OK = 'OK';
-  static const String CV_Today = 'CV_Today';
+  static const String CV_Month = 'CV_Month';
   static const String Posted_Jobs = 'Posted_Jobs';
   static const String Company_Name = 'Company_Name';
   static const String Name_Job = 'Name_Job';
@@ -107,7 +107,7 @@ class Keystring {
   static const String VIEW_CV = 'View_CV';
   static const String VIEW_SELECTED_CV = 'View_Selected_CV';
   static const String CONFIRM = 'Confirm';
-  static const String APPORVE = 'Apporve';
+  static const String APPROVE = 'Approve';
   static const String REJECT = 'Reject';
   static const String COMPANY = 'Company';
   static const String SENT_TIME = 'Sent_Time';
@@ -187,4 +187,9 @@ class Keystring {
   static const String TAX_CODE = 'Tax_Code';
   static const String TAX_CODE_MUST_10 = 'Tax_Code_Must_10';
   static const String MESSAGE = 'Message';
+  static const String EDIT = 'Edit';
+  static const String SET_DATE = 'Set_Date';
+  static const String SET_TIME = 'Set_Time';
+  static const String PREMIUM = 'Premium';
+  static const String BASIC = 'Basic';
 }

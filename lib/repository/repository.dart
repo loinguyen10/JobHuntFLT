@@ -76,7 +76,7 @@ class InsideService {
     //   'Content-type': 'application/json',
     //   'Accept': 'application/json',
     // };
-    log('BASE_URL + "login.php" ${BASE_URL + "login.php"}');
+
     Response response = await post(Uri.parse(BASE_URL + "login.php"),
         // headers: requestHeaders,
         body: msg);
@@ -85,7 +85,7 @@ class InsideService {
     log('ket qua login: ${jsonDecode(response.body)}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final UserDetail result =
-          UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
+      UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
       log("Token dc luu ${result.uid}");
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('uid', result.uid ?? '');
@@ -110,12 +110,12 @@ class InsideService {
 
   Future<dynamic> getListEducation() async {
     Response response =
-        await get(Uri.parse(BASE_URL + "profile/education.php"));
+    await get(Uri.parse(BASE_URL + "profile/education.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['education'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['education'];
       log('$result');
       return result.map((e) => EducationList.fromJson(e)).toList();
     } else {
@@ -129,7 +129,7 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['currency'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['currency'];
       return result.map((e) => CurrencyList.fromJson(e)).toList();
     } else {
       return [];
@@ -140,7 +140,7 @@ class InsideService {
     Response response = await get(Uri.parse(BASE_URL + "address/province.php"));
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['province'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['province'];
       return result.map((e) => ProvinceList.fromJson(e)).toList();
     } else {
       return [];
@@ -151,7 +151,7 @@ class InsideService {
     Response response = await get(Uri.parse(BASE_URL + "address/district.php"));
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['district'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['district'];
       return result.map((e) => DistrictList.fromJson(e)).toList();
     } else {
       return [];
@@ -160,10 +160,11 @@ class InsideService {
 
   Future<dynamic> getListWard() async {
     Response response = await get(Uri.parse(BASE_URL + "address/ward.php"));
-    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['message']}');
+    log('ket qua get: ${jsonDecode(
+        utf8.decode(response.bodyBytes))['data']['message']}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['ward'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['ward'];
       return result.map((e) => WardList.fromJson(e)).toList();
     } else {
       return [];
@@ -175,7 +176,7 @@ class InsideService {
       'uid': uid,
     });
     Response response =
-        await post(Uri.parse(BASE_URL + "profile/profile.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "profile/profile.php"), body: msg);
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final UserProfileDetail result = UserProfileDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['profile']);
@@ -185,15 +186,13 @@ class InsideService {
     }
   }
 
-  Future<dynamic> createProfile(
-    String uid,
-    String full_name,
-    String avatar_url,
-    String email,
-    String phone,
-    String address,
-    String birthday,
-  ) async {
+  Future<dynamic> createProfile(String uid,
+      String full_name,
+      String avatar_url,
+      String email,
+      String phone,
+      String address,
+      String birthday,) async {
     final msg = jsonEncode({
       'uid': uid,
       'display_name': full_name,
@@ -205,7 +204,8 @@ class InsideService {
       'birthday': birthday,
       'level': 'Basic',
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n ');
+    log(
+        'uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/create_profile.php"),
@@ -220,7 +220,7 @@ class InsideService {
       'password': password.trim(),
     });
     Response response =
-        await post(Uri.parse(BASE_URL + "register.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "register.php"), body: msg);
     return jsonDecode(response.body)['success'];
   }
 
@@ -229,7 +229,7 @@ class InsideService {
       'uid': uid,
     });
     Response response =
-        await post(Uri.parse(BASE_URL + "/company/company.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "/company/company.php"), body: msg);
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final CompanyDetail result = CompanyDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['company']);
@@ -239,18 +239,16 @@ class InsideService {
     }
   }
 
-  Future<dynamic> createCompany(
-    String uid,
-    String full_name,
-    String avatar_url,
-    String email,
-    String phone,
-    String address,
-    String website,
-    String taxcode,
-    String description,
-    String job,
-  ) async {
+  Future<dynamic> createCompany(String uid,
+      String full_name,
+      String avatar_url,
+      String email,
+      String phone,
+      String address,
+      String website,
+      String taxcode,
+      String description,
+      String job,) async {
     final msg = jsonEncode({
       'uid': uid,
       'full_name': full_name,
@@ -264,7 +262,8 @@ class InsideService {
       'job': job,
       'level': 'Basic',
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
+    log(
+        'uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/create_company.php"),
@@ -273,15 +272,13 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> updateProfile(
-    String uid,
-    String full_name,
-    String avatar_url,
-    String email,
-    String phone,
-    String address,
-    String birthday,
-  ) async {
+  Future<dynamic> updateProfile(String uid,
+      String full_name,
+      String avatar_url,
+      String email,
+      String phone,
+      String address,
+      String birthday,) async {
     final msg = jsonEncode({
       'uid': uid,
       'display_name': full_name,
@@ -292,7 +289,8 @@ class InsideService {
       'address': address,
       'birthday': birthday,
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n');
+    log(
+        'uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n birth: $birthday \n');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/update_profile.php"),
@@ -301,18 +299,16 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> updateCompany(
-    String uid,
-    String full_name,
-    String avatar_url,
-    String email,
-    String phone,
-    String address,
-    String website,
-    String taxcode,
-    String description,
-    String job,
-  ) async {
+  Future<dynamic> updateCompany(String uid,
+      String full_name,
+      String avatar_url,
+      String email,
+      String phone,
+      String address,
+      String website,
+      String taxcode,
+      String description,
+      String job,) async {
     final msg = jsonEncode({
       'uid': uid,
       'full_name': full_name,
@@ -325,7 +321,8 @@ class InsideService {
       'description': description,
       'job': job,
     });
-    log('uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
+    log(
+        'uid: $uid \n name: $full_name \n avatar: $avatar_url \n email: $email \n phone: $phone \n address: $address \n website: $website \n description $description \n job: $job \n taxcode: $taxcode ');
 
     Response response = await post(
         Uri.parse(BASE_URL + "/company/update_company.php"),
@@ -336,41 +333,38 @@ class InsideService {
 
   Future<dynamic> getListCompany() async {
     Response response =
-        await get(Uri.parse(BASE_URL + "company/allCompany.php"));
+    await get(Uri.parse(BASE_URL + "company/allCompany.php"));
     log('ket qua get: ${response.statusCode}');
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['company'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['company'];
       return result.map((e) => CompanyDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> createJob(
-    String name,
-    String companyId,
-    int minSalary,
-    int maxSalary,
-    String currency,
-    int yearExperience,
-    int typeJob,
-    int numberCandidate,
-    String address,
-    String description,
-    String candidateRequirement,
-    String jobBenefit,
-    String tag,
-    String deadline,
-    int active,
-  ) async {
+  Future<dynamic> createJob(String name,
+      String companyId,
+      int minSalary,
+      int maxSalary,
+      int yearExperience,
+      int typeJob,
+      int numberCandidate,
+      String address,
+      String description,
+      String candidateRequirement,
+      String jobBenefit,
+      String tag,
+      String deadline,
+      int active,) async {
     final msg = jsonEncode({
       'name': name,
       'companyId': companyId,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': currency,
+      'currency': 'VND',
       'yearExperience': yearExperience,
       'typeJob': typeJob,
       'numberCandidate': numberCandidate,
@@ -383,39 +377,37 @@ class InsideService {
       'active': active,
       'level': 'Basic',
     });
-    log('name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\ncurrency: $currency\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
+    log(
+        'name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/job/create_job.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "/job/create_job.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> updateJob(
-    String code,
-    String name,
-    String companyId,
-    int minSalary,
-    int maxSalary,
-    String currency,
-    int yearExperience,
-    int typeJob,
-    int numberCandidate,
-    String address,
-    String description,
-    String candidateRequirement,
-    String jobBenefit,
-    String tag,
-    String deadline,
-    int active,
-  ) async {
+  Future<dynamic> updateJob(String code,
+      String name,
+      String companyId,
+      int minSalary,
+      int maxSalary,
+      int yearExperience,
+      int typeJob,
+      int numberCandidate,
+      String address,
+      String description,
+      String candidateRequirement,
+      String jobBenefit,
+      String tag,
+      String deadline,
+      int active,) async {
     final msg = jsonEncode({
       'code': code,
       'name': name,
       'companyId': companyId,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': currency,
+      'currency': 'VND',
       'yearExperience': yearExperience,
       'typeJob': typeJob,
       'numberCandidate': numberCandidate,
@@ -428,10 +420,11 @@ class InsideService {
       'active': active,
       'level': 'Basic',
     });
-    log('code: $code\n name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\ncurrency: $currency\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
+    log(
+        'code: $code\n name: $name\n companyId: $companyId\n minSalary: $minSalary\n maxSalary: $maxSalary\nyearExperience: $yearExperience\ntypeJob: $typeJob\nnumberCandidate: $numberCandidate\naddress: $address\ndescription: $description\ncandidateRequirement: $candidateRequirement\njobBenefit: $jobBenefit\ntag: $tag\ndeadline: $deadline\nactive: $active');
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/job/update_job.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "/job/update_job.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -441,7 +434,7 @@ class InsideService {
       'code': code,
     });
     Response response =
-        await post(Uri.parse(BASE_URL + "/job/job.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "/job/job.php"), body: msg);
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final JobDetail result = JobDetail.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['job']);
@@ -457,18 +450,16 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
       return result.map((e) => JobDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> addCV(
-    String cv,
-    String userId,
-    String type,
-  ) async {
+  Future<dynamic> addCV(String cv,
+      String userId,
+      String type,) async {
     final msg = jsonEncode({
       'cv_url': cv,
       'user_id': userId,
@@ -478,7 +469,7 @@ class InsideService {
     log('cv: $cv\n userid: $userId\n type: $type');
 
     Response response =
-        await post(Uri.parse(BASE_URL + "cv/create_cv.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "cv/create_cv.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -489,32 +480,28 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['cv'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['cv'];
       return result.map((e) => CVDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> addFavorite(
-    String jobId,
-    String userId,
-  ) async {
+  Future<dynamic> addFavorite(String jobId,
+      String userId,) async {
     final msg = jsonEncode({
       'jobId': jobId,
       'userId': userId,
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "profile/add_favorive.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "profile/add_favorive.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> removeFavorite(
-    String jobId,
-    String userId,
-  ) async {
+  Future<dynamic> removeFavorite(String jobId,
+      String userId,) async {
     final msg = jsonEncode({
       'jobId': jobId,
       'userId': userId,
@@ -539,19 +526,17 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['favorite'];
       return result.map((e) => FavoriteDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> createApplication(
-    String cv_url,
-    String jobId,
-    String candidateId,
-    String companyId,
-  ) async {
+  Future<dynamic> createApplication(String cv_url,
+      String jobId,
+      String candidateId,
+      String companyId,) async {
     final msg = jsonEncode({
       'cv_url': cv_url,
       'jobId': jobId,
@@ -567,9 +552,7 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> removeApplication(
-    String code,
-  ) async {
+  Future<dynamic> removeApplication(String code,) async {
     final msg = jsonEncode({
       'code': code,
     });
@@ -581,14 +564,11 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> apporveApplication(
-    String code,
-    String apporve,
-  ) async {
+  Future<dynamic> approveApplication(String code,
+      String approve,) async {
     final msg = jsonEncode({
       'code': code,
-      'apporve': apporve,
-      'apporve_time': DateFormat('dd/MM/yyyy').add_Hm().format(DateTime.now()),
+      'approve': approve,
     });
 
     Response response = await post(
@@ -612,16 +592,22 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
       return result.map((e) => ApplicationDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> getRecuiterApplication(String companyId) async {
+  Future<dynamic> getRecuiterApplication(String companyId,
+      String searchWord,
+      String approve,
+      String sentTime,) async {
     final msg = jsonEncode({
       'companyId': companyId,
+      'search_word': searchWord,
+      'approve': approve,
+      'sent_time': sentTime,
     });
 
     Response response = await post(
@@ -633,7 +619,7 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['application'];
       return result.map((e) => ApplicationDetail.fromJson(e)).toList();
     } else {
       return [];
@@ -645,21 +631,19 @@ class InsideService {
     Response response = await get(Uri.parse(BASE_URL + "/job/allJobTitle.php"));
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['data']['title'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['data']['title'];
       list = List<String>.from(result);
     }
     return list;
   }
 
-  Future<dynamic> createJobTitle(
-    String title,
-  ) async {
+  Future<dynamic> createJobTitle(String title,) async {
     final msg = jsonEncode({
       'title': title,
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "job/create_job_title.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "job/create_job_title.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
@@ -676,24 +660,23 @@ class InsideService {
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final result = JobRecommendSetting.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']);
-      log('message setting: ${jsonDecode(utf8.decode(response.bodyBytes))['data']['setting']}');
+      log('message setting: ${jsonDecode(
+          utf8.decode(response.bodyBytes))['data']['setting']}');
       return result;
     } else {
       return null;
     }
   }
 
-  Future<dynamic> createJobRecommendSetting(
-    String uid,
-    String gender,
-    String job,
-    String educationId,
-    int yearExperience,
-    String workProvince,
-    int minSalary,
-    int maxSalary,
-    String currency,
-  ) async {
+  Future<dynamic> createJobRecommendSetting(String uid,
+      String gender,
+      String job,
+      String educationId,
+      int yearExperience,
+      String workProvince,
+      int minSalary,
+      int maxSalary,
+      String currency,) async {
     final msg = jsonEncode({
       'uid': uid,
       'gender': gender,
@@ -706,7 +689,8 @@ class InsideService {
       'currency': currency,
     });
 
-    log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
+    log(
+        'message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/create_profile_recommend_setting.php"),
@@ -715,17 +699,15 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> updateJobRecommendSetting(
-    String uid,
-    String gender,
-    String job,
-    String educationId,
-    int yearExperience,
-    String workProvince,
-    int minSalary,
-    int maxSalary,
-    String currency,
-  ) async {
+  Future<dynamic> updateJobRecommendSetting(String uid,
+      String gender,
+      String job,
+      String educationId,
+      int yearExperience,
+      String workProvince,
+      int minSalary,
+      int maxSalary,
+      String currency,) async {
     final msg = jsonEncode({
       'uid': uid,
       'gender': gender,
@@ -738,7 +720,8 @@ class InsideService {
       'currency': currency,
     });
 
-    log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
+    log(
+        'message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/update_profile_recommend_setting.php"),
@@ -748,25 +731,21 @@ class InsideService {
   }
 
   // Follow Company
-  Future<dynamic> addFollowCompany(
-    String companyId,
-    String userId,
-  ) async {
+  Future<dynamic> addFollowCompany(String companyId,
+      String userId,) async {
     final msg = jsonEncode({
       'companyId': companyId,
       'userId': userId,
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "profile/add_follower.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "profile/add_follower.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> removeFollowCompany(
-    String companyId,
-    String userId,
-  ) async {
+  Future<dynamic> removeFollowCompany(String companyId,
+      String userId,) async {
     final msg = jsonEncode({
       'companyId': companyId,
       'userId': userId,
@@ -791,33 +770,29 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['follower'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['follower'];
       return result.map((e) => FollowDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> sendOTPtoMail(
-    String mail,
-    String typeCode,
-  ) async {
+  Future<dynamic> sendOTPtoMail(String mail,
+      String typeCode,) async {
     final msg = jsonEncode({
       'email': mail,
       'type_code': typeCode,
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "/code/api_verifycode.php"), body: msg);
     log('Show OTP to Mail: ${jsonDecode(response.body)}');
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> checkOTP(
-    String otp,
-    String mail,
-    String typeCode,
-  ) async {
+  Future<dynamic> checkOTP(String otp,
+      String mail,
+      String typeCode,) async {
     final msg = jsonEncode({
       'email': mail,
       'otp_code': otp,
@@ -833,17 +808,15 @@ class InsideService {
     return jsonDecode(response.body)['success'];
   }
 
-  Future<dynamic> newPass(
-    String password,
-    String mail,
-  ) async {
+  Future<dynamic> newPass(String password,
+      String mail,) async {
     final msg = jsonEncode({
       'email': mail,
       'new_password': password,
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "/update_password.php"), body: msg);
     log('${jsonDecode(response.body)}a');
     return jsonDecode(response.body)['success'];
   }
@@ -860,7 +833,7 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
       if (result.isNotEmpty) {
         return result.map((e) => JobDetail.fromJson(e)).toList();
       }
@@ -875,25 +848,24 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-          jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
       return result.map((e) => JobDetail.fromJson(e)).toList();
     } else {
       return [];
     }
   }
 
-  Future<dynamic> removeCV(
-    String code,
-  ) async {
+  Future<dynamic> removeCV(String code,) async {
     final msg = jsonEncode({
       'code': code,
     });
 
     Response response =
-        await post(Uri.parse(BASE_URL + "cv/remove_cv.php"), body: msg);
+    await post(Uri.parse(BASE_URL + "cv/remove_cv.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> getListUserProfile() async {
     Response response =
     await get(Uri.parse(BASE_URL + "company/allCompany.php"));
@@ -905,6 +877,20 @@ class InsideService {
       return result.map((e) => UserProfileDetail.fromJson(e)).toList();
     } else {
       return [];
+    }
+
+    Future<dynamic> updateInterviewTimeApplication(String code,
+        String interviewTime,) async {
+      final msg = jsonEncode({
+        'code': code,
+        'interview_time': interviewTime,
+      });
+
+      Response response = await post(
+          Uri.parse(BASE_URL + "/application/update_interview_application.php"),
+          body: msg);
+
+      return jsonDecode(response.body)['success'];
     }
   }
 }

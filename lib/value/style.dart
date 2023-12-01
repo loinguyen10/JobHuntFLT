@@ -90,12 +90,39 @@ final bgGradientColor2 = LinearGradient(
   tileMode: TileMode.mirror,
 );
 
+final bgGradientColor3 = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: <Color>[
+    appPrimaryColor,
+    Color(0xffFF7D00),
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+  tileMode: TileMode.mirror,
+);
+
 //style
 final dropDownButtonStyle1 = ButtonStyleData(
   padding: EdgeInsets.symmetric(horizontal: 8),
   height: 32,
   width: 160,
 );
+
+final dropDownButtonStyle2 = ButtonStyleData(
+  padding: EdgeInsets.symmetric(horizontal: 8),
+  height: 20,
+  width: 160,
+);
+
 final dalDateStyle = ButtonStyle(
     padding: MaterialStateProperty.all<EdgeInsets>(
         EdgeInsets.symmetric(vertical: 16, horizontal: 8)),

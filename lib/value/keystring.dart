@@ -192,4 +192,6 @@ class Keystring {
   static const String SET_TIME = 'Set_Time';
   static const String PREMIUM = 'Premium';
   static const String BASIC = 'Basic';
+  static const String Number_Available_Jobs = 'Number_Available_Jobs';
+  static const String RESET = 'Reset';
 }

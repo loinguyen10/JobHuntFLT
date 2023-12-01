@@ -5,7 +5,9 @@ import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 
+import '../model/job.dart';
 import 'app_riverpod_void.dart';
 
 final LoginControllerProvider =
@@ -929,9 +931,9 @@ class LoginController extends StateNotifier<InsideEvent> {
   }
 
   void getRecuiterApplicationWithSetting(
-    searchWord,
-    statusCheck,
-    sentTime,
+    String searchWord,
+    String statusCheck,
+    String sentTime,
   ) async {
     state = const ThingLoadingEvent();
     try {
@@ -979,6 +981,46 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void getSearchJobList(
+    String searchWord,
+    String minSalary,
+    String maxSalary,
+    String typeJob,
+    String yearExperience,
+    String province,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).getSearchJobList(
+            searchWord,
+            minSalary,
+            maxSalary,
+            typeJob,
+            yearExperience,
+            province,
+          );
+
+      final List listResult = result['data']['job'];
+
+      if (listResult.isNotEmpty) {
+        ref.read(listJobSearchProvider.notifier).state =
+            listResult.map((e) => JobDetail.fromJson(e)).toList();
+        ref.read(numberJobSearchProvider.notifier).state =
+            result['data']['length'];
+      } else {
+        ref.invalidate(listJobSearchProvider);
+        ref.invalidate(numberJobSearchProvider);
+      }
+
+      // ref.read(todayJobSearchProvider.notifier).state = result['data']['today'];
+      state = const GetListSuccessEvent();
+    } catch (e) {
+      state = GetListErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

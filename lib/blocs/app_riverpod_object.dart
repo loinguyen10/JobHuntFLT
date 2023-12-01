@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
@@ -680,3 +679,9 @@ final dateTimeInterviewApplicationProvider = StateProvider.autoDispose((ref) =>
         ? ref.watch(timeInterviewApplicationProvider).substring(
             0, ref.watch(timeInterviewApplicationProvider).indexOf(' '))
         : '');
+
+final listJobSearchProvider = StateProvider<List<JobDetail>>((ref) => []);
+
+final numberJobSearchProvider = StateProvider<int>((ref) => 0);
+
+// final todayJobSearchProvider = StateProvider((ref) => '');

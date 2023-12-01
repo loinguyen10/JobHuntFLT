@@ -21,10 +21,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/job_setting.dart';
 import '../value/style.dart';
 
-import 'package:http/http.dart' as http;
-
-import '../component/loader_overlay.dart';
-
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
 // String BASE_URL = 'https://localhost/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
@@ -914,5 +910,39 @@ class InsideService {
         body: msg);
 
     return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> getSearchJobList(
+    String searchWord,
+    String minSalary,
+    String maxSalary,
+    String typeJob,
+    String yearExperience,
+    String province,
+  ) async {
+    final msg = jsonEncode({
+      'search_word': searchWord,
+      'minSalary': minSalary,
+      'maxSalary': maxSalary,
+      'type_job': typeJob,
+      'year_experience': yearExperience,
+      'province': province,
+    });
+
+    log(msg);
+    print(msg);
+
+    Response response = await post(
+      Uri.parse(BASE_URL + "job/job_search.php"),
+      body: msg,
+    );
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      return [];
+    }
   }
 }

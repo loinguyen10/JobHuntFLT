@@ -193,7 +193,7 @@ class LocaleString extends Translations {
           'Phone_Less_11': 'Phone number can\'t have more than 11 numbers',
           'Phone_More_9': 'Phone number must have more than 9 numbers',
           'Chat': 'Chat',
-          'Active_Job': 'Active Job',
+          'Available_Job': 'Available Job',
           'Tax_Code': 'Tax Code',
           'Tax_Code_Must_10': 'Tax code must have 10 numbers',
           'Message': 'Message',
@@ -202,6 +202,8 @@ class LocaleString extends Translations {
           'Set_Date': 'Set Date',
           'Premium': 'Premium',
           'Basic': 'Basic',
+          'Number_Available_Jobs': 'Number of Available Jobs',
+          'Reset': 'Reset',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

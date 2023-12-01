@@ -878,19 +878,18 @@ class InsideService {
     } else {
       return [];
     }
+  }
+  Future<dynamic> updateInterviewTimeApplication(String code,
+      String interviewTime,) async {
+    final msg = jsonEncode({
+      'code': code,
+      'interview_time': interviewTime,
+    });
 
-    Future<dynamic> updateInterviewTimeApplication(String code,
-        String interviewTime,) async {
-      final msg = jsonEncode({
-        'code': code,
-        'interview_time': interviewTime,
-      });
+    Response response = await post(
+        Uri.parse(BASE_URL + "/application/update_interview_application.php"),
+        body: msg);
 
-      Response response = await post(
-          Uri.parse(BASE_URL + "/application/update_interview_application.php"),
-          body: msg);
-
-      return jsonDecode(response.body)['success'];
-    }
+    return jsonDecode(response.body)['success'];
   }
 }

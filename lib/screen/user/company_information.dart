@@ -81,7 +81,7 @@ class CompanyInformation extends ConsumerWidget {
                 return [
                   SliverAppBar(
                     backgroundColor: appPrimaryColor,
-                    expandedHeight: 460.0,
+                    expandedHeight: 470.0,
                     floating: false,
                     pinned: true,
                     leading: GestureDetector(

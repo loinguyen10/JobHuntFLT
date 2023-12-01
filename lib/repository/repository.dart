@@ -894,4 +894,17 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+  Future<dynamic> getListUserProfile() async {
+    Response response =
+    await get(Uri.parse(BASE_URL + "company/allCompany.php"));
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['company'];
+      return result.map((e) => UserProfileDetail.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
 }

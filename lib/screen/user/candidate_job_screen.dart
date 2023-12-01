@@ -371,7 +371,7 @@ class _YourJobStatusScreenState extends ConsumerState<YourJobStatusScreen> {
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
-                                                                        MessageScreen(company: data[index].job!.company!),
+                                                                        MessageScreen(Uid: data[index].job!.company!.uid),
                                                               )
                                                       );
                                                     },

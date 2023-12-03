@@ -22,7 +22,13 @@ class MessageScreen extends ConsumerWidget {
   final Uid;
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final TextEditingController _messageController = TextEditingController();
-
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + '...';
+    }
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isShowTime = ref.watch(isShowTimeProvider);
@@ -75,6 +81,20 @@ class MessageScreen extends ConsumerWidget {
     }
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            // margin:
+            // const EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+        ),
         backgroundColor: appPrimaryColor,
         title: Row(
           children: [
@@ -92,7 +112,7 @@ class MessageScreen extends ConsumerWidget {
             ),
             SizedBox(width: 10), // Để tạo khoảng cách giữa avatar và tiêu đề
             Text(
-              name,
+              truncateText(name,18),
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -517,29 +537,52 @@ class _Conversation extends ConsumerState<Conversation> {
                                 },
                                 child: Row(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: SizedBox.fromSize(
-                                        size: Size.fromRadius(32),
-                                        child: avatar.isNotEmpty
-                                            ? Image.network(avatar,
-                                                fit: BoxFit.cover)
-                                            : Icon(
+                                    Expanded(
+                                      flex:1,
+                                      child: SizedBox(
+                                        height: 65,
+                                        width:60,
+                                        child: Center(
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(32),
+                                            child: SizedBox.fromSize(
+                                              size: Size.fromRadius(32),
+                                              child: avatar.isNotEmpty
+                                                  ? Image.network(
+                                                avatar,
+                                                fit: BoxFit.cover,
+                                              )
+                                                  : Icon(
                                                 Icons.apartment,
                                                 size: 32,
                                               ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    Column(
-                                      children: [
-                                        Container(child: Text(name)),
-                                        Row(children: [
-                                          SizedBox(width: 10),
-                                          Text(filteredconversations[index]['content']),
-                                          SizedBox(width: 10),
-                                          Text(formattedTimestamp(filteredconversations[index]['timestamp'])),
-                                        ],)
-                                      ],
+                                    Expanded(
+                                      flex: 4,
+                                      child: SizedBox(
+                                        child: Container(
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(child: Text(name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                Text(truncateText(filteredconversations[index]['content'],20),),
+                                                SizedBox(width: 10),
+                                                Text(formattedTimestamp(filteredconversations[index]['timestamp'])),
+                                              ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     )
                                   ],
                                 )),
@@ -551,5 +594,12 @@ class _Conversation extends ConsumerState<Conversation> {
                 ))
           ],
         ));
+  }
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + '...';
+    }
   }
 }

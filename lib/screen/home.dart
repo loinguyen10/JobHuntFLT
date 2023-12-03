@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +6,6 @@ import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/component/custom_page_route.dart';
 import 'package:jobhunt_ftl/model/company.dart';
-import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import 'package:jobhunt_ftl/screen/job/job_screen.dart';
@@ -134,10 +131,11 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        ref.invalidate(listJobSearchProvider);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SearchScreen()),
+                              builder: (context) => JobSearchScreen()),
                         );
                       },
                       child: Card(
@@ -161,7 +159,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 width: 16,
                               ),
                               Text(
-                                Keystring.SEARCH,
+                                Keystring.SEARCH.tr,
                                 style: textNormalHint,
                               ),
                             ],
@@ -393,7 +391,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  ref.refresh(jobDetailProvider);
+                                  ref.invalidate(jobDetailProvider);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

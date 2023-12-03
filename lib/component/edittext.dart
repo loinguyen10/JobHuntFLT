@@ -222,11 +222,11 @@ class _AppEdittext2State extends State<EditText2Form> {
           ),
           // errorText: '',
           border: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.grey),
+            borderSide: BorderSide(width: 1, color: Colors.black),
             borderRadius: BorderRadius.circular(8),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.grey),
+            borderSide: BorderSide(width: 1, color: Colors.black),
             borderRadius: BorderRadius.circular(8),
           ),
           suffixIcon: widget.suffixIcon,

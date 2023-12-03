@@ -210,7 +210,7 @@ class DateCustomDialog {
                             DateTime.now().month,
                             DateTime.now().day,
                             int.parse(timeChoose.substring(0, 2)),
-                            int.parse(timeChoose.substring(4)),
+                            int.parse(timeChoose.substring(3)),
                           )
                         : DateTime.now(),
                     mode: CupertinoDatePickerMode.time,

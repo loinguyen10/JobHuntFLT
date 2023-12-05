@@ -26,15 +26,11 @@ final ChangePassControllerProvider =
 });
 
 class LoginController extends StateNotifier<InsideEvent> {
-  LoginController(this.ref) : super(const SignInStateEvent());
+  LoginController(this.ref) : super(const ThingStateEvent());
 
   final Ref ref;
 
   void login(String email, String password) async {
-    ref.read(userLoginProvider.notifier).state = null;
-    ref.read(userProfileProvider.notifier).state = null;
-    ref.read(companyProfileProvider.notifier).state = null;
-    ref.read(userDetailJobSettingProvider.notifier).state = null;
     state = const SignInLoadingEvent();
     log('$email + $password');
     try {
@@ -79,7 +75,7 @@ class LoginController extends StateNotifier<InsideEvent> {
       state = SignInErrorEvent(error: e.toString());
     }
 
-    state = const SignInStateEvent();
+    state = const ThingStateEvent();
   }
 
   void register(String email, String password) async {
@@ -1025,26 +1021,27 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+
   void addHistoryPayment(
-      String money,
-      String date,
-      String status,
-      String payment_type,
-      String userId,
-      ) async {
+    String money,
+    String date,
+    String status,
+    String payment_type,
+    String userId,
+  ) async {
     state = const HistorypaymentLoadingEvent();
     try {
       final result = await ref.read(authRepositoryProvider).addHistoryPayment(
-        money,
-        date,
-        status,
-        payment_type,
-        userId,
-      );
+            money,
+            date,
+            status,
+            payment_type,
+            userId,
+          );
 
       if (result == 1) {
         final profile =
-        await ref.read(authRepositoryProvider).getProfile(userId);
+            await ref.read(authRepositoryProvider).getProfile(userId);
         ref.read(userProfileProvider.notifier).state = profile;
         ref.refresh(listHistoryPaymentsProvider);
         state = const HistorypaymentSuccessEvent();

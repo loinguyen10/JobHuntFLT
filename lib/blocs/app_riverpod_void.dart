@@ -86,9 +86,10 @@ Future<List<CurrencyList>> getCurrencyList() async {
 }
 
 void resetCall(WidgetRef ref) {
-  ref.read(userLoginProvider.notifier).state = null;
-  ref.read(userProfileProvider.notifier).state = null;
-  ref.read(companyProfileProvider.notifier).state = null;
+  ref.invalidate(userLoginProvider);
+  ref.invalidate(userProfileProvider);
+  ref.invalidate(companyProfileProvider);
+  ref.invalidate(userDetailJobSettingProvider);
 }
 
 Future<List<CompanyDetail>> getCompanyList() async {
@@ -256,6 +257,7 @@ Future<List<JobDetail>> getActiveJobList() async {
 }
 
 Future<List<JobDetail>> getRecommendJobList(String uid) async {
+  if (uid == '0') return [];
   final list = await insideService.getJobsRecommend(uid);
   return list;
 }
@@ -318,6 +320,7 @@ Future<List<CompanyDetail>> getCompanyListUid(String uid) async {
   log('list: ${list.length}');
   return list;
 }
+
 Future<List<UserProfileDetail>> getUserProfileList() async {
   final list = await insideService.getListUserProfile();
   log('listProfile: ${list.length}');

@@ -1043,6 +1043,9 @@ class LoginController extends StateNotifier<InsideEvent> {
       );
 
       if (result == 1) {
+        final profile =
+        await ref.read(authRepositoryProvider).getProfile(userId);
+        ref.read(userProfileProvider.notifier).state = profile;
         ref.refresh(listHistoryPaymentsProvider);
         state = const HistorypaymentSuccessEvent();
       } else {

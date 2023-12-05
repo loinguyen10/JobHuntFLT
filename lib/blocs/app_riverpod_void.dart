@@ -15,6 +15,7 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/model/payment.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
@@ -321,5 +322,9 @@ Future<List<CompanyDetail>> getCompanyListUid(String uid) async {
 Future<List<UserProfileDetail>> getUserProfileList() async {
   final list = await insideService.getListUserProfile();
   log('listProfile: ${list.length}');
+  return list;
+}
+Future<List<PaymentDetail>> getYourHistoryPaymentList(String uid) async {
+  final list = await insideService.getListHistoryPayments(uid);
   return list;
 }

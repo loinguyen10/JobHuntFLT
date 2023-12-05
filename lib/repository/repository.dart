@@ -19,6 +19,7 @@ import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/job_setting.dart';
+import '../model/payment.dart';
 import '../value/style.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
@@ -955,6 +956,45 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       return jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      return [];
+    }
+  }
+
+  Future<dynamic> addHistoryPayment(
+      String money,
+      String date,
+      String status,
+      String payment_type,
+      String userId,
+      ) async {
+    final msg = jsonEncode({
+      'money': money,
+      'date': date,
+      'status': status,
+      'payment_type': payment_type,
+      'userId': userId,
+    });
+
+    Response response =
+    await post(Uri.parse(BASE_URL + "payment/create_payment.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+  Future<dynamic> getListHistoryPayments(String userId) async {
+    final msg = jsonEncode({
+      'userId': userId,
+    });
+    Response response = await post(
+        Uri.parse(BASE_URL + "payment/your_payments.php"),
+        body: msg);
+
+    log('ket qua get: ${response.statusCode}');
+    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
+      final List result =
+      jsonDecode(utf8.decode(response.bodyBytes))['data']['payment'];
+      return result.map((e) => PaymentDetail.fromJson(e)).toList();
     } else {
       return [];
     }

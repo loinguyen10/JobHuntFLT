@@ -6,6 +6,7 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/model/payment.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
@@ -687,3 +688,6 @@ final numberJobSearchProvider = StateProvider<int>((ref) => 0);
 // final todayJobSearchProvider = StateProvider((ref) => '');
 final listUserProfilevider =
     FutureProvider<List<UserProfileDetail>>((ref) => getUserProfileList());
+//
+final listHistoryPaymentsProvider =
+FutureProvider<List<PaymentDetail>>((ref) => getYourHistoryPaymentList(ref.watch(userLoginProvider)?.uid.toString()??'0'));

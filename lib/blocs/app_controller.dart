@@ -1025,6 +1025,38 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+  void addHistoryPayment(
+      String money,
+      String date,
+      String status,
+      String payment_type,
+      String userId,
+      ) async {
+    state = const HistorypaymentLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).addHistoryPayment(
+        money,
+        date,
+        status,
+        payment_type,
+        userId,
+      );
+
+      if (result == 1) {
+        final profile =
+        await ref.read(authRepositoryProvider).getProfile(userId);
+        ref.read(userProfileProvider.notifier).state = profile;
+        ref.refresh(listHistoryPaymentsProvider);
+        state = const HistorypaymentSuccessEvent();
+      } else {
+        state = const HistorypaymentErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = HistorypaymentErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
 }
 
 class LoginController1 extends StateNotifier<InsideEvent> {

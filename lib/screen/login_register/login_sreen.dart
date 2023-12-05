@@ -29,10 +29,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController passwordEditingController = TextEditingController();
 
+  @override
   void initState() {
-    resetCall(ref);
-    super.initState();
     loadEaP();
+    super.initState();
   }
 
   Future<void> loadEaP() async {

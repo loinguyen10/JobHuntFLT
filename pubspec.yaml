@@ -66,6 +66,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_localizations:
     sdk: flutter
+  flutter_easyloading: ^3.0.5
   
   
 

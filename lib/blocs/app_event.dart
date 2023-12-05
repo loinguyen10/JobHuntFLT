@@ -249,3 +249,25 @@ class GetListErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+class HistorypaymentLoadingEvent extends InsideEvent {
+  const HistorypaymentLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class HistorypaymentSuccessEvent extends InsideEvent {
+  const HistorypaymentSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class HistorypaymentErrorEvent extends InsideEvent {
+  const HistorypaymentErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

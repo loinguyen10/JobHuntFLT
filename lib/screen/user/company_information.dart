@@ -380,7 +380,9 @@ class CompanyInformation extends ConsumerWidget {
                             ),
                           ),
                         ],
-                        onTap: (index) {},
+                        onTap: (index) {
+
+                        },
                       ),
                     ),
                     floating: false,

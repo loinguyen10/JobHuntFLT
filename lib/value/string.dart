@@ -206,6 +206,11 @@ class LocaleString extends Translations {
           'Reset': 'Reset',
           'All_Companies': 'All Companies',
           'Premium_Expiry_Date': 'Expiry Date of Premium',
+          'Payment_History': 'Payment history',
+          'Type_bank': 'Type - bank',
+          'Price': 'Price',
+          'Date_Created': 'Date created',
+          'STT': 'STT',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

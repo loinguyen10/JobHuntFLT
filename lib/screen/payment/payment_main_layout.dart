@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/screen/payment/payprocess.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
@@ -75,24 +76,7 @@ class payment_main_layout extends ConsumerWidget {
         title: Text(Keystring.PAYMENT.tr),
         backgroundColor: appPrimaryColor,
         elevation: 0,
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            child: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-              size: 18,
-            ),
-          ),
-        ),
+        foregroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Column(
         children: [
@@ -146,9 +130,7 @@ class payment_main_layout extends ConsumerWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    itemsSize[index].price.toString() +
-                                        ' VND/' +
-                                        itemsSize[index].title.toString(),
+                                    '${NumberFormat("#,##0").format(itemsSize[index].price)} VND/${itemsSize[index].title}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 25,

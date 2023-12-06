@@ -58,13 +58,15 @@ dependencies:
   cloud_firestore: ^4.9.1
   firebase_storage: ^11.2.6
   file_picker: ^5.3.1
-  flutter_easyloading: ^3.0.5
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.3.10
   riverpod: ^2.3.10
   google_fonts: ^4.0.4
   image: ^4.1.3
   flutter_launcher_icons: ^0.13.1
+  flutter_easyloading: ^3.0.5
+  firebase_messaging: ^14.7.6
+  firebase_in_app_messaging: ^0.7.4+6
   flutter_localizations:
     sdk: flutter
   
@@ -97,7 +99,6 @@ flutter:
     - assets/image/check.png
     - assets/image/background_company.jpg
     - assets/image/bannerjoblist.jpg
-    - assets/image/card.svg
     - assets/image/card.png
 
   # To add assets to your application, add an assets section, like this:
@@ -136,3 +137,4 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/image/icon.png"
   min_sdk_android: 21
+  remove_alpha_ios: true

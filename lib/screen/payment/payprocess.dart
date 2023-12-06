@@ -59,7 +59,7 @@ class payprocess extends ConsumerWidget {
                   builder: (context) => ThankYouPage(title: '',),
                 ),
               );
-              ref.read(LoginControllerProvider.notifier).addHistoryPayment(money, vnp_PayDate.toString(), vnp_ResponseCode.toString(), vnp_CardType.toString()+'-'+vnp_BankCode.toString(), user?.uid.toString()??'0');
+              ref.read(LoginControllerProvider.notifier).addHistoryPayment(money, vnp_PayDate.toString(), vnp_ResponseCode.toString(), vnp_CardType.toString()+'-'+vnp_BankCode.toString(), user?.uid.toString()??'0',user?.role ?? '');
             }
         },
       ),

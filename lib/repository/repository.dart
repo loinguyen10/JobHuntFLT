@@ -967,6 +967,7 @@ class InsideService {
       String status,
       String payment_type,
       String userId,
+      String role,
       ) async {
     final msg = jsonEncode({
       'money': money,
@@ -976,8 +977,18 @@ class InsideService {
       'userId': userId,
     });
 
+    String txtRole = '';
+
+    if(role == 'candidate'){
+      txtRole = 'profile';
+    }
+
+    if(role == 'recruiter'){
+      txtRole = 'company';
+    }
+
     Response response =
-    await post(Uri.parse(BASE_URL + "payment/create_payment.php"), body: msg);
+    await post(Uri.parse("${BASE_URL}payment/create_payment_$txtRole.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }

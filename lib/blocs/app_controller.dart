@@ -1028,15 +1028,18 @@ class LoginController extends StateNotifier<InsideEvent> {
     String status,
     String payment_type,
     String userId,
+      String role,
   ) async {
     state = const HistorypaymentLoadingEvent();
     try {
+
       final result = await ref.read(authRepositoryProvider).addHistoryPayment(
             money,
             date,
             status,
             payment_type,
             userId,
+            role
           );
 
       if (result == 1) {

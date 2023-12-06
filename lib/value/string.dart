@@ -125,7 +125,7 @@ class LocaleString extends Translations {
           'Vietnamese': 'Vietnamese',
           'Theme': 'Theme',
           'Upgrade': 'Upgrade',
-          'All_Appications': 'All Appications',
+          'All_Applications': 'All Applications',
           'Dark': 'Dark',
           'Light': 'Light',
           'Detail': 'Detail',
@@ -204,6 +204,8 @@ class LocaleString extends Translations {
           'Basic': 'Basic',
           'Number_Available_Jobs': 'Number of Available Jobs',
           'Reset': 'Reset',
+          'All_Companies': 'All Companies',
+          'Premium_Expiry_Date': 'Expiry Date of Premium',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

@@ -119,7 +119,7 @@ class Keystring {
   static const String VIETNAMESE = 'Vietnamese';
   static const String THEME = 'Theme';
   static const String UPGRADE = 'Upgrade';
-  static const String ALL_APPLICATIONS = 'All_Appications';
+  static const String ALL_APPLICATIONS = 'All_Applications';
   static const String DARK = 'Dark';
   static const String LIGHT = 'Light';
   static const String DETAIL = 'Detail';
@@ -194,4 +194,6 @@ class Keystring {
   static const String BASIC = 'Basic';
   static const String Number_Available_Jobs = 'Number_Available_Jobs';
   static const String RESET = 'Reset';
+  static const String ALL_COMPANIES = 'All_Companies';
+  static const String PREMIUM_EXPIRY_DATE = 'Premium_Expiry_Date';
 }

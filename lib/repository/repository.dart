@@ -64,10 +64,10 @@ class InsideService {
       // 'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
-      // 'email': 'emminh@jobshunt.info',
-      // 'password': 'minhhoang',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      'email': 'emminh@jobshunt.info',
+      'password': 'minhhoang',
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -962,12 +962,12 @@ class InsideService {
   }
 
   Future<dynamic> addHistoryPayment(
-      String money,
-      String date,
-      String status,
-      String payment_type,
-      String userId,
-      ) async {
+    String money,
+    String date,
+    String status,
+    String payment_type,
+    String userId,
+  ) async {
     final msg = jsonEncode({
       'money': money,
       'date': date,
@@ -976,11 +976,13 @@ class InsideService {
       'userId': userId,
     });
 
-    Response response =
-    await post(Uri.parse(BASE_URL + "payment/create_payment.php"), body: msg);
+    Response response = await post(
+        Uri.parse(BASE_URL + "payment/create_payment.php"),
+        body: msg);
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> getListHistoryPayments(String userId) async {
     final msg = jsonEncode({
       'userId': userId,
@@ -993,7 +995,7 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-      jsonDecode(utf8.decode(response.bodyBytes))['data']['payment'];
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['payment'];
       return result.map((e) => PaymentDetail.fromJson(e)).toList();
     } else {
       return [];

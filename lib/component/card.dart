@@ -31,9 +31,11 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-          border: Border.all(
-              width: 1, color: Theme.of(context).colorScheme.outline),
-          borderRadius: BorderRadius.all(Radius.circular(8))),
+        border:
+            Border.all(width: 1, color: Theme.of(context).colorScheme.outline),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        color: Colors.white,
+      ),
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -230,7 +232,7 @@ class _AppJobCardState extends State<AppJobCard> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -493,7 +495,19 @@ class _AppCandidateProfileCardState extends State<AppCandidateProfileCard> {
                 Text('${Keystring.PHONE.tr}: ${widget.candidate!.phone}'),
               ],
             ),
-          )
+          ),
+          Container(
+            child: GestureDetector(
+              onTap: () {
+                //
+              },
+              child: Icon(
+                Icons.report,
+                color: Colors.red,
+                size: 40,
+              ),
+            ),
+          ),
         ],
       ),
     );

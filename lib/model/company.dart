@@ -34,6 +34,7 @@ class CompanyDetail {
   String? job;
   String? level;
   String? taxcode;
+  String? premiumExpiry;
 
   CompanyDetail({
     this.uid,
@@ -47,6 +48,7 @@ class CompanyDetail {
     this.job,
     this.level,
     this.taxcode,
+    this.premiumExpiry,
   });
 
   CompanyDetail.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class CompanyDetail {
     job = json['job'];
     level = json['level'];
     taxcode = json['tax_code'];
+    premiumExpiry = json['premium_expiry'];
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +79,7 @@ class CompanyDetail {
     data['job'] = this.job;
     data['level'] = this.level;
     data['tax_code'] = this.taxcode;
+    data['premium_expiry'] = this.premiumExpiry;
     return data;
   }
 }

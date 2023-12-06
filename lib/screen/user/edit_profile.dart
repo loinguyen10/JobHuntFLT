@@ -554,6 +554,23 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 child:
                     DateCustomDialog().dobDate(context, ref, birthdayProfile),
               ),
+              SizedBox(
+                  height: profile?.premiumExpiry != null &&
+                          profile?.premiumExpiry != ''
+                      ? 24
+                      : 0),
+              profile?.premiumExpiry != null && profile?.premiumExpiry != ''
+                  ? EditTextForm(
+                      onChanged: ((value) {
+                        ref.read(premiumExpireProfileProvider.notifier).state =
+                            value;
+                      }),
+                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
+                      content: profile?.premiumExpiry ?? '',
+                      maxLines: 1,
+                      readOnly: true,
+                    )
+                  : SizedBox(height: 0),
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {

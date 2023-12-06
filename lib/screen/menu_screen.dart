@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
+import 'package:jobhunt_ftl/screen/payment/payment_history.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
 import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
@@ -570,6 +571,46 @@ class MenuScreen extends ConsumerWidget {
                                     ),
                                     Text(
                                       Keystring.UPGRADE.tr,
+                                      style: textMenu,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              ref.invalidate(listYourFavoriteProvider);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PaymentHistoryScreen()),
+                              );
+                            },
+                            child: Card(
+                              shadowColor: Colors.grey,
+                              shape: Border.all(
+                                  color: Colors.white, width: 2),
+                              margin: EdgeInsets.symmetric(vertical: 4),
+                              elevation: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.history,
+                                      size: 32,
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      Keystring.PAYMENT_HISTORY.tr,
                                       style: textMenu,
                                     ),
                                   ],

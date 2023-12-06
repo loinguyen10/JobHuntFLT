@@ -60,14 +60,14 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      // 'email': 'laingu@jobshunt.info',
-      // 'password': 'laicutai',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -983,7 +983,7 @@ class InsideService {
   }
   Future<dynamic> getListHistoryPayments(String userId) async {
     final msg = jsonEncode({
-      'userId': userId,
+      'uid': userId,
     });
     Response response = await post(
         Uri.parse(BASE_URL + "payment/your_payments.php"),

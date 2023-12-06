@@ -204,6 +204,12 @@ class LocaleString extends Translations {
           'Basic': 'Basic',
           'Number_Available_Jobs': 'Number of Available Jobs',
           'Reset': 'Reset',
+          'Payment_History': 'Payment history',
+          'Type_bank': 'Type - bank',
+          'Status': 'Status',
+          'Price': 'Price',
+          'Date_Created': 'Date created',
+          'STT': 'STT',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

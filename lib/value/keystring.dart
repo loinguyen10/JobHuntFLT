@@ -194,4 +194,9 @@ class Keystring {
   static const String BASIC = 'Basic';
   static const String Number_Available_Jobs = 'Number_Available_Jobs';
   static const String RESET = 'Reset';
+  static const String PAYMENT_HISTORY = 'Payment_History';
+  static const String TYPE_BANK = 'Type_bank';
+  static const String PRICE = 'Price';
+  static const String DATE_CREATED = 'Date_Created';
+  static const String STT = 'STT';
 }

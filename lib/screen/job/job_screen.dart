@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -100,61 +98,55 @@ class JobBestListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listActiveJobProvider);
+    final data = ref.watch(listJobBestProvider);
 
-    return _data.when(
-      data: (data) {
-        return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (_, index) {
-            String avatar = data[index].company?.avatarUrl ?? '';
-            String name = data[index].name ?? '';
-            String companyName = data[index].company?.fullname ?? '';
-            String province = getProvinceName(
-                data[index]
-                    .address!
-                    .substring(data[index].address!.lastIndexOf(',') + 1),
-                ref);
-            String money = data[index].maxSalary != -1
-                ? '${getReduceZeroMoney(data[index].maxSalary ?? 0)} ${data[index].currency}'
-                : Keystring.ARGEEMENT.tr;
-            String deadline = data[index].deadline ?? '';
+    return data.isNotEmpty
+        ? ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (_, index) {
+              String avatar = data[index].company?.avatarUrl ?? '';
+              String name = data[index].name ?? '';
+              String companyName = data[index].company?.fullname ?? '';
+              String province = getProvinceName(
+                  data[index]
+                      .address!
+                      .substring(data[index].address!.lastIndexOf(',') + 1),
+                  ref);
+              String money = data[index].maxSalary != -1
+                  ? '${getReduceZeroMoney(data[index].maxSalary ?? 0)} ${data[index].currency}'
+                  : Keystring.ARGEEMENT.tr;
+              String deadline = data[index].deadline ?? '';
 
-            return GestureDetector(
-              onTap: () {
-                ref.read(jobDetailProvider.notifier).state = data[index];
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => JobViewScreen()),
-                );
-              },
-              child: AppJobCard(
-                avatar: avatar,
-                name: name,
-                companyName: companyName,
-                province: province,
-                money: money,
-                deadline: deadline,
+              return GestureDetector(
+                onTap: () {
+                  ref.read(jobDetailProvider.notifier).state = data[index];
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => JobViewScreen()),
+                  );
+                },
+                child: AppJobCard(
+                  avatar: avatar,
+                  name: name,
+                  companyName: companyName,
+                  province: province,
+                  money: money,
+                  deadline: deadline,
+                ),
+              );
+            },
+            itemCount:
+                data.length < 3 ? data.length : (itemCount ?? data.length),
+          )
+        : SizedBox(
+            height: 160,
+            child: Center(
+              child: Text(
+                Keystring.NO_DATA.tr,
               ),
-            );
-          },
-          itemCount: data.length < 3 ? data.length : (itemCount ?? data.length),
-        );
-      },
-      error: (error, stackTrace) => SizedBox(
-        height: 160,
-        child: Center(
-          child: Text(Keystring.NO_DATA.tr),
-        ),
-      ),
-      loading: () => const SizedBox(
-        height: 160,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
 

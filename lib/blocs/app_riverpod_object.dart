@@ -129,6 +129,9 @@ final wardChooseProvider = StateProvider.autoDispose<WardList?>((ref) {
   return WardList();
 });
 
+final premiumExpireProfileProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.premiumExpiry ?? "");
+
 //company
 final avatarCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.avatarUrl ?? "");
@@ -208,6 +211,9 @@ final descriptionCompanyProvider = StateProvider(
 
 final jobCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.job ?? "");
+
+final premiumExpireCompanyProvider = StateProvider(
+    (ref) => ref.watch(companyProfileProvider)?.premiumExpiry ?? "");
 
 //job
 
@@ -689,5 +695,53 @@ final numberJobSearchProvider = StateProvider<int>((ref) => 0);
 final listUserProfilevider =
     FutureProvider<List<UserProfileDetail>>((ref) => getUserProfileList());
 //
-final listHistoryPaymentsProvider =
-FutureProvider<List<PaymentDetail>>((ref) => getYourHistoryPaymentList(ref.watch(userLoginProvider)?.uid.toString()??'0'));
+final listHistoryPaymentsProvider = FutureProvider<List<PaymentDetail>>((ref) =>
+    getYourHistoryPaymentList(
+        ref.watch(userLoginProvider)?.uid.toString() ?? '0'));
+
+final provinceBestJobProvider = StateProvider<ProvinceList?>((ref) => null);
+
+final districtBestJobProvider = StateProvider<DistrictList?>((ref) => null);
+
+final listJobBestProvider = StateProvider<List<JobDetail>>(
+  (ref) {
+    final province = ref.watch(provinceBestJobProvider);
+    final district = ref.watch(districtBestJobProvider);
+    final data = ref.watch(listActiveJobProvider);
+
+    List<JobDetail> listBest = [];
+    List<JobDetail> list = [];
+
+    data.maybeWhen(
+      data: (data) {
+        list = data;
+      },
+      orElse: () {
+        list = [];
+      },
+    );
+
+    listBest.clear();
+    listBest.addAll(list);
+    if (province != null) {
+      listBest.clear();
+      for (var job in list) {
+        final address = job.address;
+        if (district == null) {
+          if (address?.substring(address.lastIndexOf(',') + 1) ==
+              province.code) {
+            listBest.add(job);
+          }
+        } else {
+          if (address == '${district.code},${province.code}') {
+            listBest.add(job);
+          }
+        }
+      }
+    }
+
+    listBest.sort((b, a) => a.maxSalary!.compareTo(b.maxSalary!));
+    log('length: ${listBest.length}');
+    return listBest;
+  },
+);

@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
@@ -23,13 +22,8 @@ import '../model/payment.dart';
 import '../value/style.dart';
 
 String BASE_URL = 'https://jobshunt.info/app_auth/api/auth/';
-// String BASE_URL = 'https://localhost/app_auth/api/auth/';
 String BASE_IMG_URL = 'https://jobshunt.info/app_auth/img/';
-// String BASE_IMG_URL = 'https://localhost/app_auth/img/';
 String BASE_CV_URL = 'https://jobshunt.info/app_auth/cv/';
-// String BASE_URL = 'https://localhost/app_auth/api/auth/';
-// String BASE_IMG_URL = 'https://localhost/app_auth/img/';
-// String BASE_CV_URL = 'https://localhost/app_auth/cv/';
 final _auth = FirebaseAuth.instance;
 final fireStore = FirebaseFirestore.instance;
 final fireStorage = FirebaseStorage.instance;
@@ -60,14 +54,14 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': 'laingu@jobshunt.info',
-      'password': 'laicutai',
+      // 'email': 'laingu@jobshunt.info',
+      // 'password': 'laicutai',
       // 'email': 'hungbip@jobshunt.info',
       // 'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -962,13 +956,13 @@ class InsideService {
   }
 
   Future<dynamic> addHistoryPayment(
-      String money,
-      String date,
-      String status,
-      String payment_type,
-      String userId,
-      String role,
-      ) async {
+    String money,
+    String date,
+    String status,
+    String payment_type,
+    String userId,
+    String role,
+  ) async {
     final msg = jsonEncode({
       'money': money,
       'date': date,
@@ -979,19 +973,21 @@ class InsideService {
 
     String txtRole = '';
 
-    if(role == 'candidate'){
+    if (role == 'candidate') {
       txtRole = 'profile';
     }
 
-    if(role == 'recruiter'){
+    if (role == 'recruiter') {
       txtRole = 'company';
     }
 
-    Response response =
-    await post(Uri.parse("${BASE_URL}payment/create_payment_$txtRole.php"), body: msg);
+    Response response = await post(
+        Uri.parse("${BASE_URL}payment/create_payment_$txtRole.php"),
+        body: msg);
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> getListHistoryPayments(String userId) async {
     final msg = jsonEncode({
       'uid': userId,
@@ -1004,7 +1000,7 @@ class InsideService {
     log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
-      jsonDecode(utf8.decode(response.bodyBytes))['data']['payment'];
+          jsonDecode(utf8.decode(response.bodyBytes))['data']['payment'];
       return result.map((e) => PaymentDetail.fromJson(e)).toList();
     } else {
       return [];

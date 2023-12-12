@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -39,5 +40,14 @@ class FirebaseApi {
     }else{
       print('user granted permisson');
     }
+  }
+  void firebaseInit(BuildContext context){
+    FirebaseMessaging.onMessage.listen((message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification!.android;
+      print('${notification?.title}');
+      print('${notification?.body}');
+      print('${message.data.toString()}');
+    });
   }
 }

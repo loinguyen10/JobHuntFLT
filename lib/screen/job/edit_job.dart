@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jobhunt_ftl/component/app_autocomplete.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 
 import '../../blocs/app_controller.dart';
@@ -44,6 +45,11 @@ class JobEditScreen extends ConsumerWidget {
     final jobActive = ref.watch(jobActiveProvider);
     final salaryActive = ref.watch(jobSalaryProvider);
 
+    final listAllTitleJobData = ref.watch(listAllTitleJobSettingProvider);
+    final listJob = ref.watch(listJobTagProviderProvider);
+
+    List<String> listTitleJob = [];
+
     List<ProvinceList> listProvince = [];
     List<DistrictList> listDistrict = [];
     List<String> listJobType = [
@@ -73,6 +79,14 @@ class JobEditScreen extends ConsumerWidget {
             }
           }
         }
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    listAllTitleJobData.when(
+      data: (_data) {
+        listTitleJob.addAll(_data);
       },
       error: (error, stackTrace) => null,
       loading: () => const CircularProgressIndicator(),
@@ -175,28 +189,52 @@ class JobEditScreen extends ConsumerWidget {
       );
     }
 
+    String capitalizeWords(String text) {
+      if (text.isEmpty) {
+        return text;
+      }
+
+      List<String> words = text.split(' ');
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].isNotEmpty) {
+          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+        }
+      }
+
+      return words.join(' ');
+    }
+
 //void
     void doneButton() {
-      log('${company!.uid} + ${ref.watch(jobNameProvider)} + ${ref.watch(jobMinSalaryProvider)} + ${ref.watch(jobMaxSalaryProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${ref.watch(jobYearExperienceProvider)}  + ${jobTypeChoose!} + ${ref.watch(jobNumberCandidateProvider)}  + ${ref.watch(jobDescriptionProvider)} + ${ref.watch(jobCandidateRequirementProvider)} + ${ref.watch(jobBenefitProvider)} + ${ref.watch(jobTagProvider)} + ${jobDeadline}');
       if (ref.watch(jobNameProvider).isNotEmpty &&
           !ref.watch(jobMinSalaryProvider).isNaN &&
           !ref.watch(jobMaxSalaryProvider).isNaN &&
           !ref.watch(jobYearExperienceProvider).isNaN &&
           jobTypeChoose != null &&
           !ref.watch(jobNumberCandidateProvider).isNaN &&
-          provinceChoose.code != null &&
-          districtChoose.code != null &&
+          provinceChoose!.code != null &&
+          districtChoose!.code != null &&
           ref.watch(jobDescriptionProvider).isNotEmpty &&
           ref.watch(jobCandidateRequirementProvider).isNotEmpty &&
           ref.watch(jobBenefitProvider).isNotEmpty &&
-          ref.watch(jobTagProvider).isNotEmpty &&
+          listJob.isNotEmpty &&
           jobDeadline.isNotEmpty) {
+        String jobTag = '';
+
+        for (var y in listJob) {
+          if (!listTitleJob.any((x) => x == y)) {
+            log('message title: $y');
+            ref.read(LoginControllerProvider.notifier).createJobTitle(y);
+          }
+          jobTag += '$y,';
+        }
+
         if (!edit) {
           log("click done");
 
           ref.read(LoginControllerProvider.notifier).createJob(
                 ref.watch(jobNameProvider),
-                company.uid ?? '0',
+                company!.uid ?? '0',
                 ref.watch(jobMinSalaryProvider),
                 ref.watch(jobMaxSalaryProvider),
                 ref.watch(jobYearExperienceProvider),
@@ -206,7 +244,7 @@ class JobEditScreen extends ConsumerWidget {
                 ref.watch(jobDescriptionProvider),
                 ref.watch(jobCandidateRequirementProvider),
                 ref.watch(jobBenefitProvider),
-                ref.watch(jobTagProvider),
+                jobTag,
                 jobDeadline,
                 jobActive ? 1 : 0,
               );
@@ -215,7 +253,7 @@ class JobEditScreen extends ConsumerWidget {
           ref.read(LoginControllerProvider.notifier).updateJob(
                 job!.code ?? '0',
                 ref.watch(jobNameProvider),
-                company.uid ?? '0',
+                company!.uid ?? '0',
                 ref.watch(jobMinSalaryProvider),
                 ref.watch(jobMaxSalaryProvider),
                 ref.watch(jobYearExperienceProvider),
@@ -225,7 +263,7 @@ class JobEditScreen extends ConsumerWidget {
                 ref.watch(jobDescriptionProvider),
                 ref.watch(jobCandidateRequirementProvider),
                 ref.watch(jobBenefitProvider),
-                ref.watch(jobTagProvider),
+                jobTag,
                 jobDeadline,
                 jobActive ? 1 : 0,
               );
@@ -284,12 +322,12 @@ class JobEditScreen extends ConsumerWidget {
       },
     );
 
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: Theme.of(context).colorScheme.background == Colors.white
-                ? bgGradientColor0
-                : bgGradientColor1),
+    return Container(
+      decoration: BoxDecoration(
+          gradient: Theme.of(context).colorScheme.background == Colors.white
+              ? bgGradientColor0
+              : bgGradientColor1),
+      child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -483,12 +521,68 @@ class JobEditScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(jobTagProvider.notifier).state = value;
-                }),
-                label: Keystring.Tag.tr,
-                content: job?.tag ?? '',
+              AppBorderFrame(
+                labelText: Keystring.Tag.tr,
+                child: Column(
+                  children: [
+                    AppAutocompleteEditText(
+                      listSuggestion: listTitleJob,
+                      onSelected: (value) {
+                        if (!listJob.any((x) => x == value)) {
+                          ref.read(listJobTagProviderProvider.notifier).state =
+                              [...listJob, capitalizeWords(value)];
+                          // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
+                        }
+                      },
+                    ),
+                    listJob.isNotEmpty
+                        ? SizedBox(height: 16)
+                        : SizedBox(height: 0),
+                    listJob.isNotEmpty
+                        ? ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (_, index) {
+                              return Card(
+                                shadowColor: Colors.grey,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                elevation: 2,
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        listJob[index],
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 3,
+                                      ),
+                                      InkWell(
+                                        child: Icon(Icons.delete_outlined),
+                                        onTap: () {
+                                          if (listJob.isNotEmpty) {
+                                            ref
+                                                .read(listJobTagProviderProvider
+                                                    .notifier)
+                                                .state = [
+                                              for (final value in listJob)
+                                                if (value != listJob[index])
+                                                  value
+                                            ];
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: listJob.length,
+                          )
+                        : SizedBox(height: 0),
+                  ],
+                ),
               ),
               SizedBox(height: 24),
               AppBorderFrame(

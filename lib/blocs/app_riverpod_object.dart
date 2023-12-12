@@ -24,7 +24,7 @@ final checkboxRememberProvider = StateProvider.autoDispose((ref) => false);
 
 final companyProfileProvider = StateProvider<CompanyDetail?>((ref) => null);
 
-final jobDetailProvider = StateProvider<JobDetail?>((ref) => JobDetail());
+final jobDetailProvider = StateProvider<JobDetail?>((ref) => null);
 
 final checkboxTermProvider = StateProvider.autoDispose((ref) => false);
 
@@ -221,7 +221,7 @@ final jobNameProvider =
     StateProvider((ref) => ref.watch(jobDetailProvider)?.name ?? "");
 
 final jobSalaryProvider = StateProvider.autoDispose((ref) {
-  if (ref.watch(jobDetailProvider)?.code != null) {
+  if (ref.watch(jobDetailProvider) != null) {
     if (ref.watch(jobDetailProvider)!.minSalary! < 0 &&
         ref.watch(jobDetailProvider)!.maxSalary! < 0) {
       return false;
@@ -265,7 +265,7 @@ final provinceJobProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
   if (!ref.watch(listProvinceProvider).isLoading) {
     var list = ref.watch(listProvinceProvider).value;
     for (var x in list!) {
-      if (ref.watch(jobDetailProvider)?.code != null) {
+      if (ref.watch(jobDetailProvider) != null) {
         var address = ref.watch(jobDetailProvider)?.address;
         if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
           return x;
@@ -285,7 +285,7 @@ final districtJobProvider = StateProvider.autoDispose<DistrictList?>((ref) {
   if (!ref.watch(listDistrictProvider).isLoading) {
     var list = ref.watch(listDistrictProvider).value;
     for (var x in list!) {
-      if (ref.watch(jobDetailProvider)?.code != null) {
+      if (ref.watch(jobDetailProvider) != null) {
         var address = ref.watch(jobDetailProvider)?.address;
         if (address?.substring(0, address.indexOf(',')) == x.code) {
           return x;
@@ -313,8 +313,13 @@ final jobCandidateRequirementProvider = StateProvider(
 final jobBenefitProvider =
     StateProvider((ref) => ref.watch(jobDetailProvider)?.jobBenefit ?? "");
 
-final jobTagProvider =
-    StateProvider((ref) => ref.watch(jobDetailProvider)?.tag ?? "");
+final listJobTagProviderProvider = StateProvider<List<String>>((ref) {
+  if (ref.watch(jobDetailProvider) != null) {
+    var job = ref.watch(jobDetailProvider)?.tag?.split(',');
+    return [...job!];
+  }
+  return [];
+});
 
 final jobDeadlineProvider = StateProvider.autoDispose(
     (ref) => ref.watch(jobDetailProvider)?.deadline ?? "");

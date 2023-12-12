@@ -624,6 +624,23 @@ class RecuiterEditScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+              SizedBox(
+                  height: company?.premiumExpiry != null &&
+                          company?.premiumExpiry != ''
+                      ? 24
+                      : 0),
+              company?.premiumExpiry != null && company?.premiumExpiry != ''
+                  ? EditTextForm(
+                      onChanged: ((value) {
+                        ref.read(premiumExpireProfileProvider.notifier).state =
+                            value;
+                      }),
+                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
+                      content: company?.premiumExpiry ?? '',
+                      maxLines: 1,
+                      readOnly: true,
+                    )
+                  : SizedBox(height: 0),
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {

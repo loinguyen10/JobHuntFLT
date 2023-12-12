@@ -8,6 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/screen/payment/Premium/premium.dart';
 import 'package:jobhunt_ftl/screen/payment/thanku_page.dart';
 
+import '../../blocs/app_controller.dart';
+import '../../blocs/app_riverpod_object.dart';
+
 class payprocess extends ConsumerWidget {
   final String money;
 
@@ -16,6 +19,7 @@ class payprocess extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userLoginProvider);
     log("ac${money}");
     return Scaffold(
       appBar: AppBar(
@@ -42,6 +46,11 @@ class payprocess extends ConsumerWidget {
           var uri = Uri.parse(url.toString());
             var queryParams = uri.queryParameters;
             var vnp_ResponseCode = queryParams['vnp_ResponseCode'];
+            var vnp_CardType = queryParams['vnp_CardType'];
+            log(queryParams.toString());
+            var vnp_PayDate = queryParams['vnp_PayDate'];
+            var vnp_Amount = queryParams['vnp_Amount'];
+            var vnp_BankCode = queryParams['vnp_BankCode'];
 
             if (vnp_ResponseCode == '00') {
               Navigator.push(
@@ -50,8 +59,8 @@ class payprocess extends ConsumerWidget {
                   builder: (context) => ThankYouPage(title: '',),
                 ),
               );
+              ref.read(LoginControllerProvider.notifier).addHistoryPayment(money, vnp_PayDate.toString(), vnp_ResponseCode.toString(), vnp_CardType.toString()+'-'+vnp_BankCode.toString(), user?.uid ??'',user?.role ?? '');
             }
-
         },
       ),
     );

@@ -25,6 +25,7 @@ class CompanyInformation extends ConsumerWidget {
     final follow = ref.watch(followingProvider);
     final bmCheck = ref.watch(turnFollowOn);
 
+
     double screenWidth = MediaQuery.of(context).size.width;
     // bool isFollow = ref.watch(isCheckFollowCompany);
 
@@ -80,7 +81,7 @@ class CompanyInformation extends ConsumerWidget {
                 return [
                   SliverAppBar(
                     backgroundColor: appPrimaryColor,
-                    expandedHeight: 460.0,
+                    expandedHeight: 470.0,
                     floating: false,
                     pinned: true,
                     leading: GestureDetector(
@@ -379,7 +380,9 @@ class CompanyInformation extends ConsumerWidget {
                             ),
                           ),
                         ],
-                        onTap: (index) {},
+                        onTap: (index) {
+
+                        },
                       ),
                     ),
                     floating: false,

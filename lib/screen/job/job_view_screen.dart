@@ -111,7 +111,19 @@ class JobViewScreen extends ConsumerWidget {
                             child: Icon(Icons.edit),
                           ),
                         )
-                      : SizedBox(width: 0),
+                      : Container(
+                          margin: EdgeInsets.only(right: 8),
+                          child: InkWell(
+                            onTap: () {
+                              //
+                            },
+                            child: Icon(
+                              Icons.report_rounded,
+                              color: Colors.redAccent.shade700,
+                              size: 40,
+                            ),
+                          ),
+                        )
                 ],
               ),
               SizedBox(height: 16),
@@ -218,16 +230,8 @@ class JobViewScreen extends ConsumerWidget {
                                       ),
                                     ],
                                   )
-                                : AppButton(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3.5,
-                                    onPressed: () {
-                                      //
-                                    },
-                                    label: Keystring.CHECK_CV.tr,
-                                    bgColor: appPrimaryColor,
-                                    colorBorder: appPrimaryColor,
-                                    borderRadius: 16,
+                                : SizedBox(
+                                    height: 48,
                                   )
                             : SizedBox(
                                 height: 0,

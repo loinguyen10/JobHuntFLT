@@ -15,6 +15,8 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/model/payment.dart';
+import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../model/company.dart';
@@ -85,9 +87,10 @@ Future<List<CurrencyList>> getCurrencyList() async {
 }
 
 void resetCall(WidgetRef ref) {
-  ref.read(userLoginProvider.notifier).state = null;
-  ref.read(userProfileProvider.notifier).state = null;
-  ref.read(companyProfileProvider.notifier).state = null;
+  ref.invalidate(userLoginProvider);
+  ref.invalidate(userProfileProvider);
+  ref.invalidate(companyProfileProvider);
+  ref.invalidate(userDetailJobSettingProvider);
 }
 
 Future<List<CompanyDetail>> getCompanyList() async {
@@ -255,6 +258,7 @@ Future<List<JobDetail>> getActiveJobList() async {
 }
 
 Future<List<JobDetail>> getRecommendJobList(String uid) async {
+  if (uid == '0') return [];
   final list = await insideService.getJobsRecommend(uid);
   return list;
 }
@@ -287,8 +291,17 @@ Future<List<ApplicationDetail>> getCandidateApplication(
 }
 
 Future<List<ApplicationDetail>> getRecuiterApplication(
-    String recuiterId) async {
-  final list = await insideService.getRecuiterApplication(recuiterId);
+  String recuiterId,
+  String searchWord,
+  String approve,
+  String sentTime,
+) async {
+  final list = await insideService.getRecuiterApplication(
+    recuiterId,
+    searchWord,
+    approve,
+    sentTime,
+  );
   return list;
 }
 
@@ -300,5 +313,21 @@ Future<List<String>> getAllJobTitle() async {
 //
 Future<List<FollowDetail>> getYourFollowList(String uid) async {
   final list = await insideService.getListFollow(uid);
+  return list;
+}
+
+Future<List<CompanyDetail>> getCompanyListUid(String uid) async {
+  final list = await insideService.getCompany(uid);
+  log('list: ${list.length}');
+  return list;
+}
+
+Future<List<UserProfileDetail>> getUserProfileList() async {
+  final list = await insideService.getListUserProfile();
+  log('listProfile: ${list.length}');
+  return list;
+}
+Future<List<PaymentDetail>> getYourHistoryPaymentList(String uid) async {
+  final list = await insideService.getListHistoryPayments(uid);
   return list;
 }

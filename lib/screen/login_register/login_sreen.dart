@@ -31,9 +31,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void initState() {
-    resetCall(ref);
-    super.initState();
     loadEaP();
+    super.initState();
   }
 
   Future<void> saveRememberState(bool value) async {
@@ -119,6 +118,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (state is SignInLoadingEvent) {
           Loader.show(context);
         }
+
+        if (previous is SignInLoadingEvent && state is ThingStateEvent) {
+          ref.read(LoginControllerProvider.notifier).login(
+                ref.watch(emailLoginProvider),
+                ref.watch(passwordLoginProvider),
+              );
+        }
       },
     );
 
@@ -170,7 +176,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Row(
                           children: [
                             Checkbox(
-                              checkColor: Colors.white,
+                              checkColor: Theme.of(context).colorScheme.primary,
                               value: ref.watch(checkboxRememberProvider),
                               onChanged: (bool? value) async {
                                 setState(() {

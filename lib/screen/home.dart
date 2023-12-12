@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 import 'package:jobhunt_ftl/component/card.dart';
+import 'package:jobhunt_ftl/component/custom_page_route.dart';
 import 'package:jobhunt_ftl/model/company.dart';
-import 'package:jobhunt_ftl/screen/job/recuiter_application_screen.dart';
 import 'package:jobhunt_ftl/screen/user/company_screen.dart';
 import 'package:jobhunt_ftl/screen/job/edit_job.dart';
 import 'package:jobhunt_ftl/screen/job/job_screen.dart';
@@ -23,6 +23,11 @@ class HomeScreen extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
     final company = ref.watch(companyProfileProvider);
 
+    if (company != null) {
+      ref.watch(listRecuiterMonthApplicationProvider);
+      ref.watch(listActivePostJobCompanyProvider);
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appPrimaryColor,
@@ -39,30 +44,41 @@ class HomeScreen extends ConsumerWidget {
                   SizedBox(
                     width: 16,
                   ),
-                  ClipOval(
-                    child: SizedBox.fromSize(
-                      size: Size.fromRadius(24), // Image radius
-                      child: profile != null || company != null
-                          ? profile?.avatarUrl != null &&
-                                  profile?.avatarUrl != ''
-                              ? Image.network(
-                                  profile?.avatarUrl ?? '',
-                                  fit: BoxFit.cover,
-                                )
-                              : company?.avatarUrl != null &&
-                                      company?.avatarUrl != ''
-                                  ? Image.network(
-                                      company?.avatarUrl ?? '',
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Icon(
-                                      Icons.no_accounts_outlined,
-                                      size: 48,
-                                    )
-                          : Icon(
-                              Icons.no_accounts_outlined,
-                              size: 48,
-                            ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: profile?.level == 'Premium'
+                            ? Colors.yellow
+                            : Colors.transparent,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: SizedBox.fromSize(
+                        size: Size.fromRadius(24), // Image radius
+                        child: profile != null || company != null
+                            ? profile?.avatarUrl != null &&
+                                    profile?.avatarUrl != ''
+                                ? Image.network(
+                                    profile?.avatarUrl ?? '',
+                                    fit: BoxFit.cover,
+                                  )
+                                : company?.avatarUrl != null &&
+                                        company?.avatarUrl != ''
+                                    ? Image.network(
+                                        company?.avatarUrl ?? '',
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Icon(
+                                        Icons.no_accounts_outlined,
+                                        size: 48,
+                                      )
+                            : Icon(
+                                Icons.no_accounts_outlined,
+                                size: 48,
+                              ),
+                      ),
                     ),
                   ),
                 ],
@@ -72,9 +88,12 @@ class HomeScreen extends ConsumerWidget {
         ],
         leading: IconButton(
           onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => MenuScreen()),
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MenuScreen()),
+              SlidePageRoute(child: MenuScreen()),
             );
           },
           icon: Icon(Icons.menu),
@@ -112,10 +131,11 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        ref.invalidate(listJobSearchProvider);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SearchScreen()),
+                              builder: (context) => JobSearchScreen()),
                         );
                       },
                       child: Card(
@@ -139,7 +159,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 width: 16,
                               ),
                               Text(
-                                Keystring.SEARCH,
+                                Keystring.SEARCH.tr,
                                 style: textNormalHint,
                               ),
                             ],
@@ -327,14 +347,25 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             children: [
                               AppSquareHomeCard(
                                 icon: Icons.description_outlined,
-                                title: Keystring.CV_Today.tr,
-                                count: '0',
+                                title: Keystring.CV_Month.tr,
+                                count: ref
+                                        .watch(
+                                            listRecuiterMonthApplicationProvider)
+                                        .value
+                                        ?.length
+                                        .toString() ??
+                                    '0',
                                 bgColor: Colors.greenAccent,
                               ),
                               AppSquareHomeCard(
                                 icon: CupertinoIcons.briefcase,
                                 title: Keystring.ACTIVE_JOB.tr,
-                                count: '0',
+                                count: ref
+                                        .watch(listActivePostJobCompanyProvider)
+                                        .value
+                                        ?.length
+                                        .toString() ??
+                                    '0',
                                 bgColor: Colors.redAccent,
                               ),
                             ],
@@ -360,7 +391,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  ref.refresh(jobDetailProvider);
+                                  ref.invalidate(jobDetailProvider);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

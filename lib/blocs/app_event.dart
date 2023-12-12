@@ -169,3 +169,105 @@ class FavoriteErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class CreateOTPSuccessEvent extends InsideEvent {
+  const CreateOTPSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ReCreateOTPEvent extends InsideEvent {
+  const ReCreateOTPEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CreateOTPEmailExistEvent extends InsideEvent {
+  const CreateOTPEmailExistEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class CreateOTPErrorEvent extends InsideEvent {
+  const CreateOTPErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class RemoveCVSuccessEvent extends InsideEvent {
+  const RemoveCVSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveCVErrorEvent extends InsideEvent {
+  const RemoveCVErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class GetCompanySuccessEvent extends InsideEvent {
+  const GetCompanySuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetCompanyErrorEvent extends InsideEvent {
+  const GetCompanyErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class GetListSuccessEvent extends InsideEvent {
+  const GetListSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetListErrorEvent extends InsideEvent {
+  const GetListErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+class HistorypaymentLoadingEvent extends InsideEvent {
+  const HistorypaymentLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class HistorypaymentSuccessEvent extends InsideEvent {
+  const HistorypaymentSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class HistorypaymentErrorEvent extends InsideEvent {
+  const HistorypaymentErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}

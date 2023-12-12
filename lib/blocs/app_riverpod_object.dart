@@ -1,8 +1,4 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:ui';
-
-import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/model/address.dart';
 import 'package:jobhunt_ftl/model/application.dart';
 import 'package:jobhunt_ftl/model/company.dart';
@@ -10,6 +6,7 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/model/payment.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:riverpod/riverpod.dart';
@@ -20,16 +17,14 @@ import 'app_riverpod_void.dart';
 
 final emailLoginProvider = StateProvider((ref) => '');
 final passwordLoginProvider = StateProvider((ref) => '');
-final userLoginProvider = StateProvider<UserDetail?>((ref) => UserDetail());
-final userProfileProvider =
-    StateProvider<UserProfileDetail?>((ref) => UserProfileDetail());
+final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
+final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
 final checkboxRememberProvider = StateProvider.autoDispose((ref) => false);
 
-final companyProfileProvider =
-    StateProvider<CompanyDetail?>((ref) => CompanyDetail());
+final companyProfileProvider = StateProvider<CompanyDetail?>((ref) => null);
 
-final jobDetailProvider = StateProvider<JobDetail?>((ref) => JobDetail());
+final jobDetailProvider = StateProvider<JobDetail?>((ref) => null);
 
 final checkboxTermProvider = StateProvider.autoDispose((ref) => false);
 
@@ -45,18 +40,15 @@ final listJobProvider = FutureProvider<List<JobDetail>>((ref) => getJobList());
 final listActiveJobProvider =
     FutureProvider<List<JobDetail>>((ref) => getActiveJobList());
 
-// final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
-//   (ref) {
-//     final listActive = getActiveJobList();
-
-//   },
-// );
+final listRecommendJobProvider = FutureProvider<List<JobDetail>>(
+  (ref) => getRecommendJobList(ref.watch(userLoginProvider)?.uid ?? '0'),
+);
 
 final listPostJobProvider = FutureProvider<List<JobDetail>>(
-    (ref) => getPostedJobList(ref.watch(companyProfileProvider)!.uid ?? '0'));
+    (ref) => getPostedJobList(ref.watch(companyProfileProvider)?.uid ?? '0'));
 
 final listSuggestionJobProvider = FutureProvider<List<JobDetail>>((ref) =>
-    getSuggestionJobList(ref.watch(jobDetailProvider)!.companyId ?? '0'));
+    getSuggestionJobList(ref.watch(jobDetailProvider)?.companyId ?? '0'));
 
 final listCompanyProvider =
     FutureProvider<List<CompanyDetail>>((ref) => getCompanyList());
@@ -137,6 +129,9 @@ final wardChooseProvider = StateProvider.autoDispose<WardList?>((ref) {
   return WardList();
 });
 
+final premiumExpireProfileProvider =
+    StateProvider((ref) => ref.watch(userProfileProvider)?.premiumExpiry ?? "");
+
 //company
 final avatarCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.avatarUrl ?? "");
@@ -150,6 +145,9 @@ final emailCompanyProvider = StateProvider((ref) =>
     '');
 
 final websiteCompanyProvider =
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.web ?? "");
+
+final taxCodeCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
 
 final phoneCompanyProvider =
@@ -214,13 +212,16 @@ final descriptionCompanyProvider = StateProvider(
 final jobCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.job ?? "");
 
+final premiumExpireCompanyProvider = StateProvider(
+    (ref) => ref.watch(companyProfileProvider)?.premiumExpiry ?? "");
+
 //job
 
 final jobNameProvider =
     StateProvider((ref) => ref.watch(jobDetailProvider)?.name ?? "");
 
 final jobSalaryProvider = StateProvider.autoDispose((ref) {
-  if (ref.watch(jobDetailProvider)?.code != null) {
+  if (ref.watch(jobDetailProvider) != null) {
     if (ref.watch(jobDetailProvider)!.minSalary! < 0 &&
         ref.watch(jobDetailProvider)!.maxSalary! < 0) {
       return false;
@@ -264,7 +265,7 @@ final provinceJobProvider = StateProvider.autoDispose<ProvinceList?>((ref) {
   if (!ref.watch(listProvinceProvider).isLoading) {
     var list = ref.watch(listProvinceProvider).value;
     for (var x in list!) {
-      if (ref.watch(jobDetailProvider)?.code != null) {
+      if (ref.watch(jobDetailProvider) != null) {
         var address = ref.watch(jobDetailProvider)?.address;
         if (address?.substring(address.lastIndexOf(',') + 1) == x.code) {
           return x;
@@ -284,7 +285,7 @@ final districtJobProvider = StateProvider.autoDispose<DistrictList?>((ref) {
   if (!ref.watch(listDistrictProvider).isLoading) {
     var list = ref.watch(listDistrictProvider).value;
     for (var x in list!) {
-      if (ref.watch(jobDetailProvider)?.code != null) {
+      if (ref.watch(jobDetailProvider) != null) {
         var address = ref.watch(jobDetailProvider)?.address;
         if (address?.substring(0, address.indexOf(',')) == x.code) {
           return x;
@@ -312,8 +313,13 @@ final jobCandidateRequirementProvider = StateProvider(
 final jobBenefitProvider =
     StateProvider((ref) => ref.watch(jobDetailProvider)?.jobBenefit ?? "");
 
-final jobTagProvider =
-    StateProvider((ref) => ref.watch(jobDetailProvider)?.tag ?? "");
+final listJobTagProviderProvider = StateProvider<List<String>>((ref) {
+  if (ref.watch(jobDetailProvider) != null) {
+    var job = ref.watch(jobDetailProvider)?.tag?.split(',');
+    return [...job!];
+  }
+  return [];
+});
 
 final jobDeadlineProvider = StateProvider.autoDispose(
     (ref) => ref.watch(jobDetailProvider)?.deadline ?? "");
@@ -340,7 +346,7 @@ final listYourCVProvider = FutureProvider<List<CVDetail>>(
     (ref) => getYourCVList(ref.watch(userLoginProvider)!.uid ?? '0'));
 
 final lastNumberCVProvider = StateProvider<int>((ref) {
-  final list = ref.watch(listAllCVProvider);
+  final list = ref.watch(listYourCVProvider);
   if (list != null && list.value!.isNotEmpty) {
     return int.parse(list.value!.last.code ?? '0');
   }
@@ -385,7 +391,7 @@ final listCandidateApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) =>
         getCandidateApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
 
-final listCandidateApporveApplicationProvider =
+final listCandidateApproveApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) {
   final listAll = ref.watch(listCandidateApplicationProvider);
   List<ApplicationDetail> list = [];
@@ -393,7 +399,7 @@ final listCandidateApporveApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '1') list.add(i);
+        if (i.approve == '1') list.add(i);
       }
     },
     orElse: () {
@@ -412,7 +418,7 @@ final listCandidateRejectApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '0') list.add(i);
+        if (i.approve == '0') list.add(i);
       }
     },
     orElse: () {
@@ -431,7 +437,7 @@ final listCandidateWaitingApplicationProvider =
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == null || i.apporve == '') list.add(i);
+        if (i.approve == null || i.approve == '') list.add(i);
       }
     },
     orElse: () {
@@ -444,78 +450,39 @@ final listCandidateWaitingApplicationProvider =
 
 final StatusCheckProvider = StateProvider((ref) => '');
 
-final listRecuiterApplicationProvider = FutureProvider<List<ApplicationDetail>>(
-    (ref) => getRecuiterApplication(ref.watch(userLoginProvider)!.uid ?? '0'));
+final getListRecuiterApplicationProvider =
+    FutureProvider<List<ApplicationDetail>>((ref) => getRecuiterApplication(
+        ref.watch(userLoginProvider)!.uid ?? '0', '', '', ''));
 
-final listRecuiterApporveApplicationProvider =
+final listRecuiterApplicationProvider = StateProvider<List<ApplicationDetail>>(
+  (ref) {
+    final listAll = ref.watch(getListRecuiterApplicationProvider);
+    List<ApplicationDetail> list = [];
+
+    listAll.maybeWhen(
+      data: (data) {
+        list.addAll(data);
+      },
+      orElse: () {
+        list = [];
+      },
+    );
+
+    log('list recuiter after: ${list.length}');
+    return list;
+  },
+);
+
+final listRecuiterMonthApplicationProvider =
     FutureProvider<List<ApplicationDetail>>((ref) {
-  final listAll = ref.watch(listRecuiterApplicationProvider);
+  final listAll = ref.watch(getListRecuiterApplicationProvider);
   List<ApplicationDetail> list = [];
 
   listAll.maybeWhen(
     data: (data) {
       for (var i in data) {
-        if (i.apporve == '1') list.add(i);
-      }
-    },
-    orElse: () {
-      list = [];
-    },
-  );
-
-  return list;
-});
-
-final listRecuiterRejectApplicationProvider =
-    FutureProvider<List<ApplicationDetail>>((ref) {
-  final listAll = ref.watch(listRecuiterApplicationProvider);
-  List<ApplicationDetail> list = [];
-
-  listAll.maybeWhen(
-    data: (data) {
-      for (var i in data) {
-        if (i.apporve == '0') list.add(i);
-      }
-    },
-    orElse: () {
-      list = [];
-    },
-  );
-
-  return list;
-});
-
-final listRecuiterWaitingApplicationProvider =
-    FutureProvider<List<ApplicationDetail>>((ref) {
-  final listAll = ref.watch(listRecuiterApplicationProvider);
-  List<ApplicationDetail> list = [];
-
-  listAll.maybeWhen(
-    data: (data) {
-      for (var i in data) {
-        if (i.apporve == null || i.apporve == '') list.add(i);
-      }
-    },
-    orElse: () {
-      list = [];
-    },
-  );
-
-  return list;
-});
-
-final listRecuiterTodayApplicationProvider =
-    FutureProvider<List<ApplicationDetail>>((ref) {
-  final listAll = ref.watch(listRecuiterApplicationProvider);
-  List<ApplicationDetail> list = [];
-  String now = DateFormat('dd/MM/yyyy').format(DateTime.now());
-
-  listAll.maybeWhen(
-    data: (data) {
-      for (var i in data) {
-        if ((i.apporve == null || i.apporve == '') &&
-            i.sendTime!.substring(0, i.sendTime!.indexOf(' ')) == now) {
-          log('messageTime: ${i.sendTime} - $now');
+        if (i.sendTime!.substring(3, 5) == DateTime.now().month.toString()) {
+          log('this month: ${i.sendTime!.substring(3, 5)} & ${DateTime.now().month}');
           list.add(i);
         }
       }
@@ -644,6 +611,7 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
   final job = ref.watch(jobDetailProvider);
+
   List<FollowDetail> listFollow = [];
 
   list.maybeWhen(
@@ -671,3 +639,114 @@ final listJobOfCompanyProvider = FutureProvider<List<JobDetail>>((ref) =>
     getPostedJobList(ref.watch(jobDetailProvider)!.company?.uid ?? '0'));
 
 final emailsaveProvider = StateProvider((ref) => '');
+//
+final itemPayMentProvider = StateProvider<int>((ref) => 1);
+final isitemPayMentProvider = StateProvider<bool>((ref) => false);
+
+final emailRegisterProvider = StateProvider((ref) => '');
+final passwordRegisterProvider = StateProvider((ref) => '');
+final timerProvider = StateProvider((ref) => 10);
+
+final listJobTagCompanyProvider = StateProvider<List<String>>((ref) {
+  if (ref.watch(companyProfileProvider) != null) {
+    var job = ref.watch(companyProfileProvider)?.job?.split(',');
+    return [...job!];
+  }
+  return [];
+});
+
+final listActivePostJobCompanyProvider = FutureProvider<List<JobDetail>>((ref) {
+  final listAll = ref.watch(listPostJobProvider);
+  List<JobDetail> list = [];
+
+  listAll.maybeWhen(
+    data: (data) {
+      for (var i in data) {
+        if (i.active == 1) {
+          list.add(i);
+        }
+      }
+    },
+    orElse: () {
+      list = [];
+    },
+  );
+  return list;
+});
+final isShowTimeProvider = StateProvider<bool>((ref) => false);
+
+final dateSearchProvider = StateProvider.autoDispose((ref) => '');
+
+final timeInterviewApplicationProvider = StateProvider.autoDispose(
+    (ref) => ref.watch(applicationDetailProvider)?.interviewTime ?? '');
+
+final timeTimeInterviewApplicationProvider = StateProvider.autoDispose((ref) =>
+    ref.watch(applicationDetailProvider)?.interviewTime != null
+        ? ref.watch(timeInterviewApplicationProvider).substring(
+            ref.watch(timeInterviewApplicationProvider).indexOf(' ') + 1)
+        : '');
+
+final dateTimeInterviewApplicationProvider = StateProvider.autoDispose((ref) =>
+    ref.watch(applicationDetailProvider)?.interviewTime != null
+        ? ref.watch(timeInterviewApplicationProvider).substring(
+            0, ref.watch(timeInterviewApplicationProvider).indexOf(' '))
+        : '');
+
+final listJobSearchProvider = StateProvider<List<JobDetail>>((ref) => []);
+
+final numberJobSearchProvider = StateProvider<int>((ref) => 0);
+
+// final todayJobSearchProvider = StateProvider((ref) => '');
+final listUserProfilevider =
+    FutureProvider<List<UserProfileDetail>>((ref) => getUserProfileList());
+//
+final listHistoryPaymentsProvider = FutureProvider<List<PaymentDetail>>((ref) =>
+    getYourHistoryPaymentList(
+        ref.watch(userLoginProvider)?.uid.toString() ?? '0'));
+
+final provinceBestJobProvider = StateProvider<ProvinceList?>((ref) => null);
+
+final districtBestJobProvider = StateProvider<DistrictList?>((ref) => null);
+
+final listJobBestProvider = StateProvider<List<JobDetail>>(
+  (ref) {
+    final province = ref.watch(provinceBestJobProvider);
+    final district = ref.watch(districtBestJobProvider);
+    final data = ref.watch(listActiveJobProvider);
+
+    List<JobDetail> listBest = [];
+    List<JobDetail> list = [];
+
+    data.maybeWhen(
+      data: (data) {
+        list = data;
+      },
+      orElse: () {
+        list = [];
+      },
+    );
+
+    listBest.clear();
+    listBest.addAll(list);
+    if (province != null) {
+      listBest.clear();
+      for (var job in list) {
+        final address = job.address;
+        if (district == null) {
+          if (address?.substring(address.lastIndexOf(',') + 1) ==
+              province.code) {
+            listBest.add(job);
+          }
+        } else {
+          if (address == '${district.code},${province.code}') {
+            listBest.add(job);
+          }
+        }
+      }
+    }
+
+    listBest.sort((b, a) => a.maxSalary!.compareTo(b.maxSalary!));
+    log('length: ${listBest.length}');
+    return listBest;
+  },
+);

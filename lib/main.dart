@@ -22,8 +22,6 @@ void main() async {
   var languagueSeleted =
       prefs.getString('language') ?? Get.deviceLocale!.languageCode;
 
-  var themeSeleted = prefs.getBool('theme') ?? true;
-
   if (Get.deviceLocale!.languageCode != 'vi' &&
       Get.deviceLocale!.languageCode != 'en') {
     languagueSeleted = 'en';
@@ -32,7 +30,6 @@ void main() async {
   runApp(ProviderScope(
       child: MyApp(
     language: languagueSeleted,
-    isLight: themeSeleted,
   )));
 }
 
@@ -46,9 +43,8 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.language, required this.isLight});
+  const MyApp({super.key, required this.language});
   final String language;
-  final bool isLight;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +63,7 @@ class MyApp extends StatelessWidget {
       locale: Locale(language),
       home: LoginScreen(),
       builder: EasyLoading.init(),
-      theme: isLight ? appLightTheme : appDarkTheme,
+      theme: appLightTheme,
     );
   }
 }

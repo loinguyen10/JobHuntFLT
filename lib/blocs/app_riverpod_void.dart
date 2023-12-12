@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart';
@@ -13,12 +15,13 @@ import 'package:jobhunt_ftl/model/cv.dart';
 import 'package:jobhunt_ftl/model/favorite.dart';
 import 'package:jobhunt_ftl/model/follow.dart';
 import 'package:jobhunt_ftl/model/job.dart';
+import 'package:jobhunt_ftl/model/payment.dart';
+import 'package:jobhunt_ftl/model/userprofile.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../model/company.dart';
 import '../model/job_setting.dart';
-import '../model/userprofile.dart';
 import '../repository/repository.dart';
-import '../screen/home.dart';
 import 'app_riverpod_object.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -84,10 +87,10 @@ Future<List<CurrencyList>> getCurrencyList() async {
 }
 
 void resetCall(WidgetRef ref) {
-  ref.read(userLoginProvider.notifier).state = null;
-  ref.read(userProfileProvider.notifier).state = null;
-  ref.read(companyProfileProvider.notifier).state = null;
-  Get.offAll(HomeScreen());
+  ref.invalidate(userLoginProvider);
+  ref.invalidate(userProfileProvider);
+  ref.invalidate(companyProfileProvider);
+  ref.invalidate(userDetailJobSettingProvider);
 }
 
 Future<List<CompanyDetail>> getCompanyList() async {
@@ -125,7 +128,15 @@ String getDistrictName(String code, WidgetRef ref) {
   ref.watch(listDistrictProvider).when(
         data: (_data) {
           for (var i in _data) {
-            if (code == i.code) name = i.name ?? '';
+            if (code == i.code) {
+              if (Get.locale!.languageCode == 'vi') {
+                name = i.fullName ?? '';
+              }
+              if (Get.locale!.languageCode == 'en') {
+                name = i.name ?? '';
+              }
+              break;
+            }
           }
         },
         error: (error, stackTrace) => (),
@@ -133,6 +144,84 @@ String getDistrictName(String code, WidgetRef ref) {
       );
   log('$code & $name');
   return name;
+}
+
+String getWardName(String code, WidgetRef ref) {
+  String name = '';
+  ref.watch(listWardProvider).when(
+        data: (_data) {
+          for (var i in _data) {
+            if (code == i.code) {
+              if (Get.locale!.languageCode == 'vi') {
+                name = i.fullName ?? '';
+              }
+              if (Get.locale!.languageCode == 'en') {
+                name = i.name ?? '';
+              }
+              break;
+            }
+          }
+        },
+        error: (error, stackTrace) => (),
+        loading: () => (),
+      );
+  log('$code & $name');
+  return name;
+}
+
+String getReduceZeroMoney(int money) {
+  String reduce = money.toString();
+
+  switch (money) {
+    case >= 1000 && <= 9 * 100000:
+      reduce =
+          "${(money / 1000).toStringAsFixed(money % 1000000 == 0 ? 0 : 1)} ${Keystring.THOUSANDS.tr}";
+      break;
+    case >= 1000000 && <= 9 * 100000000:
+      reduce =
+          "${(money / 1000000).toStringAsFixed(money % 1000000 == 0 ? 0 : 1)} ${Keystring.MILLIONS.tr}";
+      break;
+    case >= 1000000000:
+      reduce =
+          "${(money / 1000000000).toStringAsFixed(money % 1000000 == 0 ? 0 : 1)} ${Keystring.BILLIONS.tr}";
+      break;
+  }
+  return reduce;
+}
+
+bool checkPassword(String password) {
+  bool check = true;
+  bool count = false;
+  String mess = Keystring.PASSWORD.tr;
+
+  if (password.trim().isEmpty) {
+    check = false;
+    mess = Keystring.PLS_ENTER_PASSWORD.tr;
+  } else {
+    if (password.trim().length < 6) {
+      check = false;
+      mess += ' ${Keystring.NEED_6P_CHAR.tr.toLowerCase()}';
+      count = true;
+    }
+    if (password.trim().contains(' ')) {
+      check = false;
+      if (count) mess += " ${Keystring.AND.tr.toLowerCase()}";
+      mess += ' ${Keystring.NO_SPACE.tr.toLowerCase()}';
+    }
+  }
+
+  if (!check) {
+    Fluttertoast.showToast(
+        msg: "$mess.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  return check;
 }
 
 Future<List<JobDetail>> getJobList() async {
@@ -164,25 +253,14 @@ Future<List<JobDetail>> getSuggestionJobList(String companyId) async {
 }
 
 Future<List<JobDetail>> getActiveJobList() async {
-  final list = await insideService.getListJob();
-  List<JobDetail> yourJob = [];
-
-  for (var i in list) {
-    if (i.active == 1) yourJob.add(i);
-  }
-
-  return yourJob;
+  final list = await insideService.getListJobActive();
+  return list;
 }
 
-Future<List<JobDetail>> getRecommendJobList() async {
-  final list = await insideService.getListJob();
-  List<JobDetail> yourJob = [];
-
-  for (var i in list) {
-    if (i.active == 1) yourJob.add(i);
-  }
-
-  return yourJob;
+Future<List<JobDetail>> getRecommendJobList(String uid) async {
+  if (uid == '0') return [];
+  final list = await insideService.getJobsRecommend(uid);
+  return list;
 }
 
 Future<List<CVDetail>> getYourCVList(String userId) async {
@@ -213,8 +291,17 @@ Future<List<ApplicationDetail>> getCandidateApplication(
 }
 
 Future<List<ApplicationDetail>> getRecuiterApplication(
-    String recuiterId) async {
-  final list = await insideService.getRecuiterApplication(recuiterId);
+  String recuiterId,
+  String searchWord,
+  String approve,
+  String sentTime,
+) async {
+  final list = await insideService.getRecuiterApplication(
+    recuiterId,
+    searchWord,
+    approve,
+    sentTime,
+  );
   return list;
 }
 
@@ -222,8 +309,25 @@ Future<List<String>> getAllJobTitle() async {
   final list = await insideService.getAllJobTitle();
   return list;
 }
+
 //
 Future<List<FollowDetail>> getYourFollowList(String uid) async {
   final list = await insideService.getListFollow(uid);
+  return list;
+}
+
+Future<List<CompanyDetail>> getCompanyListUid(String uid) async {
+  final list = await insideService.getCompany(uid);
+  log('list: ${list.length}');
+  return list;
+}
+
+Future<List<UserProfileDetail>> getUserProfileList() async {
+  final list = await insideService.getListUserProfile();
+  log('listProfile: ${list.length}');
+  return list;
+}
+Future<List<PaymentDetail>> getYourHistoryPaymentList(String uid) async {
+  final list = await insideService.getListHistoryPayments(uid);
   return list;
 }

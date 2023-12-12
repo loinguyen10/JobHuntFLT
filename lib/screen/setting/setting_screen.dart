@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:jobhunt_ftl/value/style.dart';
 
@@ -26,41 +27,41 @@ class SettingScreen extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ThemeSelectScreen()),
-                      );
-                    },
-                    child: Card(
-                      shadowColor: Colors.grey,
-                      shape: Border.all(color: Colors.white, width: 2),
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      elevation: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background),
-                        padding: EdgeInsets.all(20),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.light,
-                              size: 32,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              Keystring.THEME.tr,
-                              style: textMenu,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => ThemeSelectScreen()),
+                  //     );
+                  //   },
+                  //   child: Card(
+                  //     shadowColor: Colors.grey,
+                  //     shape: Border.all(color: Colors.white, width: 2),
+                  //     margin: EdgeInsets.symmetric(vertical: 4),
+                  //     elevation: 3,
+                  //     child: Container(
+                  //       decoration: BoxDecoration(
+                  //           color: Theme.of(context).colorScheme.background),
+                  //       padding: EdgeInsets.all(20),
+                  //       child: Row(
+                  //         children: [
+                  //           Icon(
+                  //             Icons.light,
+                  //             size: 32,
+                  //           ),
+                  //           SizedBox(
+                  //             width: 16,
+                  //           ),
+                  //           Text(
+                  //             Keystring.THEME.tr,
+                  //             style: textMenu,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(

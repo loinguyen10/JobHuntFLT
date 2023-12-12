@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
-import 'package:path/path.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
-import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
+
+import '../model/job.dart';
+import 'app_riverpod_void.dart';
 
 final LoginControllerProvider =
     StateNotifierProvider<LoginController, InsideEvent>((ref) {
@@ -26,15 +26,11 @@ final ChangePassControllerProvider =
 });
 
 class LoginController extends StateNotifier<InsideEvent> {
-  LoginController(this.ref) : super(const SignInStateEvent());
+  LoginController(this.ref) : super(const ThingStateEvent());
 
   final Ref ref;
 
   void login(String email, String password) async {
-    ref.read(userLoginProvider.notifier).state = null;
-    ref.read(userProfileProvider.notifier).state = null;
-    ref.read(companyProfileProvider.notifier).state = null;
-    ref.read(userDetailJobSettingProvider.notifier).state = null;
     state = const SignInLoadingEvent();
     log('$email + $password');
     try {
@@ -51,14 +47,17 @@ class LoginController extends StateNotifier<InsideEvent> {
             final setting = await ref
                 .read(authRepositoryProvider)
                 .getJobRecommendSetting(user.uid);
+
             log('pro: $profile');
+
             // log('setting: ${setting.uid} ${setting.job}');
             ref.read(userProfileProvider.notifier).state = profile;
             if (setting != null) {
               ref.read(userDetailJobSettingProvider.notifier).state = setting;
             }
-          } else if (user.role == 'recuiter') {
-            log('recuiter');
+            ref.watch(listYourCVProvider);
+          } else if (user.role == 'recruiter') {
+            log('recruiter');
             final company =
                 await ref.read(authRepositoryProvider).getCompany(user.uid);
             log('company: $company');
@@ -76,7 +75,7 @@ class LoginController extends StateNotifier<InsideEvent> {
       state = SignInErrorEvent(error: e.toString());
     }
 
-    state = const SignInStateEvent();
+    state = const ThingStateEvent();
   }
 
   void register(String email, String password) async {
@@ -89,8 +88,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         final user =
             await ref.read(authRepositoryProvider).login(email, password);
         ref.read(userLoginProvider.notifier).state = user;
-        // ref.read(userProfileProvider.notifier).state = null;
-        // ref.read(companyProfileProvider.notifier).state = null;
+        ref.refresh(emailRegisterProvider);
         state = const SignUpSuccessEvent();
       } else {
         state = const SignUpErrorEvent(error: 'Register Failed');
@@ -181,6 +179,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -195,6 +194,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
+              taxcode,
               description,
               job,
             );
@@ -226,6 +226,7 @@ class LoginController extends StateNotifier<InsideEvent> {
                 phone,
                 address,
                 website,
+                taxcode,
                 description,
                 job,
               );
@@ -314,6 +315,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String phone,
     String address,
     String website,
+    String taxcode,
     String description,
     String job,
   ) async {
@@ -342,6 +344,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               phone,
               address,
               website,
+              taxcode,
               description,
               job,
             );
@@ -373,7 +376,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String companyId,
     int minSalary,
     int maxSalary,
-    String currency,
     int yearExperience,
     int typeJob,
     int numberCandidate,
@@ -392,7 +394,6 @@ class LoginController extends StateNotifier<InsideEvent> {
             companyId,
             minSalary,
             maxSalary,
-            currency,
             yearExperience,
             typeJob,
             numberCandidate,
@@ -423,7 +424,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String companyId,
     int minSalary,
     int maxSalary,
-    String currency,
     int yearExperience,
     int typeJob,
     int numberCandidate,
@@ -443,7 +443,6 @@ class LoginController extends StateNotifier<InsideEvent> {
             companyId,
             minSalary,
             maxSalary,
-            currency,
             yearExperience,
             typeJob,
             numberCandidate,
@@ -484,10 +483,14 @@ class LoginController extends StateNotifier<InsideEvent> {
       Response response =
           await Dio().post(BASE_URL + 'cv/upload_cv.php', data: formData);
       if (jsonDecode(response.data)['success'] == 1) {
-        String url = '${BASE_CV_URL}/${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
+        String url = '${BASE_CV_URL}${uid}/cv_id${uid}_${lastNumber + 1}.pdf';
         final result =
             await ref.read(authRepositoryProvider).addCV(url, uid, 'upload');
-        state = const CreateThingSuccessEvent();
+        if (result == 1) {
+          state = const CreateThingSuccessEvent();
+        } else {
+          state = const CreateThingErrorEvent(error: 'Failed');
+        }
       } else {
         state = const CreateThingErrorEvent(error: 'Failed');
       }
@@ -603,22 +606,19 @@ class LoginController extends StateNotifier<InsideEvent> {
     state = const ThingStateEvent();
   }
 
-  void apporveApplication(
+  void approveApplication(
     String code,
-    String apporve,
+    String approve,
   ) async {
     state = const ThingLoadingEvent();
     try {
-      final result = await ref.read(authRepositoryProvider).apporveApplication(
+      final result = await ref.read(authRepositoryProvider).approveApplication(
             code,
-            apporve,
+            approve,
           );
 
       if (result == 1) {
-        Future.delayed(Duration(seconds: 3), () {
-          ref.refresh(listRecuiterTodayApplicationProvider);
-          state = const CreateThingSuccessEvent();
-        });
+        state = const CreateThingSuccessEvent();
       } else {
         state = const CreateThingErrorEvent(error: 'error');
       }
@@ -634,7 +634,9 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const ThingLoadingEvent();
     try {
-      final result = await ref.read(authRepositoryProvider).sendOTPtoMail(mail);
+      final result = await ref
+          .read(authRepositoryProvider)
+          .sendOTPtoMail(mail, 'RePassOTP');
       log('$result');
       if (result == 1) {
         state = const CreateThingSuccessEvent();
@@ -654,7 +656,9 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const ThingLoadingEvent();
     try {
-      final result = await ref.read(authRepositoryProvider).checkOTP(otp, mail);
+      final result = await ref
+          .read(authRepositoryProvider)
+          .checkOTP(otp, mail, 'RePassOTP');
       log('$result');
       if (result == 1) {
         state = const CreateThingSuccessEvent();
@@ -723,6 +727,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               .read(authRepositoryProvider)
               .getJobRecommendSetting(uid);
           ref.read(userDetailJobSettingProvider.notifier).state = setting;
+          ref.refresh(listRecommendJobProvider);
         } else {
           state = const CreateThingErrorEvent(error: 'error');
         }
@@ -764,6 +769,7 @@ class LoginController extends StateNotifier<InsideEvent> {
             await ref.read(authRepositoryProvider).getJobRecommendSetting(uid);
         log('setting: $setting');
         ref.read(userDetailJobSettingProvider.notifier).state = setting;
+        ref.invalidate(listRecommendJobProvider);
         state = const UpdateThingSuccessEvent();
       } else {
         state = const UpdateThingErrorEvent(error: 'error');
@@ -842,6 +848,211 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void sendOTPtoMail1(
+    String mail,
+    bool mode,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref
+          .read(authRepositoryProvider)
+          .sendOTPtoMail(mail, 'RegisterOTP');
+      log('$result');
+      if (result == 1) {
+        if (mode) {
+          state = const CreateOTPSuccessEvent();
+        } else {
+          state = const ReCreateOTPEvent();
+        }
+      } else if (result == 2) {
+        state = const CreateOTPEmailExistEvent(error: 'email exist');
+      } else {
+        state = const CreateOTPErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateOTPErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void checkOTP1(
+    String otp,
+    String mail,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref
+          .read(authRepositoryProvider)
+          .checkOTP(otp, mail, 'RegisterOTP');
+      log('$result');
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        log('message');
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void removeCV(
+    String code,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).removeCV(
+            code,
+          );
+
+      if (result == 1) {
+        ref.refresh(listYourCVProvider);
+        state = const RemoveCVSuccessEvent();
+      } else {
+        state = const RemoveCVErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = RemoveCVErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void getRecuiterApplicationWithSetting(
+    String searchWord,
+    String statusCheck,
+    String sentTime,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      String approve = '';
+      if (statusCheck == 'approve') approve = '1';
+      if (statusCheck == 'reject') approve = '0';
+      if (statusCheck == 'waiting') approve = 'null';
+
+      log('message approve: $approve');
+      log('message sendtime: $sentTime');
+
+      final result =
+          await ref.read(authRepositoryProvider).getRecuiterApplication(
+                ref.watch(userLoginProvider)!.uid ?? '0',
+                searchWord,
+                approve,
+                sentTime,
+              );
+
+      ref.read(listRecuiterApplicationProvider.notifier).state = result;
+      state = const GetListSuccessEvent();
+    } catch (e) {
+      state = GetListErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void updateInterviewApplication(
+    String code,
+    String interviewTime,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result =
+          await ref.read(authRepositoryProvider).updateInterviewTimeApplication(
+                code,
+                interviewTime,
+              );
+
+      if (result == 1) {
+        state = const CreateThingSuccessEvent();
+      } else {
+        state = const CreateThingErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateThingErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void getSearchJobList(
+    String searchWord,
+    String minSalary,
+    String maxSalary,
+    String typeJob,
+    String yearExperience,
+    String province,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).getSearchJobList(
+            searchWord,
+            minSalary,
+            maxSalary,
+            typeJob,
+            yearExperience,
+            province,
+          );
+
+      final List listResult = result['data']['job'];
+
+      if (listResult.isNotEmpty) {
+        ref.read(listJobSearchProvider.notifier).state =
+            listResult.map((e) => JobDetail.fromJson(e)).toList();
+        ref.read(numberJobSearchProvider.notifier).state =
+            result['data']['length'];
+      } else {
+        ref.invalidate(listJobSearchProvider);
+        ref.invalidate(numberJobSearchProvider);
+      }
+
+      // ref.read(todayJobSearchProvider.notifier).state = result['data']['today'];
+      state = const GetListSuccessEvent();
+    } catch (e) {
+      state = GetListErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void addHistoryPayment(
+    String money,
+    String date,
+    String status,
+    String payment_type,
+    String userId,
+      String role,
+  ) async {
+    state = const HistorypaymentLoadingEvent();
+    try {
+
+      final result = await ref.read(authRepositoryProvider).addHistoryPayment(
+            money,
+            date,
+            status,
+            payment_type,
+            userId,
+            role
+          );
+
+      if (result == 1) {
+        final profile =
+            await ref.read(authRepositoryProvider).getProfile(userId);
+        ref.read(userProfileProvider.notifier).state = profile;
+        ref.refresh(listHistoryPaymentsProvider);
+        state = const HistorypaymentSuccessEvent();
+      } else {
+        state = const HistorypaymentErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = HistorypaymentErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

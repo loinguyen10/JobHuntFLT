@@ -20,7 +20,6 @@ import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../blocs/app_riverpod_void.dart';
 import '../../component/edittext.dart';
-import '../../model/userprofile.dart';
 import '../../value/style.dart';
 import '../home.dart';
 
@@ -404,21 +403,14 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
         if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
           Loader.hide();
           log('error');
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(Keystring.UNSUCCESSFUL.tr),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
+          Fluttertoast.showToast(
+            msg: Keystring.UNSUCCESSFUL.tr,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0,
           );
         }
 
@@ -441,12 +433,12 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
       },
     );
 
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: Theme.of(context).colorScheme.background == Colors.white
-                ? bgGradientColor0
-                : bgGradientColor1),
+    return Container(
+      decoration: BoxDecoration(
+          gradient: Theme.of(context).colorScheme.background == Colors.white
+              ? bgGradientColor0
+              : bgGradientColor1),
+      child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -510,14 +502,29 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 content:
                     profile?.email ?? ref.watch(emailProfileProvider) ?? '',
                 readOnly: true,
+                typeKeyboard: TextInputType.emailAddress,
               ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
+                  if (value.length >= 11) {
+                    Fluttertoast.showToast(
+                        msg: Keystring.PHONE_LESS_11.tr,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+
                   ref.read(phoneProfileProvider.notifier).state = value;
                 }),
                 label: Keystring.PHONE.tr,
                 content: profile?.phone ?? '',
+                maxLines: 1,
+                maxLength: 11,
+                typeKeyboard: TextInputType.phone,
               ),
               SizedBox(height: 24),
               AppBorderFrame(
@@ -547,6 +554,23 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                 child:
                     DateCustomDialog().dobDate(context, ref, birthdayProfile),
               ),
+              SizedBox(
+                  height: profile?.premiumExpiry != null &&
+                          profile?.premiumExpiry != ''
+                      ? 24
+                      : 0),
+              profile?.premiumExpiry != null && profile?.premiumExpiry != ''
+                  ? EditTextForm(
+                      onChanged: ((value) {
+                        ref.read(premiumExpireProfileProvider.notifier).state =
+                            value;
+                      }),
+                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
+                      content: profile?.premiumExpiry ?? '',
+                      maxLines: 1,
+                      readOnly: true,
+                    )
+                  : SizedBox(height: 0),
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
@@ -556,37 +580,46 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
                       districtChoose!.code != null &&
                       wardChoose!.code != null &&
                       ref.watch(dateBirthProvider).isNotEmpty) {
-                    // var eduImport = '';
-                    // for (var edu in listEducationShowData) {
-                    //   eduImport += "${edu.id},";
-                    // }
-
-                    // log('${eduImport.substring(0, eduImport.length - 1)}');
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(dateBirthProvider)} ');
-                    if (!widget.edit) {
-                      log("click done");
-                      ref.read(LoginControllerProvider.notifier).createProfile(
-                            user!.uid ?? '0',
-                            ref.watch(fullNameProfileProvider),
-                            ref.watch(avatarProfileProvider),
-                            ref.watch(emailProfileProvider),
-                            ref.watch(phoneProfileProvider),
-                            ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(dateBirthProvider),
-                            // eduImport.substring(0, eduImport.length - 1),
-                          );
+                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose.code} + ${districtChoose.code} + ${wardChoose.code} + ${ref.watch(dateBirthProvider)} ');
+                    if (ref.watch(phoneProfileProvider).length < 9) {
+                      Fluttertoast.showToast(
+                        msg: Keystring.PHONE_MORE_9.tr,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
                     } else {
-                      log("click update");
-                      ref.read(LoginControllerProvider.notifier).updateProfile(
-                            user!.uid ?? '0',
-                            ref.watch(fullNameProfileProvider),
-                            ref.watch(avatarProfileProvider),
-                            ref.watch(emailProfileProvider),
-                            ref.watch(phoneProfileProvider),
-                            ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(dateBirthProvider),
-                            // eduImport.substring(0, eduImport.length - 1),
-                          );
+                      if (!widget.edit) {
+                        log("click done");
+                        ref
+                            .read(LoginControllerProvider.notifier)
+                            .createProfile(
+                              user.uid ?? '0',
+                              ref.watch(fullNameProfileProvider),
+                              ref.watch(avatarProfileProvider),
+                              ref.watch(emailProfileProvider),
+                              ref.watch(phoneProfileProvider),
+                              ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                              ref.watch(dateBirthProvider),
+                            );
+                      } else {
+                        log("click update");
+                        ref
+                            .read(LoginControllerProvider.notifier)
+                            .updateProfile(
+                              user.uid ?? '0',
+                              ref.watch(fullNameProfileProvider),
+                              ref.watch(avatarProfileProvider),
+                              ref.watch(emailProfileProvider),
+                              ref.watch(phoneProfileProvider),
+                              ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                              ref.watch(dateBirthProvider),
+                              // eduImport.substring(0, eduImport.length - 1),
+                            );
+                      }
                     }
                   } else {
                     Fluttertoast.showToast(

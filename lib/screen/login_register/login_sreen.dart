@@ -26,11 +26,27 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    loadEaP();
+    super.initState();
+  }
+
+  Future<void> loadEaP() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    ref.read(emailLoginProvider.notifier).state =
+        prefs.getString('saveEmail') ?? '';
+    emailEditingController.text = prefs.getString('saveEmail') ?? '';
+    ref.read(passwordLoginProvider.notifier).state =
+        prefs.getString('savePassword') ?? '';
+    passwordEditingController.text = prefs.getString('savePassword') ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailEditingController = TextEditingController();
-    TextEditingController passwordEditingController = TextEditingController();
-
     ref.listen<InsideEvent>(
       LoginControllerProvider,
       (previous, state) {
@@ -79,6 +95,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (state is SignInLoadingEvent) {
           Loader.show(context);
         }
+
+        if (previous is SignInLoadingEvent && state is ThingStateEvent) {
+          ref.read(LoginControllerProvider.notifier).login(
+                ref.watch(emailLoginProvider),
+                ref.watch(passwordLoginProvider),
+              );
+        }
       },
     );
 
@@ -88,26 +111,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       prefs.setString('savePassword', ref.watch(passwordLoginProvider));
     }
 
-    Future<void> loadEaP() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      ref.read(emailLoginProvider.notifier).state =
-          prefs.getString('saveEmail') ?? '';
-      emailEditingController.text = prefs.getString('saveEmail') ?? '';
-      ref.read(passwordLoginProvider.notifier).state =
-          prefs.getString('savePassword') ?? '';
-      passwordEditingController.text = prefs.getString('savePassword') ?? '';
-    }
-
-    // loadEaP();
-
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-              gradient: Theme.of(context).colorScheme.background == Colors.white
-                  ? bgGradientColor0
-                  : bgGradientColor1),
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
+        child: SafeArea(
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5),
@@ -115,15 +126,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Column(
                   children: [
                     SizedBox(height: 30.0),
-                    // Text(
-                    //   Keystring.APP_NAME.tr,
-                    //   style: GoogleFonts.josefinSans(textStyle: textLogo),
-                    // ),
                     Image.asset(
                       'assets/image/font_logo.png',
                       width: MediaQuery.of(context).size.width / 1.3,
                     ),
-                    SizedBox(height: 50.0),
+                    SizedBox(height: 64.0),
                     EditTextController(
                       onChanged: ((value) {
                         ref.read(emailLoginProvider.notifier).state = value;
@@ -152,7 +159,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Row(
                           children: [
                             Checkbox(
-                              checkColor: Colors.white,
+                              checkColor: Theme.of(context).colorScheme.primary,
                               value: ref.watch(checkboxRememberProvider),
                               onChanged: (bool? value) {
                                 setState(() {
@@ -206,47 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         style: TextStyle(fontSize: 18),
                       ),
                     ),
-                    SizedBox(height: 40.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 2,
-                          width: 80,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          Keystring.SIGN_IN_WITH.tr,
-                          style: textNormal,
-                        ),
-                        SizedBox(width: 12),
-                        Container(
-                          height: 2,
-                          width: 80,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.0),
-                    InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('google'),
-                        ));
-                      },
-                      child: ClipOval(
-                        child: SizedBox.fromSize(
-                            size: Size.fromRadius(24), // Image radius
-                            child:
-                                // Image.network('https://pngimg.com/uploads/google/google_PNG19635.png',fit: BoxFit.cover,)),
-                                Image.asset(
-                              'assets/image/google_logo.png',
-                              fit: BoxFit.cover,
-                            )),
-                      ),
-                    ),
-                    SizedBox(height: 32.0),
+                    SizedBox(height: 88.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -275,7 +242,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     SizedBox(height: 8.0),
                     InkWell(
                       onTap: () {
-                        resetCall(ref);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ));
                       },
                       child: Text(
                         Keystring.USING_APP_WITHOUT.tr,

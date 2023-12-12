@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
+import 'package:jobhunt_ftl/component/app_autocomplete.dart';
 
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
@@ -32,10 +33,12 @@ class RecuiterEditScreen extends ConsumerWidget {
 
     final user = ref.watch(userLoginProvider);
     final company = ref.watch(companyProfileProvider);
+    final listJob = ref.watch(listJobTagCompanyProvider);
 
     final listProvinceData = ref.watch(listProvinceProvider);
     final listDistrictData = ref.watch(listDistrictProvider);
     final listWardData = ref.watch(listWardProvider);
+    final listAllTitleJobData = ref.watch(listAllTitleJobSettingProvider);
 
     final provinceChoose = ref.watch(provinceCompanyProvider);
     final districtChoose = ref.watch(districtCompanyProvider);
@@ -46,6 +49,7 @@ class RecuiterEditScreen extends ConsumerWidget {
     List<ProvinceList> listProvince = [];
     List<DistrictList> listDistrict = [];
     List<WardList> listWard = [];
+    List<String> listTitleJob = [];
 
 //get data
 
@@ -83,6 +87,14 @@ class RecuiterEditScreen extends ConsumerWidget {
             }
           }
         }
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
+
+    listAllTitleJobData.when(
+      data: (_data) {
+        listTitleJob.addAll(_data);
       },
       error: (error, stackTrace) => null,
       loading: () => const CircularProgressIndicator(),
@@ -178,6 +190,21 @@ class RecuiterEditScreen extends ConsumerWidget {
           ),
         ),
       );
+    }
+
+    String capitalizeWords(String text) {
+      if (text.isEmpty) {
+        return text;
+      }
+
+      List<String> words = text.split(' ');
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].isNotEmpty) {
+          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+        }
+      }
+
+      return words.join(' ');
     }
 
 //upload
@@ -382,12 +409,12 @@ class RecuiterEditScreen extends ConsumerWidget {
       },
     );
 
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: Theme.of(context).colorScheme.background == Colors.white
-                ? bgGradientColor0
-                : bgGradientColor1),
+    return Container(
+      decoration: BoxDecoration(
+          gradient: Theme.of(context).colorScheme.background == Colors.white
+              ? bgGradientColor0
+              : bgGradientColor1),
+      child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -446,10 +473,24 @@ class RecuiterEditScreen extends ConsumerWidget {
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: ((value) {
+                  if (value.length >= 11) {
+                    Fluttertoast.showToast(
+                        msg: Keystring.PHONE_LESS_11.tr,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+
                   ref.read(phoneCompanyProvider.notifier).state = value;
                 }),
                 label: Keystring.PHONE.tr,
                 content: company?.phone ?? '',
+                maxLines: 1,
+                maxLength: 11,
+                typeKeyboard: TextInputType.phone,
               ),
               SizedBox(height: 24),
               EditTextForm(
@@ -458,6 +499,16 @@ class RecuiterEditScreen extends ConsumerWidget {
                 }),
                 label: Keystring.WEBSITE.tr,
                 content: company?.web ?? '',
+              ),
+              SizedBox(height: 24),
+              EditTextForm(
+                onChanged: ((value) {
+                  ref.read(taxCodeCompanyProvider.notifier).state = value;
+                }),
+                label: Keystring.TAX_CODE.tr,
+                content: company?.taxcode ?? '',
+                maxLines: 1,
+                maxLength: 10,
               ),
               SizedBox(height: 24),
               AppBorderFrame(
@@ -502,13 +553,94 @@ class RecuiterEditScreen extends ConsumerWidget {
                 maxLines: 5,
               ),
               SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(jobCompanyProvider.notifier).state = value;
-                }),
-                label: Keystring.WANT_JOB.tr,
-                content: company?.job ?? '',
+              // EditTextForm(
+              //   onChanged: ((value) {
+              //     ref.read(jobCompanyProvider.notifier).state = value;
+              //   }),
+              //   label: Keystring.WANT_JOB.tr,
+              //   content: company?.job ?? '',
+              // ),
+              AppBorderFrame(
+                labelText: Keystring.WANT_JOB.tr,
+                child: Column(
+                  children: [
+                    AppAutocompleteEditText(
+                      listSuggestion: listTitleJob,
+                      onSelected: (value) {
+                        if (!listJob.any((x) => x == value)) {
+                          ref.read(listJobTagCompanyProvider.notifier).state = [
+                            ...listJob,
+                            capitalizeWords(value)
+                          ];
+                        }
+                      },
+                    ),
+                    listJob.isNotEmpty
+                        ? SizedBox(height: 16)
+                        : SizedBox(height: 0),
+                    listJob.isNotEmpty
+                        ? ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (_, index) {
+                              return Card(
+                                shadowColor: Colors.grey,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                elevation: 2,
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        listJob[index],
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 3,
+                                      ),
+                                      InkWell(
+                                        child: Icon(Icons.delete_outlined),
+                                        onTap: () {
+                                          if (listJob.isNotEmpty) {
+                                            ref
+                                                .read(listJob2SettingProvider
+                                                    .notifier)
+                                                .state = [
+                                              for (final value in listJob)
+                                                if (value != listJob[index])
+                                                  value
+                                            ];
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: listJob.length,
+                          )
+                        : SizedBox(height: 0),
+                  ],
+                ),
               ),
+              SizedBox(
+                  height: company?.premiumExpiry != null &&
+                          company?.premiumExpiry != ''
+                      ? 24
+                      : 0),
+              company?.premiumExpiry != null && company?.premiumExpiry != ''
+                  ? EditTextForm(
+                      onChanged: ((value) {
+                        ref.read(premiumExpireProfileProvider.notifier).state =
+                            value;
+                      }),
+                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
+                      content: company?.premiumExpiry ?? '',
+                      maxLines: 1,
+                      readOnly: true,
+                    )
+                  : SizedBox(height: 0),
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
@@ -516,39 +648,80 @@ class RecuiterEditScreen extends ConsumerWidget {
                   if (ref.watch(fullNameCompanyProvider).isNotEmpty &&
                       ref.watch(phoneCompanyProvider).isNotEmpty &&
                       ref.watch(websiteCompanyProvider).isNotEmpty &&
+                      ref.watch(taxCodeCompanyProvider).isNotEmpty &&
                       provinceChoose.code != null &&
                       districtChoose.code != null &&
                       wardChoose.code != null &&
                       ref.watch(roadCompanyProvider).isNotEmpty &&
-                      ref.watch(jobCompanyProvider).isNotEmpty &&
+                      listJob.isNotEmpty &&
                       ref.watch(descriptionCompanyProvider).isNotEmpty) {
-                    if (!edit) {
-                      log("click done");
-
-                      ref.read(LoginControllerProvider.notifier).createCompany(
-                            user.uid ?? '0',
-                            ref.watch(fullNameCompanyProvider),
-                            ref.watch(avatarCompanyProvider),
-                            ref.watch(emailCompanyProvider),
-                            ref.watch(phoneCompanyProvider),
-                            '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(websiteCompanyProvider),
-                            ref.watch(descriptionCompanyProvider),
-                            ref.watch(jobCompanyProvider),
-                          );
+                    if (ref.watch(phoneCompanyProvider).length < 9) {
+                      Fluttertoast.showToast(
+                        msg: Keystring.PHONE_MORE_9.tr,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    } else if (ref.watch(taxCodeCompanyProvider).length != 10) {
+                      Fluttertoast.showToast(
+                        msg: Keystring.TAX_CODE_MUST_10.tr,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
                     } else {
-                      log("click update");
-                      ref.read(LoginControllerProvider.notifier).updateCompany(
-                            user.uid ?? '0',
-                            ref.watch(fullNameCompanyProvider),
-                            ref.watch(avatarCompanyProvider),
-                            company?.email ?? '',
-                            ref.watch(phoneCompanyProvider),
-                            '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                            ref.watch(websiteCompanyProvider),
-                            ref.watch(descriptionCompanyProvider),
-                            ref.watch(jobCompanyProvider),
-                          );
+                      String job = '';
+
+                      for (var y in listJob) {
+                        if (!listTitleJob.any((x) => x == y)) {
+                          log('message title: $y');
+                          ref
+                              .read(LoginControllerProvider.notifier)
+                              .createJobTitle(y);
+                        }
+                        job += '$y,';
+                      }
+
+                      if (!edit) {
+                        log("click done");
+
+                        ref
+                            .read(LoginControllerProvider.notifier)
+                            .createCompany(
+                              user.uid ?? '0',
+                              ref.watch(fullNameCompanyProvider),
+                              ref.watch(avatarCompanyProvider),
+                              ref.watch(emailCompanyProvider),
+                              ref.watch(phoneCompanyProvider),
+                              '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                              ref.watch(websiteCompanyProvider),
+                              ref.watch(taxCodeCompanyProvider),
+                              ref.watch(descriptionCompanyProvider),
+                              job.substring(0, job.length - 1),
+                            );
+                      } else {
+                        log("click update");
+                        ref
+                            .read(LoginControllerProvider.notifier)
+                            .updateCompany(
+                              user.uid ?? '0',
+                              ref.watch(fullNameCompanyProvider),
+                              ref.watch(avatarCompanyProvider),
+                              company?.email ?? '',
+                              ref.watch(phoneCompanyProvider),
+                              '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                              ref.watch(websiteCompanyProvider),
+                              ref.watch(taxCodeCompanyProvider),
+                              ref.watch(descriptionCompanyProvider),
+                              job.substring(0, job.length - 1),
+                            );
+                      }
                     }
                   } else {
                     Fluttertoast.showToast(

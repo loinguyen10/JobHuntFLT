@@ -38,9 +38,11 @@ final textStatus2View =
     TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold);
 final textNormal2 =
     TextStyle(fontSize: ParameterStyle.FONT_SIZE_NORMAL, color: Colors.white);
+final textTitleTab1Company =
+    TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
 //color
-final appPrimaryColor = Color(0xff00A3FF);
+final appPrimaryColor = Color(0xffFF5F00);
 final bgPrimaryColor0 = Color(0xffEEEEEE);
 final bgPrimaryColor1 = Color(0xff404040);
 final appHintColor = Color.fromARGB(0, 238, 238, 238);
@@ -49,7 +51,7 @@ final bgGradientColor0 = LinearGradient(
   end: Alignment.bottomCenter,
   colors: <Color>[
     appPrimaryColor,
-    Color(0xffA0DDFF),
+    Color(0xffFF7D00),
     Colors.white,
     Colors.white,
     Colors.white,
@@ -70,12 +72,57 @@ final bgGradientColor1 = LinearGradient(
   tileMode: TileMode.mirror,
 );
 
+final bgGradientColor2 = LinearGradient(
+  begin: Alignment.topRight,
+  end: Alignment.bottomCenter,
+  colors: <Color>[
+    appPrimaryColor,
+    Color(0xffFF7D00),
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+  tileMode: TileMode.mirror,
+);
+
+final bgGradientColor3 = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: <Color>[
+    appPrimaryColor,
+    Color(0xffFF7D00),
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+  tileMode: TileMode.mirror,
+);
+
 //style
 final dropDownButtonStyle1 = ButtonStyleData(
   padding: EdgeInsets.symmetric(horizontal: 8),
   height: 32,
   width: 160,
 );
+
+final dropDownButtonStyle2 = ButtonStyleData(
+  padding: EdgeInsets.symmetric(horizontal: 8),
+  height: 20,
+  width: 160,
+);
+
 final dalDateStyle = ButtonStyle(
     padding: MaterialStateProperty.all<EdgeInsets>(
         EdgeInsets.symmetric(vertical: 16, horizontal: 8)),

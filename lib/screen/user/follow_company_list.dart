@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jobhunt_ftl/model/company.dart';
 import 'package:jobhunt_ftl/screen/user/company_information.dart';
-
 import '../../blocs/app_riverpod_object.dart';
 import '../../blocs/app_riverpod_void.dart';
 import '../../component/card.dart';
 import '../../value/keystring.dart';
-import '../job/job_view_screen.dart';
+
 class FollowCompanyScreen extends ConsumerWidget {
   const FollowCompanyScreen({super.key});
 
@@ -35,36 +33,35 @@ class FollowCompanyScreen extends ConsumerWidget {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
-                      String avatar =data[index].company!.avatarUrl ?? '';
-                      String nameCompany =
-                          data[index].company!.fullname ?? '';
+                      String avatar = data[index].company!.avatarUrl ?? '';
+                      String nameCompany = data[index].company!.fullname ?? '';
                       String job = data[index].company!.job ?? '';
+                      var tag = job.split(',');
                       String province = getProvinceName(
                           data[index].company!.address!.substring(
                               data[index].company!.address!.lastIndexOf(',') +
                                   1),
                           ref);
 
-
                       return Card(
                         shadowColor: Colors.black,
                         margin:
-                        EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         elevation: 5,
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CompanyInformation(company:data[index].company!)));
-                          },
-                          child: AppCompanyCard(
-                            avatar: avatar,
-                            name: nameCompany,
-                            province:province ,
-                            job: job,
-                          )
-                        ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CompanyInformation(
+                                          company: data[index].company!)));
+                            },
+                            child: AppCompanyCard(
+                              avatar: avatar,
+                              name: nameCompany,
+                              province: province,
+                              job: tag[0],
+                            )),
                       );
                     },
                     itemCount: data.length,

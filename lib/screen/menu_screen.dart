@@ -74,7 +74,7 @@ class MenuScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: profile?.level == 'Premium'
+                      color: profile?.level == 'Premium' || company?.level == 'Premium'
                           ? Colors.yellow
                           : Colors.transparent,
                       width: 4.0,
@@ -124,7 +124,7 @@ class MenuScreen extends ConsumerWidget {
                         style: textNameMenu,
                       ),
                       SizedBox(height: 8),
-                      profile?.level == 'Premium'
+                      profile?.level == 'Premium' ||   company?.level == 'Premium'
                           ? AppTagCard(
                               child: Text(Keystring.PREMIUM.tr),
                               bgColor: Colors.yellow,

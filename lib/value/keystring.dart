@@ -201,4 +201,5 @@ class Keystring {
   static const String PRICE = 'Price';
   static const String DATE_CREATED = 'Date_Created';
   static const String STT = 'STT';
+  static const String TERM = 'TERM';
 }

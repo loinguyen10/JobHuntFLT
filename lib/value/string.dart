@@ -211,6 +211,7 @@ class LocaleString extends Translations {
           'Price': 'Price',
           'Date_Created': 'Date created',
           'STT': 'STT',
+          'Term':'By accessing or using the FPL Work software, services, or any applications provided by FPL Work (jobshunt.ino), collectively referred to as "Services," regardless of the means of access, you agree to be bound by these Terms of Use ("Terms"). The Services are owned or controlled by FPL Work, and these Terms affect your legal rights and obligations. If you do not agree to be bound by all of these Terms, do not access or use the Services. If you have any questions regarding these Terms, please contact us.\n We may update these Terms of Use over time for legal reasons or to allow for the proper functioning of the FPL Work software. Any changes will be notified to you through an appropriate notice on our website. These changes will apply to the use of the FPL Work website. After we have notified you, if you do not wish to accept the updated Terms of Use, you should not continue to use the FPL Work software. If you continue to use the FPL Work software after the Terms of Use are updated, you must accept FPL Work\'s Terms of Use by choosing to agree through the notice displayed on our website when the changes are applied.',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -419,6 +420,7 @@ class LocaleString extends Translations {
           'Price': 'Giá',
           'Date_Created': 'Ngày tạo',
           'STT': 'STT',
+          'Term':'Bằng cách truy cập hoặc sử dụng phần mềm  FPL Work, các dịch vụ, hoặc bất kỳ ứng dụng nào do FPL Work (jobshunt.ino) cung cấp (gọi chung là "Dịch vụ"), dù truy cập bằng cách nào, bạn đồng ý chịu sự ràng buộc của Điều Khoản Sử Dụng với Người dùng này ("Điều Khoản Sử Dụng"). Dịch vụ do FPL Work sở hữu hoặc kiểm soát. Các Điều Khoản Sử Dụng này ảnh hưởng đến quyền và nghĩa vụ pháp lý của bạn. Nếu bạn không đồng ý chịu sự ràng buộc của tất cả các Điều Khoản Sử Dụng này, bạn không truy cập hay sử dụng Dịch vụ. Nếu Bạn có bất kỳ câu hỏi nào liên quan đến Điều Khoản này, vui lòng liên hệ chúng tôi.\nChúng tôi có thể cập nhật Điều Khoản Sử Dụng này theo thời gian vì các lý do pháp lý hoặc theo quy định hoặc để cho phép hoạt động thích hợp của phần mềm FPL Work. Mọi thay đổi sẽ được thông báo tới bạn bằng một thông báo phù hợp trên trang web của chúng tôi. Những thay đổi này sẽ áp dụng cho việc sử dụng trang web FPL Work. Sau khi chúng tôi đã thông báo đến bạn, Nếu bạn không muốn chấp nhận Điều Khoản Sử Dụng sau khi được cập nhật, bạn không nên tiếp tục sử dụng phần mềm FPL Work. Nếu bạn tiếp tục sử dụng phần mềm FPL Work kể từ ngày Điều Khoản Sử Dụng được cập nhật, bạn phải chấp thuận Điều Khoản Sử Dụng của FPL Work bằng cách lựa chọn đồng ý thông qua thông báo được hiển thị trên trang web của chúng tôi khi áp dụng các thay đổi.',
         },
       };
 }

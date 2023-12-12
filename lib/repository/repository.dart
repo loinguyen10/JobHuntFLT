@@ -60,8 +60,8 @@ class InsideService {
       'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      //'email': emailAddress.trim(),
+      //'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',

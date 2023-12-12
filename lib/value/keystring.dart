@@ -183,7 +183,7 @@ class Keystring {
   static const String PHONE_MORE_9 = 'Phone_More_9';
   static const String PHONE_LESS_11 = 'Phone_Less_11';
   static const String CHAT = 'Chat';
-  static const String ACTIVE_JOB = 'Active_Job';
+  static const String ACTIVE_JOB = 'Available_Job';
   static const String TAX_CODE = 'Tax_Code';
   static const String TAX_CODE_MUST_10 = 'Tax_Code_Must_10';
   static const String MESSAGE = 'Message';

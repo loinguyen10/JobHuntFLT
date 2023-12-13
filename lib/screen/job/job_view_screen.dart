@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../../component/app_button.dart';
 import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
+import '../report/report_company.dart';
 import '../user/company_information.dart';
 
 class JobViewScreen extends ConsumerWidget {
@@ -43,6 +45,12 @@ class JobViewScreen extends ConsumerWidget {
 
     final tagJob = job.tag!.split(',');
     final tagCompany = job.company!.job?.split(',');
+
+    if (role != 'recruiter') {
+      ref
+          .read(LoginControllerProvider.notifier)
+          .clickViewPlusJob(job.code ?? '0');
+    }
 
     //listen
     ref.listen<InsideEvent>(
@@ -115,7 +123,12 @@ class JobViewScreen extends ConsumerWidget {
                           margin: EdgeInsets.only(right: 8),
                           child: InkWell(
                             onTap: () {
-                              //
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ReprotScreen(company: job.company!),
+                              ));
                             },
                             child: Icon(
                               Icons.report_rounded,

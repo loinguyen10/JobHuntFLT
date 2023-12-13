@@ -35,6 +35,7 @@ class CompanyPremiumScreen extends ConsumerWidget {
                   String name = listCompanyPremium[index].fullname ?? '';
                   String avatar = listCompanyPremium[index].avatarUrl ?? '';
                   String job = listCompanyPremium[index].job ?? '';
+                  String level = listCompanyPremium[index].level ?? '';
                   var tag = job.split(',');
                   String province = getProvinceName(
                       listCompanyPremium[index].address!.substring(
@@ -57,6 +58,7 @@ class CompanyPremiumScreen extends ConsumerWidget {
                       name: name,
                       province: province,
                       job: tag[0],
+                      level: level,
                     ),
                   );
                 },
@@ -103,6 +105,7 @@ class AllCompanyScreen extends ConsumerWidget {
             String name = _data[index].fullname ?? '';
             String avatar = _data[index].avatarUrl ?? '';
             String job = _data[index].job ?? '';
+            String level = _data[index].level ?? '';
             var tag = job.split(',');
             String province = getProvinceName(
                 _data[index]
@@ -125,6 +128,7 @@ class AllCompanyScreen extends ConsumerWidget {
                 name: name,
                 province: province,
                 job: tag[0],
+                level: level,
               ),
             );
           },

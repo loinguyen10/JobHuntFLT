@@ -1028,19 +1028,13 @@ class LoginController extends StateNotifier<InsideEvent> {
     String status,
     String payment_type,
     String userId,
-      String role,
+    String role,
   ) async {
     state = const HistorypaymentLoadingEvent();
     try {
-
-      final result = await ref.read(authRepositoryProvider).addHistoryPayment(
-            money,
-            date,
-            status,
-            payment_type,
-            userId,
-            role
-          );
+      final result = await ref
+          .read(authRepositoryProvider)
+          .addHistoryPayment(money, date, status, payment_type, userId, role);
 
       if (result == 1) {
         final profile =
@@ -1053,6 +1047,39 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = HistorypaymentErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void clickViewPlusJob(
+    String code,
+  ) async {
+    await ref.read(authRepositoryProvider).clickViewPlus(code);
+  }
+
+  void createReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    state = const CreateReportLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).creatReport(
+            report_sender_id,
+            reported_persons_id,
+            title,
+            description,
+          );
+
+      if (result == 1) {
+        state = const CreateReportSuccessEvent();
+      } else {
+        state = const CreateReportErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateReportErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

@@ -20,6 +20,7 @@ import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../blocs/app_riverpod_void.dart';
 import '../../component/edittext.dart';
+import '../../component/outline_text.dart';
 import '../../value/style.dart';
 import '../home.dart';
 
@@ -27,14 +28,12 @@ class ShowProfileScreen extends ConsumerStatefulWidget {
   const ShowProfileScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ShowProfileScreen();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ShowProfileScreen();
 }
 
 class _ShowProfileScreen extends ConsumerState<ShowProfileScreen> {
   @override
   Widget build(BuildContext context) {
-
     final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
 
@@ -51,109 +50,70 @@ class _ShowProfileScreen extends ConsumerState<ShowProfileScreen> {
           child: Column(
             children: [
               AppBar(
-                title: Text(Keystring.YOUR_PROFILE.tr),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
+                foregroundColor: Colors.white,
               ),
-              SizedBox(
-                height: 24,
-              ),
-              ClipOval(
-                child: SizedBox.fromSize(
-                  size: Size.fromRadius(64), // Image radius
-                  child: avatarProfile != ''
-                      ? avatarProfile.substring(0, 8) == 'https://'
-                      ? Image.network(
-                    avatarProfile,
-                    fit: BoxFit.cover,
-                  )
-                      : Image.file(
-                    File(avatarProfile),
-                    fit: BoxFit.cover,
-                  )
-                      : Icon(
-                    Icons.no_accounts_outlined,
-                    size: 256,
+              Row(
+                children: [
+                  SizedBox(width: 24),
+                  ClipOval(
+                    child: SizedBox.fromSize(
+                      size: Size.fromRadius(64), // Image radius
+                      child: avatarProfile != ''
+                          ? Image.network(avatarProfile, fit: BoxFit.cover)
+                          : Icon(
+                        Icons.no_accounts_outlined,
+                        size: 256,
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(width: 32),
+                  Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppOutlineText(
+                            text: profile?.fullName ?? '',
+                            fontSize: 22,
+                            strokeWidth: 2,
+                          ),
+                          Text(
+                            '${Keystring.BIRTHDAY.tr}: ${profile?.birthday ?? ''}',
+                            style: textNormal,
+                          )
+                        ],
+                      )),
+                  SizedBox(width: 24),
+                ],
               ),
               SizedBox(height: 32),
               EditTextForm(
-                onChanged: ((value) {
-                  ref.read(fullNameProfileProvider.notifier).state = value;
-                  log(value);
-                }),
-                label: Keystring.FULLNAME.tr,
-                // hintText: Keystring.FULLNAME.tr,
-                content: profile?.fullName ?? '',
-              ),
-              // SizedBox(height: 24),
-              // EditTextForm(
-              //   onChanged: ((value) {
-              //     //
-              //   }),
-              //   label: Keystring.DISPLAY_NAME.tr,
-              // ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  // ref.read(emailProfileProvider.notifier).state = value;
-                }),
+                onChanged: (value) => (),
                 label: Keystring.EMAIL.tr,
                 content:
-                    profile?.email ?? ref.watch(emailProfileProvider) ?? '',
+                profile?.email ?? ref.watch(emailProfileProvider) ?? '',
                 readOnly: true,
-                typeKeyboard: TextInputType.emailAddress,
               ),
               SizedBox(height: 24),
               EditTextForm(
-                onChanged: ((value) {
-                  if (value.length >= 11) {
-                    Fluttertoast.showToast(
-                        msg: Keystring.PHONE_LESS_11.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-
-                  ref.read(phoneProfileProvider.notifier).state = value;
-                }),
+                onChanged: (value) => (),
                 label: Keystring.PHONE.tr,
                 content: profile?.phone ?? '',
-                maxLines: 1,
-                maxLength: 11,
-                typeKeyboard: TextInputType.phone,
+                readOnly: true,
               ),
-              SizedBox(height: 24),
-
               SizedBox(height: 24),
               AppBorderFrame(
-                labelText: Keystring.BIRTHDAY.tr,
-                child:
-                    DateCustomDialog().dobDate(context, ref, birthdayProfile),
+                  labelText: Keystring.ADDRESS.tr,
+                  child: Expanded(
+                    child: Text('${getWardName(profile!.address!.substring(profile!.address!.indexOf(',') + 1,
+                        profile!.address!.indexOf(',', profile!.address!.indexOf(',') + 1)), ref)},'
+                        '${getDistrictName(profile!.address!.substring(
+                        profile!.address!.lastIndexOf(',', profile!.address!.lastIndexOf(',') - 1) + 1,
+                        profile!.address!.lastIndexOf(',')), ref)},'
+                        '${getProvinceName(profile!.address!.substring(profile.address!.lastIndexOf(',') + 1), ref)}',style: textNormal,),
+                  )
               ),
-              SizedBox(
-                  height: profile?.premiumExpiry != null &&
-                          profile?.premiumExpiry != ''
-                      ? 24
-                      : 0),
-              profile?.premiumExpiry != null && profile?.premiumExpiry != ''
-                  ? EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(premiumExpireProfileProvider.notifier).state =
-                            value;
-                      }),
-                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
-                      content: profile?.premiumExpiry ?? '',
-                      maxLines: 1,
-                      readOnly: true,
-                    )
-                  : SizedBox(height: 0),
-              SizedBox(height: 32),
-
               SizedBox(height: 32),
             ],
           ),

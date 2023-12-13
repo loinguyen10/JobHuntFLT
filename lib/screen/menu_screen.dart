@@ -16,6 +16,7 @@ import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/screen/user/follow_company_list.dart';
+import 'package:jobhunt_ftl/screen/user/show_proflie.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../blocs/app_riverpod_object.dart';
@@ -164,9 +165,9 @@ class MenuScreen extends ConsumerWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          EditProfileScreenNew(
-                                            edit: true,
-                                          )),
+                                    // EditProfileScreenNew(edit: true)
+                                    ShowProfileScreen()
+                                    ),
                                 );
                               } else if (company != null) {
                                 ref.invalidate(listJobTagCompanyProvider);

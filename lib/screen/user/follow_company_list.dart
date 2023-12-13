@@ -36,6 +36,7 @@ class FollowCompanyScreen extends ConsumerWidget {
                       String avatar = data[index].company!.avatarUrl ?? '';
                       String nameCompany = data[index].company!.fullname ?? '';
                       String job = data[index].company!.job ?? '';
+                      String level = data[index].company!.level ?? '';
                       var tag = job.split(',');
                       String province = getProvinceName(
                           data[index].company!.address!.substring(
@@ -61,6 +62,7 @@ class FollowCompanyScreen extends ConsumerWidget {
                               name: nameCompany,
                               province: province,
                               job: tag[0],
+                              level: level,
                             )),
                       );
                     },

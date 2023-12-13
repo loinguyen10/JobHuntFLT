@@ -287,7 +287,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                Keystring.VERIFIED_COMPANIES.tr,
+                                Keystring.PREMIUM_COMPANIES.tr,
                                 style: textJobHome,
                               ),
                               GestureDetector(

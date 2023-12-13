@@ -201,4 +201,13 @@ class Keystring {
   static const String PRICE = 'Price';
   static const String DATE_CREATED = 'Date_Created';
   static const String STT = 'STT';
+  static const String REPORT_COMPANY = 'Report_Company';
+  static const String REPORT_COMPANY_TITLE = 'Report_Company_Title';
+  static const String REPORT_COMPANY_REMINDER = 'Report_Company_Reminder';
+  static const String REPORTING_REASON = 'Reporting_Reason';
+  static const String OTHER_REASONS = 'Other_Reasons';
+  static const String ONE_REASON = 'One_Reason';
+  static const String TWO_REASON = 'Two_Reason';
+  static const String THREE_REASON = 'Three_Reason';
+  static const String REPORT = 'Report';
 }

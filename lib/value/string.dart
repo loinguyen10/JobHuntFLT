@@ -213,6 +213,16 @@ class LocaleString extends Translations {
           'STT': '#',
           'Term':
               '\t\t\tBy accessing or using the FPL Work software, services, or any applications provided by FPL Work (jobshunt.info), collectively referred to as "Services," regardless of the means of access, you agree to be bound by these Terms of Use ("Terms"). The Services are owned or controlled by FPL Work, and these Terms affect your legal rights and obligations. If you do not agree to be bound by all of these Terms, do not access or use the Services. If you have any questions regarding these Terms, please contact us.\n\t\t\tWe may update these Terms of Use over time for legal reasons or to allow for the proper functioning of the FPL Work software. Any changes will be notified to you through an appropriate notice on our website. These changes will apply to the use of the FPL Work website. After we have notified you, if you do not wish to accept the updated Terms of Use, you should not continue to use the FPL Work software. If you continue to use the FPL Work software after the Terms of Use are updated, you must accept FPL Work\'s Terms of Use by choosing to agree through the notice displayed on our website when the changes are applied.',
+          'Report_Company': 'Company report',
+          'Report_Company_Title': 'Report inaccurate recruitment information',
+          'Reporting_Reason': 'Reporting reason',
+          'Other_Reasons': 'Other reasons',
+          'One_Reason': 'The employer shows signs of fraud',
+          'Two_Reason': 'Incorrect information',
+          'Three_Reason': 'Fill in your other reason',
+          'Report': 'Report',
+          'Report_Company_Reminder':
+              'Find out carefully about the employer. You should be careful with jobs that require payment of fees, or contracts that are vague or unclear. If you find that the employer information is incorrect, please report it to us.',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',

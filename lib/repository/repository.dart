@@ -1016,6 +1016,24 @@ class InsideService {
 
     Response response =
         await post(Uri.parse("${BASE_URL}job/view_click.php"), body: msg);
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> creatReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    final msg = jsonEncode({
+      'report_sender_id': report_sender_id,
+      'reported_persons_id': reported_persons_id,
+      'title': title,
+      'description': description,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}report/create_report.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }

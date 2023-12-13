@@ -1057,6 +1057,33 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     await ref.read(authRepositoryProvider).clickViewPlus(code);
   }
+
+  void createReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    state = const CreateReportLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).creatReport(
+            report_sender_id,
+            reported_persons_id,
+            title,
+            description,
+          );
+
+      if (result == 1) {
+        state = const CreateReportSuccessEvent();
+      } else {
+        state = const CreateReportErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateReportErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
 }
 
 class LoginController1 extends StateNotifier<InsideEvent> {

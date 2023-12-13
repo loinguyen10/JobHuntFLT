@@ -745,7 +745,7 @@ final listJobBestProvider = StateProvider<List<JobDetail>>(
       }
     }
 
-    listBest.sort((b, a) => a.maxSalary!.compareTo(b.maxSalary!));
+    listBest.sort((b, a) => a.numberClick!.compareTo(b.numberClick!));
     log('length: ${listBest.length}');
     return listBest;
   },

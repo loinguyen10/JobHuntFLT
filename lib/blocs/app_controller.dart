@@ -1028,19 +1028,13 @@ class LoginController extends StateNotifier<InsideEvent> {
     String status,
     String payment_type,
     String userId,
-      String role,
+    String role,
   ) async {
     state = const HistorypaymentLoadingEvent();
     try {
-
-      final result = await ref.read(authRepositoryProvider).addHistoryPayment(
-            money,
-            date,
-            status,
-            payment_type,
-            userId,
-            role
-          );
+      final result = await ref
+          .read(authRepositoryProvider)
+          .addHistoryPayment(money, date, status, payment_type, userId, role);
 
       if (result == 1) {
         final profile =
@@ -1056,6 +1050,12 @@ class LoginController extends StateNotifier<InsideEvent> {
     }
 
     state = const ThingStateEvent();
+  }
+
+  void clickViewPlusJob(
+    String code,
+  ) async {
+    await ref.read(authRepositoryProvider).clickViewPlus(code);
   }
 }
 

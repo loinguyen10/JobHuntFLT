@@ -1006,4 +1006,17 @@ class InsideService {
       return [];
     }
   }
+
+  Future<dynamic> clickViewPlus(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}job/view_click.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
 }

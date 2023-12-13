@@ -233,7 +233,7 @@ class CompanyVerifyScreen extends StatelessWidget {
               elevation: 0,
               bottom: TabBar(
                 tabs: [
-                  Tab(text: Keystring.VERIFIED_COMPANIES.tr),
+                  Tab(text: Keystring.PREMIUM_COMPANIES.tr),
                   Tab(text: Keystring.ALL_COMPANIES.tr),
                 ],
               ),

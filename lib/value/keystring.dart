@@ -9,7 +9,7 @@ class Keystring {
   static const String SEARCH = 'Search';
   static const String RECOMMEND_JOB = 'Recommend_Job';
   static const String BEST_JOB = 'Best_Job';
-  static const String VERIFIED_COMPANIES = 'Verified_Companies';
+  static const String PREMIUM_COMPANIES = 'Premium_Companies';
   static const String NO_DATA = 'No_Data';
   static const String YOUR_PROFILE = 'Your_Profile';
   static const String YOUR_INBOX = 'Your_Inbox';
@@ -201,5 +201,5 @@ class Keystring {
   static const String PRICE = 'Price';
   static const String DATE_CREATED = 'Date_Created';
   static const String STT = 'STT';
-  static const String TERM = 'TERM';
+  static const String TERM = 'Term';
 }

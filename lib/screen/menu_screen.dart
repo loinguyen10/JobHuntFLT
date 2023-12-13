@@ -123,21 +123,25 @@ class MenuScreen extends ConsumerWidget {
                                 : company?.fullname ?? '',
                         style: textNameMenu,
                       ),
-                      SizedBox(height: 8),
-                      profile?.level == 'Premium'
-                          ? AppTagCard(
-                              child: Text(Keystring.PREMIUM.tr),
-                              bgColor: Colors.yellow,
-                              borderColor: Colors.grey,
-                            )
-                          : AppTagCard(
-                              child: Text(
-                                Keystring.BASIC.tr,
-                                style: TextStyle(color: Colors.black45),
-                              ),
-                              bgColor: Colors.grey.shade300,
-                              borderColor: Colors.black54,
-                            ),
+                      SizedBox(
+                        height: profile == null && company == null ? 0 : 8,
+                      ),
+                      profile == null && company == null
+                          ? SizedBox(height: 0)
+                          : profile?.level == 'Premium'
+                              ? AppTagCard(
+                                  child: Text(Keystring.PREMIUM.tr),
+                                  bgColor: Colors.yellow,
+                                  borderColor: Colors.grey,
+                                )
+                              : AppTagCard(
+                                  child: Text(
+                                    Keystring.BASIC.tr,
+                                    style: TextStyle(color: Colors.black45),
+                                  ),
+                                  bgColor: Colors.grey.shade300,
+                                  borderColor: Colors.black54,
+                                ),
                     ],
                   ),
                 ),
@@ -590,8 +594,7 @@ class MenuScreen extends ConsumerWidget {
                             },
                             child: Card(
                               shadowColor: Colors.grey,
-                              shape: Border.all(
-                                  color: Colors.white, width: 2),
+                              shape: Border.all(color: Colors.white, width: 2),
                               margin: EdgeInsets.symmetric(vertical: 4),
                               elevation: 2,
                               child: Container(

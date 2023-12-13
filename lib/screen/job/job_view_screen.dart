@@ -124,11 +124,11 @@ class JobViewScreen extends ConsumerWidget {
                           child: InkWell(
                             onTap: () {
                               Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                                  context,
+                                  MaterialPageRoute(
                                     builder: (context) =>
-                                        ReprotScreen(company: job.company!),
-                              ));
+                                        ReportScreen(job: job),
+                                  ));
                             },
                             child: Icon(
                               Icons.report_rounded,

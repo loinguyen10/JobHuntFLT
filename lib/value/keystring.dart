@@ -202,8 +202,6 @@ class Keystring {
   static const String DATE_CREATED = 'Date_Created';
   static const String STT = 'STT';
   static const String TERM = 'Term';
-  static const String REPORT_COMPANY = 'Report_Company';
-  static const String REPORT_COMPANY_TITLE = 'Report_Company_Title';
   static const String REPORT_COMPANY_REMINDER = 'Report_Company_Reminder';
   static const String REPORTING_REASON = 'Reporting_Reason';
   static const String OTHER_REASONS = 'Other_Reasons';

@@ -5,20 +5,21 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/model/company.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_riverpod_object.dart';
 
-class ReprotScreen extends ConsumerStatefulWidget {
-  ReprotScreen({required this.company, Key? key}) : super(key: key);
-  CompanyDetail company;
+class ReportScreen extends ConsumerStatefulWidget {
+  ReportScreen({required this.job, Key? key}) : super(key: key);
+  JobDetail job;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ReprotScreen();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ReportScreen();
 }
 
-class _ReprotScreen extends ConsumerState<ReprotScreen> {
+class _ReportScreen extends ConsumerState<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -28,7 +29,7 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
     final user = ref.watch(userLoginProvider);
     return (Scaffold(
       appBar: AppBar(
-        title: Text(Keystring.REPORT_COMPANY.tr),
+        title: Text(Keystring.REPORT.tr),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -37,28 +38,33 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
             Container(
               margin: EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 15),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(220,220,220, 1.0),
+                color: Color.fromRGBO(220, 220, 220, 1.0),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [Text(Keystring.REPORT_COMPANY_TITLE.tr)],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(Keystring.REPORT_COMPANY_REMINDER.tr)
-                  ],
-                ),
-              ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(Keystring.REPORT_COMPANY_REMINDER.tr)),
             ),
             SizedBox(
               width: 10,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: SizedBox(
+                  width: screenWidth, child: Text(Keystring.Name_Job.tr)),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: SizedBox(
+                  width: screenWidth, child: Text(widget.job.name ?? '')),
+            ),
+            SizedBox(
+              height: 20,
             ),
             Padding(
               padding: EdgeInsets.only(left: 10),
@@ -72,14 +78,14 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
               padding: EdgeInsets.only(left: 10),
               child: SizedBox(
                   width: screenWidth,
-                  child: Text(widget.company.fullname ?? '')),
+                  child: Text(widget.job.company!.fullname ?? '')),
             ),
             SizedBox(
               height: 20,
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10),
-              color: Color.fromRGBO(220,220,220, 1.0),
+              color: Color.fromRGBO(220, 220, 220, 1.0),
               height: 1,
             ),
             SizedBox(
@@ -146,7 +152,9 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
                           border: InputBorder.none,
                         ),
                         onChanged: ((value) {
-                          ref.read(OtherReportingReasonProvider.notifier).state = value;
+                          ref
+                              .read(OtherReportingReasonProvider.notifier)
+                              .state = value;
                           log(value);
                         }),
                       ),
@@ -157,7 +165,7 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
               height: 20,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10,right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.red,
@@ -168,10 +176,14 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
                   ),
                 ),
                 onPressed: () {
-                  if(_reason == 'Other reasons' && _otherReportingReason == ''){
-
-                  }else{
-                    ref.read(LoginControllerProvider.notifier).createReport(user?.uid??'', widget.company.uid??'', _reason, _otherReportingReason);
+                  if (_reason == 'Other reasons' &&
+                      _otherReportingReason == '') {
+                  } else {
+                    ref.read(LoginControllerProvider.notifier).createReport(
+                        user?.uid ?? '',
+                        widget.job.company!.uid ?? '',
+                        _reason,
+                        _otherReportingReason);
                     showSuccessDialog(context);
                   }
                 },
@@ -184,6 +196,7 @@ class _ReprotScreen extends ConsumerState<ReprotScreen> {
     ));
   }
 }
+
 void showSuccessDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -193,7 +206,7 @@ void showSuccessDialog(BuildContext context) {
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color.fromRGBO(220,220,220, 1.0),
+              primary: Color.fromRGBO(220, 220, 220, 1.0),
             ),
             onPressed: () {
               Navigator.of(context).pop();

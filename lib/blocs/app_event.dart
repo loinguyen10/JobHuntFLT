@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:get/get.dart';
 import 'package:jobhunt_ftl/model/user.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 
 abstract class InsideEvent extends Equatable {
   const InsideEvent();
@@ -304,12 +306,12 @@ class CheckCountSuccessEvent extends InsideEvent {
 }
 
 class CheckCountOverwriteEvent extends InsideEvent {
-  const CheckCountOverwriteEvent({this.message = ''});
+  const CheckCountOverwriteEvent({this.messageOverwrite = ''});
 
-  final String message;
+  final String messageOverwrite;
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [messageOverwrite];
 }
 
 class CheckCountErrorEvent extends InsideEvent {

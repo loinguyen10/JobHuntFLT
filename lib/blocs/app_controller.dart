@@ -1090,7 +1090,6 @@ class LoginController extends StateNotifier<InsideEvent> {
     String title,
   ) async {
     state = const ThingLoadingEvent();
-    log('hello1');
     try {
       final result = await ref.read(authRepositoryProvider).checkCount(
             userId,
@@ -1098,18 +1097,17 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       final int success = result['success'];
-      final String messageTxt = result['message'];
-      log(messageTxt);
+      final String txtMessage = result['message'];
 
       if (success == 1) {
         state = const CheckCountSuccessEvent();
       } else if (success == 3) {
-        log(messageTxt);
-        // switch (messageTxt) {
-        //   case '':
-        //     break;
-        // }
-        state = const CheckCountOverwriteEvent(message: 'error');
+        if (txtMessage.substring(txtMessage.lastIndexOf('-') + 1) ==
+            'candidate_cv') {
+          state = const CheckCountOverwriteEvent(messageOverwrite: 'CV full');
+        } else {
+          state = const CheckCountOverwriteEvent();
+        }
       } else {
         state = const CheckCountErrorEvent(error: 'error');
       }

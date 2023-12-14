@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,7 +15,6 @@ import '../../component/date_dialog.dart';
 import '../../component/edittext.dart';
 import '../../component/loader_overlay.dart';
 import '../../model/address.dart';
-import '../../model/job_setting.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
 
@@ -28,9 +25,6 @@ class JobEditScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String filePath = '';
-
-    final user = ref.watch(userLoginProvider);
     final company = ref.watch(companyProfileProvider);
     final job = ref.watch(jobDetailProvider);
 
@@ -57,6 +51,8 @@ class JobEditScreen extends ConsumerWidget {
       Keystring.PART_TIME.tr,
       Keystring.FULL_TIME.tr
     ];
+
+    String jobTag2 = '';
 
 //get data
 
@@ -229,44 +225,55 @@ class JobEditScreen extends ConsumerWidget {
           jobTag += '$y,';
         }
 
-        if (!edit) {
-          log("click done");
+        jobTag2 = jobTag;
 
-          ref.read(LoginControllerProvider.notifier).createJob(
-                ref.watch(jobNameProvider),
-                company!.uid ?? '0',
-                ref.watch(jobMinSalaryProvider),
-                ref.watch(jobMaxSalaryProvider),
-                ref.watch(jobYearExperienceProvider),
-                jobTypeChoose,
-                ref.watch(jobNumberCandidateProvider),
-                '${districtChoose.code},${provinceChoose.code}',
-                ref.watch(jobDescriptionProvider),
-                ref.watch(jobCandidateRequirementProvider),
-                ref.watch(jobBenefitProvider),
-                jobTag,
-                jobDeadline,
-                jobActive ? 1 : 0,
+        if (company?.level != 'Premium') {
+          ref.read(LoginControllerProvider.notifier).checkCount(
+                ref.watch(userLoginProvider)!.uid ?? '',
+                edit
+                    ? '${Keystring.recruiter_edit_job_}${job?.code}'
+                    : Keystring.recruiter_post_job,
               );
         } else {
-          log("click update");
-          ref.read(LoginControllerProvider.notifier).updateJob(
-                job!.code ?? '0',
-                ref.watch(jobNameProvider),
-                company!.uid ?? '0',
-                ref.watch(jobMinSalaryProvider),
-                ref.watch(jobMaxSalaryProvider),
-                ref.watch(jobYearExperienceProvider),
-                jobTypeChoose,
-                ref.watch(jobNumberCandidateProvider),
-                '${districtChoose.code},${provinceChoose.code}',
-                ref.watch(jobDescriptionProvider),
-                ref.watch(jobCandidateRequirementProvider),
-                ref.watch(jobBenefitProvider),
-                jobTag,
-                jobDeadline,
-                jobActive ? 1 : 0,
-              );
+          if (!edit) {
+            log("click done");
+
+            ref.read(LoginControllerProvider.notifier).createJob(
+                  ref.watch(jobNameProvider),
+                  company!.uid ?? '0',
+                  ref.watch(jobMinSalaryProvider),
+                  ref.watch(jobMaxSalaryProvider),
+                  ref.watch(jobYearExperienceProvider),
+                  jobTypeChoose,
+                  ref.watch(jobNumberCandidateProvider),
+                  '${districtChoose.code},${provinceChoose.code}',
+                  ref.watch(jobDescriptionProvider),
+                  ref.watch(jobCandidateRequirementProvider),
+                  ref.watch(jobBenefitProvider),
+                  jobTag,
+                  jobDeadline,
+                  jobActive ? 1 : 0,
+                );
+          } else {
+            log("click update");
+            ref.read(LoginControllerProvider.notifier).updateJob(
+                  job!.code ?? '0',
+                  ref.watch(jobNameProvider),
+                  company!.uid ?? '0',
+                  ref.watch(jobMinSalaryProvider),
+                  ref.watch(jobMaxSalaryProvider),
+                  ref.watch(jobYearExperienceProvider),
+                  jobTypeChoose,
+                  ref.watch(jobNumberCandidateProvider),
+                  '${districtChoose.code},${provinceChoose.code}',
+                  ref.watch(jobDescriptionProvider),
+                  ref.watch(jobCandidateRequirementProvider),
+                  ref.watch(jobBenefitProvider),
+                  jobTag,
+                  jobDeadline,
+                  jobActive ? 1 : 0,
+                );
+          }
         }
       } else {
         Fluttertoast.showToast(
@@ -285,7 +292,9 @@ class JobEditScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+        if (state is CreateThingErrorEvent ||
+            state is UpdateThingErrorEvent ||
+            state is CheckCountErrorEvent) {
           Loader.hide();
           log('error');
           showDialog(
@@ -309,14 +318,87 @@ class JobEditScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent ||
             state is UpdateThingSuccessEvent) {
           Loader.hide();
+
+          if (company?.level != 'Premium') {
+            ref.read(LoginControllerProvider.notifier).addCount(
+                  ref.watch(userLoginProvider)!.uid ?? '',
+                  edit
+                      ? '${Keystring.recruiter_edit_job_}${job?.code}'
+                      : Keystring.recruiter_post_job,
+                );
+          }
+
           log('c-success');
           ref.refresh(listPostJobProvider.future);
           ref.refresh(listJobProvider.future);
           Navigator.pop(context);
         }
 
+        if (state is CheckCountSuccessEvent) {
+          if (edit) {
+            ref.read(LoginControllerProvider.notifier).updateJob(
+                  job!.code ?? '0',
+                  ref.watch(jobNameProvider),
+                  company!.uid ?? '0',
+                  ref.watch(jobMinSalaryProvider),
+                  ref.watch(jobMaxSalaryProvider),
+                  ref.watch(jobYearExperienceProvider),
+                  jobTypeChoose!,
+                  ref.watch(jobNumberCandidateProvider),
+                  '${districtChoose!.code},${provinceChoose!.code}',
+                  ref.watch(jobDescriptionProvider),
+                  ref.watch(jobCandidateRequirementProvider),
+                  ref.watch(jobBenefitProvider),
+                  jobTag2,
+                  jobDeadline,
+                  jobActive ? 1 : 0,
+                );
+          } else {
+            ref.read(LoginControllerProvider.notifier).createJob(
+                  ref.watch(jobNameProvider),
+                  company!.uid ?? '0',
+                  ref.watch(jobMinSalaryProvider),
+                  ref.watch(jobMaxSalaryProvider),
+                  ref.watch(jobYearExperienceProvider),
+                  jobTypeChoose!,
+                  ref.watch(jobNumberCandidateProvider),
+                  '${districtChoose!.code},${provinceChoose!.code}',
+                  ref.watch(jobDescriptionProvider),
+                  ref.watch(jobCandidateRequirementProvider),
+                  ref.watch(jobBenefitProvider),
+                  jobTag2,
+                  jobDeadline,
+                  jobActive ? 1 : 0,
+                );
+          }
+        }
+
+        if (state is CheckCountOverwriteEvent) {
+          Loader.hide();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(
+                  Keystring.WARNING.tr,
+                  style: textNormal,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
         if (state is CreateThingLoadingEvent ||
-            state is UpdateThingLoadingEvent) {
+            state is UpdateThingLoadingEvent ||
+            state is ThingLoadingEvent) {
           Loader.show(context);
         }
       },

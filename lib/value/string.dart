@@ -224,6 +224,10 @@ class LocaleString extends Translations {
           'Want_Exit': 'Do you want to exit?',
           'View_Profile': 'View Profile',
           'Has': 'Has',
+          'Warning':
+              'You have reached the limit of this function. Please update PREMIUM if you want to continue.',
+          'CV_Full':
+              'You have reached the limit of CV Manager (Max 3 CVs/account). Please update PREMIUM if you want to save more.',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -444,6 +448,10 @@ class LocaleString extends Translations {
           'Want_Exit': 'Bạn có muốn thoát?',
           'View_Profile': 'Xem Hồ Sơ',
           'Has': 'Có',
+          'Warning':
+              'Bạn đã đạt đến giới hạn của chức năng này. Vui lòng nâng cấp CAO CẤP nếu bạn muốn tiếp tục.',
+          'CV_Full':
+              'Bạn đã đạt đến giới hạn của Quản lý CV (Tối đa 3 CV/tài khoản). Vui lòng nâng cấp CAO CẤP nếu bạn muốn lưu trữ thêm.',
         },
       };
 }

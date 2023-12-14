@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-
-import '../blocs/app_riverpod_void.dart';
 import '../value/style.dart';
 
 class AppCompanyCard extends StatefulWidget {
@@ -14,12 +11,14 @@ class AppCompanyCard extends StatefulWidget {
     required this.name,
     required this.province,
     required this.job,
+    required this.level,
   });
 
   final String avatar;
   final String name;
   final String province;
   final String job;
+  final String level;
 
   @override
   State<AppCompanyCard> createState() => _AppCompanyCardState();
@@ -41,18 +40,41 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
         mainAxisSize: MainAxisSize.max,
         children: [
           SizedBox(width: 8),
-          ClipOval(
-            child: SizedBox.fromSize(
-              size: Size.fromRadius(40), // Image radius
-              child: widget.avatar != ''
-                  ? Image.network(
-                      widget.avatar,
-                      fit: BoxFit.cover,
-                    )
-                  : Icon(
-                      Icons.apartment,
-                      size: 80,
-                    ),
+          Container(
+            child: Stack(
+              children: [
+                ClipOval(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(40), // Image radius
+                    child: widget.avatar != ''
+                        ? Image.network(
+                            widget.avatar,
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.apartment,
+                            size: 80,
+                          ),
+                  ),
+                ),
+                widget.level == 'Premium'
+                    ? Positioned(
+                        right: 0.0,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: CircleAvatar(
+                            radius: 12.0,
+                            backgroundColor: Colors.white,
+                            child: Icon(
+                              Icons.star,
+                              color: Colors.yellow[600],
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(width: 0),
+              ],
             ),
           ),
           SizedBox(width: 8),

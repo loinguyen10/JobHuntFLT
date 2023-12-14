@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -330,4 +331,9 @@ Future<List<UserProfileDetail>> getUserProfileList() async {
 Future<List<PaymentDetail>> getYourHistoryPaymentList(String uid) async {
   final list = await insideService.getListHistoryPayments(uid);
   return list;
+}
+
+void getCandidateRecommend(String uid, WidgetRef ref) async {
+  final result = await insideService.getJobRecommendSetting(uid);
+  ref.read(candidateRecommendProvider.notifier).state = result;
 }

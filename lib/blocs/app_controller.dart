@@ -928,7 +928,7 @@ class LoginController extends StateNotifier<InsideEvent> {
   }
 
   void getRecuiterApplicationWithSetting(
-    String searchWord,
+    String jobId,
     String statusCheck,
     String sentTime,
   ) async {
@@ -945,7 +945,7 @@ class LoginController extends StateNotifier<InsideEvent> {
       final result =
           await ref.read(authRepositoryProvider).getRecuiterApplication(
                 ref.watch(userLoginProvider)!.uid ?? '0',
-                searchWord,
+                jobId,
                 approve,
                 sentTime,
               );
@@ -1029,19 +1029,13 @@ class LoginController extends StateNotifier<InsideEvent> {
     String status,
     String payment_type,
     String userId,
-      String role,
+    String role,
   ) async {
     state = const HistorypaymentLoadingEvent();
     try {
-
-      final result = await ref.read(authRepositoryProvider).addHistoryPayment(
-            money,
-            date,
-            status,
-            payment_type,
-            userId,
-            role
-          );
+      final result = await ref
+          .read(authRepositoryProvider)
+          .addHistoryPayment(money, date, status, payment_type, userId, role);
 
       if (result == 1) {
         final profile =
@@ -1058,21 +1052,27 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+
+  void clickViewPlusJob(
+    String code,
+  ) async {
+    await ref.read(authRepositoryProvider).clickViewPlus(code);
+  }
+
   void createReport(
-      String report_sender_id,
-      String reported_persons_id,
-      String title,
-      String description,
-      ) async {
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
     state = const CreateReportLoadingEvent();
     try {
-
       final result = await ref.read(authRepositoryProvider).creatReport(
-        report_sender_id,
-        reported_persons_id,
-        title,
-        description,
-      );
+            report_sender_id,
+            reported_persons_id,
+            title,
+            description,
+          );
 
       if (result == 1) {
         state = const CreateReportSuccessEvent();
@@ -1101,6 +1101,41 @@ class LoginController extends StateNotifier<InsideEvent> {
         send,
       );
 
+
+  void checkCount(
+    String userId,
+    String title,
+  ) async {
+    state = const ThingLoadingEvent();
+    log('hello1');
+    try {
+      final result = await ref.read(authRepositoryProvider).checkCount(
+            userId,
+            title,
+          );
+
+      final int success = result['success'];
+      final String messageTxt = result['message'];
+      log(messageTxt);
+
+      if (success == 1) {
+        state = const CheckCountSuccessEvent();
+      } else if (success == 3) {
+        log(messageTxt);
+        // switch (messageTxt) {
+        //   case '':
+        //     break;
+        // }
+        state = const CheckCountOverwriteEvent(message: 'error');
+      } else {
+        state = const CheckCountErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CheckCountErrorEvent(error: e.toString());
+      }
+  state = const ThingStateEvent();
+  }
+
       if (result == 1) {
         state = const AddMessageSuccessEvent();
         print('ket qua them'+result);
@@ -1110,10 +1145,32 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = AddMessageErrorEvent(error: e.toString());
-    }
+      }
+      state = const ThingStateEvent();
+  }
+
+  void addCount(
+    String userId,
+    String title,
+  ) async {
+    try {
+      final result = await ref.read(authRepositoryProvider).addCount(
+            userId,
+            title,
+          );
+
+      if (result == 1) {
+        state = const AddCountSuccessEvent();
+      } else {
+        state = const AddCountErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = AddCountErrorEvent(error: e.toString());
+      }
 
     state = const ThingStateEvent();
   }
+
   void addConverstation(
       String id,
       String userId,
@@ -1138,11 +1195,11 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = AddConverstationErrorEvent(error: e.toString());
-    }
+      }
 
     state = const ThingStateEvent();
   }
-}
+}  
 
 class LoginController1 extends StateNotifier<InsideEvent> {
   LoginController1(this.ref) : super(const SignInStateEvent());

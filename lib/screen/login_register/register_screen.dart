@@ -29,11 +29,64 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
     // var passUp = '';
     // var passAgain = '';
 
-    void _showOTPDialog() {
+    void showOTPDialog() {
       showDialog(
         context: context,
         builder: (context) {
           return OTPScreen(emailUp: emailUp);
+        },
+      );
+    }
+
+    void showTermsAndConditions() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height / 1.25),
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    margin: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(16.0),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 0.0,
+                            offset: Offset(0.0, 0.0),
+                          ),
+                        ]),
+                    child: SingleChildScrollView(
+                      child: Text(Keystring.TERM.tr, style: textNormal),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0.0,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: CircleAvatar(
+                          radius: 14.0,
+                          backgroundColor: Colors.red,
+                          child: Icon(Icons.close, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       );
     }
@@ -58,7 +111,7 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
         if (state is CreateOTPSuccessEvent) {
           Loader.hide();
           log('success');
-          _showOTPDialog();
+          showOTPDialog();
         }
 
         if (state is ReCreateOTPEvent) {
@@ -151,10 +204,13 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                           Keystring.READ_ACCEPTED.tr,
                         ),
                         SizedBox(width: 2),
-                        Text(
-                          Keystring.Terms_Conditions.tr,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        InkWell(
+                          onTap: () => showTermsAndConditions(),
+                          child: Text(
+                            Keystring.Terms_Conditions.tr,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )
                       ],
                     ),
                   ),

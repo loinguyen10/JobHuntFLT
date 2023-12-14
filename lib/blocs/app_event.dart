@@ -379,8 +379,4 @@ class AddCountErrorEvent extends InsideEvent {
 class AddConverstationErrorEvent extends InsideEvent {
   const AddConverstationErrorEvent({this.error});
 
-  final String? error;
 
-  @override
-  List<Object> get props => [error ?? ''];
-}

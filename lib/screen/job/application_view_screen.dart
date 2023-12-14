@@ -39,6 +39,8 @@ class _ApplicationViewFullScreenState
     final job = application!.job;
     final candidate = application.candidate;
 
+    bool? approveIt;
+
     void showInterviewTime(bool edit) {
       showDialog(
         context: context,
@@ -56,7 +58,7 @@ class _ApplicationViewFullScreenState
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent) {
+        if (state is CreateThingErrorEvent || state is CheckCountErrorEvent) {
           Loader.hide();
           log('error-apply');
           Fluttertoast.showToast(
@@ -72,6 +74,14 @@ class _ApplicationViewFullScreenState
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success-apply');
+
+          if (ref.watch(companyProfileProvider)?.level != 'Premium') {
+            ref.read(LoginControllerProvider.notifier).addCount(
+                  ref.watch(userLoginProvider)!.uid ?? '',
+                  Keystring.recruiter_job_appication,
+                );
+          }
+
           ref.invalidate(getListRecuiterApplicationProvider);
           Get.back();
           Fluttertoast.showToast(
@@ -82,6 +92,41 @@ class _ApplicationViewFullScreenState
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
+        }
+
+        if (state is CheckCountSuccessEvent) {
+          if (approveIt == true) {
+            Loader.hide();
+            showInterviewTime(false);
+          } else if (approveIt == false) {
+            ref.read(LoginControllerProvider.notifier).approveApplication(
+                  application.code ?? '0',
+                  '0',
+                );
+          }
+        }
+
+        if (state is CheckCountOverwriteEvent) {
+          Loader.hide();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(
+                  Keystring.WARNING.tr,
+                  style: textNormal,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
         }
 
         if (state is ThingLoadingEvent) {
@@ -202,7 +247,25 @@ class _ApplicationViewFullScreenState
                                 Expanded(
                                   child: AppButton(
                                     onPressed: () {
-                                      showInterviewTime(false);
+                                      if (ref
+                                              .watch(companyProfileProvider)
+                                              ?.level ==
+                                          'Premium') {
+                                        showInterviewTime(false);
+                                      } else {
+                                        approveIt = true;
+                                        ref
+                                            .read(LoginControllerProvider
+                                                .notifier)
+                                            .checkCount(
+                                              ref
+                                                      .watch(userLoginProvider)!
+                                                      .uid ??
+                                                  '',
+                                              Keystring
+                                                  .recruiter_job_appication,
+                                            );
+                                      }
                                     },
                                     label: Keystring.APPROVE.tr,
                                     bgColor: Colors.green,
@@ -224,14 +287,35 @@ class _ApplicationViewFullScreenState
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {
-                                                ref
-                                                    .read(
-                                                        LoginControllerProvider
-                                                            .notifier)
-                                                    .approveApplication(
-                                                      application.code ?? '0',
-                                                      '0',
-                                                    );
+                                                if (ref
+                                                        .watch(
+                                                            companyProfileProvider)
+                                                        ?.level ==
+                                                    'Premium') {
+                                                  ref
+                                                      .read(
+                                                          LoginControllerProvider
+                                                              .notifier)
+                                                      .approveApplication(
+                                                        application.code ?? '0',
+                                                        '0',
+                                                      );
+                                                } else {
+                                                  approveIt = false;
+                                                  ref
+                                                      .read(
+                                                          LoginControllerProvider
+                                                              .notifier)
+                                                      .checkCount(
+                                                        ref
+                                                                .watch(
+                                                                    userLoginProvider)!
+                                                                .uid ??
+                                                            '',
+                                                        Keystring
+                                                            .recruiter_job_appication,
+                                                      );
+                                                }
                                                 Navigator.pop(context);
                                               },
                                               child:

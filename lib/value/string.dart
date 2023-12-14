@@ -224,6 +224,13 @@ class LocaleString extends Translations {
           'Want_Exit': 'Do you want to exit?',
           'View_Profile': 'View Profile',
           'Has': 'Has',
+          'Warning':
+              'You have reached the limit of this function. Please update PREMIUM if you want to continue.',
+          'CV_Full':
+              'You have reached the limit of CV Manager (Max 3 CVs/account). Please update PREMIUM if you want to save more.',
+          'Report_User_Reminder':
+              'Learn carefully about the candidate you want to accept. Be cautious about issues such as spam, abuse or harrassment action. If you have any problem of this candidate, please report them to us.',
+          'Two_Reason_2': 'Abuse or harrassment action',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -444,6 +451,13 @@ class LocaleString extends Translations {
           'Want_Exit': 'Bạn có muốn thoát?',
           'View_Profile': 'Xem Hồ Sơ',
           'Has': 'Có',
+          'Warning':
+              'Bạn đã đạt đến giới hạn của chức năng này. Vui lòng nâng cấp CAO CẤP nếu bạn muốn tiếp tục.',
+          'CV_Full':
+              'Bạn đã đạt đến giới hạn của Quản lý CV (Tối đa 3 CV/tài khoản). Vui lòng nâng cấp CAO CẤP nếu bạn muốn lưu trữ thêm.',
+          'Report_User_Reminder':
+              'Hãy tìm hiểu kỹ về ứng viên bạn muốn ứng tuyển. Bạn nên cẩn trọng với những vấn đề như spam, những hành động quấy rối, lạm dụng. Nếu bạn thấy rằng ứng viên này có sai phạm, hãy phán ánh với chúng tôi.',
+          'Two_Reason_2': 'Hành động quấy rối, lạm dụng',
         },
       };
 }

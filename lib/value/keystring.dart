@@ -213,4 +213,12 @@ class Keystring {
   static const String VIEW_PROFILE = 'View_Profile';
   static const String HAS = 'Has';
   static const String candidate_apply_job = 'candidate_apply_job';
+  static const String candidate_upload_cv = 'candidate_upload_cv';
+  static const String recruiter_post_job = 'recruiter_post_job';
+  static const String recruiter_job_appication = 'recruiter_job_appication';
+  static const String recruiter_edit_job_ = 'recruiter_edit_job_';
+  static const String WARNING = 'Warning';
+  static const String CV_FULL = 'CV_Full';
+  static const String REPORT_USER_REMINDER = 'Report_User_Reminder';
+  static const String TWO_REASON_2 = 'Two_Reason_2';
 }

@@ -56,12 +56,12 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      'email': 'hungbip@jobshunt.info',
-      'password': 'hung',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
-      // 'email': emailAddress.trim(),
-      // 'password': password.trim(),
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -1069,12 +1069,13 @@ class InsideService {
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> addMessage(
-      String userId,
-      String companyId,
-      String content,
-      String send,
-      ) async {
+    String userId,
+    String companyId,
+    String content,
+    String send,
+  ) async {
     final msg = jsonEncode({
       'userId': userId,
       'companyId': companyId,
@@ -1082,20 +1083,20 @@ class InsideService {
       'send': send,
     });
 
-    Response response = await post(
-        Uri.parse("${BASE_URL}message/add_message.php"),
-        body: msg);
+    Response response =
+        await post(Uri.parse("${BASE_URL}message/add_message.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }
+
   Future<dynamic> addConverstation(
-      String id,
-      String userId,
-      String companyId,
-      String content,
-      ) async {
+    String id,
+    String userId,
+    String companyId,
+    String content,
+  ) async {
     final msg = jsonEncode({
-      'id':id,
+      'id': id,
       'userId': userId,
       'companyId': companyId,
       'content': content,

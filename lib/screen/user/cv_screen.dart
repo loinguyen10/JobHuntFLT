@@ -165,7 +165,7 @@ class CVUploadScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent) {
+        if (state is CreateThingErrorEvent || state is CheckCountErrorEvent) {
           log('error');
           ref.read(uploadCheckProvider.notifier).state = 'error';
         }
@@ -173,9 +173,46 @@ class CVUploadScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent) {
           log('c-success');
           ref.read(uploadCheckProvider.notifier).state = 'success';
+          if (ref.watch(userProfileProvider)?.level != 'Premium') {
+            ref.read(LoginControllerProvider.notifier).addCount(
+                  ref.watch(userLoginProvider)?.uid ?? '',
+                  Keystring.candidate_upload_cv,
+                );
+          }
         }
 
-        if (state is CreateThingLoadingEvent) {
+        if (state is CheckCountSuccessEvent) {
+          ref
+              .read(LoginControllerProvider.notifier)
+              .uploadCV(user!.uid ?? '0', cv);
+        }
+
+        if (state is CheckCountOverwriteEvent) {
+          ref.read(uploadCheckProvider.notifier).state = 'error';
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(
+                  state.messageOverwrite == 'CV full'
+                      ? Keystring.CV_FULL.tr
+                      : Keystring.WARNING.tr,
+                  style: textNormal,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingLoadingEvent || state is ThingLoadingEvent) {
           log('c-loading');
           ref.read(uploadCheckProvider.notifier).state = 'loading';
         }
@@ -271,9 +308,15 @@ class CVUploadScreen extends ConsumerWidget {
               AppButton(
                 onPressed: () {
                   if (cv != '') {
-                    ref
-                        .read(LoginControllerProvider.notifier)
-                        .uploadCV(user!.uid ?? '0', cv);
+                    if (ref.watch(userProfileProvider)?.level == 'Premium') {
+                      ref
+                          .read(LoginControllerProvider.notifier)
+                          .uploadCV(user!.uid ?? '0', cv);
+                    } else {
+                      ref.read(LoginControllerProvider.notifier).checkCount(
+                          ref.watch(userLoginProvider)!.uid ?? '',
+                          Keystring.candidate_upload_cv);
+                    }
                   } else {
                     Fluttertoast.showToast(
                         msg: Keystring.NOT_FULL_DATA.tr,

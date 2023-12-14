@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:get/get.dart';
 import 'package:jobhunt_ftl/model/user.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 
 abstract class InsideEvent extends Equatable {
   const InsideEvent();
@@ -298,7 +300,7 @@ class CreateReportErrorEvent extends InsideEvent {
 
 class CheckCountSuccessEvent extends InsideEvent {
   const CheckCountSuccessEvent();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -310,25 +312,24 @@ class AddMessageLoadingEvent extends InsideEvent {
   List<Object> get props => [];
 }
 
-
 class CheckCountOverwriteEvent extends InsideEvent {
-  const CheckCountOverwriteEvent({this.message = ''});
+  const CheckCountOverwriteEvent({this.messageOverwrite = ''});
 
-  final String message;
+  final String messageOverwrite;
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [messageOverwrite];
 }
 
 class CheckCountErrorEvent extends InsideEvent {
   const CheckCountErrorEvent({this.error});
-  
+
   final String? error;
 
   @override
   List<Object> get props => [error ?? ''];
 }
-  
+
 class AddMessageSuccessEvent extends InsideEvent {
   const AddMessageSuccessEvent();
 
@@ -339,22 +340,19 @@ class AddMessageSuccessEvent extends InsideEvent {
 class AddMessageErrorEvent extends InsideEvent {
   const AddMessageErrorEvent({this.error});
 
-
   final String? error;
 
   @override
   List<Object> get props => [error ?? ''];
 }
 
-
 class AddCountSuccessEvent extends InsideEvent {
   const AddCountSuccessEvent();
-  
-  
+
   @override
   List<Object> get props => [];
 }
-  
+
 class AddConverstationLoadingEvent extends InsideEvent {
   const AddConverstationLoadingEvent();
 
@@ -369,10 +367,9 @@ class AddConverstationSuccessEvent extends InsideEvent {
   List<Object> get props => [];
 }
 
-
 class AddCountErrorEvent extends InsideEvent {
   const AddCountErrorEvent({this.error});
-  
+
   final String? error;
 
   @override
@@ -381,12 +378,6 @@ class AddCountErrorEvent extends InsideEvent {
 
 class AddConverstationErrorEvent extends InsideEvent {
   const AddConverstationErrorEvent({this.error});
-  
-  final String? error;
-
-  @override
-  List<Object> get props => [error ?? ''];
-}
 
   final String? error;
 

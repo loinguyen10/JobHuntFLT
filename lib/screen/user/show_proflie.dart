@@ -11,7 +11,7 @@ import '../../component/outline_text.dart';
 import '../../value/style.dart';
 
 class ShowProfileScreen extends ConsumerWidget {
-  ShowProfileScreen({super.key, required this.profile});
+  const ShowProfileScreen({super.key, required this.profile});
   final UserProfileDetail profile;
 
   @override
@@ -115,7 +115,8 @@ class ShowProfileScreen extends ConsumerWidget {
                           style: textNormal,
                         ),
                       ),
-                      ListView.builder(
+                      listJob != null && listJob.isNotEmpty
+                          ? ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (_, index) {
@@ -126,27 +127,33 @@ class ShowProfileScreen extends ConsumerWidget {
                             elevation: 2,
                             child: ListTile(
                               title: Text(
-                                listJob?[index] ?? '',
+                                listJob[index],
                                 overflow: TextOverflow.fade,
                                 maxLines: 2,
                               ),
                             ),
                           );
                         },
-                        itemCount: listJob?.length,
+                        itemCount: listJob.length,
+                      )
+                          : SizedBox(
+                        height: 80,
+                        child: Text(Keystring.NO_DATA.tr),
                       ),
                     ],
                   )),
               SizedBox(height: 24),
               AppBorderFrame(
                 labelText: Keystring.EDUCATION.tr,
-                child: ListView.builder(
+                child: listEducation != null && listEducation.isNotEmpty
+                    ? ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (_, index) {
                     return Card(
                       shadowColor: Colors.grey,
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       elevation: 2,
                       child: ListTile(
                         title: Text(
@@ -160,7 +167,11 @@ class ShowProfileScreen extends ConsumerWidget {
                       ),
                     );
                   },
-                  itemCount: listEducation?.length,
+                  itemCount: listEducation.length,
+                )
+                    : SizedBox(
+                  height: 80,
+                  child: Text(Keystring.NO_DATA.tr),
                 ),
               ),
               SizedBox(height: 32),

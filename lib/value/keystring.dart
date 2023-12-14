@@ -219,4 +219,6 @@ class Keystring {
   static const String recruiter_edit_job_ = 'recruiter_edit_job_';
   static const String WARNING = 'Warning';
   static const String CV_FULL = 'CV_Full';
+  static const String REPORT_USER_REMINDER = 'Report_User_Reminder';
+  static const String TWO_REASON_2 = 'Two_Reason_2';
 }

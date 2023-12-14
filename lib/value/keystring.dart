@@ -210,4 +210,6 @@ class Keystring {
   static const String THREE_REASON = 'Three_Reason';
   static const String REPORT = 'Report';
   static const String WANT_EXIT = 'Want_Exit';
+  static const String VIEW_PROFILE = 'View_Profile';
+  static const String HAS = 'Has';
 }

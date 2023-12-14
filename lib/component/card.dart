@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-
-import '../blocs/app_riverpod_void.dart';
 import '../value/style.dart';
 
 class AppCompanyCard extends StatefulWidget {

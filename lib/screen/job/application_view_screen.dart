@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
+import 'package:jobhunt_ftl/screen/user/show_proflie.dart';
 
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
@@ -144,22 +145,54 @@ class _ApplicationViewFullScreenState
                     ref),
               ),
               SizedBox(height: 32),
-              AppButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ViewCVScreen(
-                              cv: application.cvUrl ?? '',
-                            )),
-                  );
-                },
-                label: Keystring.VIEW_CV.tr,
-                bgColor: Colors.grey,
-                textColor: Colors.black,
-                colorBorder: Colors.black,
-                borderRadius: 16,
-                height: 56,
+              Row(
+                children: [
+                  widget.recruiter
+                      ? Expanded(
+                          child: AppButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ShowProfileScreen(
+                                          profile: application.candidate!,
+                                        )),
+                              );
+                              getCandidateRecommend(
+                                  application.candidate!.uid ?? '0', ref);
+                            },
+                            label: Keystring.VIEW_PROFILE.tr,
+                            bgColor: Colors.grey,
+                            textColor: Colors.black,
+                            colorBorder: Colors.black,
+                            borderRadius: 16,
+                            height: 56,
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                          ),
+                        )
+                      : SizedBox(width: 0),
+                  Expanded(
+                    child: AppButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewCVScreen(
+                                    cv: application.cvUrl ?? '',
+                                  )),
+                        );
+                      },
+                      label: Keystring.VIEW_CV.tr,
+                      bgColor: Colors.grey,
+                      textColor: Colors.black,
+                      colorBorder: Colors.black,
+                      borderRadius: 16,
+                      height: 56,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: widget.recruiter ? 16 : 0),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 40),
               widget.recruiter

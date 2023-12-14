@@ -165,9 +165,9 @@ class MenuScreen extends ConsumerWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          // EditProfileScreenNew(edit: true)
-                                          ShowProfileScreen()),
+                                    builder: (context) =>
+                                        EditProfileScreenNew(edit: true),
+                                  ),
                                 );
                               } else if (company != null) {
                                 ref.invalidate(listJobTagCompanyProvider);

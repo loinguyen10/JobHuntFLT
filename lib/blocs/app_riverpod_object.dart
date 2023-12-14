@@ -745,8 +745,14 @@ final listJobBestProvider = StateProvider<List<JobDetail>>(
       }
     }
 
-    listBest.sort((b, a) => a.maxSalary!.compareTo(b.maxSalary!));
+    listBest.sort((b, a) => a.numberClick!.compareTo(b.numberClick!));
     log('length: ${listBest.length}');
     return listBest;
   },
 );
+final ReportingReasonProvider = StateProvider<String>((ref) => '');
+final OtherReportingReasonProvider = StateProvider<String>((ref) => '');
+final OtherReasonProvider = StateProvider<bool>((ref) => false);
+final checkCreateReportProvider = StateProvider<bool>((ref) => false);
+final candidateRecommendProvider =
+    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());

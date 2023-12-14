@@ -56,12 +56,12 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      // 'email': 'hungbip@jobshunt.info',
-      // 'password': 'hung',
+      'email': 'hungbip@jobshunt.info',
+      'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -1005,5 +1005,36 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> clickViewPlus(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}job/view_click.php"), body: msg);
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> creatReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    final msg = jsonEncode({
+      'report_sender_id': report_sender_id,
+      'reported_persons_id': reported_persons_id,
+      'title': title,
+      'description': description,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}report/create_report.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

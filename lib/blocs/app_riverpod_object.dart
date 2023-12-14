@@ -754,4 +754,5 @@ final ReportingReasonProvider = StateProvider<String>((ref) => '');
 final OtherReportingReasonProvider = StateProvider<String>((ref) => '');
 final OtherReasonProvider = StateProvider<bool>((ref) => false);
 final checkCreateReportProvider = StateProvider<bool>((ref) => false);
+final candidateRecommendProvider = StateProvider<JobRecommendSetting?>((ref) => null);
 

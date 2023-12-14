@@ -337,7 +337,7 @@ class LocaleString extends Translations {
           'Approve': 'Chấp thuận',
           'Reject': 'Từ chối',
           'Company': 'Công ty',
-          'Sent_Time': 'Tời gian gửi',
+          'Sent_Time': 'Thời gian gửi',
           'Status': 'Trạng thái',
           'View_Job': 'Xem công việc',
           'View_All': 'Xem tất cả',

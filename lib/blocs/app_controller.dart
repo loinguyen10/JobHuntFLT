@@ -927,7 +927,7 @@ class LoginController extends StateNotifier<InsideEvent> {
   }
 
   void getRecuiterApplicationWithSetting(
-    String searchWord,
+    String jobId,
     String statusCheck,
     String sentTime,
   ) async {
@@ -944,7 +944,7 @@ class LoginController extends StateNotifier<InsideEvent> {
       final result =
           await ref.read(authRepositoryProvider).getRecuiterApplication(
                 ref.watch(userLoginProvider)!.uid ?? '0',
-                searchWord,
+                jobId,
                 approve,
                 sentTime,
               );
@@ -1080,6 +1080,63 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CreateReportErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void checkCount(
+    String userId,
+    String title,
+  ) async {
+    state = const ThingLoadingEvent();
+    log('hello1');
+    try {
+      final result = await ref.read(authRepositoryProvider).checkCount(
+            userId,
+            title,
+          );
+
+      final int success = result['success'];
+      final String messageTxt = result['message'];
+      log(messageTxt);
+
+      if (success == 1) {
+        state = const CheckCountSuccessEvent();
+      } else if (success == 3) {
+        log(messageTxt);
+        // switch (messageTxt) {
+        //   case '':
+        //     break;
+        // }
+        state = const CheckCountOverwriteEvent(message: 'error');
+      } else {
+        state = const CheckCountErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CheckCountErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void addCount(
+    String userId,
+    String title,
+  ) async {
+    try {
+      final result = await ref.read(authRepositoryProvider).addCount(
+            userId,
+            title,
+          );
+
+      if (result == 1) {
+        state = const AddCountSuccessEvent();
+      } else {
+        state = const AddCountErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = AddCountErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

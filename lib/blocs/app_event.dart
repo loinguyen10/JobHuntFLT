@@ -293,3 +293,50 @@ class CreateReportErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
+class AddMessageLoadingEvent extends InsideEvent {
+  const AddMessageLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddMessageSuccessEvent extends InsideEvent {
+  const AddMessageSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddMessageErrorEvent extends InsideEvent {
+  const AddMessageErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class AddConverstationLoadingEvent extends InsideEvent {
+  const AddConverstationLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddConverstationSuccessEvent extends InsideEvent {
+  const AddConverstationSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddConverstationErrorEvent extends InsideEvent {
+  const AddConverstationErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+

@@ -56,10 +56,10 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      // 'email': 'hungbip@jobshunt.info',
-      // 'password': 'hung',
-      'email': 'emminh@jobshunt.info',
-      'password': 'minhhoang',
+      'email': 'hungbip@jobshunt.info',
+      'password': 'hung',
+      // 'email': 'emminh@jobshunt.info',
+      // 'password': 'minhhoang',
       // 'email': emailAddress.trim(),
       // 'password': password.trim(),
     });
@@ -1021,6 +1021,44 @@ class InsideService {
 
     Response response = await post(
         Uri.parse("${BASE_URL}report/create_report.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+  Future<dynamic> addMessage(
+      String userId,
+      String companyId,
+      String content,
+      String send,
+      ) async {
+    final msg = jsonEncode({
+      'userId': userId,
+      'companyId': companyId,
+      'content': content,
+      'send': send,
+    });
+
+    Response response = await post(
+        Uri.parse("${BASE_URL}message/add_message.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+  Future<dynamic> addConverstation(
+      String id,
+      String userId,
+      String companyId,
+      String content,
+      ) async {
+    final msg = jsonEncode({
+      'id':id,
+      'userId': userId,
+      'companyId': companyId,
+      'content': content,
+    });
+
+    Response response = await post(
+        Uri.parse("${BASE_URL}message/add_conversation.php"),
         body: msg);
 
     return jsonDecode(response.body)['success'];

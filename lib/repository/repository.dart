@@ -54,10 +54,10 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      // 'email': 'laingu@jobshunt.info',
-      // 'password': 'laicutai',
-      'email': 'hungbip@jobshunt.info',
-      'password': 'hung',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
+      // 'email': 'hungbip@jobshunt.info',
+      // 'password': 'hung',
       // 'email': 'emminh@jobshunt.info',
       // 'password': 'minhhoang',
       // 'email': emailAddress.trim(),
@@ -609,16 +609,18 @@ class InsideService {
 
   Future<dynamic> getRecuiterApplication(
     String companyId,
-    String searchWord,
+    String jobId,
     String approve,
     String sentTime,
   ) async {
     final msg = jsonEncode({
       'companyId': companyId,
-      'search_word': searchWord,
+      'jobId': jobId,
       'approve': approve,
       'sent_time': sentTime,
     });
+
+    log(msg);
 
     Response response = await post(
       Uri.parse(BASE_URL + "application/recuiter_application.php"),
@@ -1034,6 +1036,36 @@ class InsideService {
 
     Response response =
         await post(Uri.parse("${BASE_URL}report/create_report.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkCount(
+    String userId,
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'user_id': userId,
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}count/check_count.php"), body: msg);
+
+    return jsonDecode(response.body);
+  }
+
+  Future<dynamic> addCount(
+    String userId,
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'user_id': userId,
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}count/add_count.php"), body: msg);
 
     return jsonDecode(response.body)['success'];
   }

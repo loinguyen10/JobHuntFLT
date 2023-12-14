@@ -249,6 +249,7 @@ class GetListErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
 class HistorypaymentLoadingEvent extends InsideEvent {
   const HistorypaymentLoadingEvent();
 
@@ -271,6 +272,7 @@ class HistorypaymentErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
 class CreateReportLoadingEvent extends InsideEvent {
   const CreateReportLoadingEvent();
 
@@ -287,6 +289,47 @@ class CreateReportSuccessEvent extends InsideEvent {
 
 class CreateReportErrorEvent extends InsideEvent {
   const CreateReportErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class CheckCountSuccessEvent extends InsideEvent {
+  const CheckCountSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CheckCountOverwriteEvent extends InsideEvent {
+  const CheckCountOverwriteEvent({this.message = ''});
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CheckCountErrorEvent extends InsideEvent {
+  const CheckCountErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class AddCountSuccessEvent extends InsideEvent {
+  const AddCountSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddCountErrorEvent extends InsideEvent {
+  const AddCountErrorEvent({this.error});
 
   final String? error;
 

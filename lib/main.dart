@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
 import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
+import 'package:jobhunt_ftl/screen/splash_screen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
 import 'package:jobhunt_ftl/value/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,9 +28,14 @@ void main() async {
     languagueSeleted = 'en';
   }
 
+  var skipSplash = prefs.getBool('splash') ?? false;
+  // var emailTemp = prefs.getString('emailTemp') ?? '';
+  // var passTemp = prefs.getString('passTemp') ?? '';
+
   runApp(ProviderScope(
       child: MyApp(
     language: languagueSeleted,
+    skipSplash: skipSplash,
   )));
 }
 
@@ -43,8 +49,9 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.language});
+  const MyApp({super.key, required this.language, required this.skipSplash});
   final String language;
+  final bool skipSplash;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +68,7 @@ class MyApp extends StatelessWidget {
       ],
       translations: LocaleString(),
       locale: Locale(language),
-      home: LoginScreen(),
+      home: skipSplash ? const LoginScreen() : const SplashScreen(),
       builder: EasyLoading.init(),
       theme: appLightTheme,
     );

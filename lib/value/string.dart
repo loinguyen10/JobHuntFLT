@@ -231,6 +231,10 @@ class LocaleString extends Translations {
           'Report_User_Reminder':
               'Learn carefully about the candidate you want to accept. Be cautious about issues such as spam, abuse or harrassment action. If you have any problem of this candidate, please report them to us.',
           'Two_Reason_2': 'Abuse or harrassment action',
+          'Splash_Title': 'Find a perfect job',
+          'Splash_Tile':
+              'Find your dream job is easier and faster with FPLWork',
+          'Get_Started': 'Let\'s Get Started',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -458,6 +462,10 @@ class LocaleString extends Translations {
           'Report_User_Reminder':
               'Hãy tìm hiểu kỹ về ứng viên bạn muốn ứng tuyển. Bạn nên cẩn trọng với những vấn đề như spam, những hành động quấy rối, lạm dụng. Nếu bạn thấy rằng ứng viên này có sai phạm, hãy phán ánh với chúng tôi.',
           'Two_Reason_2': 'Hành động quấy rối, lạm dụng',
+          'Splash_Title': 'Tìm công việc ước mơ',
+          'Splash_Tile':
+              'Tìm công việc mơ ước thật dễ dàng và nhanh chóng với FPLWork',
+          'Get_Started': 'Bắt đầu nào',
         },
       };
 }

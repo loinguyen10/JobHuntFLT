@@ -126,7 +126,9 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Theme.of(context).colorScheme.secondary,
+        decoration: BoxDecoration(
+          gradient: bgGradientColor4,
+        ),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: widget.company == null

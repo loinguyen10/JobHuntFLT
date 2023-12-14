@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -1084,6 +1085,22 @@ class LoginController extends StateNotifier<InsideEvent> {
 
     state = const ThingStateEvent();
   }
+  void addMessage(
+      String userId,
+      String companyId,
+      String content,
+      String send,
+      ) async {
+    state = const AddMessageLoadingEvent();
+    try {
+
+      final result = await ref.read(authRepositoryProvider).addMessage(
+        userId,
+        companyId,
+        content,
+        send,
+      );
+
 
   void checkCount(
     String userId,
@@ -1115,9 +1132,21 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = CheckCountErrorEvent(error: e.toString());
-    }
+      }
+  state = const ThingStateEvent();
+  }
 
-    state = const ThingStateEvent();
+      if (result == 1) {
+        state = const AddMessageSuccessEvent();
+        print('ket qua them'+result);
+      } else {
+        state = const AddMessageErrorEvent(error: 'error');
+        print('ket qua them'+result);
+      }
+    } catch (e) {
+      state = AddMessageErrorEvent(error: e.toString());
+      }
+      state = const ThingStateEvent();
   }
 
   void addCount(
@@ -1137,11 +1166,40 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = AddCountErrorEvent(error: e.toString());
-    }
+      }
 
     state = const ThingStateEvent();
   }
-}
+
+  void addConverstation(
+      String id,
+      String userId,
+      String companyId,
+      String content,
+      ) async {
+    state = const AddConverstationLoadingEvent();
+    try {
+
+      final result = await ref.read(authRepositoryProvider).addConverstation(
+        id,
+        userId,
+        companyId,
+        content
+      );
+
+      if (result == 1) {
+        state = const AddConverstationSuccessEvent();
+        print('ket qua them'+result);
+      } else {
+        state = const AddConverstationErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = AddConverstationErrorEvent(error: e.toString());
+      }
+
+    state = const ThingStateEvent();
+  }
+}  
 
 class LoginController1 extends StateNotifier<InsideEvent> {
   LoginController1(this.ref) : super(const SignInStateEvent());

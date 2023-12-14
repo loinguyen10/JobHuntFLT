@@ -298,10 +298,18 @@ class CreateReportErrorEvent extends InsideEvent {
 
 class CheckCountSuccessEvent extends InsideEvent {
   const CheckCountSuccessEvent();
+  
+  @override
+  List<Object> get props => [];
+}
+
+class AddMessageLoadingEvent extends InsideEvent {
+  const AddMessageLoadingEvent();
 
   @override
   List<Object> get props => [];
 }
+
 
 class CheckCountOverwriteEvent extends InsideEvent {
   const CheckCountOverwriteEvent({this.message = ''});
@@ -314,6 +322,23 @@ class CheckCountOverwriteEvent extends InsideEvent {
 
 class CheckCountErrorEvent extends InsideEvent {
   const CheckCountErrorEvent({this.error});
+  
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+  
+class AddMessageSuccessEvent extends InsideEvent {
+  const AddMessageSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddMessageErrorEvent extends InsideEvent {
+  const AddMessageErrorEvent({this.error});
+
 
   final String? error;
 
@@ -321,15 +346,47 @@ class CheckCountErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
+
 class AddCountSuccessEvent extends InsideEvent {
   const AddCountSuccessEvent();
+  
+  
+  @override
+  List<Object> get props => [];
+}
+  
+class AddConverstationLoadingEvent extends InsideEvent {
+  const AddConverstationLoadingEvent();
 
   @override
   List<Object> get props => [];
 }
 
+class AddConverstationSuccessEvent extends InsideEvent {
+  const AddConverstationSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+
 class AddCountErrorEvent extends InsideEvent {
   const AddCountErrorEvent({this.error});
+  
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class AddConverstationErrorEvent extends InsideEvent {
+  const AddConverstationErrorEvent({this.error});
+  
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
 
   final String? error;
 

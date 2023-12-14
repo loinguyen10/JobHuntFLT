@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
 import 'package:jobhunt_ftl/screen/user/show_proflie.dart';
-
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
@@ -18,7 +16,6 @@ import '../../component/card.dart';
 import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
-import '../home.dart';
 import '../user/viewcv.dart';
 import 'job_view_screen.dart';
 
@@ -151,6 +148,8 @@ class _ApplicationViewFullScreenState
                       ? Expanded(
                           child: AppButton(
                             onPressed: () {
+                              getCandidateRecommend(
+                                  application.candidate!.uid ?? '0', ref);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -158,8 +157,6 @@ class _ApplicationViewFullScreenState
                                           profile: application.candidate!,
                                         )),
                               );
-                              getCandidateRecommend(
-                                  application.candidate!.uid ?? '0', ref);
                             },
                             label: Keystring.VIEW_PROFILE.tr,
                             bgColor: Colors.grey,

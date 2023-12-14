@@ -48,11 +48,13 @@ class HomeScreen extends ConsumerWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: profile?.level == 'Premium' || company?.level == 'Premium'
+                        color: profile?.level == 'Premium' ||
+                                company?.level == 'Premium'
                             ? Colors.yellow
                             : Colors.transparent,
                         width: 4.0,
                       ),
+                      color: Colors.white,
                     ),
                     child: ClipOval(
                       child: SizedBox.fromSize(

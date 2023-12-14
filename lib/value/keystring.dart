@@ -209,4 +209,5 @@ class Keystring {
   static const String TWO_REASON = 'Two_Reason';
   static const String THREE_REASON = 'Three_Reason';
   static const String REPORT = 'Report';
+  static const String WANT_EXIT = 'Want_Exit';
 }

@@ -221,6 +221,7 @@ class LocaleString extends Translations {
           'Report': 'Report',
           'Report_Company_Reminder':
               'Learn carefully about the recruiting company and the position you want to apply for. Be cautious about issues such as requiring fees or unclear, ambiguous contracts. If you have any problem in the company\'s job posting, please report them to us.',
+          'Want_Exit': 'Do you want to exit?',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -438,6 +439,7 @@ class LocaleString extends Translations {
           'Report': 'Báo cáo',
           'Report_Company_Reminder':
               'Hãy tìm hiểu kỹ về công ty tuyển dụng và công việc bạn muốn ứng tuyển. Bạn nên cẩn trọng với những vấn đề như yêu cầu nộp phí, hoặc những hợp động mập mờ, không rõ ràng. Nếu bạn thấy rằng tin tuyển dụng của công ty này có sai phạm, hãy phán ánh với chúng tôi.',
+          'Want_Exit': 'Bạn có muốn thoát?',
         },
       };
 }

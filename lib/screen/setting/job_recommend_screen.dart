@@ -543,13 +543,6 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           label: Keystring.MAX_SALARY.tr,
                         ),
                       ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: AppBorderFrame(
-                          labelText: Keystring.CURRENCY.tr,
-                          child: dropCurrency(),
-                        ),
-                      ),
                     ],
                   ),
                 ),

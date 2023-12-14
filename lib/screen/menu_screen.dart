@@ -10,7 +10,7 @@ import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_history.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
-import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
+import 'package:jobhunt_ftl/screen/setting/languague_screen.dart';
 import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
@@ -81,6 +81,7 @@ class MenuScreen extends ConsumerWidget {
                           : Colors.transparent,
                       width: 4.0,
                     ),
+                    color: Colors.white,
                   ),
                   child: ClipOval(
                     child: SizedBox.fromSize(
@@ -165,9 +166,8 @@ class MenuScreen extends ConsumerWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                    // EditProfileScreenNew(edit: true)
-                                    ShowProfileScreen()
-                                    ),
+                                          // EditProfileScreenNew(edit: true)
+                                          ShowProfileScreen()),
                                 );
                               } else if (company != null) {
                                 ref.invalidate(listJobTagCompanyProvider);
@@ -668,14 +668,15 @@ class MenuScreen extends ConsumerWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SettingScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => LanguageSelectScreen()),
                     );
                   },
                   child: Card(
                     shadowColor: Colors.grey,
                     shape: Border.all(color: Colors.white, width: 2),
                     margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
+                    elevation: 3,
                     child: Container(
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.background),
@@ -683,14 +684,14 @@ class MenuScreen extends ConsumerWidget {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.tune_outlined,
+                            Icons.translate,
                             size: 32,
                           ),
                           SizedBox(
                             width: 16,
                           ),
                           Text(
-                            Keystring.SETTING.tr,
+                            Keystring.LANGUAGE.tr,
                             style: textMenu,
                           ),
                         ],
@@ -704,14 +705,8 @@ class MenuScreen extends ConsumerWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          content: Text('EXIT?'),
+                          content: Text(Keystring.WANT_EXIT.tr),
                           actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancel'),
-                            ),
                             TextButton(
                               onPressed: () {
                                 resetCall(ref);
@@ -726,7 +721,13 @@ class MenuScreen extends ConsumerWidget {
                                 }
                                 Get.offAll(() => const LoginScreen());
                               },
-                              child: const Text('YES'),
+                              child: Text(Keystring.EXIT.tr),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(Keystring.CANCEL.tr),
                             ),
                           ],
                         );

@@ -34,11 +34,12 @@ class ShowProfileScreen extends ConsumerStatefulWidget {
 class _ShowProfileScreen extends ConsumerState<ShowProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userLoginProvider);
     final profile = ref.watch(userProfileProvider);
 
-    final avatarProfile = ref.watch(avatarProfileProvider);
-    final birthdayProfile = ref.watch(dateBirthProvider);
+    final avatarProfile = profile?.avatarUrl ?? '';
+    final recommendProfile = ref.watch(candidateRecommendProvider);
+    final listJob = recommendProfile?.job?.split(',');
+    final listEducation = recommendProfile?.education;
 
     return Container(
       decoration: BoxDecoration(
@@ -57,62 +58,109 @@ class _ShowProfileScreen extends ConsumerState<ShowProfileScreen> {
               Row(
                 children: [
                   SizedBox(width: 24),
-                  ClipOval(
-                    child: SizedBox.fromSize(
-                      size: Size.fromRadius(64), // Image radius
-                      child: avatarProfile != ''
-                          ? Image.network(avatarProfile, fit: BoxFit.cover)
-                          : Icon(
-                        Icons.no_accounts_outlined,
-                        size: 256,
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: ClipOval(
+                      child: SizedBox.fromSize(
+                        size: Size.fromRadius(64),
+                        child: avatarProfile != ''
+                            ? Image.network(avatarProfile, fit: BoxFit.cover)
+                            : Icon(
+                          Icons.no_accounts_outlined,
+                          size: 128,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(width: 32),
                   Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppOutlineText(
-                            text: profile?.fullName ?? '',
-                            fontSize: 22,
-                            strokeWidth: 2,
-                          ),
-                          Text(
-                            '${Keystring.BIRTHDAY.tr}: ${profile?.birthday ?? ''}',
-                            style: textNormal,
-                          )
-                        ],
-                      )),
+                      child: AppOutlineText(
+                        text: profile?.fullName ?? '',
+                        fontSize: 22,
+                        strokeWidth: 2,
+                      ),),
                   SizedBox(width: 24),
                 ],
               ),
               SizedBox(height: 32),
               EditTextForm(
                 onChanged: (value) => (),
-                label: Keystring.EMAIL.tr,
+                label: Keystring.BIRTHDAY.tr,
                 content:
-                profile?.email ?? ref.watch(emailProfileProvider) ?? '',
+                profile?.birthday ?? '',
                 readOnly: true,
               ),
               SizedBox(height: 24),
               EditTextForm(
                 onChanged: (value) => (),
-                label: Keystring.PHONE.tr,
-                content: profile?.phone ?? '',
+                label: Keystring.GENDER.tr,
+                content:
+                profile?.email ?? ref.watch(emailProfileProvider) ?? '',
                 readOnly: true,
               ),
               SizedBox(height: 24),
               AppBorderFrame(
                   labelText: Keystring.ADDRESS.tr,
-                  child: Expanded(
-                    child: Text('${getWardName(profile!.address!.substring(profile!.address!.indexOf(',') + 1,
-                        profile!.address!.indexOf(',', profile!.address!.indexOf(',') + 1)), ref)},'
-                        '${getDistrictName(profile!.address!.substring(
-                        profile!.address!.lastIndexOf(',', profile!.address!.lastIndexOf(',') - 1) + 1,
-                        profile!.address!.lastIndexOf(',')), ref)},'
-                        '${getProvinceName(profile!.address!.substring(profile.address!.lastIndexOf(',') + 1), ref)}',style: textNormal,),
-                  )
+                  child: Text('${getWardName(profile!.address!.substring(profile!.address!.indexOf(',') + 1,
+                      profile!.address!.indexOf(',', profile!.address!.indexOf(',') + 1)), ref)}, '
+                      '${getDistrictName(profile!.address!.substring(
+                      profile!.address!.lastIndexOf(',', profile!.address!.lastIndexOf(',') - 1) + 1,
+                      profile!.address!.lastIndexOf(',')), ref)},\n'
+                      '${getProvinceName(profile!.address!.substring(profile.address!.lastIndexOf(',') + 1), ref)}',style: textNormal,)
+              ),
+              SizedBox(height: 24),
+              AppBorderFrame(
+                labelText: Keystring.WANT_JOB.tr,
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (_, index) {
+                    return Card(
+                      shadowColor: Colors.grey,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      elevation: 2,
+                      child: ListTile(
+                        title: Text(
+                          listJob?[index] ?? '',
+                          overflow: TextOverflow.fade,
+                          maxLines: 2,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: listJob?.length,
+                ),
+              ),
+              SizedBox(height: 24),
+              AppBorderFrame(
+                labelText: Keystring.EDUCATION.tr,
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (_, index) {
+                    return Card(
+                      shadowColor: Colors.grey,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      elevation: 2,
+                      child: ListTile(
+                        title: Text(
+                            (Get.locale!.languageCode == 'en'
+                                ? listEducation![index].title_en
+                                : listEducation![index].title) ??
+                                '',
+                          overflow: TextOverflow.fade,
+                          maxLines: 2,
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: listEducation?.length,
+                ),
               ),
               SizedBox(height: 32),
             ],

@@ -388,8 +388,4 @@ class AddConverstationErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
-  final String? error;
 
-  @override
-  List<Object> get props => [error ?? ''];
-}

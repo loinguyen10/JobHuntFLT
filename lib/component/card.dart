@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
+import '../screen/report/report_user.dart';
 import '../value/style.dart';
 
 class AppCompanyCard extends StatefulWidget {
@@ -521,7 +522,12 @@ class _AppCandidateProfileCardState extends State<AppCandidateProfileCard> {
           Container(
             child: GestureDetector(
               onTap: () {
-                //
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ReportUserScreen(userDetail: widget.candidate),
+                    ));
               },
               child: Icon(
                 Icons.report,

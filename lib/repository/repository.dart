@@ -609,16 +609,18 @@ class InsideService {
 
   Future<dynamic> getRecuiterApplication(
     String companyId,
-    String searchWord,
+    String jobId,
     String approve,
     String sentTime,
   ) async {
     final msg = jsonEncode({
       'companyId': companyId,
-      'search_word': searchWord,
+      'jobId': jobId,
       'approve': approve,
       'sent_time': sentTime,
     });
+
+    log(msg);
 
     Response response = await post(
       Uri.parse(BASE_URL + "application/recuiter_application.php"),
@@ -1005,5 +1007,105 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> clickViewPlus(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}job/view_click.php"), body: msg);
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> creatReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    final msg = jsonEncode({
+      'report_sender_id': report_sender_id,
+      'reported_persons_id': reported_persons_id,
+      'title': title,
+      'description': description,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}report/create_report.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkCount(
+    String userId,
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'user_id': userId,
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}count/check_count.php"), body: msg);
+
+    return jsonDecode(response.body);
+  }
+
+  Future<dynamic> addCount(
+    String userId,
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'user_id': userId,
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}count/add_count.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> addMessage(
+    String userId,
+    String companyId,
+    String content,
+    String send,
+  ) async {
+    final msg = jsonEncode({
+      'userId': userId,
+      'companyId': companyId,
+      'content': content,
+      'send': send,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}message/add_message.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> addConverstation(
+    String id,
+    String userId,
+    String companyId,
+    String content,
+  ) async {
+    final msg = jsonEncode({
+      'id': id,
+      'userId': userId,
+      'companyId': companyId,
+      'content': content,
+    });
+
+    Response response = await post(
+        Uri.parse("${BASE_URL}message/add_conversation.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

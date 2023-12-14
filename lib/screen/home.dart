@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,11 +50,13 @@ class HomeScreen extends ConsumerWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: profile?.level == 'Premium'
+                        color: profile?.level == 'Premium' ||
+                                company?.level == 'Premium'
                             ? Colors.yellow
                             : Colors.transparent,
                         width: 4.0,
                       ),
+                      color: Colors.white,
                     ),
                     child: ClipOval(
                       child: SizedBox.fromSize(
@@ -122,7 +126,9 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Theme.of(context).colorScheme.secondary,
+        decoration: BoxDecoration(
+          gradient: bgGradientColor4,
+        ),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: widget.company == null
@@ -346,6 +352,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AppSquareHomeCard(
+                                width: MediaQuery.of(context).size.width / 2.25,
                                 icon: Icons.description_outlined,
                                 title: Keystring.CV_Month.tr,
                                 count: ref
@@ -358,6 +365,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 bgColor: Colors.greenAccent,
                               ),
                               AppSquareHomeCard(
+                                width: MediaQuery.of(context).size.width / 2.25,
                                 icon: CupertinoIcons.briefcase,
                                 title: Keystring.ACTIVE_JOB.tr,
                                 count: ref

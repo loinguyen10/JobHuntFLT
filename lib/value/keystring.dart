@@ -202,4 +202,26 @@ class Keystring {
   static const String DATE_CREATED = 'Date_Created';
   static const String STT = 'STT';
   static const String TERM = 'Term';
+  static const String REPORT_COMPANY_REMINDER = 'Report_Company_Reminder';
+  static const String REPORTING_REASON = 'Reporting_Reason';
+  static const String OTHER_REASONS = 'Other_Reasons';
+  static const String ONE_REASON = 'One_Reason';
+  static const String TWO_REASON = 'Two_Reason';
+  static const String THREE_REASON = 'Three_Reason';
+  static const String REPORT = 'Report';
+  static const String WANT_EXIT = 'Want_Exit';
+  static const String VIEW_PROFILE = 'View_Profile';
+  static const String HAS = 'Has';
+  static const String candidate_apply_job = 'candidate_apply_job';
+  static const String candidate_upload_cv = 'candidate_upload_cv';
+  static const String recruiter_post_job = 'recruiter_post_job';
+  static const String recruiter_job_appication = 'recruiter_job_appication';
+  static const String recruiter_edit_job_ = 'recruiter_edit_job_';
+  static const String WARNING = 'Warning';
+  static const String CV_FULL = 'CV_Full';
+  static const String REPORT_USER_REMINDER = 'Report_User_Reminder';
+  static const String TWO_REASON_2 = 'Two_Reason_2';
+  static const String SPLASH_TITLE = 'Splash_Title';
+  static const String SPLASH_TILE = 'Splash_Tile';
+  static const String GET_STARTED = 'Get_Started';
 }

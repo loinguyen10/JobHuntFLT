@@ -213,6 +213,28 @@ class LocaleString extends Translations {
           'STT': '#',
           'Term':
               '\t\t\tBy accessing or using the FPL Work software, services, or any applications provided by FPL Work (jobshunt.info), collectively referred to as "Services," regardless of the means of access, you agree to be bound by these Terms of Use ("Terms"). The Services are owned or controlled by FPL Work, and these Terms affect your legal rights and obligations. If you do not agree to be bound by all of these Terms, do not access or use the Services. If you have any questions regarding these Terms, please contact us.\n\t\t\tWe may update these Terms of Use over time for legal reasons or to allow for the proper functioning of the FPL Work software. Any changes will be notified to you through an appropriate notice on our website. These changes will apply to the use of the FPL Work website. After we have notified you, if you do not wish to accept the updated Terms of Use, you should not continue to use the FPL Work software. If you continue to use the FPL Work software after the Terms of Use are updated, you must accept FPL Work\'s Terms of Use by choosing to agree through the notice displayed on our website when the changes are applied.',
+          'Reporting_Reason': 'Reason',
+          'Other_Reasons': 'Other reasons',
+          'One_Reason': 'This post has signs of fraud',
+          'Two_Reason': 'The informations are incorrect',
+          'Three_Reason': 'Fill in your reason',
+          'Report': 'Report',
+          'Report_Company_Reminder':
+              'Learn carefully about the recruiting company and the position you want to apply for. Be cautious about issues such as requiring fees or unclear, ambiguous contracts. If you have any problem in the company\'s job posting, please report them to us.',
+          'Want_Exit': 'Do you want to exit?',
+          'View_Profile': 'View Profile',
+          'Has': 'Has',
+          'Warning':
+              'You have reached the limit of this function. Please update PREMIUM if you want to continue.',
+          'CV_Full':
+              'You have reached the limit of CV Manager (Max 3 CVs/account). Please update PREMIUM if you want to save more.',
+          'Report_User_Reminder':
+              'Learn carefully about the candidate you want to accept. Be cautious about issues such as spam, abuse or harrassment action. If you have any problem of this candidate, please report them to us.',
+          'Two_Reason_2': 'Abuse or harrassment action',
+          'Splash_Title': 'Find a perfect job',
+          'Splash_Tile':
+              'Find your dream job is easier and faster with FPLWork',
+          'Get_Started': 'Let\'s Get Started',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -271,7 +293,7 @@ class LocaleString extends Translations {
           'Read_Accepted': 'Tôi đã đọc và chấp thuận',
           'Terms_Conditions': 'Các điều khoản dịch vụ',
           'Candidate': 'Ứng viên',
-          'Recuiter': 'Nhà tuyển dụng',
+          'Recruiter': 'Nhà tuyển dụng',
           'Remember': 'Ghi nhớ',
           'Forget_Pass': 'Quên mật khẩu',
           'Need_Same_Pass': '2 mật khẩu phải trùng nhau',
@@ -326,7 +348,7 @@ class LocaleString extends Translations {
           'Approve': 'Chấp thuận',
           'Reject': 'Từ chối',
           'Company': 'Công ty',
-          'Sent_Time': 'Tời gian gửi',
+          'Sent_Time': 'Thời gian gửi',
           'Status': 'Trạng thái',
           'View_Job': 'Xem công việc',
           'View_All': 'Xem tất cả',
@@ -422,6 +444,28 @@ class LocaleString extends Translations {
           'STT': 'STT',
           'Term':
               '\t\t\tBằng cách truy cập hoặc sử dụng phần mềm FPL Work, các dịch vụ, hoặc bất kỳ ứng dụng nào do FPL Work (jobshunt.ino) cung cấp (gọi chung là "Dịch vụ"), dù truy cập bằng cách nào, bạn đồng ý chịu sự ràng buộc của Điều Khoản Sử Dụng với Người dùng này ("Điều Khoản Sử Dụng"). Dịch vụ do FPL Work sở hữu hoặc kiểm soát. Các Điều Khoản Sử Dụng này ảnh hưởng đến quyền và nghĩa vụ pháp lý của bạn. Nếu bạn không đồng ý chịu sự ràng buộc của tất cả các Điều Khoản Sử Dụng này, bạn không truy cập hay sử dụng Dịch vụ. Nếu Bạn có bất kỳ câu hỏi nào liên quan đến Điều Khoản này, vui lòng liên hệ chúng tôi.\n\t\t\tChúng tôi có thể cập nhật Điều Khoản Sử Dụng này theo thời gian vì các lý do pháp lý hoặc theo quy định hoặc để cho phép hoạt động thích hợp của phần mềm FPL Work. Mọi thay đổi sẽ được thông báo tới bạn bằng một thông báo phù hợp trên trang web của chúng tôi. Những thay đổi này sẽ áp dụng cho việc sử dụng trang web FPL Work. Sau khi chúng tôi đã thông báo đến bạn, Nếu bạn không muốn chấp nhận Điều Khoản Sử Dụng sau khi được cập nhật, bạn không nên tiếp tục sử dụng phần mềm FPL Work. Nếu bạn tiếp tục sử dụng phần mềm FPL Work kể từ ngày Điều Khoản Sử Dụng được cập nhật, bạn phải chấp thuận Điều Khoản Sử Dụng của FPL Work bằng cách lựa chọn đồng ý thông qua thông báo được hiển thị trên trang web của chúng tôi khi áp dụng các thay đổi.',
+          'Reporting_Reason': 'Lý do báo cáo',
+          'Other_Reasons': 'Lý do khác',
+          'One_Reason': 'Bài đăng có dấu hiệu lừa đảo',
+          'Two_Reason': 'Thông tin không chính xác',
+          'Three_Reason': 'Điền lý do của bạn vào đây',
+          'Report': 'Báo cáo',
+          'Report_Company_Reminder':
+              'Hãy tìm hiểu kỹ về công ty tuyển dụng và công việc bạn muốn ứng tuyển. Bạn nên cẩn trọng với những vấn đề như yêu cầu nộp phí, hoặc những hợp động mập mờ, không rõ ràng. Nếu bạn thấy rằng tin tuyển dụng của công ty này có sai phạm, hãy phán ánh với chúng tôi.',
+          'Want_Exit': 'Bạn có muốn thoát?',
+          'View_Profile': 'Xem Hồ Sơ',
+          'Has': 'Có',
+          'Warning':
+              'Bạn đã đạt đến giới hạn của chức năng này. Vui lòng nâng cấp CAO CẤP nếu bạn muốn tiếp tục.',
+          'CV_Full':
+              'Bạn đã đạt đến giới hạn của Quản lý CV (Tối đa 3 CV/tài khoản). Vui lòng nâng cấp CAO CẤP nếu bạn muốn lưu trữ thêm.',
+          'Report_User_Reminder':
+              'Hãy tìm hiểu kỹ về ứng viên bạn muốn ứng tuyển. Bạn nên cẩn trọng với những vấn đề như spam, những hành động quấy rối, lạm dụng. Nếu bạn thấy rằng ứng viên này có sai phạm, hãy phán ánh với chúng tôi.',
+          'Two_Reason_2': 'Hành động quấy rối, lạm dụng',
+          'Splash_Title': 'Tìm công việc ước mơ',
+          'Splash_Tile':
+              'Tìm công việc mơ ước thật dễ dàng và nhanh chóng với FPLWork',
+          'Get_Started': 'Bắt đầu nào',
         },
       };
 }

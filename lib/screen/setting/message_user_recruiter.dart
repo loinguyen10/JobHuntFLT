@@ -249,10 +249,10 @@ class MessageScreen extends ConsumerWidget {
                           if (!message.isEmpty) {
                             if (role == 'candidate') {
                               sendMessage(message, uid ?? '',
-                                  receiverUid.toString(), role ?? '');
+                                  receiverUid.toString(), role ?? '',ref);
                             } else if (role == 'recruiter') {
                               sendMessage(message, receiverUid.toString(),
-                                  uid ?? '', role ?? '');
+                                  uid ?? '', role ?? '',ref);
                             }
                             _messageController.clear();
                           }
@@ -271,7 +271,7 @@ class MessageScreen extends ConsumerWidget {
   }
 
   void sendMessage(
-      String content, String senderUid, String receiverUid, String role) async {
+      String content, String senderUid, String receiverUid, String role,WidgetRef ref) async {
     try {
       Timestamp timestamp = Timestamp.now();
       // if (role == 'candidate') {
@@ -285,7 +285,8 @@ class MessageScreen extends ConsumerWidget {
         await FirebaseFirestore.instance.collection('chats').add(messageData);
 
         print('Đã gửi tin nhắn thành công'+senderUid+'&&'+receiverUid);
-        AddConversation(senderUid, receiverUid, content, timestamp,role);
+        ref.watch(LoginControllerProvider.notifier).addMessage(senderUid,receiverUid,content,role);
+        AddConversation(senderUid, receiverUid, content, timestamp,role,ref);
       // } else if (role == 'recruiter') {
       //   Map<String, dynamic> messageData = {
       //     'content': content,
@@ -319,7 +320,7 @@ class MessageScreen extends ConsumerWidget {
   }
 
   void AddConversation(String userUid, String companyUid, String content,
-      Timestamp timestamp,String role) async {
+      Timestamp timestamp,String role,WidgetRef ref) async {
     CollectionReference conversationCollection =
         FirebaseFirestore.instance.collection('conversation');
 
@@ -344,6 +345,15 @@ class MessageScreen extends ConsumerWidget {
             'timestamp': timestamp,
           };
           await conversationCollection.add(conversationData);
+          QuerySnapshot<Object?> existingData = await conversationCollection
+              .where('userUid', isEqualTo: userUid)
+              .where('companyUid', isEqualTo: companyUid)
+              .where('timestamp',isEqualTo: timestamp)
+              .get();
+          if (existingData.docs.isNotEmpty) {
+            QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+            ref.watch(LoginControllerProvider.notifier).addConverstation(existingDoc.id,userUid,companyUid,content);
+          }
         }
       // }else if(role == 'recruiter'){
       //   QuerySnapshot<Object?> existingData = await conversationCollection

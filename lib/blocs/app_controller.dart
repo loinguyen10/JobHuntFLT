@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -927,7 +928,7 @@ class LoginController extends StateNotifier<InsideEvent> {
   }
 
   void getRecuiterApplicationWithSetting(
-    String searchWord,
+    String jobId,
     String statusCheck,
     String sentTime,
   ) async {
@@ -944,7 +945,7 @@ class LoginController extends StateNotifier<InsideEvent> {
       final result =
           await ref.read(authRepositoryProvider).getRecuiterApplication(
                 ref.watch(userLoginProvider)!.uid ?? '0',
-                searchWord,
+                jobId,
                 approve,
                 sentTime,
               );
@@ -1028,19 +1029,13 @@ class LoginController extends StateNotifier<InsideEvent> {
     String status,
     String payment_type,
     String userId,
-      String role,
+    String role,
   ) async {
     state = const HistorypaymentLoadingEvent();
     try {
-
-      final result = await ref.read(authRepositoryProvider).addHistoryPayment(
-            money,
-            date,
-            status,
-            payment_type,
-            userId,
-            role
-          );
+      final result = await ref
+          .read(authRepositoryProvider)
+          .addHistoryPayment(money, date, status, payment_type, userId, role);
 
       if (result == 1) {
         final profile =
@@ -1053,6 +1048,145 @@ class LoginController extends StateNotifier<InsideEvent> {
       }
     } catch (e) {
       state = HistorypaymentErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void clickViewPlusJob(
+    String code,
+  ) async {
+    await ref.read(authRepositoryProvider).clickViewPlus(code);
+  }
+
+  void createReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    state = const CreateReportLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).creatReport(
+            report_sender_id,
+            reported_persons_id,
+            title,
+            description,
+          );
+
+      if (result == 1) {
+        state = const CreateReportSuccessEvent();
+      } else {
+        state = const CreateReportErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CreateReportErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void addMessage(
+    String userId,
+    String companyId,
+    String content,
+    String send,
+  ) async {
+    state = const AddMessageLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).addMessage(
+            userId,
+            companyId,
+            content,
+            send,
+          );
+      if (result == 1) {
+        state = const AddMessageSuccessEvent();
+        print('ket qua them' + result);
+      } else {
+        state = const AddMessageErrorEvent(error: 'error');
+        print('ket qua them' + result);
+      }
+    } catch (e) {
+      state = AddMessageErrorEvent(error: e.toString());
+    }
+    state = const ThingStateEvent();
+  }
+
+  void checkCount(
+    String userId,
+    String title,
+  ) async {
+    state = const ThingLoadingEvent();
+    try {
+      final result = await ref.read(authRepositoryProvider).checkCount(
+            userId,
+            title,
+          );
+
+      final int success = result['success'];
+      final String txtMessage = result['message'];
+
+      if (success == 1) {
+        state = const CheckCountSuccessEvent();
+      } else if (success == 3) {
+        if (txtMessage.substring(txtMessage.lastIndexOf('-') + 1) ==
+            'candidate_cv') {
+          state = const CheckCountOverwriteEvent(messageOverwrite: 'CV full');
+        } else {
+          state = const CheckCountOverwriteEvent();
+        }
+      } else {
+        state = const CheckCountErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = CheckCountErrorEvent(error: e.toString());
+    }
+    state = const ThingStateEvent();
+  }
+
+  void addCount(
+    String userId,
+    String title,
+  ) async {
+    try {
+      final result = await ref.read(authRepositoryProvider).addCount(
+            userId,
+            title,
+          );
+
+      if (result == 1) {
+        state = const AddCountSuccessEvent();
+      } else {
+        state = const AddCountErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = AddCountErrorEvent(error: e.toString());
+    }
+
+    state = const ThingStateEvent();
+  }
+
+  void addConverstation(
+    String id,
+    String userId,
+    String companyId,
+    String content,
+  ) async {
+    state = const AddConverstationLoadingEvent();
+    try {
+      final result = await ref
+          .read(authRepositoryProvider)
+          .addConverstation(id, userId, companyId, content);
+
+      if (result == 1) {
+        state = const AddConverstationSuccessEvent();
+        print('ket qua them' + result);
+      } else {
+        state = const AddConverstationErrorEvent(error: 'error');
+      }
+    } catch (e) {
+      state = AddConverstationErrorEvent(error: e.toString());
     }
 
     state = const ThingStateEvent();

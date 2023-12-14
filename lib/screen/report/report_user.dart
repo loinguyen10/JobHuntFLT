@@ -7,14 +7,16 @@ import '../../blocs/app_controller.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../model/userprofile.dart';
 import '../../value/keystring.dart';
-class ReportUserScreen extends ConsumerStatefulWidget{
+
+class ReportUserScreen extends ConsumerStatefulWidget {
   ReportUserScreen({required this.userDetail, Key? key}) : super(key: key);
   final UserProfileDetail? userDetail;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ReportUserScreen();
 }
-class _ReportUserScreen extends ConsumerState<ReportUserScreen>{
+
+class _ReportUserScreen extends ConsumerState<ReportUserScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -40,7 +42,7 @@ class _ReportUserScreen extends ConsumerState<ReportUserScreen>{
               ),
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(Keystring.REPORT_COMPANY_REMINDER.tr)),
+                  child: Text(Keystring.REPORT_USER_REMINDER.tr)),
             ),
             SizedBox(
               width: 10,
@@ -95,10 +97,10 @@ class _ReportUserScreen extends ConsumerState<ReportUserScreen>{
               ),
             ),
             ListTile(
-              title: Text(Keystring.TWO_REASON.tr),
+              title: Text(Keystring.TWO_REASON_2.tr),
               leading: Radio(
                 activeColor: Theme.of(context).colorScheme.primary,
-                value: 'Incorrect information',
+                value: 'Abuse or harrassment action',
                 groupValue: _reason,
                 onChanged: (value) {
                   ref.read(ReportingReasonProvider.notifier).state = value!;
@@ -122,29 +124,29 @@ class _ReportUserScreen extends ConsumerState<ReportUserScreen>{
             ),
             checkOtherReasons
                 ? Container(
-              height: 100,
-              margin: EdgeInsets.only(left: 10, right: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: TextField(
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    hintText: Keystring.THREE_REASON.tr,
-                    border: InputBorder.none,
-                  ),
-                  onChanged: ((value) {
-                    ref
-                        .read(OtherReportingReasonProvider.notifier)
-                        .state = value;
-                    log(value);
-                  }),
-                ),
-              ),
-            )
+                    height: 100,
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: TextField(
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          hintText: Keystring.THREE_REASON.tr,
+                          border: InputBorder.none,
+                        ),
+                        onChanged: ((value) {
+                          ref
+                              .read(OtherReportingReasonProvider.notifier)
+                              .state = value;
+                          log(value);
+                        }),
+                      ),
+                    ),
+                  )
                 : Container(),
             SizedBox(
               height: 20,
@@ -180,8 +182,8 @@ class _ReportUserScreen extends ConsumerState<ReportUserScreen>{
       ),
     ));
   }
-
 }
+
 void showSuccessDialog(BuildContext context) {
   showDialog(
     context: context,

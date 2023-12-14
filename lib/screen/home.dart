@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -348,6 +350,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AppSquareHomeCard(
+                                width: MediaQuery.of(context).size.width / 2.25,
                                 icon: Icons.description_outlined,
                                 title: Keystring.CV_Month.tr,
                                 count: ref
@@ -360,6 +363,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 bgColor: Colors.greenAccent,
                               ),
                               AppSquareHomeCard(
+                                width: MediaQuery.of(context).size.width / 2.25,
                                 icon: CupertinoIcons.briefcase,
                                 title: Keystring.ACTIVE_JOB.tr,
                                 count: ref

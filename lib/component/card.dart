@@ -681,6 +681,7 @@ class AppSquareHomeCard extends StatefulWidget {
     required this.title,
     required this.count,
     required this.icon,
+    this.width = 185,
     this.bgColor = Colors.black,
   });
 
@@ -688,6 +689,7 @@ class AppSquareHomeCard extends StatefulWidget {
   final String title;
   final String count;
   final IconData icon;
+  final double width;
 
   @override
   State<AppSquareHomeCard> createState() => _AppSquareHomeCardState();
@@ -700,7 +702,7 @@ class _AppSquareHomeCardState extends State<AppSquareHomeCard> {
       elevation: 7,
       shadowColor: Colors.black,
       child: Container(
-        width: 163,
+        width: widget.width,
         padding: EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(

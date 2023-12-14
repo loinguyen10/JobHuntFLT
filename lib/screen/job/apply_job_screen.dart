@@ -94,7 +94,7 @@ class ApplyJobScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent) {
+        if (state is CreateThingErrorEvent || state is CheckCountErrorEvent) {
           Loader.hide();
           log('error2');
           Fluttertoast.showToast(
@@ -110,6 +110,12 @@ class ApplyJobScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success1');
+          if (ref.watch(userProfileProvider)?.level != 'Premium') {
+            ref.read(LoginControllerProvider.notifier).addCount(
+                  ref.watch(userLoginProvider)?.uid ?? '',
+                  Keystring.candidate_apply_job,
+                );
+          }
           Fluttertoast.showToast(
               msg: Keystring.SUCCESSFUL.tr,
               toastLength: Toast.LENGTH_SHORT,
@@ -121,7 +127,40 @@ class ApplyJobScreen extends ConsumerWidget {
           Navigator.pop(context);
         }
 
-        if (state is CreateThingLoadingEvent) {
+        if (state is CheckCountSuccessEvent) {
+          ref.read(LoginControllerProvider.notifier).createApplication(
+                CVChoose?.cvUrl ?? '',
+                job?.code ?? '',
+                ref.watch(userLoginProvider)!.uid ?? '',
+                job?.company!.uid ?? '',
+              );
+        }
+
+        if (state is CheckCountOverwriteEvent) {
+          Loader.hide();
+          log('error3');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(
+                  Keystring.WARNING.tr,
+                  style: textNormal,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingLoadingEvent || state is ThingLoadingEvent) {
           Loader.show(context);
         }
       },
@@ -187,15 +226,29 @@ class ApplyJobScreen extends ConsumerWidget {
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () {
-                                    ref
-                                        .read(LoginControllerProvider.notifier)
-                                        .createApplication(
-                                          CVChoose?.cvUrl ?? '',
-                                          job.code ?? '',
-                                          ref.watch(userLoginProvider)!.uid ??
-                                              '',
-                                          job.company!.uid ?? '',
-                                        );
+                                    if (ref.watch(userProfileProvider)?.level ==
+                                        'Premium') {
+                                      ref
+                                          .read(
+                                              LoginControllerProvider.notifier)
+                                          .createApplication(
+                                            CVChoose?.cvUrl ?? '',
+                                            job.code ?? '',
+                                            ref.watch(userLoginProvider)!.uid ??
+                                                '',
+                                            job.company!.uid ?? '',
+                                          );
+                                    } else {
+                                      ref
+                                          .read(
+                                              LoginControllerProvider.notifier)
+                                          .checkCount(
+                                              ref
+                                                      .watch(userLoginProvider)!
+                                                      .uid ??
+                                                  '',
+                                              Keystring.candidate_apply_job);
+                                    }
                                     Navigator.pop(context);
                                   },
                                   child: Text(Keystring.CONFIRM.tr),

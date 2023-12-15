@@ -204,7 +204,7 @@ class RecuiterEditScreen extends ConsumerWidget {
         }
       }
 
-      return words.join(' ');
+      return words.join(' ').trim();
     }
 
 //upload
@@ -393,7 +393,7 @@ class RecuiterEditScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success');
-          Get.offAll(HomeScreen());
+          Get.offAll(() => HomeScreen());
         }
 
         if (state is UpdateThingSuccessEvent) {
@@ -644,14 +644,15 @@ class RecuiterEditScreen extends ConsumerWidget {
               SizedBox(height: 32),
               AppButton(
                 onPressed: () {
-                  log('${user!.uid} + ${ref.watch(fullNameCompanyProvider)} + ${ref.watch(phoneCompanyProvider)} + ${ref.watch(websiteCompanyProvider)} + ${provinceChoose!.code} + ${districtChoose!.code} + ${wardChoose!.code} + ${ref.watch(roadCompanyProvider)} + ${ref.watch(jobCompanyProvider)}  + ${ref.watch(descriptionCompanyProvider)}');
+                  log(ref.watch(taxCodeCompanyProvider));
+
                   if (ref.watch(fullNameCompanyProvider).isNotEmpty &&
                       ref.watch(phoneCompanyProvider).isNotEmpty &&
                       ref.watch(websiteCompanyProvider).isNotEmpty &&
                       ref.watch(taxCodeCompanyProvider).isNotEmpty &&
-                      provinceChoose.code != null &&
-                      districtChoose.code != null &&
-                      wardChoose.code != null &&
+                      provinceChoose!.code != null &&
+                      districtChoose!.code != null &&
+                      wardChoose!.code != null &&
                       ref.watch(roadCompanyProvider).isNotEmpty &&
                       listJob.isNotEmpty &&
                       ref.watch(descriptionCompanyProvider).isNotEmpty) {
@@ -694,7 +695,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                         ref
                             .read(LoginControllerProvider.notifier)
                             .createCompany(
-                              user.uid ?? '0',
+                              user!.uid ?? '0',
                               ref.watch(fullNameCompanyProvider),
                               ref.watch(avatarCompanyProvider),
                               ref.watch(emailCompanyProvider),
@@ -710,7 +711,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                         ref
                             .read(LoginControllerProvider.notifier)
                             .updateCompany(
-                              user.uid ?? '0',
+                              user!.uid ?? '0',
                               ref.watch(fullNameCompanyProvider),
                               ref.watch(avatarCompanyProvider),
                               company?.email ?? '',

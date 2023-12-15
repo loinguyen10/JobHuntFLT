@@ -197,7 +197,7 @@ class JobEditScreen extends ConsumerWidget {
         }
       }
 
-      return words.join(' ');
+      return words.join(' ').trim();
     }
 
 //void

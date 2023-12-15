@@ -196,7 +196,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
         }
       }
 
-      return words.join(' ');
+      return words.join(' ').trim();
     }
 
     //listen

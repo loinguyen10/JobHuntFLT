@@ -186,6 +186,7 @@ class LoginController extends StateNotifier<InsideEvent> {
   ) async {
     state = const CreateThingLoadingEvent();
     try {
+      log('$avatar_url');
       if (avatar_url.isEmpty) {
         final result = await ref.read(authRepositoryProvider).createCompany(
               uid,
@@ -211,7 +212,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         }
       } else {
         FormData formData = FormData.fromMap({
-          "file": await MultipartFile.fromFile(avatar_url,
+          "uploadedfile": await MultipartFile.fromFile(avatar_url,
               filename: "img_id${uid}_company_profile_avatar.jpg")
         });
         Response response = await Dio().post(
@@ -326,10 +327,10 @@ class LoginController extends StateNotifier<InsideEvent> {
       if (avatar_url.substring(0, 8) != 'https://') {
         FormData formData = FormData.fromMap({
           "uploadedfile": await MultipartFile.fromFile(avatar_url,
-              filename: "img_id${uid}_user_profile_avatar.jpg")
+              filename: "img_id${uid}_company_profile_avatar.jpg")
         });
         Response response = await Dio().post(
-            "$BASE_URL/profile/upload_profile_avatar.php",
+            "$BASE_URL/company/upload_company_avatar.php",
             data: formData);
         log('$response');
         if (jsonDecode(response.data)['success'] != 1) {

@@ -148,7 +148,7 @@ final websiteCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.web ?? "");
 
 final taxCodeCompanyProvider =
-    StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.taxcode ?? "");
 
 final phoneCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
@@ -191,8 +191,11 @@ final wardCompanyProvider = StateProvider.autoDispose<WardList?>((ref) {
     var address = ref.watch(companyProfileProvider)?.address;
 
     for (var x in list!) {
-      if (address?.substring(address.indexOf(',') + 1,
-              address.indexOf(',', address.indexOf(',') + 1)) ==
+      final last = address!.lastIndexOf(',');
+      if (address.substring(
+              address.lastIndexOf(',', address.lastIndexOf(',', last - 1) - 1) +
+                  1,
+              address.lastIndexOf(',', last - 1)) ==
           x.code) {
         return x;
       }

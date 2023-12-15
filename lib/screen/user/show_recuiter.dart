@@ -204,7 +204,7 @@ class RecuiterEditScreen extends ConsumerWidget {
         }
       }
 
-      return words.join(' ');
+      return words.join(' ').trim();
     }
 
 //upload

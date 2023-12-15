@@ -118,13 +118,17 @@ class MenuScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        profile == null && company == null
-                            ? Keystring.GUEST.tr
-                            : profile != null
-                                ? profile.fullName ?? ''
-                                : company?.fullname ?? '',
-                        style: textNameMenu,
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          profile == null && company == null
+                              ? Keystring.GUEST.tr
+                              : profile != null
+                                  ? profile.fullName ?? ''
+                                  : company?.fullname ?? '',
+                          style: textNameMenu,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       SizedBox(
                         height: profile == null && company == null ? 0 : 8,
@@ -162,6 +166,11 @@ class MenuScreen extends ConsumerWidget {
                             onTap: () {
                               log('click profile');
                               if (profile != null) {
+                                ref.invalidate(provinceChooseProvider);
+                                ref.invalidate(districtChooseProvider);
+                                ref.invalidate(wardChooseProvider);
+                                ref.invalidate(avatarProfileProvider);
+                                ref.invalidate(dateBirthProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -171,6 +180,10 @@ class MenuScreen extends ConsumerWidget {
                                 );
                               } else if (company != null) {
                                 ref.invalidate(listJobTagCompanyProvider);
+                                ref.invalidate(provinceCompanyProvider);
+                                ref.invalidate(districtCompanyProvider);
+                                ref.invalidate(wardCompanyProvider);
+                                ref.invalidate(avatarCompanyProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

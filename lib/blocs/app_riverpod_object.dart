@@ -15,8 +15,8 @@ import '../model/job_setting.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
-final emailLoginProvider = StateProvider((ref) => '');
-final passwordLoginProvider = StateProvider((ref) => '');
+// final emailLoginProvider = StateProvider((ref) => '');
+// final passwordLoginProvider = StateProvider((ref) => '');
 final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
 final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
@@ -141,7 +141,7 @@ final fullNameCompanyProvider =
 
 final emailCompanyProvider = StateProvider((ref) =>
     ref.watch(companyProfileProvider)?.email ??
-    ref.watch(emailLoginProvider) ??
+    ref.watch(userLoginProvider)?.email ??
     '');
 
 final websiteCompanyProvider =

@@ -127,7 +127,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: bgGradientColor4,
+          gradient: bgGradientColorHome,
         ),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(

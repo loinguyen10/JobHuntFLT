@@ -29,6 +29,7 @@ class MessageScreen extends ConsumerWidget {
       return text.substring(0, maxLength) + '...';
     }
   }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isShowTime = ref.watch(isShowTimeProvider);
@@ -40,7 +41,7 @@ class MessageScreen extends ConsumerWidget {
     String? receiverUid = Uid;
     List<CompanyDetail> listCompany = [];
     List<UserProfileDetail> listUser = [];
-    print('sendUid'+Uid);
+    print('sendUid' + Uid);
     if (role == 'candidate') {
       final listCompanyData = ref.watch(listCompanyProvider);
       listCompanyData.when(
@@ -51,10 +52,8 @@ class MessageScreen extends ConsumerWidget {
         loading: () => const CircularProgressIndicator(),
       );
       for (var c in listCompany) {
-        if (Uid ==
-            c.uid) {
-          print(
-              'idid: ${Uid} & ${c.uid}');
+        if (Uid == c.uid) {
+          print('idid: ${Uid} & ${c.uid}');
           avatar = c.avatarUrl ?? '';
           name = c.fullname ?? '';
         }
@@ -70,10 +69,8 @@ class MessageScreen extends ConsumerWidget {
         loading: () => const CircularProgressIndicator(),
       );
       for (var c in listUser) {
-        if (Uid ==
-            c.uid) {
-          print(
-              'idid: ${Uid} & ${c.uid}');
+        if (Uid == c.uid) {
+          print('idid: ${Uid} & ${c.uid}');
           avatar = c.avatarUrl ?? '';
           name = c.displayName ?? '';
         }
@@ -112,7 +109,7 @@ class MessageScreen extends ConsumerWidget {
             ),
             SizedBox(width: 10), // Để tạo khoảng cách giữa avatar và tiêu đề
             Text(
-              truncateText(name,18),
+              truncateText(name, 18),
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -180,17 +177,19 @@ class MessageScreen extends ConsumerWidget {
                             },
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: filteredMessages[index]['send'] == role
-                                  ? CrossAxisAlignment.end
-                                  : CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                                  filteredMessages[index]['send'] == role
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 8),
                                   decoration: BoxDecoration(
-                                    color: filteredMessages[index]['send'] == role
-                                        ? appPrimaryColor
-                                        : Colors.grey,
+                                    color:
+                                        filteredMessages[index]['send'] == role
+                                            ? appPrimaryColor
+                                            : Colors.grey,
                                     borderRadius: BorderRadius.circular(28.0),
                                   ),
                                   child: Padding(
@@ -249,10 +248,10 @@ class MessageScreen extends ConsumerWidget {
                           if (!message.isEmpty) {
                             if (role == 'candidate') {
                               sendMessage(message, uid ?? '',
-                                  receiverUid.toString(), role ?? '',ref);
+                                  receiverUid.toString(), role ?? '', ref);
                             } else if (role == 'recruiter') {
                               sendMessage(message, receiverUid.toString(),
-                                  uid ?? '', role ?? '',ref);
+                                  uid ?? '', role ?? '', ref);
                             }
                             _messageController.clear();
                           }
@@ -270,23 +269,25 @@ class MessageScreen extends ConsumerWidget {
     );
   }
 
-  void sendMessage(
-      String content, String senderUid, String receiverUid, String role,WidgetRef ref) async {
+  void sendMessage(String content, String senderUid, String receiverUid,
+      String role, WidgetRef ref) async {
     try {
       Timestamp timestamp = Timestamp.now();
       // if (role == 'candidate') {
-        Map<String, dynamic> messageData = {
-          'content': content,
-          'userUid': senderUid,
-          'companyUid': receiverUid,
-          'send': role,
-          'timestamp': timestamp,
-        };
-        await FirebaseFirestore.instance.collection('chats').add(messageData);
+      Map<String, dynamic> messageData = {
+        'content': content,
+        'userUid': senderUid,
+        'companyUid': receiverUid,
+        'send': role,
+        'timestamp': timestamp,
+      };
+      await FirebaseFirestore.instance.collection('chats').add(messageData);
 
-        print('Đã gửi tin nhắn thành công'+senderUid+'&&'+receiverUid);
-        ref.watch(LoginControllerProvider.notifier).addMessage(senderUid,receiverUid,content,role);
-        AddConversation(senderUid, receiverUid, content, timestamp,role,ref);
+      print('Đã gửi tin nhắn thành công' + senderUid + '&&' + receiverUid);
+      ref
+          .watch(LoginControllerProvider.notifier)
+          .addMessage(senderUid, receiverUid, content, role);
+      AddConversation(senderUid, receiverUid, content, timestamp, role, ref);
       // } else if (role == 'recruiter') {
       //   Map<String, dynamic> messageData = {
       //     'content': content,
@@ -320,63 +321,65 @@ class MessageScreen extends ConsumerWidget {
   }
 
   void AddConversation(String userUid, String companyUid, String content,
-      Timestamp timestamp,String role,WidgetRef ref) async {
+      Timestamp timestamp, String role, WidgetRef ref) async {
     CollectionReference conversationCollection =
         FirebaseFirestore.instance.collection('conversation');
 
-      // if(role=='candidate'){
-        QuerySnapshot<Object?> existingData = await conversationCollection
-            .where('userUid', isEqualTo: userUid)
-            .where('companyUid', isEqualTo: companyUid)
-            .get();
-        if (existingData.docs.isNotEmpty) {
-          QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
-          await conversationCollection.doc(existingDoc.id).update({
-            'userUid': userUid,
-            'companyUid': companyUid,
-            'content': content,
-            'timestamp': timestamp,
-          });
-        } else {
-          Map<String, dynamic> conversationData = {
-            'userUid': userUid,
-            'companyUid': companyUid,
-            'content': content,
-            'timestamp': timestamp,
-          };
-          await conversationCollection.add(conversationData);
-          QuerySnapshot<Object?> existingData = await conversationCollection
-              .where('userUid', isEqualTo: userUid)
-              .where('companyUid', isEqualTo: companyUid)
-              .where('timestamp',isEqualTo: timestamp)
-              .get();
-          if (existingData.docs.isNotEmpty) {
-            QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
-            ref.watch(LoginControllerProvider.notifier).addConverstation(existingDoc.id,userUid,companyUid,content);
-          }
-        }
-      // }else if(role == 'recruiter'){
-      //   QuerySnapshot<Object?> existingData = await conversationCollection
-      //       .where('userUid', isEqualTo: companyUid)
-      //       .where('companyUid', isEqualTo: userUid)
-      //       .get();
-      //   if (existingData.docs.isNotEmpty) {
-      //     QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
-      //     await conversationCollection.doc(existingDoc.id).update({
-      //       'userUid': companyUid,
-      //       'companyUid': userUid,
-      //       'content': content,
-      //       'timestamp': timestamp,
-      //     });
-      //   } else {
-      //     Map<String, dynamic> conversationData = {
-      //       'content': content,
-      //       'timestamp': timestamp,
-      //     };
-      //     await conversationCollection.add(conversationData);
-      //   }
-      // }
-    print('UserId'+userUid+'companyId'+companyUid);
+    // if(role=='candidate'){
+    QuerySnapshot<Object?> existingData = await conversationCollection
+        .where('userUid', isEqualTo: userUid)
+        .where('companyUid', isEqualTo: companyUid)
+        .get();
+    if (existingData.docs.isNotEmpty) {
+      QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+      await conversationCollection.doc(existingDoc.id).update({
+        'userUid': userUid,
+        'companyUid': companyUid,
+        'content': content,
+        'timestamp': timestamp,
+      });
+    } else {
+      Map<String, dynamic> conversationData = {
+        'userUid': userUid,
+        'companyUid': companyUid,
+        'content': content,
+        'timestamp': timestamp,
+      };
+      await conversationCollection.add(conversationData);
+      QuerySnapshot<Object?> existingData = await conversationCollection
+          .where('userUid', isEqualTo: userUid)
+          .where('companyUid', isEqualTo: companyUid)
+          .where('timestamp', isEqualTo: timestamp)
+          .get();
+      if (existingData.docs.isNotEmpty) {
+        QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+        ref
+            .watch(LoginControllerProvider.notifier)
+            .addConverstation(existingDoc.id, userUid, companyUid, content);
+      }
+    }
+    // }else if(role == 'recruiter'){
+    //   QuerySnapshot<Object?> existingData = await conversationCollection
+    //       .where('userUid', isEqualTo: companyUid)
+    //       .where('companyUid', isEqualTo: userUid)
+    //       .get();
+    //   if (existingData.docs.isNotEmpty) {
+    //     QueryDocumentSnapshot<Object?> existingDoc = existingData.docs.first;
+    //     await conversationCollection.doc(existingDoc.id).update({
+    //       'userUid': companyUid,
+    //       'companyUid': userUid,
+    //       'content': content,
+    //       'timestamp': timestamp,
+    //     });
+    //   } else {
+    //     Map<String, dynamic> conversationData = {
+    //       'content': content,
+    //       'timestamp': timestamp,
+    //     };
+    //     await conversationCollection.add(conversationData);
+    //   }
+    // }
+    print('UserId' + userUid + 'companyId' + companyUid);
   }
 }
 
@@ -396,7 +399,6 @@ class _Conversation extends ConsumerState<Conversation> {
     List<CompanyDetail> listCompany = [];
     List<UserProfileDetail> listUserProfile = [];
     final listCompanyData = ref.watch(listCompanyProvider);
-
 
     listCompanyData.when(
       data: (_data) {
@@ -420,10 +422,11 @@ class _Conversation extends ConsumerState<Conversation> {
       DateTime messageTime = timestamp.toDate();
       return DateFormat.Hm().format(messageTime);
     }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(Keystring.YOUR_INBOX.tr),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
           elevation: 0,
           foregroundColor: Theme.of(context).colorScheme.primary,
         ),
@@ -487,7 +490,7 @@ class _Conversation extends ConsumerState<Conversation> {
                       }).toList();
 
                       List<Map<String, dynamic>> filteredconversations =
-                      conversations.where((message) {
+                          conversations.where((message) {
                         if (role == 'candidate') {
                           return message['userUid'] == uid;
                         } else {
@@ -503,7 +506,7 @@ class _Conversation extends ConsumerState<Conversation> {
                         itemBuilder: (context, index) {
                           String avatar = '';
                           String name = '';
-                          if(role == 'candidate'){
+                          if (role == 'candidate') {
                             for (var c in listCompany) {
                               if (filteredconversations[index]['companyUid'] ==
                                   c.uid) {
@@ -513,7 +516,7 @@ class _Conversation extends ConsumerState<Conversation> {
                                 name = c.fullname ?? '';
                               }
                             }
-                          }else if(role == 'recruiter'){
+                          } else if (role == 'recruiter') {
                             for (var c in listUserProfile) {
                               if (filteredconversations[index]['userUid'] ==
                                   c.uid) {
@@ -530,42 +533,47 @@ class _Conversation extends ConsumerState<Conversation> {
                             tileColor: Colors.transparent,
                             title: GestureDetector(
                                 onTap: () {
-                                  if(role=='candidate'){
+                                  if (role == 'candidate') {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              MessageScreen(Uid: filteredconversations[index]['companyUid']??'tùng nà'),
+                                          builder: (context) => MessageScreen(
+                                              Uid: filteredconversations[index]
+                                                      ['companyUid'] ??
+                                                  'tùng nà'),
                                         ));
-                                  }else if(role == 'recruiter')
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            MessageScreen(Uid: filteredconversations[index]['userUid']??'tùng nà'),
-                                      ));
+                                  } else if (role == 'recruiter')
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MessageScreen(
+                                              Uid: filteredconversations[index]
+                                                      ['userUid'] ??
+                                                  'tùng nà'),
+                                        ));
                                 },
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      flex:1,
+                                      flex: 1,
                                       child: SizedBox(
                                         height: 65,
-                                        width:60,
+                                        width: 60,
                                         child: Center(
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(32),
+                                            borderRadius:
+                                                BorderRadius.circular(32),
                                             child: SizedBox.fromSize(
                                               size: Size.fromRadius(32),
                                               child: avatar.isNotEmpty
                                                   ? Image.network(
-                                                avatar,
-                                                fit: BoxFit.cover,
-                                              )
+                                                      avatar,
+                                                      fit: BoxFit.cover,
+                                                    )
                                                   : Icon(
-                                                Icons.apartment,
-                                                size: 32,
-                                              ),
+                                                      Icons.apartment,
+                                                      size: 32,
+                                                    ),
                                             ),
                                           ),
                                         ),
@@ -579,15 +587,29 @@ class _Conversation extends ConsumerState<Conversation> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Container(child: Text(name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
+                                                  Container(
+                                                      child: Text(
+                                                    name,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                  )),
                                                 ],
                                               ),
                                               Row(
                                                 children: [
-                                                Text(truncateText(filteredconversations[index]['content'],20),),
-                                                SizedBox(width: 10),
-                                                Text(formattedTimestamp(filteredconversations[index]['timestamp'])),
-                                              ],
+                                                  Text(
+                                                    truncateText(
+                                                        filteredconversations[
+                                                            index]['content'],
+                                                        20),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text(formattedTimestamp(
+                                                      filteredconversations[
+                                                          index]['timestamp'])),
+                                                ],
                                               )
                                             ],
                                           ),
@@ -605,6 +627,7 @@ class _Conversation extends ConsumerState<Conversation> {
           ],
         ));
   }
+
   String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
       return text;

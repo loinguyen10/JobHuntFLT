@@ -528,14 +528,16 @@ class JobViewScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(height: 16),
                                 AppButton(
-                                  onPressed: () => {
+                                  onPressed: () {
+                                    ref
+                                        .read(companyInforProvider.notifier)
+                                        .state = job.company!;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              CompanyInformation(
-                                                  company: job.company!)),
-                                    )
+                                              CompanyInformation()),
+                                    );
                                   },
                                   height: 40,
                                   label: Keystring.CHECK.tr,

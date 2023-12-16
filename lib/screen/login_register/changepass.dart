@@ -82,7 +82,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
         title: Text(Keystring.Changepass.tr),
         backgroundColor: appPrimaryColor,
         elevation: 0,
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -289,17 +289,17 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       }
     }
 
-    return SafeArea(
-      child: Container(
-        color: Theme.of(context).colorScheme.secondary,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(Keystring.JOB_RECOMMEND_SETTING.tr),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            foregroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          body: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Keystring.JOB_RECOMMEND_SETTING.tr),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.background,
+      ),
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).colorScheme.secondary,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(height: 16),

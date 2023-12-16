@@ -15,16 +15,14 @@ import '../../value/style.dart';
 import '../job/job_view_screen.dart';
 
 class CompanyInformation extends ConsumerWidget {
-  CompanyInformation({required this.company, Key? key}) : super(key: key);
-  CompanyDetail company;
+  CompanyInformation({Key? key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final companyInfor = ref.watch(companyProfileProvider);
     final role = ref.watch(userLoginProvider)?.role;
-    final follow = ref.watch(followingProvider);
+    final company = ref.watch(companyInforProvider);
     final bmCheck = ref.watch(turnFollowOn);
-
 
     double screenWidth = MediaQuery.of(context).size.width;
     // bool isFollow = ref.watch(isCheckFollowCompany);
@@ -380,9 +378,7 @@ class CompanyInformation extends ConsumerWidget {
                             ),
                           ),
                         ],
-                        onTap: (index) {
-
-                        },
+                        onTap: (index) {},
                       ),
                     ),
                     floating: false,
@@ -402,6 +398,8 @@ class CompanyInformation extends ConsumerWidget {
   }
 
   void showUnfollowDialog(BuildContext context, WidgetRef ref) {
+    final company = ref.watch(companyInforProvider);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {

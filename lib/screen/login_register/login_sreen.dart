@@ -43,9 +43,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> saveNextTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('emailSaveNextTime', emailEditingController.text);
+    await prefs.setString(
+        'emailSaveNextTime', emailEditingController.text.toLowerCase());
     await prefs.setString(
         'passwordSaveNextTime', passwordEditingController.text);
+  }
+
+  Future<void> saveEaP(String email, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('saveEmail', emailEditingController.text.toLowerCase());
+    prefs.setString('savePassword', passwordEditingController.text);
   }
 
   @override
@@ -78,7 +85,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (state is SignInSuccessEvent) {
           Loader.hide();
           log('success');
-          saveNextTime();
+          if (ref.watch(checkboxRememberProvider)) {
+            saveEaP(
+                emailEditingController.text, passwordEditingController.text);
+            saveNextTime();
+          }
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -105,12 +116,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         }
       },
     );
-
-    Future<void> saveEaP(String email, String password) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('saveEmail', emailEditingController.text);
-      prefs.setString('savePassword', passwordEditingController.text);
-    }
 
     return Scaffold(
       body: Container(
@@ -199,11 +204,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           minimumSize: Size(double.infinity, 60)),
                       onPressed: () async {
                         log("click button dang nhap");
-                        if (ref.watch(checkboxRememberProvider)) {
-                          saveEaP(emailEditingController.text,
-                              passwordEditingController.text);
-                        }
-
                         ref.read(LoginControllerProvider.notifier).login(
                               emailEditingController.text,
                               passwordEditingController.text,

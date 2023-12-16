@@ -489,6 +489,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         final result =
             await ref.read(authRepositoryProvider).addCV(url, uid, 'upload');
         if (result == 1) {
+          ref.refresh(listYourCVProvider);
           state = const CreateThingSuccessEvent();
         } else {
           state = const CreateThingErrorEvent(error: 'Failed');
@@ -916,7 +917,7 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        ref.refresh(listYourCVProvider);
+        ref.invalidate(listYourCVProvider);
         state = const RemoveCVSuccessEvent();
       } else {
         state = const RemoveCVErrorEvent(error: 'error');

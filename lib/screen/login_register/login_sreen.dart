@@ -14,8 +14,6 @@ import 'package:jobhunt_ftl/screen/login_register/register_screen.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../blocs/app_riverpod_void.dart';
 import '../../value/style.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -37,12 +35,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> loadEaP() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    ref.read(emailLoginProvider.notifier).state =
-        prefs.getString('saveEmail') ?? '';
+    // ref.read(emailLoginProvider.notifier).state = prefs.getString('saveEmail') ?? '';
     emailEditingController.text = prefs.getString('saveEmail') ?? '';
-    ref.read(passwordLoginProvider.notifier).state =
-        prefs.getString('savePassword') ?? '';
+    // ref.read(passwordLoginProvider.notifier).state = prefs.getString('savePassword') ?? '';
     passwordEditingController.text = prefs.getString('savePassword') ?? '';
+  }
+
+  Future<void> saveNextTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('emailSaveNextTime', emailEditingController.text);
+    await prefs.setString(
+        'passwordSaveNextTime', passwordEditingController.text);
   }
 
   @override
@@ -75,6 +78,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (state is SignInSuccessEvent) {
           Loader.hide();
           log('success');
+          saveNextTime();
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -97,18 +101,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         }
 
         if (previous is SignInLoadingEvent && state is ThingStateEvent) {
-          ref.read(LoginControllerProvider.notifier).login(
-                ref.watch(emailLoginProvider),
-                ref.watch(passwordLoginProvider),
-              );
+          //
         }
       },
     );
 
     Future<void> saveEaP(String email, String password) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('saveEmail', ref.watch(emailLoginProvider));
-      prefs.setString('savePassword', ref.watch(passwordLoginProvider));
+      prefs.setString('saveEmail', emailEditingController.text);
+      prefs.setString('savePassword', passwordEditingController.text);
     }
 
     return Scaffold(
@@ -133,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     SizedBox(height: 64.0),
                     EditTextController(
                       onChanged: ((value) {
-                        ref.read(emailLoginProvider.notifier).state = value;
+                        // ref.read(emailLoginProvider.notifier).state = value;
                       }),
                       controller: emailEditingController,
                       textColor: Colors.black,
@@ -145,7 +146,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       obscureText: true,
                       showEye: true,
                       onChanged: ((value) {
-                        ref.read(passwordLoginProvider.notifier).state = value;
+                        // ref.read(passwordLoginProvider.notifier).state = value;
                       }),
                       controller: passwordEditingController,
                       textColor: Colors.black,
@@ -199,13 +200,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: () async {
                         log("click button dang nhap");
                         if (ref.watch(checkboxRememberProvider)) {
-                          saveEaP(ref.watch(emailLoginProvider),
-                              ref.watch(passwordLoginProvider));
+                          saveEaP(emailEditingController.text,
+                              passwordEditingController.text);
                         }
 
                         ref.read(LoginControllerProvider.notifier).login(
-                              ref.watch(emailLoginProvider),
-                              ref.watch(passwordLoginProvider),
+                              emailEditingController.text,
+                              passwordEditingController.text,
                             );
                       },
                       child: Text(

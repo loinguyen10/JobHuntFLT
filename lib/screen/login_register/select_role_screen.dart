@@ -19,7 +19,7 @@ class _RoleScreenState extends State<RoleScreen> {
   @override
   void dispose() {
     super.dispose();
-    Get.offAll(() => LoginScreen());
+    Get.offAll(() => const LoginScreen());
   }
 
   @override
@@ -31,7 +31,7 @@ class _RoleScreenState extends State<RoleScreen> {
           return Container(
             child: AlertDialog(
               content: Text(
-                "So ${Keystring.You_Are.tr} $role?".toUpperCase(),
+                "${Keystring.You_Are.tr} $role?".toUpperCase(),
                 style: TextStyle(fontSize: 20),
               ),
               actions: <Widget>[
@@ -88,31 +88,28 @@ class _RoleScreenState extends State<RoleScreen> {
             style: textTitleRole,
           ),
           SizedBox(height: 50.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              AppButton(
-                onPressed: () {
-                  confirmDialog(Keystring.CANDIDATE.tr);
-                },
-                label: Keystring.CANDIDATE.tr,
-                width: MediaQuery.of(context).size.width / 3,
-                fontSize: 16,
-                padding: EdgeInsets.symmetric(vertical: 12),
-              ),
-              // SizedBox(
-              //   width: 30,
-              // ),
-              AppButton(
-                onPressed: () {
-                  confirmDialog(Keystring.RECRUITER.tr);
-                },
-                label: Keystring.RECRUITER.tr,
-                width: MediaQuery.of(context).size.width / 3,
-                fontSize: 16,
-                padding: EdgeInsets.symmetric(vertical: 12),
-              ),
-            ],
+          AppButton(
+            onPressed: () {
+              confirmDialog(Keystring.CANDIDATE.tr);
+            },
+            label: Keystring.CANDIDATE.tr,
+            width: MediaQuery.of(context).size.width / 2,
+            fontSize: 16,
+            padding: EdgeInsets.symmetric(vertical: 12),
+            margin: EdgeInsets.symmetric(vertical: 12),
+          ),
+          // SizedBox(
+          //   width: 30,
+          // ),
+          AppButton(
+            onPressed: () {
+              confirmDialog(Keystring.RECRUITER.tr);
+            },
+            label: Keystring.RECRUITER.tr,
+            width: MediaQuery.of(context).size.width / 2,
+            fontSize: 16,
+            padding: EdgeInsets.symmetric(vertical: 12),
+            margin: EdgeInsets.symmetric(vertical: 12),
           ),
           SizedBox(height: 30.0),
         ],

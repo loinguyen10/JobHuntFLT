@@ -15,8 +15,8 @@ import '../model/job_setting.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
-final emailLoginProvider = StateProvider((ref) => '');
-final passwordLoginProvider = StateProvider((ref) => '');
+// final emailLoginProvider = StateProvider((ref) => '');
+// final passwordLoginProvider = StateProvider((ref) => '');
 final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
 final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
@@ -72,7 +72,7 @@ final fullNameProfileProvider =
 
 final emailProfileProvider = StateProvider((ref) =>
     ref.watch(userProfileProvider)?.email ??
-    ref.watch(emailLoginProvider) ??
+    ref.watch(userLoginProvider)?.email ??
     '');
 
 final phoneProfileProvider =
@@ -141,14 +141,14 @@ final fullNameCompanyProvider =
 
 final emailCompanyProvider = StateProvider((ref) =>
     ref.watch(companyProfileProvider)?.email ??
-    ref.watch(emailLoginProvider) ??
+    ref.watch(userLoginProvider)?.email ??
     '');
 
 final websiteCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.web ?? "");
 
 final taxCodeCompanyProvider =
-    StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
+    StateProvider((ref) => ref.watch(companyProfileProvider)?.taxcode ?? "");
 
 final phoneCompanyProvider =
     StateProvider((ref) => ref.watch(companyProfileProvider)?.phone ?? "");
@@ -191,8 +191,11 @@ final wardCompanyProvider = StateProvider.autoDispose<WardList?>((ref) {
     var address = ref.watch(companyProfileProvider)?.address;
 
     for (var x in list!) {
-      if (address?.substring(address.indexOf(',') + 1,
-              address.indexOf(',', address.indexOf(',') + 1)) ==
+      final last = address!.lastIndexOf(',');
+      if (address.substring(
+              address.lastIndexOf(',', address.lastIndexOf(',', last - 1) - 1) +
+                  1,
+              address.lastIndexOf(',', last - 1)) ==
           x.code) {
         return x;
       }
@@ -347,7 +350,7 @@ final listYourCVProvider = FutureProvider<List<CVDetail>>(
 
 final lastNumberCVProvider = StateProvider<int>((ref) {
   final list = ref.watch(listYourCVProvider);
-  if (list != null && list.value!.isNotEmpty) {
+  if (!list.isLoading && list.value!.isNotEmpty) {
     return int.parse(list.value!.last.code ?? '0');
   }
 
@@ -504,7 +507,7 @@ final applicationDetailProvider =
 
 // recommend job
 final userDetailJobSettingProvider =
-    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
+    StateProvider<JobRecommendSetting?>((ref) => null);
 
 final genderJobSettingProvider = StateProvider(
     (ref) => ref.watch(userDetailJobSettingProvider)?.gender ?? '');

@@ -197,7 +197,7 @@ class JobEditScreen extends ConsumerWidget {
         }
       }
 
-      return words.join(' ');
+      return words.join(' ').trim();
     }
 
 //void
@@ -404,323 +404,345 @@ class JobEditScreen extends ConsumerWidget {
       },
     );
 
-    return Container(
-      decoration: BoxDecoration(
-          gradient: Theme.of(context).colorScheme.background == Colors.white
-              ? bgGradientColor0
-              : bgGradientColor1),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 32),
-              EditTextForm(
-                onChanged: ((value) {
-                  //
-                }),
-                label: Keystring.Company_Name.tr,
-                content: ref.watch(fullNameCompanyProvider),
-                readOnly: true,
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(jobNameProvider.notifier).state = value;
-                }),
-                label: Keystring.Name_Job.tr,
-                content: job?.name ?? '',
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.SALARY.tr,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          Keystring.ARGEEMENT.tr,
-                          style: textNormal,
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Switch(
-                          value: salaryActive,
-                          activeColor: appPrimaryColor,
-                          inactiveThumbColor: appPrimaryColor,
-                          onChanged: (bool value) {
-                            ref.read(jobSalaryProvider.notifier).state = value;
-                          },
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          Keystring.DISARGEEMENT.tr,
-                          style: textNormal,
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                      ],
-                    ),
-                    salaryActive ? SizedBox(height: 16) : SizedBox(height: 0),
-                    salaryActive
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: EditTextForm(
-                                  typeKeyboard: TextInputType.number,
-                                  onChanged: ((value) {
-                                    ref
-                                        .read(jobMinSalaryProvider.notifier)
-                                        .state = int.parse(value);
-                                  }),
-                                  content: job?.minSalary == null
-                                      ? ''
-                                      : job?.minSalary.toString() ?? '',
-                                  label: Keystring.MIN_SALARY.tr,
-                                ),
-                              ),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: EditTextForm(
-                                  typeKeyboard: TextInputType.number,
-                                  onChanged: ((value) {
-                                    ref
-                                        .read(jobMaxSalaryProvider.notifier)
-                                        .state = int.parse(value);
-                                  }),
-                                  content: job?.maxSalary == null
-                                      ? ''
-                                      : job?.maxSalary.toString() ?? '',
-                                  label: Keystring.MAX_SALARY.tr,
-                                ),
-                              ),
-                            ],
-                          )
-                        : SizedBox(height: 0),
-                  ],
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 32),
+                EditTextForm(
+                  onChanged: ((value) {
+                    //
+                  }),
+                  label: Keystring.Company_Name.tr,
+                  content: ref.watch(fullNameCompanyProvider),
+                  readOnly: true,
                 ),
-              ),
-              SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(jobYearExperienceProvider.notifier).state =
-                            int.parse(value);
-                      }),
-                      label: Keystring.Year_Experience.tr,
-                      content: job?.yearExperience == null
-                          ? ''
-                          : job?.yearExperience.toString() ?? '',
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  AppBorderFrame(
-                    labelText: Keystring.Type_Job.tr,
-                    child: dropJobType(),
-                    width: MediaQuery.of(context).size.width / 3,
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(jobNumberCandidateProvider.notifier).state =
-                            int.parse(value);
-                      }),
-                      label: Keystring.Number_Candidate.tr,
-                      content: job?.numberCandidate == null
-                          ? ''
-                          : job?.numberCandidate.toString() ?? '',
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.ADDRESS.tr,
-                child: Column(
-                  children: [
-                    AppBorderFrame(
-                      labelText: Keystring.PROVINCE.tr,
-                      child: dropProvince(),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    AppBorderFrame(
-                      labelText: Keystring.DISTRICT.tr,
-                      child: dropDistrict(),
-                    )
-                  ],
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    ref.read(jobNameProvider.notifier).state = value;
+                  }),
+                  label: Keystring.Name_Job.tr,
+                  content: job?.name ?? '',
                 ),
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.Job_Detail.tr,
-                child: Column(
-                  children: [
-                    EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(jobDescriptionProvider.notifier).state = value;
-                      }),
-                      label: Keystring.DESCRIPTION.tr,
-                      height: 120,
-                      content: job?.description ?? '',
-                      maxLines: 4,
-                    ),
-                    SizedBox(height: 20),
-                    EditTextForm(
-                      onChanged: ((value) {
-                        ref
-                            .read(jobCandidateRequirementProvider.notifier)
-                            .state = value;
-                      }),
-                      label: Keystring.Candidate_Requirement.tr,
-                      height: 120,
-                      content: job?.candidateRequirement ?? '',
-                      maxLines: 4,
-                    ),
-                    SizedBox(height: 20),
-                    EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(jobBenefitProvider.notifier).state = value;
-                      }),
-                      label: Keystring.Job_Benefit.tr,
-                      height: 120,
-                      content: job?.jobBenefit ?? '',
-                      maxLines: 4,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.Tag.tr,
-                child: Column(
-                  children: [
-                    AppAutocompleteEditText(
-                      listSuggestion: listTitleJob,
-                      onSelected: (value) {
-                        if (!listJob.any((x) => x == value)) {
-                          ref.read(listJobTagProviderProvider.notifier).state =
-                              [...listJob, capitalizeWords(value)];
-                          // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
-                        }
-                      },
-                    ),
-                    listJob.isNotEmpty
-                        ? SizedBox(height: 16)
-                        : SizedBox(height: 0),
-                    listJob.isNotEmpty
-                        ? ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (_, index) {
-                              return Card(
-                                shadowColor: Colors.grey,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                elevation: 2,
-                                child: ListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        listJob[index],
-                                        overflow: TextOverflow.fade,
-                                        maxLines: 3,
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.SALARY.tr,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.ARGEEMENT.tr,
+                            style: textNormal,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Switch(
+                            value: salaryActive,
+                            activeColor: appPrimaryColor,
+                            inactiveThumbColor: appPrimaryColor,
+                            onChanged: (bool value) {
+                              ref.read(jobSalaryProvider.notifier).state =
+                                  value;
+                            },
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.DISARGEEMENT.tr,
+                            style: textNormal,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                        ],
+                      ),
+                      salaryActive ? SizedBox(height: 16) : SizedBox(height: 0),
+                      salaryActive
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: EditTextFormWithSuffixIcon(
+                                    typeKeyboard: TextInputType.number,
+                                    onChanged: ((value) {
+                                      ref
+                                          .read(jobMinSalaryProvider.notifier)
+                                          .state = int.parse(value);
+                                    }),
+                                    suffixIcon: Transform.rotate(
+                                      angle: 180 * 3.14 / 180,
+                                      child: Icon(
+                                        Icons.currency_ruble_rounded,
+                                        size: 14,
                                       ),
-                                      InkWell(
-                                        child: Icon(Icons.delete_outlined),
-                                        onTap: () {
-                                          if (listJob.isNotEmpty) {
-                                            ref
-                                                .read(listJobTagProviderProvider
-                                                    .notifier)
-                                                .state = [
-                                              for (final value in listJob)
-                                                if (value != listJob[index])
-                                                  value
-                                            ];
-                                          }
-                                        },
-                                      ),
-                                    ],
+                                    ),
+                                    content: job?.minSalary == null
+                                        ? ''
+                                        : job?.minSalary.toString() ?? '',
+                                    label: Keystring.MIN_SALARY.tr,
                                   ),
                                 ),
-                              );
-                            },
-                            itemCount: listJob.length,
-                          )
-                        : SizedBox(height: 0),
-                  ],
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: EditTextFormWithSuffixIcon(
+                                    typeKeyboard: TextInputType.number,
+                                    onChanged: ((value) {
+                                      ref
+                                          .read(jobMaxSalaryProvider.notifier)
+                                          .state = int.parse(value);
+                                    }),
+                                    suffixIcon: Transform.rotate(
+                                      angle: 180 * 3.14 / 180,
+                                      child: Icon(
+                                        Icons.currency_ruble_rounded,
+                                        size: 14,
+                                      ),
+                                    ),
+                                    content: job?.maxSalary == null
+                                        ? ''
+                                        : job?.maxSalary.toString() ?? '',
+                                    label: Keystring.MAX_SALARY.tr,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : SizedBox(height: 0),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.Deadline.tr,
-                child: DateCustomDialog().jobDate(context, ref, jobDeadline),
-              ),
-              SizedBox(height: 24),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.black45,
-                    ),
-                    borderRadius: BorderRadius.circular(8)),
-                child: Row(
+                SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 16,
+                    Expanded(
+                      child: EditTextForm(
+                        onChanged: ((value) {
+                          ref.read(jobYearExperienceProvider.notifier).state =
+                              int.parse(value);
+                        }),
+                        label: Keystring.Year_Experience.tr,
+                        content: job?.yearExperience == null
+                            ? ''
+                            : job?.yearExperience.toString() ?? '',
+                      ),
                     ),
-                    Text(
-                      Keystring.ACTIVE.tr,
-                      style: textNormal,
+                    SizedBox(width: 8),
+                    AppBorderFrame(
+                      labelText: Keystring.Type_Job.tr,
+                      child: dropJobType(),
+                      width: MediaQuery.of(context).size.width / 3,
                     ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Switch(
-                      value: jobActive,
-                      activeColor: Colors.green,
-                      inactiveThumbColor: Colors.red,
-                      onChanged: (bool value) {
-                        ref.read(jobActiveProvider.notifier).state = value;
-                      },
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: EditTextForm(
+                        onChanged: ((value) {
+                          ref.read(jobNumberCandidateProvider.notifier).state =
+                              int.parse(value);
+                        }),
+                        label: Keystring.Number_Candidate.tr,
+                        content: job?.numberCandidate == null
+                            ? ''
+                            : job?.numberCandidate.toString() ?? '',
+                      ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 32),
-              AppButton(
-                onPressed: () {
-                  if (salaryActive == false) {
-                    ref.read(jobMinSalaryProvider.notifier).state = -1;
-                    ref.read(jobMaxSalaryProvider.notifier).state = -1;
-                    doneButton();
-                  } else {
-                    doneButton();
-                  }
-                },
-                bgColor: appPrimaryColor,
-                height: 64,
-                label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
-                fontSize: 16,
-              ),
-              SizedBox(height: 32),
-            ],
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.ADDRESS.tr,
+                  child: Column(
+                    children: [
+                      AppBorderFrame(
+                        labelText: Keystring.PROVINCE.tr,
+                        child: dropProvince(),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      AppBorderFrame(
+                        labelText: Keystring.DISTRICT.tr,
+                        child: dropDistrict(),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.Job_Detail.tr,
+                  child: Column(
+                    children: [
+                      EditTextForm(
+                        onChanged: ((value) {
+                          ref.read(jobDescriptionProvider.notifier).state =
+                              value;
+                        }),
+                        label: Keystring.DESCRIPTION.tr,
+                        height: 120,
+                        content: job?.description ?? '',
+                        maxLines: 4,
+                      ),
+                      SizedBox(height: 20),
+                      EditTextForm(
+                        onChanged: ((value) {
+                          ref
+                              .read(jobCandidateRequirementProvider.notifier)
+                              .state = value;
+                        }),
+                        label: Keystring.Candidate_Requirement.tr,
+                        height: 120,
+                        content: job?.candidateRequirement ?? '',
+                        maxLines: 4,
+                      ),
+                      SizedBox(height: 20),
+                      EditTextForm(
+                        onChanged: ((value) {
+                          ref.read(jobBenefitProvider.notifier).state = value;
+                        }),
+                        label: Keystring.Job_Benefit.tr,
+                        height: 120,
+                        content: job?.jobBenefit ?? '',
+                        maxLines: 4,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.Tag.tr,
+                  child: Column(
+                    children: [
+                      AppAutocompleteEditText(
+                        listSuggestion: listTitleJob,
+                        onSelected: (value) {
+                          if (!listJob.any((x) => x == value)) {
+                            ref
+                                .read(listJobTagProviderProvider.notifier)
+                                .state = [...listJob, capitalizeWords(value)];
+                            // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
+                          }
+                        },
+                      ),
+                      listJob.isNotEmpty
+                          ? SizedBox(height: 16)
+                          : SizedBox(height: 0),
+                      listJob.isNotEmpty
+                          ? ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (_, index) {
+                                return Card(
+                                  shadowColor: Colors.grey,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  elevation: 2,
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            listJob[index],
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 3,
+                                          ),
+                                        ),
+                                        InkWell(
+                                          child: Icon(Icons.delete_outlined),
+                                          onTap: () {
+                                            if (listJob.isNotEmpty) {
+                                              ref
+                                                  .read(
+                                                      listJobTagProviderProvider
+                                                          .notifier)
+                                                  .state = [
+                                                for (final value in listJob)
+                                                  if (value != listJob[index])
+                                                    value
+                                              ];
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemCount: listJob.length,
+                            )
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.Deadline.tr,
+                  child: DateCustomDialog().jobDate(context, ref, jobDeadline),
+                ),
+                SizedBox(height: 24),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black45,
+                      ),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 16,
+                      ),
+                      Text(
+                        Keystring.ACTIVE.tr,
+                        style: textNormal,
+                      ),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      Switch(
+                        value: jobActive,
+                        activeColor: Colors.green,
+                        inactiveThumbColor: Colors.red,
+                        onChanged: (bool value) {
+                          ref.read(jobActiveProvider.notifier).state = value;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 32),
+                AppButton(
+                  onPressed: () {
+                    if (salaryActive == false) {
+                      ref.read(jobMinSalaryProvider.notifier).state = -1;
+                      ref.read(jobMaxSalaryProvider.notifier).state = -1;
+                      doneButton();
+                    } else {
+                      doneButton();
+                    }
+                  },
+                  bgColor: appPrimaryColor,
+                  height: 64,
+                  label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                  fontSize: 16,
+                ),
+                SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),

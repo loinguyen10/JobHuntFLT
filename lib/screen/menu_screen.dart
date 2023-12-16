@@ -16,8 +16,8 @@ import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/screen/user/follow_company_list.dart';
-import 'package:jobhunt_ftl/screen/user/show_proflie.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
@@ -54,6 +54,12 @@ class MenuScreen extends ConsumerWidget {
     //   );
     // }
 
+    Future<void> deleteNextTime() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('emailSaveNextTime', '');
+      await prefs.setString('passwordSaveNextTime', '');
+    }
+
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: appHintColor,
@@ -71,45 +77,44 @@ class MenuScreen extends ConsumerWidget {
                 SizedBox(
                   height: 48,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: profile?.level == 'Premium' ||
-                              company?.level == 'Premium'
-                          ? Colors.yellow
-                          : Colors.transparent,
-                      width: 4.0,
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: ClipOval(
-                    child: SizedBox.fromSize(
-                      size: Size.fromRadius(56), // Image radius
-                      child: profile != null || company != null
-                          ? profile?.avatarUrl != null &&
-                                  profile?.avatarUrl != ''
-                              ? Image.network(
-                                  profile?.avatarUrl ?? '',
-                                  fit: BoxFit.cover,
-                                )
-                              : company?.avatarUrl != null &&
-                                      company?.avatarUrl != ''
+                profile != null || company != null
+                    ? Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: profile?.level == 'Premium' ||
+                                    company?.level == 'Premium'
+                                ? Colors.yellow
+                                : Colors.transparent,
+                            width: 4.0,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: SizedBox.fromSize(
+                            size: Size.fromRadius(56), // Image radius
+                            child: Container(
+                              color: const Color.fromARGB(127, 255, 255, 255),
+                              child: profile?.avatarUrl != null &&
+                                      profile?.avatarUrl != ''
                                   ? Image.network(
-                                      company?.avatarUrl ?? '',
+                                      profile?.avatarUrl ?? '',
                                       fit: BoxFit.cover,
                                     )
-                                  : Icon(
-                                      Icons.no_accounts_outlined,
-                                      size: 112,
-                                    )
-                          : Icon(
-                              Icons.no_accounts_outlined,
-                              size: 112,
+                                  : company?.avatarUrl != null &&
+                                          company?.avatarUrl != ''
+                                      ? Image.network(
+                                          company?.avatarUrl ?? '',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(
+                                          Icons.no_accounts_outlined,
+                                          size: 112,
+                                        ),
                             ),
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(height: 0),
                 SizedBox(
                   height: 24,
                 ),
@@ -118,13 +123,17 @@ class MenuScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        profile == null && company == null
-                            ? Keystring.GUEST.tr
-                            : profile != null
-                                ? profile.fullName ?? ''
-                                : company?.fullname ?? '',
-                        style: textNameMenu,
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          profile == null && company == null
+                              ? Keystring.GUEST.tr
+                              : profile != null
+                                  ? profile.fullName ?? ''
+                                  : company?.fullname ?? '',
+                          style: textNameMenu,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       SizedBox(
                         height: profile == null && company == null ? 0 : 8,
@@ -162,6 +171,11 @@ class MenuScreen extends ConsumerWidget {
                             onTap: () {
                               log('click profile');
                               if (profile != null) {
+                                ref.invalidate(provinceChooseProvider);
+                                ref.invalidate(districtChooseProvider);
+                                ref.invalidate(wardChooseProvider);
+                                ref.invalidate(avatarProfileProvider);
+                                ref.invalidate(dateBirthProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -171,6 +185,10 @@ class MenuScreen extends ConsumerWidget {
                                 );
                               } else if (company != null) {
                                 ref.invalidate(listJobTagCompanyProvider);
+                                ref.invalidate(provinceCompanyProvider);
+                                ref.invalidate(districtCompanyProvider);
+                                ref.invalidate(wardCompanyProvider);
+                                ref.invalidate(avatarCompanyProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -712,11 +730,9 @@ class MenuScreen extends ConsumerWidget {
                                 resetCall(ref);
                                 if (profile != null || company != null) {
                                   Loader.show(context);
-                                  ref.read(emailLoginProvider.notifier).state =
-                                      '';
-                                  ref
-                                      .read(passwordLoginProvider.notifier)
-                                      .state = '';
+                                  // ref.read(emailLoginProvider.notifier).state = '';
+                                  // ref.read(passwordLoginProvider.notifier).state = '';
+                                  deleteNextTime();
                                   Loader.hide();
                                 }
                                 Get.offAll(() => const LoginScreen());

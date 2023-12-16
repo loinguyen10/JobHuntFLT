@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/firebase_options.dart';
-import 'package:jobhunt_ftl/screen/login_register/login_sreen.dart';
+import 'package:jobhunt_ftl/screen/open_screen.dart';
 import 'package:jobhunt_ftl/value/string.dart';
 import 'package:jobhunt_ftl/value/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
       ],
       translations: LocaleString(),
       locale: Locale(language),
-      home: LoginScreen(),
+      home: const FirstScreen(),
       builder: EasyLoading.init(),
       theme: appLightTheme,
     );

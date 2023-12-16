@@ -221,4 +221,7 @@ class Keystring {
   static const String CV_FULL = 'CV_Full';
   static const String REPORT_USER_REMINDER = 'Report_User_Reminder';
   static const String TWO_REASON_2 = 'Two_Reason_2';
+  static const String SPLASH_TITLE = 'Splash_Title';
+  static const String SPLASH_TILE = 'Splash_Tile';
+  static const String GET_STARTED = 'Get_Started';
 }

@@ -81,7 +81,7 @@ class CompanyInformation extends ConsumerWidget {
                 return [
                   SliverAppBar(
                     backgroundColor: appPrimaryColor,
-                    expandedHeight: 470.0,
+                    expandedHeight: 500,
                     floating: false,
                     pinned: true,
                     leading: GestureDetector(
@@ -107,259 +107,263 @@ class CompanyInformation extends ConsumerWidget {
                         visible: isInnerBoxScrolled,
                         child: const Text('Scrollable TabBar Example'),
                       ),
-                      background: Container(
-                        color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                    flex: 2,
-                                    child: SizedBox(
-                                      width: screenWidth,
-                                      height: 300,
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                gradient: Theme.of(context)
-                                                            .colorScheme
-                                                            .background ==
-                                                        Colors.white
-                                                    ? bgGradientColor0
-                                                    : bgGradientColor1),
-                                            child: SizedBox(
-                                                height: 300,
-                                                width: screenWidth,
-                                                child: const Image(
-                                                  image: AssetImage(
-                                                      'assets/image/background_company.jpg'),
-                                                )),
-                                          ),
-                                          Positioned(
-                                            left: 2 * screenWidth / 5,
-                                            right: 2 * screenWidth / 5,
-                                            bottom: 0,
-                                            child: SizedBox(
-                                              height: 80,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
-                                                ),
-                                                child: Container(
-                                                  color: appPrimaryColor,
-                                                  child: company.avatarUrl != ''
-                                                      ? Image.network(
-                                                          company.avatarUrl ??
-                                                              '',
-                                                          fit: BoxFit.cover)
-                                                      : const Icon(
-                                                          Icons.apartment,
-                                                          size: 96,
-                                                        ),
-                                                ),
-                                              ),
+                      background: SingleChildScrollView(
+                        child: Container(
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                      flex: 2,
+                                      child: SizedBox(
+                                        width: screenWidth,
+                                        height: 300,
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  gradient: Theme.of(context)
+                                                              .colorScheme
+                                                              .background ==
+                                                          Colors.white
+                                                      ? bgGradientColor0
+                                                      : bgGradientColor1),
+                                              child: SizedBox(
+                                                  height: 300,
+                                                  width: screenWidth,
+                                                  child: const Image(
+                                                    image: AssetImage(
+                                                        'assets/image/background_company.jpg'),
+                                                  )),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                    width: screenWidth,
-                                    child: Center(
-                                        child: Text(
-                                      company.fullname.toString(),
-                                      style: textTitleTab1Company,
-                                    )))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: screenWidth,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.language,
-                                        size: 18, // Kích thước của biểu tượng
-                                        color: Colors
-                                            .black, // Màu sắc của biểu tượng
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(company.web.toString(),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: screenWidth,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.phone,
-                                        size: 18, // Kích thước của biểu tượng
-                                        color: Colors
-                                            .black, // Màu sắc của biểu tượng
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(company.phone.toString(),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: screenWidth,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.email,
-                                        size: 18, // Kích thước của biểu tượng
-                                        color: Colors
-                                            .black, // Màu sắc của biểu tượng
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(company.email.toString(),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                role != null
-                                    ? role != 'recruiter'
-                                        ? SizedBox(
-                                            width: screenWidth,
-                                            height: 55,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  if (bmCheck) {
-                                                    showUnfollowDialog(
-                                                        context, ref);
-                                                  } else {
-                                                    ref
-                                                        .read(
-                                                            LoginControllerProvider
-                                                                .notifier)
-                                                        .addFollowCompany(
-                                                          company?.uid ?? '0',
-                                                          ref
-                                                                  .watch(
-                                                                      userLoginProvider)
-                                                                  ?.uid ??
-                                                              '0',
-                                                        );
-                                                  }
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5.0),
+                                            Positioned(
+                                              left: 2 * screenWidth / 5,
+                                              right: 2 * screenWidth / 5,
+                                              bottom: 0,
+                                              child: SizedBox(
+                                                height: 80,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft: Radius.circular(10),
+                                                    topRight: Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  ),
                                                   child: Container(
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            width: 1,
-                                                            color: bmCheck
-                                                                ? Colors.black
-                                                                : Colors.white),
-                                                        color: bmCheck
-                                                            ? Colors.white
-                                                            : appPrimaryColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0)),
-                                                    child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(
-                                                            bmCheck
-                                                                ? Icons.check
-                                                                : Icons.add,
-                                                            color: bmCheck
-                                                                ? Colors.black
-                                                                : Colors.white,
+                                                    color: appPrimaryColor,
+                                                    child: company.avatarUrl != ''
+                                                        ? Image.network(
+                                                            company.avatarUrl ??
+                                                                '',
+                                                            fit: BoxFit.cover)
+                                                        : const Icon(
+                                                            Icons.apartment,
+                                                            size: 96,
                                                           ),
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Text(
-                                                            bmCheck
-                                                                ? '${Keystring.FOllOWING.tr}'
-                                                                : '${Keystring.COMPANY_FOllOW.tr}',
-                                                            style: TextStyle(
-                                                                color: bmCheck
-                                                                    ? Colors
-                                                                        .black
-                                                                    : Colors
-                                                                        .white),
-                                                          )
-                                                        ]),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          )
-                                        : SizedBox(height: 0)
-                                    : SizedBox(
-                                        width: 0,
-                                      )
-                              ],
-                            )
-                          ],
+                                          ],
+                                        ),
+                                      )),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                      width: screenWidth,
+                                      child: Center(
+                                          child: Text(textAlign: TextAlign.center,
+                                        company.fullname.toString(),
+                                        style: textTitleTab1Company,
+                                      )))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: screenWidth,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.language,
+                                          size: 18, // Kích thước của biểu tượng
+                                          color: Colors
+                                              .black, // Màu sắc của biểu tượng
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(company.web.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: screenWidth,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.phone,
+                                          size: 18, // Kích thước của biểu tượng
+                                          color: Colors
+                                              .black, // Màu sắc của biểu tượng
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(company.phone.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: screenWidth,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.email,
+                                          size: 18, // Kích thước của biểu tượng
+                                          color: Colors
+                                              .black, // Màu sắc của biểu tượng
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(company.email.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  role != null
+                                      ? role != 'recruiter'
+                                          ? SizedBox(
+                                              width: screenWidth,
+                                              height: 55,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    if (bmCheck) {
+                                                      showUnfollowDialog(
+                                                          context, ref);
+                                                    } else {
+                                                      ref
+                                                          .read(
+                                                              LoginControllerProvider
+                                                                  .notifier)
+                                                          .addFollowCompany(
+                                                            company?.uid ?? '0',
+                                                            ref
+                                                                    .watch(
+                                                                        userLoginProvider)
+                                                                    ?.uid ??
+                                                                '0',
+                                                          );
+                                                    }
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(5.0),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              width: 1,
+                                                              color: bmCheck
+                                                                  ? Colors.black
+                                                                  : Colors.white),
+                                                          color: bmCheck
+                                                              ? Colors.white
+                                                              : appPrimaryColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8.0)),
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                              bmCheck
+                                                                  ? Icons.check
+                                                                  : Icons.add,
+                                                              color: bmCheck
+                                                                  ? Colors.black
+                                                                  : Colors.white,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Text(
+                                                              bmCheck
+                                                                  ? '${Keystring.FOllOWING.tr}'
+                                                                  : '${Keystring.COMPANY_FOllOW.tr}',
+                                                              style: TextStyle(
+                                                                  color: bmCheck
+                                                                      ? Colors
+                                                                          .black
+                                                                      : Colors
+                                                                          .white),
+                                                            )
+                                                          ]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(height: 0)
+                                      : SizedBox(
+                                          width: 0,
+                                        )
+
+                                ],
+                              ),
+                              SizedBox(height: 10,)
+                            ],
+                          ),
                         ),
                       ),
                     ),

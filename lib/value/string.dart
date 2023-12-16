@@ -324,7 +324,7 @@ class LocaleString extends Translations {
           'Intern': 'Thực tập sinh',
           'Part_Time': 'Bán thời gian',
           'Full_Time': 'Toàn thời gian',
-          'Apply_Now': 'Ứng tuyển ngay',
+          'Apply_Now': 'Ứng tuyển',
           'Information': 'Thông tin',
           'Person': 'Người',
           'Check_CV': 'Kiểm tra CV',

@@ -145,8 +145,10 @@ class CompanyInformation extends ConsumerWidget {
                                                 child: ClipRRect(
                                                   borderRadius:
                                                       const BorderRadius.only(
-                                                    topLeft: Radius.circular(10),
-                                                    topRight: Radius.circular(10),
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
                                                     bottomLeft:
                                                         Radius.circular(10),
                                                     bottomRight:
@@ -154,7 +156,8 @@ class CompanyInformation extends ConsumerWidget {
                                                   ),
                                                   child: Container(
                                                     color: appPrimaryColor,
-                                                    child: company.avatarUrl != ''
+                                                    child: company.avatarUrl !=
+                                                            ''
                                                         ? Image.network(
                                                             company.avatarUrl ??
                                                                 '',
@@ -180,7 +183,8 @@ class CompanyInformation extends ConsumerWidget {
                                   SizedBox(
                                       width: screenWidth,
                                       child: Center(
-                                          child: Text(textAlign: TextAlign.center,
+                                          child: Text(
+                                        textAlign: TextAlign.center,
                                         company.fullname.toString(),
                                         style: textTitleTab1Company,
                                       )))
@@ -194,7 +198,8 @@ class CompanyInformation extends ConsumerWidget {
                                   SizedBox(
                                     width: screenWidth,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.language,
@@ -222,7 +227,8 @@ class CompanyInformation extends ConsumerWidget {
                                   SizedBox(
                                     width: screenWidth,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.phone,
@@ -250,7 +256,8 @@ class CompanyInformation extends ConsumerWidget {
                                   SizedBox(
                                     width: screenWidth,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.email,
@@ -305,20 +312,23 @@ class CompanyInformation extends ConsumerWidget {
                                                   },
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(5.0),
+                                                        const EdgeInsets.all(
+                                                            5.0),
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                               width: 1,
                                                               color: bmCheck
                                                                   ? Colors.black
-                                                                  : Colors.white),
+                                                                  : Colors
+                                                                      .white),
                                                           color: bmCheck
                                                               ? Colors.white
                                                               : appPrimaryColor,
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(8.0)),
+                                                                  .circular(
+                                                                      8.0)),
                                                       child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -330,7 +340,8 @@ class CompanyInformation extends ConsumerWidget {
                                                                   : Icons.add,
                                                               color: bmCheck
                                                                   ? Colors.black
-                                                                  : Colors.white,
+                                                                  : Colors
+                                                                      .white,
                                                             ),
                                                             SizedBox(
                                                               width: 5,
@@ -356,10 +367,11 @@ class CompanyInformation extends ConsumerWidget {
                                       : SizedBox(
                                           width: 0,
                                         )
-
                                 ],
                               ),
-                              SizedBox(height: 10,)
+                              SizedBox(
+                                height: 10,
+                              )
                             ],
                           ),
                         ),
@@ -618,60 +630,54 @@ class Tab2 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _data = ref.watch(listJobOfCompanyProvider);
-    return _data.when(
-      data: (data) {
-        return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (_, index) {
-            String avatar = data[index].company?.avatarUrl ?? '';
-            String name = data[index].name ?? '';
-            String companyName = data[index].company?.fullname ?? '';
-            String province = getProvinceName(
-                data[index]
-                    .address!
-                    .substring(data[index].address!.lastIndexOf(',') + 1),
-                ref);
-            String money = data[index].maxSalary != -1
-                ? '${data[index].maxSalary} ${data[index].currency}'
-                : Keystring.ARGEEMENT.tr;
-            String deadline = data[index].deadline ?? '';
+    final data = ref.watch(JobInCompanyProvider);
+    return data.isNotEmpty
+        ? ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (_, index) {
+              String avatar = data[index].company?.avatarUrl ?? '';
+              String name = data[index].name ?? '';
+              String companyName = data[index].company?.fullname ?? '';
+              String province = getProvinceName(
+                  data[index]
+                      .address!
+                      .substring(data[index].address!.lastIndexOf(',') + 1),
+                  ref);
+              String money = data[index].maxSalary != -1
+                  ? '${data[index].maxSalary} ${data[index].currency}'
+                  : Keystring.ARGEEMENT.tr;
+              String deadline = data[index].deadline ?? '';
 
-            return GestureDetector(
-              onTap: () {
-                ref.read(jobDetailProvider.notifier).state = data[index];
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => JobViewScreen()),
-                );
-              },
-              child: AppJobCard(
-                avatar: avatar,
-                name: name,
-                companyName: companyName,
-                province: province,
-                money: money,
-                deadline: deadline,
+              return GestureDetector(
+                onTap: () {
+                  ref.read(jobDetailProvider.notifier).state = data[index];
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => JobViewScreen()),
+                  );
+                },
+                child: AppJobCard(
+                  avatar: avatar,
+                  name: name,
+                  companyName: companyName,
+                  province: province,
+                  money: money,
+                  deadline: deadline,
+                ),
+              );
+            },
+            itemCount: data.length,
+          )
+        : Container(
+            margin: EdgeInsets.symmetric(vertical: 80),
+            child: Center(
+              child: Text(
+                Keystring.NO_DATA.tr,
+                style: textNormal,
               ),
-            );
-          },
-          itemCount: data.length,
-        );
-      },
-      error: (error, stackTrace) => SizedBox(
-        height: 160,
-        child: Center(
-          child: Text(Keystring.NO_DATA.tr),
-        ),
-      ),
-      loading: () => const SizedBox(
-        height: 160,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
 

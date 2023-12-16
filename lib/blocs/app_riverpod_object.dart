@@ -759,3 +759,30 @@ final OtherReasonProvider = StateProvider<bool>((ref) => false);
 final checkCreateReportProvider = StateProvider<bool>((ref) => false);
 final candidateRecommendProvider =
     StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
+
+final JobInCompanyProvider = StateProvider(
+  (ref) {
+    final companyuid = ref.watch(companyInforProvider).uid;
+
+    final dataJobActive = ref.watch(listActiveJobProvider);
+    List<JobDetail> listJobActive = [];
+    List<JobDetail> listJob = [];
+
+    dataJobActive.maybeWhen(
+      data: (data) {
+        listJobActive.addAll(data);
+      },
+      orElse: () {
+        listJobActive = [];
+      },
+    );
+
+    for (var job in listJobActive) {
+      if (job.companyId == companyuid) {
+        listJob.add(job);
+      }
+    }
+
+    return listJob;
+  },
+);

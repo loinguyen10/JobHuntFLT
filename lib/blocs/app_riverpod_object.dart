@@ -613,7 +613,7 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
-  final job = ref.watch(jobDetailProvider);
+  final company = ref.watch(companyInforProvider);
 
   List<FollowDetail> listFollow = [];
 
@@ -627,11 +627,11 @@ final turnFollowOn = StateProvider<bool>((ref) {
   );
 
   log('listFollow: ${listFollow.length}');
-  log('company: ${job?.companyId}');
+  log('company: ${company.uid}');
 
   for (var i in listFollow) {
-    if (job?.companyId == i.companyId) {
-      log('message11111: ${job?.companyId} & ${i.companyId} ');
+    if (company.uid == i.companyId) {
+      log('message11111: ${company.uid} & ${i.companyId} ');
       return true;
     }
   }

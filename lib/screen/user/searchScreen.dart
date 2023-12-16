@@ -399,8 +399,8 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                         ),
                       )
                     : SingleChildScrollView(
-                        child: SizedBox(
-                          height: sizePhone.height / 2,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 80),
                           child: Center(
                             child: Text(
                               Keystring.NO_DATA.tr,

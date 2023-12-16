@@ -72,7 +72,7 @@ final fullNameProfileProvider =
 
 final emailProfileProvider = StateProvider((ref) =>
     ref.watch(userProfileProvider)?.email ??
-    ref.watch(emailLoginProvider) ??
+    ref.watch(userLoginProvider)?.email ??
     '');
 
 final phoneProfileProvider =
@@ -350,7 +350,7 @@ final listYourCVProvider = FutureProvider<List<CVDetail>>(
 
 final lastNumberCVProvider = StateProvider<int>((ref) {
   final list = ref.watch(listYourCVProvider);
-  if (list != null && list.value!.isNotEmpty) {
+  if (!list.isLoading && list.value!.isNotEmpty) {
     return int.parse(list.value!.last.code ?? '0');
   }
 
@@ -507,7 +507,7 @@ final applicationDetailProvider =
 
 // recommend job
 final userDetailJobSettingProvider =
-    StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
+    StateProvider<JobRecommendSetting?>((ref) => null);
 
 final genderJobSettingProvider = StateProvider(
     (ref) => ref.watch(userDetailJobSettingProvider)?.gender ?? '');

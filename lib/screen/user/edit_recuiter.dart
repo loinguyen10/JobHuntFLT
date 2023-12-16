@@ -409,339 +409,344 @@ class RecuiterEditScreen extends ConsumerWidget {
       },
     );
 
-    return Container(
-      decoration: BoxDecoration(
-          gradient: Theme.of(context).colorScheme.background == Colors.white
-              ? bgGradientColor0
-              : bgGradientColor1),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              edit
-                  ? AppBar(
-                      title: Text(Keystring.YOUR_PROFILE.tr),
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                    )
-                  : SizedBox(
-                      height: 0,
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                edit
+                    ? AppBar(
+                        title: Text(Keystring.YOUR_PROFILE.tr),
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+                SizedBox(
+                  height: 24,
+                ),
+                ClipOval(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(128), // Image radius
+                    child: GestureDetector(
+                      onTap: () => uploadImg(),
+                      child: avatarProfile != ''
+                          ? avatarProfile.substring(0, 8) == 'https://'
+                              ? Image.network(
+                                  avatarProfile,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(avatarProfile),
+                                  fit: BoxFit.cover,
+                                )
+                          : Icon(
+                              Icons.no_accounts_outlined,
+                              size: 256,
+                            ),
                     ),
-              SizedBox(
-                height: 24,
-              ),
-              ClipOval(
-                child: SizedBox.fromSize(
-                  size: Size.fromRadius(128), // Image radius
-                  child: GestureDetector(
-                    onTap: () => uploadImg(),
-                    child: avatarProfile != ''
-                        ? avatarProfile.substring(0, 8) == 'https://'
-                            ? Image.network(
-                                avatarProfile,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(avatarProfile),
-                                fit: BoxFit.cover,
-                              )
-                        : Icon(
-                            Icons.no_accounts_outlined,
-                            size: 256,
-                          ),
                   ),
                 ),
-              ),
-              SizedBox(height: 32),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(fullNameCompanyProvider.notifier).state = value;
-                  log(value);
-                }),
-                label: Keystring.FULLNAME.tr,
-                content: company?.fullname ?? '',
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  // ref.read(emailProfileProvider.notifier).state = value;
-                }),
-                label: Keystring.EMAIL.tr,
-                content: company?.email ?? ref.watch(emailCompanyProvider),
-                readOnly: true,
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  if (value.length >= 11) {
-                    Fluttertoast.showToast(
-                        msg: Keystring.PHONE_LESS_11.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-
-                  ref.read(phoneCompanyProvider.notifier).state = value;
-                }),
-                label: Keystring.PHONE.tr,
-                content: company?.phone ?? '',
-                maxLines: 1,
-                maxLength: 11,
-                typeKeyboard: TextInputType.phone,
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(websiteCompanyProvider.notifier).state = value;
-                }),
-                label: Keystring.WEBSITE.tr,
-                content: company?.web ?? '',
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(taxCodeCompanyProvider.notifier).state = value;
-                }),
-                label: Keystring.TAX_CODE.tr,
-                content: company?.taxcode ?? '',
-                maxLines: 1,
-                maxLength: 10,
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.ADDRESS.tr,
-                child: Column(
-                  children: [
-                    AppBorderFrame(
-                      labelText: Keystring.PROVINCE.tr,
-                      child: dropProvince(),
-                    ),
-                    SizedBox(height: 20),
-                    AppBorderFrame(
-                      labelText: Keystring.DISTRICT.tr,
-                      child: dropDistrict(),
-                    ),
-                    SizedBox(height: 20),
-                    AppBorderFrame(
-                      labelText: Keystring.WARD.tr,
-                      child: dropWard(),
-                    ),
-                    SizedBox(height: 20),
-                    EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(roadCompanyProvider.notifier).state = value;
-                      }),
-                      label: Keystring.ROAD_STREET.tr,
-                      content: company?.address!
-                              .substring(0, company.address!.indexOf(',')) ??
-                          '',
-                    ),
-                  ],
+                SizedBox(height: 32),
+                EditTextForm(
+                  onChanged: ((value) {
+                    ref.read(fullNameCompanyProvider.notifier).state = value;
+                    log(value);
+                  }),
+                  label: Keystring.FULLNAME.tr,
+                  content: company?.fullname ?? '',
                 ),
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(descriptionCompanyProvider.notifier).state = value;
-                }),
-                label: Keystring.DESCRIPTION.tr,
-                height: 120,
-                content: company?.description ?? '',
-                maxLines: 5,
-              ),
-              SizedBox(height: 24),
-              // EditTextForm(
-              //   onChanged: ((value) {
-              //     ref.read(jobCompanyProvider.notifier).state = value;
-              //   }),
-              //   label: Keystring.WANT_JOB.tr,
-              //   content: company?.job ?? '',
-              // ),
-              AppBorderFrame(
-                labelText: Keystring.WANT_JOB.tr,
-                child: Column(
-                  children: [
-                    AppAutocompleteEditText(
-                      listSuggestion: listTitleJob,
-                      onSelected: (value) {
-                        if (!listJob.any((x) => x == value)) {
-                          ref.read(listJobTagCompanyProvider.notifier).state = [
-                            ...listJob,
-                            capitalizeWords(value)
-                          ];
-                        }
-                      },
-                    ),
-                    listJob.isNotEmpty
-                        ? SizedBox(height: 16)
-                        : SizedBox(height: 0),
-                    listJob.isNotEmpty
-                        ? ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (_, index) {
-                              return Card(
-                                shadowColor: Colors.grey,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                elevation: 2,
-                                child: ListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        listJob[index],
-                                        overflow: TextOverflow.fade,
-                                        maxLines: 3,
-                                      ),
-                                      InkWell(
-                                        child: Icon(Icons.delete_outlined),
-                                        onTap: () {
-                                          if (listJob.isNotEmpty) {
-                                            ref
-                                                .read(listJob2SettingProvider
-                                                    .notifier)
-                                                .state = [
-                                              for (final value in listJob)
-                                                if (value != listJob[index])
-                                                  value
-                                            ];
-                                          }
-                                        },
-                                      ),
-                                    ],
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    // ref.read(emailProfileProvider.notifier).state = value;
+                  }),
+                  label: Keystring.EMAIL.tr,
+                  content: company?.email ?? ref.watch(emailCompanyProvider),
+                  readOnly: true,
+                ),
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    if (value.length >= 11) {
+                      Fluttertoast.showToast(
+                          msg: Keystring.PHONE_LESS_11.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+
+                    ref.read(phoneCompanyProvider.notifier).state = value;
+                  }),
+                  label: Keystring.PHONE.tr,
+                  content: company?.phone ?? '',
+                  maxLines: 1,
+                  maxLength: 11,
+                  typeKeyboard: TextInputType.phone,
+                ),
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    ref.read(websiteCompanyProvider.notifier).state = value;
+                  }),
+                  label: Keystring.WEBSITE.tr,
+                  content: company?.web ?? '',
+                ),
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    ref.read(taxCodeCompanyProvider.notifier).state = value;
+                  }),
+                  label: Keystring.TAX_CODE.tr,
+                  content: company?.taxcode ?? '',
+                  maxLines: 1,
+                  maxLength: 10,
+                ),
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.ADDRESS.tr,
+                  child: Column(
+                    children: [
+                      AppBorderFrame(
+                        labelText: Keystring.PROVINCE.tr,
+                        child: dropProvince(),
+                      ),
+                      SizedBox(height: 20),
+                      AppBorderFrame(
+                        labelText: Keystring.DISTRICT.tr,
+                        child: dropDistrict(),
+                      ),
+                      SizedBox(height: 20),
+                      AppBorderFrame(
+                        labelText: Keystring.WARD.tr,
+                        child: dropWard(),
+                      ),
+                      SizedBox(height: 20),
+                      EditTextForm(
+                        onChanged: ((value) {
+                          ref.read(roadCompanyProvider.notifier).state = value;
+                        }),
+                        label: Keystring.ROAD_STREET.tr,
+                        content: company?.address!
+                                .substring(0, company.address!.indexOf(',')) ??
+                            '',
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    ref.read(descriptionCompanyProvider.notifier).state = value;
+                  }),
+                  label: Keystring.DESCRIPTION.tr,
+                  height: 120,
+                  content: company?.description ?? '',
+                  maxLines: 5,
+                ),
+                SizedBox(height: 24),
+                // EditTextForm(
+                //   onChanged: ((value) {
+                //     ref.read(jobCompanyProvider.notifier).state = value;
+                //   }),
+                //   label: Keystring.WANT_JOB.tr,
+                //   content: company?.job ?? '',
+                // ),
+                AppBorderFrame(
+                  labelText: Keystring.WANT_JOB.tr,
+                  child: Column(
+                    children: [
+                      AppAutocompleteEditText(
+                        listSuggestion: listTitleJob,
+                        onSelected: (value) {
+                          if (!listJob.any((x) => x == value)) {
+                            ref.read(listJobTagCompanyProvider.notifier).state =
+                                [...listJob, capitalizeWords(value)];
+                          }
+                        },
+                      ),
+                      listJob.isNotEmpty
+                          ? SizedBox(height: 16)
+                          : SizedBox(height: 0),
+                      listJob.isNotEmpty
+                          ? ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (_, index) {
+                                return Card(
+                                  shadowColor: Colors.grey,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  elevation: 2,
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            listJob[index],
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 3,
+                                          ),
+                                        ),
+                                        InkWell(
+                                          child: Icon(Icons.delete_outlined),
+                                          onTap: () {
+                                            if (listJob.isNotEmpty) {
+                                              ref
+                                                  .read(
+                                                      listJobTagCompanyProvider
+                                                          .notifier)
+                                                  .state = [
+                                                for (final value in listJob)
+                                                  if (value != listJob[index])
+                                                    value
+                                              ];
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            itemCount: listJob.length,
-                          )
-                        : SizedBox(height: 0),
-                  ],
+                                );
+                              },
+                              itemCount: listJob.length,
+                            )
+                          : SizedBox(height: 0),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                  height: company?.premiumExpiry != null &&
-                          company?.premiumExpiry != ''
-                      ? 24
-                      : 0),
-              company?.premiumExpiry != null && company?.premiumExpiry != ''
-                  ? EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(premiumExpireProfileProvider.notifier).state =
-                            value;
-                      }),
-                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
-                      content: company?.premiumExpiry ?? '',
-                      maxLines: 1,
-                      readOnly: true,
-                    )
-                  : SizedBox(height: 0),
-              SizedBox(height: 32),
-              AppButton(
-                onPressed: () {
-                  log(ref.watch(taxCodeCompanyProvider));
+                SizedBox(
+                    height: company?.premiumExpiry != null &&
+                            company?.premiumExpiry != ''
+                        ? 24
+                        : 0),
+                company?.premiumExpiry != null && company?.premiumExpiry != ''
+                    ? EditTextForm(
+                        onChanged: ((value) {
+                          ref
+                              .read(premiumExpireProfileProvider.notifier)
+                              .state = value;
+                        }),
+                        label: Keystring.PREMIUM_EXPIRY_DATE.tr,
+                        content: company?.premiumExpiry ?? '',
+                        maxLines: 1,
+                        readOnly: true,
+                      )
+                    : SizedBox(height: 0),
+                SizedBox(height: 32),
+                AppButton(
+                  onPressed: () {
+                    log(ref.watch(taxCodeCompanyProvider));
 
-                  if (ref.watch(fullNameCompanyProvider).isNotEmpty &&
-                      ref.watch(phoneCompanyProvider).isNotEmpty &&
-                      ref.watch(websiteCompanyProvider).isNotEmpty &&
-                      ref.watch(taxCodeCompanyProvider).isNotEmpty &&
-                      provinceChoose!.code != null &&
-                      districtChoose!.code != null &&
-                      wardChoose!.code != null &&
-                      ref.watch(roadCompanyProvider).isNotEmpty &&
-                      listJob.isNotEmpty &&
-                      ref.watch(descriptionCompanyProvider).isNotEmpty) {
-                    if (ref.watch(phoneCompanyProvider).length < 9) {
-                      Fluttertoast.showToast(
-                        msg: Keystring.PHONE_MORE_9.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                    } else if (ref.watch(taxCodeCompanyProvider).length != 10) {
-                      Fluttertoast.showToast(
-                        msg: Keystring.TAX_CODE_MUST_10.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                    } else {
-                      String job = '';
+                    if (ref.watch(fullNameCompanyProvider).isNotEmpty &&
+                        ref.watch(phoneCompanyProvider).isNotEmpty &&
+                        ref.watch(websiteCompanyProvider).isNotEmpty &&
+                        ref.watch(taxCodeCompanyProvider).isNotEmpty &&
+                        provinceChoose!.code != null &&
+                        districtChoose!.code != null &&
+                        wardChoose!.code != null &&
+                        ref.watch(roadCompanyProvider).isNotEmpty &&
+                        listJob.isNotEmpty &&
+                        ref.watch(descriptionCompanyProvider).isNotEmpty) {
+                      if (ref.watch(phoneCompanyProvider).length < 9) {
+                        Fluttertoast.showToast(
+                          msg: Keystring.PHONE_MORE_9.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      } else if (ref.watch(taxCodeCompanyProvider).length !=
+                          10) {
+                        Fluttertoast.showToast(
+                          msg: Keystring.TAX_CODE_MUST_10.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      } else {
+                        String job = '';
 
-                      for (var y in listJob) {
-                        if (!listTitleJob.any((x) => x == y)) {
-                          log('message title: $y');
+                        for (var y in listJob) {
+                          if (!listTitleJob.any((x) => x == y)) {
+                            log('message title: $y');
+                            ref
+                                .read(LoginControllerProvider.notifier)
+                                .createJobTitle(y);
+                          }
+                          job += '$y,';
+                        }
+
+                        if (!edit) {
+                          log("click done");
+
                           ref
                               .read(LoginControllerProvider.notifier)
-                              .createJobTitle(y);
+                              .createCompany(
+                                user!.uid ?? '0',
+                                ref.watch(fullNameCompanyProvider),
+                                ref.watch(avatarCompanyProvider),
+                                ref.watch(emailCompanyProvider),
+                                ref.watch(phoneCompanyProvider),
+                                '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                                ref.watch(websiteCompanyProvider),
+                                ref.watch(taxCodeCompanyProvider),
+                                ref.watch(descriptionCompanyProvider),
+                                job.substring(0, job.length - 1),
+                              );
+                        } else {
+                          log("click update");
+                          ref
+                              .read(LoginControllerProvider.notifier)
+                              .updateCompany(
+                                user!.uid ?? '0',
+                                ref.watch(fullNameCompanyProvider),
+                                ref.watch(avatarCompanyProvider),
+                                company?.email ?? '',
+                                ref.watch(phoneCompanyProvider),
+                                '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                                ref.watch(websiteCompanyProvider),
+                                ref.watch(taxCodeCompanyProvider),
+                                ref.watch(descriptionCompanyProvider),
+                                job.substring(0, job.length - 1),
+                              );
                         }
-                        job += '$y,';
                       }
-
-                      if (!edit) {
-                        log("click done");
-
-                        ref
-                            .read(LoginControllerProvider.notifier)
-                            .createCompany(
-                              user!.uid ?? '0',
-                              ref.watch(fullNameCompanyProvider),
-                              ref.watch(avatarCompanyProvider),
-                              ref.watch(emailCompanyProvider),
-                              ref.watch(phoneCompanyProvider),
-                              '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                              ref.watch(websiteCompanyProvider),
-                              ref.watch(taxCodeCompanyProvider),
-                              ref.watch(descriptionCompanyProvider),
-                              job.substring(0, job.length - 1),
-                            );
-                      } else {
-                        log("click update");
-                        ref
-                            .read(LoginControllerProvider.notifier)
-                            .updateCompany(
-                              user!.uid ?? '0',
-                              ref.watch(fullNameCompanyProvider),
-                              ref.watch(avatarCompanyProvider),
-                              company?.email ?? '',
-                              ref.watch(phoneCompanyProvider),
-                              '${ref.watch(roadCompanyProvider)},${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                              ref.watch(websiteCompanyProvider),
-                              ref.watch(taxCodeCompanyProvider),
-                              ref.watch(descriptionCompanyProvider),
-                              job.substring(0, job.length - 1),
-                            );
-                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: Keystring.NOT_FULL_DATA.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                     }
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: Keystring.NOT_FULL_DATA.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-                },
-                bgColor: appPrimaryColor,
-                height: 64,
-                label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
-                fontSize: 16,
-              ),
-              SizedBox(height: 32),
-            ],
+                  },
+                  bgColor: appPrimaryColor,
+                  height: 64,
+                  label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                  fontSize: 16,
+                ),
+                SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),

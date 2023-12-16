@@ -126,10 +126,12 @@ class ShowProfileScreen extends ConsumerWidget {
                                       horizontal: 8, vertical: 4),
                                   elevation: 2,
                                   child: ListTile(
-                                    title: Text(
-                                      listJob[index],
-                                      overflow: TextOverflow.fade,
-                                      maxLines: 2,
+                                    title: Expanded(
+                                      child: Text(
+                                        listJob[index],
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 2,
+                                      ),
                                     ),
                                   ),
                                 );

@@ -70,45 +70,44 @@ class MenuScreen extends ConsumerWidget {
                 SizedBox(
                   height: 48,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: profile?.level == 'Premium' ||
-                              company?.level == 'Premium'
-                          ? Colors.yellow
-                          : Colors.transparent,
-                      width: 4.0,
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: ClipOval(
-                    child: SizedBox.fromSize(
-                      size: Size.fromRadius(56), // Image radius
-                      child: profile != null || company != null
-                          ? profile?.avatarUrl != null &&
-                                  profile?.avatarUrl != ''
-                              ? Image.network(
-                                  profile?.avatarUrl ?? '',
-                                  fit: BoxFit.cover,
-                                )
-                              : company?.avatarUrl != null &&
-                                      company?.avatarUrl != ''
+                profile != null || company != null
+                    ? Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: profile?.level == 'Premium' ||
+                                    company?.level == 'Premium'
+                                ? Colors.yellow
+                                : Colors.transparent,
+                            width: 4.0,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: SizedBox.fromSize(
+                            size: Size.fromRadius(56), // Image radius
+                            child: Container(
+                              color: const Color.fromARGB(127, 255, 255, 255),
+                              child: profile?.avatarUrl != null &&
+                                      profile?.avatarUrl != ''
                                   ? Image.network(
-                                      company?.avatarUrl ?? '',
+                                      profile?.avatarUrl ?? '',
                                       fit: BoxFit.cover,
                                     )
-                                  : Icon(
-                                      Icons.no_accounts_outlined,
-                                      size: 112,
-                                    )
-                          : Icon(
-                              Icons.no_accounts_outlined,
-                              size: 112,
+                                  : company?.avatarUrl != null &&
+                                          company?.avatarUrl != ''
+                                      ? Image.network(
+                                          company?.avatarUrl ?? '',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(
+                                          Icons.no_accounts_outlined,
+                                          size: 112,
+                                        ),
                             ),
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(height: 0),
                 SizedBox(
                   height: 24,
                 ),

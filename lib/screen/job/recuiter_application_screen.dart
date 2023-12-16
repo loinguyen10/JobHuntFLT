@@ -9,7 +9,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/app_small_button.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
-import 'package:jobhunt_ftl/component/edittext.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/model/job.dart';
 

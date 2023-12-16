@@ -383,10 +383,12 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          listJob[index],
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 3,
+                                        Expanded(
+                                          child: Text(
+                                            listJob[index],
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 3,
+                                          ),
                                         ),
                                         InkWell(
                                           child: Icon(Icons.delete_outlined),

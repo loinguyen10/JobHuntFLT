@@ -62,9 +62,9 @@ class ShowProfileScreen extends ConsumerWidget {
                         child: avatarProfile != ''
                             ? Image.network(avatarProfile, fit: BoxFit.cover)
                             : Icon(
-                          Icons.no_accounts_outlined,
-                          size: 128,
-                        ),
+                                Icons.no_accounts_outlined,
+                                size: 128,
+                              ),
                       ),
                     ),
                   ),
@@ -98,8 +98,8 @@ class ShowProfileScreen extends ConsumerWidget {
                   labelText: Keystring.ADDRESS.tr,
                   child: Text(
                     '${getWardName(profile.address!.substring(profile.address!.indexOf(',') + 1, profile.address!.indexOf(',', profile.address!.indexOf(',') + 1)), ref)}, '
-                        '${getDistrictName(profile.address!.substring(profile.address!.lastIndexOf(',', profile.address!.lastIndexOf(',') - 1) + 1, profile.address!.lastIndexOf(',')), ref)},\n'
-                        '${getProvinceName(profile.address!.substring(profile.address!.lastIndexOf(',') + 1), ref)}',
+                    '${getDistrictName(profile.address!.substring(profile.address!.lastIndexOf(',', profile.address!.lastIndexOf(',') - 1) + 1, profile.address!.lastIndexOf(',')), ref)},\n'
+                    '${getProvinceName(profile.address!.substring(profile.address!.lastIndexOf(',') + 1), ref)}',
                     style: textNormal,
                   )),
               SizedBox(height: 24),
@@ -117,6 +117,38 @@ class ShowProfileScreen extends ConsumerWidget {
                       ),
                       listJob != null && listJob.isNotEmpty
                           ? ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (_, index) {
+                                return Card(
+                                  shadowColor: Colors.grey,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  elevation: 2,
+                                  child: ListTile(
+                                    title: Expanded(
+                                      child: Text(
+                                        listJob[index],
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemCount: listJob.length,
+                            )
+                          : SizedBox(
+                              height: 80,
+                              child: Text(Keystring.NO_DATA.tr),
+                            ),
+                    ],
+                  )),
+              SizedBox(height: 24),
+              AppBorderFrame(
+                labelText: Keystring.EDUCATION.tr,
+                child: listEducation != null && listEducation.isNotEmpty
+                    ? ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (_, index) {
@@ -127,52 +159,22 @@ class ShowProfileScreen extends ConsumerWidget {
                             elevation: 2,
                             child: ListTile(
                               title: Text(
-                                listJob[index],
+                                (Get.locale!.languageCode == 'en'
+                                        ? listEducation[index].title_en
+                                        : listEducation[index].title) ??
+                                    '',
                                 overflow: TextOverflow.fade,
                                 maxLines: 2,
                               ),
                             ),
                           );
                         },
-                        itemCount: listJob.length,
+                        itemCount: listEducation.length,
                       )
-                          : SizedBox(
+                    : SizedBox(
                         height: 80,
                         child: Text(Keystring.NO_DATA.tr),
                       ),
-                    ],
-                  )),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.EDUCATION.tr,
-                child: listEducation != null && listEducation.isNotEmpty
-                    ? ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (_, index) {
-                    return Card(
-                      shadowColor: Colors.grey,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      elevation: 2,
-                      child: ListTile(
-                        title: Text(
-                          (Get.locale!.languageCode == 'en'
-                              ? listEducation![index].title_en
-                              : listEducation![index].title) ??
-                              '',
-                          overflow: TextOverflow.fade,
-                          maxLines: 2,
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: listEducation.length,
-                )
-                    : SizedBox(
-                  height: 80,
-                  child: Text(Keystring.NO_DATA.tr),
-                ),
               ),
               SizedBox(height: 32),
             ],

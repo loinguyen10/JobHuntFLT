@@ -14,8 +14,6 @@ import 'package:jobhunt_ftl/screen/login_register/register_screen.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../blocs/app_riverpod_void.dart';
 import '../../value/style.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {

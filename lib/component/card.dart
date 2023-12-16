@@ -103,19 +103,22 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
                       child: Text(
                         widget.province,
                         overflow: TextOverflow.fade,
-                        maxLines: 3,
+                        maxLines: 1,
                       ),
                     ),
                     Container(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 3),
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: Colors.green),
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                        border: Border.all(width: 2, color: Colors.green),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
                       child: Text(
                         widget.job,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                   ],

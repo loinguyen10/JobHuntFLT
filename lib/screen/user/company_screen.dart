@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +6,6 @@ import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../model/company.dart';
-import '../../value/style.dart';
 import 'company_information.dart';
 
 class CompanyPremiumScreen extends ConsumerWidget {

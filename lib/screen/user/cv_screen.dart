@@ -36,7 +36,7 @@ class CVChooseScreen extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  ref.refresh(cvUploadProvider);
+                  ref.invalidate(cvUploadProvider);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CVUploadScreen()),
@@ -71,7 +71,7 @@ class CVChooseScreen extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  ref.refresh(listYourCVProvider);
+                  ref.invalidate(listYourCVProvider);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CVManagerScreen()),
@@ -154,7 +154,7 @@ class CVUploadScreen extends ConsumerWidget {
         File file = File(result.files.single.path!);
 
         ref.read(cvUploadProvider.notifier).state = file.path;
-        ref.refresh(uploadCheckProvider.notifier);
+        ref.invalidate(uploadCheckProvider);
       } else {
         // User canceled the picker
       }

@@ -56,10 +56,8 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      // 'email': 'hungbip@jobshunt.info',
-      // 'password': 'hung',
-      // 'email': 'emminh@jobshunt.info',
-      // 'password': 'minhhoang',
+      // 'email': 'dohonghai252003@gmail.com',
+      // 'password': '123456',
       'email': emailAddress.trim(),
       'password': password.trim(),
     });

@@ -1039,9 +1039,16 @@ class LoginController extends StateNotifier<InsideEvent> {
           .addHistoryPayment(money, date, status, payment_type, userId, role);
 
       if (result == 1) {
-        final profile =
-            await ref.read(authRepositoryProvider).getProfile(userId);
-        ref.read(userProfileProvider.notifier).state = profile;
+        if (role == 'candidate') {
+          final profile =
+              await ref.read(authRepositoryProvider).getProfile(userId);
+          ref.read(userProfileProvider.notifier).state = profile;
+        } else if (role == 'recruiter') {
+          final company =
+              await ref.read(authRepositoryProvider).getCompany(userId);
+          log('company: $company');
+          ref.read(companyProfileProvider.notifier).state = company;
+        }
         ref.refresh(listHistoryPaymentsProvider);
         state = const HistorypaymentSuccessEvent();
       } else {

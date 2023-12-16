@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:jobhunt_ftl/blocs/app_event.dart';
 // import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -10,8 +7,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 // import '../component/loader_overlay.dart';
 
 class ViewCVScreen extends StatelessWidget {
-  ViewCVScreen({super.key, required this.cv});
-  String cv;
+  const ViewCVScreen({super.key, required this.cv});
+  final String cv;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +40,11 @@ class ViewCVScreen extends StatelessWidget {
 }
 
 class ScreenViewCV extends StatefulWidget {
-  ScreenViewCV({
+  const ScreenViewCV({
     super.key,
     required this.cv,
   });
-  String cv;
+  final String cv;
 
   @override
   State<ScreenViewCV> createState() => _ScreenViewCV();

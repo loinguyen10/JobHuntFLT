@@ -1,7 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:get/get.dart';
-import 'package:jobhunt_ftl/model/user.dart';
-import 'package:jobhunt_ftl/value/keystring.dart';
 
 abstract class InsideEvent extends Equatable {
   const InsideEvent();

@@ -225,4 +225,5 @@ class Keystring {
   static const String SPLASH_TILE = 'Splash_Tile';
   static const String GET_STARTED = 'Get_Started';
   static const String HOLD_DELETE = 'Hold_Delete';
+  static const String NO_AVAILABLE = 'No_Available';
 }

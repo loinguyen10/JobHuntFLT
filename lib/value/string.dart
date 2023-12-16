@@ -236,6 +236,7 @@ class LocaleString extends Translations {
               'Find your dream job is easier and faster with FPLWork',
           'Get_Started': 'Let\'s Get Started',
           'Hold_Delete': 'Hold a CV you want to delete',
+          'No_Available': 'This job is no longer available.',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -468,6 +469,7 @@ class LocaleString extends Translations {
               'Tìm công việc mơ ước thật dễ dàng và nhanh chóng với FPLWork',
           'Get_Started': 'Bắt đầu nào',
           'Hold_Delete': 'Giữ CV mà bạn muốn xóa',
+          'No_Available': 'Công việc này hiện không còn hoạt động.',
         },
       };
 }

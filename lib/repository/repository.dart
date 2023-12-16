@@ -54,12 +54,12 @@ class InsideService {
 
   Future<dynamic> login(String emailAddress, String password) async {
     final msg = jsonEncode({
-      // 'email': 'laingu@jobshunt.info',
-      // 'password': 'laicutai',
+      'email': 'laingu@jobshunt.info',
+      'password': 'laicutai',
       // 'email': 'dohonghai252003@gmail.com',
       // 'password': '123456',
-      'email': emailAddress.trim(),
-      'password': password.trim(),
+      // 'email': emailAddress.trim(),
+      // 'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',

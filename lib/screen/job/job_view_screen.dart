@@ -195,6 +195,7 @@ class JobViewScreen extends ConsumerWidget {
                                                       ApplyJobScreen()));
                                         },
                                         label: Keystring.APPLY_NOW.tr,
+                                        fontSize: 14,
                                         bgColor: appPrimaryColor,
                                         colorBorder: appPrimaryColor,
                                         borderRadius: 16,

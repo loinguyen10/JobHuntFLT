@@ -53,7 +53,7 @@ class _ReportScreen extends ConsumerState<ReportScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10),
               child: SizedBox(
-                  width: screenWidth, child: Text(Keystring.Name_Job.tr)),
+                  width: screenWidth, child: Text(Keystring.Name_Job.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),
             ),
             SizedBox(
               height: 15,
@@ -69,7 +69,7 @@ class _ReportScreen extends ConsumerState<ReportScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10),
               child: SizedBox(
-                  width: screenWidth, child: Text(Keystring.RECRUITER.tr)),
+                  width: screenWidth, child: Text(Keystring.RECRUITER.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15))),
             ),
             SizedBox(
               height: 15,
@@ -95,7 +95,7 @@ class _ReportScreen extends ConsumerState<ReportScreen> {
               padding: EdgeInsets.only(left: 10),
               child: SizedBox(
                   width: screenWidth,
-                  child: Text(Keystring.REPORTING_REASON.tr)),
+                  child: Text(Keystring.REPORTING_REASON.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15))),
             ),
             ListTile(
               title: Text(Keystring.ONE_REASON.tr),

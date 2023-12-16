@@ -521,26 +521,40 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: EditTextForm(
+                        child: EditTextFormWithSuffixIcon(
                           typeKeyboard: TextInputType.number,
                           onChanged: ((value) {
                             ref
                                 .read(minSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
+                          ),
                           content: setting?.minSalary.toString() ?? '',
                           label: Keystring.MIN_SALARY.tr,
                         ),
                       ),
                       SizedBox(width: 12),
                       Expanded(
-                        child: EditTextForm(
+                        child: EditTextFormWithSuffixIcon(
                           typeKeyboard: TextInputType.number,
                           onChanged: ((value) {
                             ref
                                 .read(maxSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
+                          ),
                           content: setting?.maxSalary.toString() ?? '',
                           label: Keystring.MAX_SALARY.tr,
                         ),

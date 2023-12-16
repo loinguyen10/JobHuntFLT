@@ -263,9 +263,12 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                           },
                           controller: minSalaryController,
                           label: Keystring.MIN_SALARY.tr,
-                          suffixIcon: Icon(
-                            Icons.currency_bitcoin,
-                            size: 14,
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
                           ),
                           // hintText: 'VNĐ',
                           typeKeyboard: TextInputType.number,
@@ -281,9 +284,12 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                           },
                           controller: maxSalaryController,
                           label: Keystring.MAX_SALARY.tr,
-                          suffixIcon: Icon(
-                            Icons.currency_bitcoin,
-                            size: 14,
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
                           ),
                           // hintText: 'VNĐ',
                           typeKeyboard: TextInputType.number,

@@ -510,6 +510,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                   content: company?.taxcode ?? '',
                   maxLines: 1,
                   maxLength: 10,
+                  typeKeyboard: TextInputType.number,
                 ),
                 SizedBox(height: 24),
                 AppBorderFrame(

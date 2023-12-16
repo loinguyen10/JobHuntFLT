@@ -411,7 +411,7 @@ class LocaleString extends Translations {
           'Yes': 'Có',
           'No': 'Không',
           'Headquarter': 'Trụ sở',
-          'Check': 'Kiểm tra',
+          'Check': 'Xem',
           'Thousands': 'Nghìn',
           'Millions': 'Triệu',
           'Billions': 'Tỷ',

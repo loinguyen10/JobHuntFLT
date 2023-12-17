@@ -21,19 +21,6 @@ class ShowProfileScreen extends ConsumerWidget {
     final listJob = recommendProfile?.job?.split(',');
     final listEducation = recommendProfile?.education;
 
-    String showGender(String? gender) {
-      switch (gender) {
-        case 'Male':
-          return Keystring.MALE.tr;
-        case 'Female':
-          return Keystring.FEMALE.tr;
-        case 'Other':
-          return Keystring.OTHER.tr;
-        default:
-          return Keystring.NO_DATA.tr;
-      }
-    }
-
     return Container(
       decoration: BoxDecoration(
           gradient: Theme.of(context).colorScheme.background == Colors.white
@@ -84,13 +71,6 @@ class ShowProfileScreen extends ConsumerWidget {
                 onChanged: (value) => (),
                 label: Keystring.BIRTHDAY.tr,
                 content: profile.birthday ?? '',
-                readOnly: true,
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: (value) => (),
-                label: Keystring.GENDER.tr,
-                content: showGender(recommendProfile?.gender),
                 readOnly: true,
               ),
               SizedBox(height: 24),

@@ -461,11 +461,13 @@ class PasswordRegisterScreen extends ConsumerStatefulWidget {
 
 class _PasswordRegisterScreenState
     extends ConsumerState<PasswordRegisterScreen> {
+  final passUpController = TextEditingController();
+  final passAgainController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     String emailUp = ref.watch(emailRegisterProvider);
-    String passUp = '';
-    String passAgain = '';
+    // String passUp = '';
+    // String passAgain = '';
 
     ref.listen<InsideEvent>(
       LoginControllerProvider,
@@ -528,7 +530,8 @@ class _PasswordRegisterScreenState
                     obscureText: true,
                     showEye: true,
                     onChanged: ((value) {
-                      passUp = value;
+                      passUpController.text = value;
+                      log(passUpController.text  +'_'+ value);
                     }),
                     textColor: Colors.black,
                     label: Keystring.PASSWORD.tr,
@@ -539,7 +542,7 @@ class _PasswordRegisterScreenState
                     obscureText: true,
                     showEye: true,
                     onChanged: ((value) {
-                      passAgain = value;
+                      passAgainController.text = value;
                     }),
                     textColor: Colors.black,
                     label: Keystring.PASSWORD_AGAIN.tr,
@@ -553,9 +556,9 @@ class _PasswordRegisterScreenState
                             borderRadius: BorderRadius.circular(8)),
                         minimumSize: Size(double.infinity, 60)),
                     onPressed: () async {
-                      log('yoo1 $emailUp - $passUp');
-                      if (passUp.isNotEmpty && passAgain.isNotEmpty) {
-                        if (passUp != passAgain) {
+                      log('yoo1 $emailUp - ${passUpController.text}');
+                      if (passUpController.text.isNotEmpty && passAgainController.text.isNotEmpty) {
+                        if (passUpController.text  != passAgainController.text) {
                           Fluttertoast.showToast(
                               msg: Keystring.NEED_SAME_PASS.tr,
                               toastLength: Toast.LENGTH_SHORT,
@@ -565,9 +568,10 @@ class _PasswordRegisterScreenState
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else {
+                          log('yoo1 $emailUp - ${passUpController.text}');
                           ref
                               .read(LoginControllerProvider.notifier)
-                              .register(emailUp, passUp);
+                              .register(emailUp, passUpController.text );
                         }
                       } else {
                         Fluttertoast.showToast(

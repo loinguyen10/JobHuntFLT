@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:jobhunt_ftl/model/user.dart';
 
 abstract class InsideEvent extends Equatable {
   const InsideEvent();
@@ -249,6 +248,7 @@ class GetListErrorEvent extends InsideEvent {
   @override
   List<Object> get props => [error ?? ''];
 }
+
 class HistorypaymentLoadingEvent extends InsideEvent {
   const HistorypaymentLoadingEvent();
 
@@ -265,6 +265,116 @@ class HistorypaymentSuccessEvent extends InsideEvent {
 
 class HistorypaymentErrorEvent extends InsideEvent {
   const HistorypaymentErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class CreateReportLoadingEvent extends InsideEvent {
+  const CreateReportLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CreateReportSuccessEvent extends InsideEvent {
+  const CreateReportSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CreateReportErrorEvent extends InsideEvent {
+  const CreateReportErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class CheckCountSuccessEvent extends InsideEvent {
+  const CheckCountSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddMessageLoadingEvent extends InsideEvent {
+  const AddMessageLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CheckCountOverwriteEvent extends InsideEvent {
+  const CheckCountOverwriteEvent({this.messageOverwrite = ''});
+
+  final String messageOverwrite;
+
+  @override
+  List<Object> get props => [messageOverwrite];
+}
+
+class CheckCountErrorEvent extends InsideEvent {
+  const CheckCountErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class AddMessageSuccessEvent extends InsideEvent {
+  const AddMessageSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddMessageErrorEvent extends InsideEvent {
+  const AddMessageErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class AddCountSuccessEvent extends InsideEvent {
+  const AddCountSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddConverstationLoadingEvent extends InsideEvent {
+  const AddConverstationLoadingEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddConverstationSuccessEvent extends InsideEvent {
+  const AddConverstationSuccessEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddCountErrorEvent extends InsideEvent {
+  const AddCountErrorEvent({this.error});
+
+  final String? error;
+
+  @override
+  List<Object> get props => [error ?? ''];
+}
+
+class AddConverstationErrorEvent extends InsideEvent {
+  const AddConverstationErrorEvent({this.error});
 
   final String? error;
 

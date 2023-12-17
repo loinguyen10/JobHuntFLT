@@ -119,7 +119,6 @@ String getProvinceName(String code, WidgetRef ref) {
         error: (error, stackTrace) => (),
         loading: () => (),
       );
-  log('$code & $name');
   return name;
 }
 
@@ -142,7 +141,6 @@ String getDistrictName(String code, WidgetRef ref) {
         error: (error, stackTrace) => (),
         loading: () => (),
       );
-  log('$code & $name');
   return name;
 }
 
@@ -165,7 +163,6 @@ String getWardName(String code, WidgetRef ref) {
         error: (error, stackTrace) => (),
         loading: () => (),
       );
-  log('$code & $name');
   return name;
 }
 
@@ -226,7 +223,7 @@ bool checkPassword(String password) {
 
 Future<List<JobDetail>> getJobList() async {
   final list = await insideService.getListJob();
-  log('list: ${list.length}');
+  log('list job: ${list.length}');
   return list;
 }
 
@@ -327,7 +324,13 @@ Future<List<UserProfileDetail>> getUserProfileList() async {
   log('listProfile: ${list.length}');
   return list;
 }
+
 Future<List<PaymentDetail>> getYourHistoryPaymentList(String uid) async {
   final list = await insideService.getListHistoryPayments(uid);
   return list;
+}
+
+void getCandidateRecommend(String uid, WidgetRef ref) async {
+  final result = await insideService.getJobRecommendSetting(uid);
+  ref.read(candidateRecommendProvider.notifier).state = result;
 }

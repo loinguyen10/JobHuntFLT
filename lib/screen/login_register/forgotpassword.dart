@@ -20,9 +20,8 @@ class ForgotPasswordScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int countdown = 90;
-    late Timer timer;
     final TextEditingController emailController = TextEditingController();
-    final TextEditingController otpController = TextEditingController();
+    // final TextEditingController otpController = TextEditingController();
     final email = ref.watch(emailsaveProvider);
     String otp = "";
 
@@ -65,7 +64,8 @@ class ForgotPasswordScreen extends ConsumerWidget {
                                     isResendButtonEnabled = false;
                                   });
 
-                                  Future.delayed(Duration(seconds: 60), () {
+                                  Future.delayed(Duration(seconds: countdown),
+                                      () {
                                     setState(() {
                                       isResendButtonEnabled = true;
                                     });
@@ -195,7 +195,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
           children: <Widget>[
             EditTextController(
               onChanged: ((value) {
-                ref.read(emailLoginProvider.notifier).state = value;
+                // ref.read(emailLoginProvider.notifier).state = value;
               }),
               controller: emailController,
               textColor: Colors.black,

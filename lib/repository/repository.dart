@@ -56,12 +56,10 @@ class InsideService {
     final msg = jsonEncode({
       // 'email': 'laingu@jobshunt.info',
       // 'password': 'laicutai',
-      'email': 'hungbip@jobshunt.info',
-      'password': 'hung',
-      // 'email': 'emminh@jobshunt.info',
-      // 'password': 'minhhoang',
-      //'email': emailAddress.trim(),
-      //'password': password.trim(),
+      // 'email': 'dohonghai252003@gmail.com',
+      // 'password': '123456',
+      'email': emailAddress.trim(),
+      'password': password.trim(),
     });
     // Map<String, String> requestHeaders = {
     //   'Content-type': 'application/json',
@@ -75,13 +73,17 @@ class InsideService {
     log('ket qua login00: ${response.statusCode}');
     log('ket qua login: ${jsonDecode(response.body)}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
-      final UserDetail result =
-          UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
-      log("Token dc luu ${result.uid}");
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('uid', result.uid ?? '');
-      await prefs.setString('email', result.email ?? '');
-      return result;
+      if (jsonDecode(response.body)['success'] != 0) {
+        final UserDetail result =
+            UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
+        log("Token dc luu ${result.uid}");
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('uid', result.uid ?? '');
+        await prefs.setString('email', result.email ?? '');
+        return result;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
@@ -207,7 +209,7 @@ class InsideService {
 
   Future<dynamic> register(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': emailAddress.trim(),
+      'email': emailAddress.trim().toLowerCase(),
       'password': password.trim(),
     });
     Response response =
@@ -250,7 +252,7 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
-      'tax_code': taxcode,
+      'tax_code': taxcode.trim(),
       'description': description,
       'job': job,
       'level': 'Basic',
@@ -312,7 +314,7 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
-      'tax_code': taxcode,
+      'tax_code': taxcode.trim(),
       'description': description,
       'job': job,
     });
@@ -609,16 +611,18 @@ class InsideService {
 
   Future<dynamic> getRecuiterApplication(
     String companyId,
-    String searchWord,
+    String jobId,
     String approve,
     String sentTime,
   ) async {
     final msg = jsonEncode({
       'companyId': companyId,
-      'search_word': searchWord,
+      'jobId': jobId,
       'approve': approve,
       'sent_time': sentTime,
     });
+
+    log(msg);
 
     Response response = await post(
       Uri.parse(BASE_URL + "application/recuiter_application.php"),
@@ -852,8 +856,7 @@ class InsideService {
     Response response = await post(
         Uri.parse(BASE_URL + "job/job_recommend_for_user.php"),
         body: msg);
-    log('ket qua get: ${response.statusCode}');
-    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    log('ket qua get list recommend: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];
@@ -1005,5 +1008,105 @@ class InsideService {
     } else {
       return [];
     }
+  }
+
+  Future<dynamic> clickViewPlus(
+    String code,
+  ) async {
+    final msg = jsonEncode({
+      'code': code,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}job/view_click.php"), body: msg);
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> creatReport(
+    String report_sender_id,
+    String reported_persons_id,
+    String title,
+    String description,
+  ) async {
+    final msg = jsonEncode({
+      'report_sender_id': report_sender_id,
+      'reported_persons_id': reported_persons_id,
+      'title': title,
+      'description': description,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}report/create_report.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> checkCount(
+    String userId,
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'user_id': userId,
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}count/check_count.php"), body: msg);
+
+    return jsonDecode(response.body);
+  }
+
+  Future<dynamic> addCount(
+    String userId,
+    String title,
+  ) async {
+    final msg = jsonEncode({
+      'user_id': userId,
+      'title': title,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}count/add_count.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> addMessage(
+    String userId,
+    String companyId,
+    String content,
+    String send,
+  ) async {
+    final msg = jsonEncode({
+      'userId': userId,
+      'companyId': companyId,
+      'content': content,
+      'send': send,
+    });
+
+    Response response =
+        await post(Uri.parse("${BASE_URL}message/add_message.php"), body: msg);
+
+    return jsonDecode(response.body)['success'];
+  }
+
+  Future<dynamic> addConverstation(
+    String id,
+    String userId,
+    String companyId,
+    String content,
+  ) async {
+    final msg = jsonEncode({
+      'id': id,
+      'userId': userId,
+      'companyId': companyId,
+      'content': content,
+    });
+
+    Response response = await post(
+        Uri.parse("${BASE_URL}message/add_conversation.php"),
+        body: msg);
+
+    return jsonDecode(response.body)['success'];
   }
 }

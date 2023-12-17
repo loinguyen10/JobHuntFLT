@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +6,6 @@ import 'package:jobhunt_ftl/component/card.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../model/company.dart';
-import '../../value/style.dart';
 import 'company_information.dart';
 
 class CompanyPremiumScreen extends ConsumerWidget {
@@ -35,6 +32,7 @@ class CompanyPremiumScreen extends ConsumerWidget {
                   String name = listCompanyPremium[index].fullname ?? '';
                   String avatar = listCompanyPremium[index].avatarUrl ?? '';
                   String job = listCompanyPremium[index].job ?? '';
+                  String level = listCompanyPremium[index].level ?? '';
                   var tag = job.split(',');
                   String province = getProvinceName(
                       listCompanyPremium[index].address!.substring(
@@ -44,12 +42,12 @@ class CompanyPremiumScreen extends ConsumerWidget {
 
                   return GestureDetector(
                     onTap: () {
+                      ref.read(companyInforProvider.notifier).state =
+                          listCompanyPremium[index];
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CompanyInformation(
-                              company: listCompanyPremium[index],
-                            ),
+                            builder: (context) => CompanyInformation(),
                           ));
                     },
                     child: AppCompanyCard(
@@ -57,6 +55,7 @@ class CompanyPremiumScreen extends ConsumerWidget {
                       name: name,
                       province: province,
                       job: tag[0],
+                      level: level,
                     ),
                   );
                 },
@@ -103,6 +102,7 @@ class AllCompanyScreen extends ConsumerWidget {
             String name = _data[index].fullname ?? '';
             String avatar = _data[index].avatarUrl ?? '';
             String job = _data[index].job ?? '';
+            String level = _data[index].level ?? '';
             var tag = job.split(',');
             String province = getProvinceName(
                 _data[index]
@@ -112,12 +112,11 @@ class AllCompanyScreen extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () {
+                ref.read(companyInforProvider.notifier).state = _data[index];
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CompanyInformation(
-                        company: _data[index],
-                      ),
+                      builder: (context) => CompanyInformation(),
                     ));
               },
               child: AppCompanyCard(
@@ -125,6 +124,7 @@ class AllCompanyScreen extends ConsumerWidget {
                 name: name,
                 province: province,
                 job: tag[0],
+                level: level,
               ),
             );
           },

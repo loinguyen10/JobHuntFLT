@@ -51,14 +51,14 @@ class _AppAutocompleteEditTextState extends State<AppAutocompleteEditText> {
         if (textEditingValue.text == '') {
           return const Iterable<String>.empty();
         }
-        if (!widget.listSuggestion.any((x) => x == textEditingValue.text)) {
-          return widget.listSuggestion.where((String option) {
-                return option
-                    .toLowerCase()
-                    .contains(textEditingValue.text.toLowerCase());
-              }).toList() +
-              [textEditingValue.text];
-        }
+        // if (!widget.listSuggestion.any((x) => x == textEditingValue.text)) {
+        //   return widget.listSuggestion.where((String option) {
+        //         return option
+        //             .toLowerCase()
+        //             .contains(textEditingValue.text.toLowerCase());
+        //       }).toList() +
+        //       [textEditingValue.text];
+        // }
 
         return widget.listSuggestion.where((String option) {
           return option

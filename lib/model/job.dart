@@ -18,7 +18,9 @@ class JobDetail {
   String? deadline;
   int? active;
   String? level;
+  int? numberClick;
   CompanyDetail? company;
+  int? remainPeople;
 
   JobDetail({
     this.code,
@@ -39,6 +41,8 @@ class JobDetail {
     this.active,
     this.level,
     this.company,
+    this.numberClick,
+    this.remainPeople,
   });
 
   JobDetail.fromJson(Map<String, dynamic> json) {
@@ -59,6 +63,8 @@ class JobDetail {
     deadline = json['deadline'];
     active = int.parse(json['active']);
     level = json['level'];
+    numberClick = int.parse(json['num_click']);
+    remainPeople = json['remain_people'] ?? 0;
     company = json['company'] != null
         ? new CompanyDetail.fromJson(json['company'])
         : null;
@@ -83,6 +89,8 @@ class JobDetail {
     data['deadline'] = this.deadline;
     data['active'] = this.active;
     data['level'] = this.level;
+    data['num_click'] = this.numberClick;
+    data['remain_people'] = this.remainPeople;
     if (this.company != null) {
       data['company'] = this.company!.toJson();
     }

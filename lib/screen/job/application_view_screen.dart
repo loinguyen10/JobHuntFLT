@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
-
+import 'package:jobhunt_ftl/screen/user/show_proflie.dart';
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
@@ -17,7 +16,6 @@ import '../../component/card.dart';
 import '../../component/loader_overlay.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
-import '../home.dart';
 import '../user/viewcv.dart';
 import 'job_view_screen.dart';
 
@@ -41,6 +39,8 @@ class _ApplicationViewFullScreenState
     final job = application!.job;
     final candidate = application.candidate;
 
+    bool? approveIt;
+
     void showInterviewTime(bool edit) {
       showDialog(
         context: context,
@@ -58,7 +58,7 @@ class _ApplicationViewFullScreenState
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent) {
+        if (state is CreateThingErrorEvent || state is CheckCountErrorEvent) {
           Loader.hide();
           log('error-apply');
           Fluttertoast.showToast(
@@ -74,6 +74,14 @@ class _ApplicationViewFullScreenState
         if (state is CreateThingSuccessEvent) {
           Loader.hide();
           log('c-success-apply');
+
+          if (ref.watch(companyProfileProvider)?.level != 'Premium') {
+            ref.read(LoginControllerProvider.notifier).addCount(
+                  ref.watch(userLoginProvider)!.uid ?? '',
+                  Keystring.recruiter_job_appication,
+                );
+          }
+
           ref.invalidate(getListRecuiterApplicationProvider);
           Get.back();
           Fluttertoast.showToast(
@@ -84,6 +92,41 @@ class _ApplicationViewFullScreenState
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
+        }
+
+        if (state is CheckCountSuccessEvent) {
+          if (approveIt == true) {
+            Loader.hide();
+            showInterviewTime(false);
+          } else if (approveIt == false) {
+            ref.read(LoginControllerProvider.notifier).approveApplication(
+                  application.code ?? '0',
+                  '0',
+                );
+          }
+        }
+
+        if (state is CheckCountOverwriteEvent) {
+          Loader.hide();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(
+                  Keystring.WARNING.tr,
+                  style: textNormal,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
         }
 
         if (state is ThingLoadingEvent) {
@@ -144,22 +187,54 @@ class _ApplicationViewFullScreenState
                     ref),
               ),
               SizedBox(height: 32),
-              AppButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ViewCVScreen(
-                              cv: application.cvUrl ?? '',
-                            )),
-                  );
-                },
-                label: Keystring.VIEW_CV.tr,
-                bgColor: Colors.grey,
-                textColor: Colors.black,
-                colorBorder: Colors.black,
-                borderRadius: 16,
-                height: 56,
+              Row(
+                children: [
+                  widget.recruiter
+                      ? Expanded(
+                          child: AppButton(
+                            onPressed: () {
+                              getCandidateRecommend(
+                                  application.candidate!.uid ?? '0', ref);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ShowProfileScreen(
+                                          profile: application.candidate!,
+                                        )),
+                              );
+                            },
+                            label: Keystring.VIEW_PROFILE.tr,
+                            bgColor: Colors.grey,
+                            textColor: Colors.black,
+                            colorBorder: Colors.black,
+                            borderRadius: 16,
+                            height: 56,
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                          ),
+                        )
+                      : SizedBox(width: 0),
+                  Expanded(
+                    child: AppButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewCVScreen(
+                                    cv: application.cvUrl ?? '',
+                                  )),
+                        );
+                      },
+                      label: Keystring.VIEW_CV.tr,
+                      bgColor: Colors.grey,
+                      textColor: Colors.black,
+                      colorBorder: Colors.black,
+                      borderRadius: 16,
+                      height: 56,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: widget.recruiter ? 16 : 0),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 40),
               widget.recruiter
@@ -172,7 +247,25 @@ class _ApplicationViewFullScreenState
                                 Expanded(
                                   child: AppButton(
                                     onPressed: () {
-                                      showInterviewTime(false);
+                                      if (ref
+                                              .watch(companyProfileProvider)
+                                              ?.level ==
+                                          'Premium') {
+                                        showInterviewTime(false);
+                                      } else {
+                                        approveIt = true;
+                                        ref
+                                            .read(LoginControllerProvider
+                                                .notifier)
+                                            .checkCount(
+                                              ref
+                                                      .watch(userLoginProvider)!
+                                                      .uid ??
+                                                  '',
+                                              Keystring
+                                                  .recruiter_job_appication,
+                                            );
+                                      }
                                     },
                                     label: Keystring.APPROVE.tr,
                                     bgColor: Colors.green,
@@ -194,14 +287,35 @@ class _ApplicationViewFullScreenState
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {
-                                                ref
-                                                    .read(
-                                                        LoginControllerProvider
-                                                            .notifier)
-                                                    .approveApplication(
-                                                      application.code ?? '0',
-                                                      '0',
-                                                    );
+                                                if (ref
+                                                        .watch(
+                                                            companyProfileProvider)
+                                                        ?.level ==
+                                                    'Premium') {
+                                                  ref
+                                                      .read(
+                                                          LoginControllerProvider
+                                                              .notifier)
+                                                      .approveApplication(
+                                                        application.code ?? '0',
+                                                        '0',
+                                                      );
+                                                } else {
+                                                  approveIt = false;
+                                                  ref
+                                                      .read(
+                                                          LoginControllerProvider
+                                                              .notifier)
+                                                      .checkCount(
+                                                        ref
+                                                                .watch(
+                                                                    userLoginProvider)!
+                                                                .uid ??
+                                                            '',
+                                                        Keystring
+                                                            .recruiter_job_appication,
+                                                      );
+                                                }
                                                 Navigator.pop(context);
                                               },
                                               child:

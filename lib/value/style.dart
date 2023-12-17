@@ -42,7 +42,8 @@ final textTitleTab1Company =
     TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
 //color
-final appPrimaryColor = Color(0xffFF5F00);
+final appPrimaryColor = Color(0xffff7624);
+final appBgGradientColor = Color(0xffff8839);
 final bgPrimaryColor0 = Color(0xffEEEEEE);
 final bgPrimaryColor1 = Color(0xff404040);
 final appHintColor = Color.fromARGB(0, 238, 238, 238);
@@ -51,7 +52,7 @@ final bgGradientColor0 = LinearGradient(
   end: Alignment.bottomCenter,
   colors: <Color>[
     appPrimaryColor,
-    Color(0xffFF7D00),
+    appBgGradientColor,
     Colors.white,
     Colors.white,
     Colors.white,
@@ -77,8 +78,7 @@ final bgGradientColor2 = LinearGradient(
   end: Alignment.bottomCenter,
   colors: <Color>[
     appPrimaryColor,
-    Color(0xffFF7D00),
-    Colors.white,
+    appBgGradientColor,
     Colors.white,
     Colors.white,
     Colors.white,
@@ -95,7 +95,29 @@ final bgGradientColor3 = LinearGradient(
   end: Alignment.bottomCenter,
   colors: <Color>[
     appPrimaryColor,
-    Color(0xffFF7D00),
+    appBgGradientColor,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+    Colors.white,
+  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+  tileMode: TileMode.mirror,
+);
+
+final bgGradientColorHome = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: <Color>[
+    appBgGradientColor,
+    appBgGradientColor,
+    Colors.white,
+    Colors.white,
+    Colors.white,
     Colors.white,
     Colors.white,
     Colors.white,

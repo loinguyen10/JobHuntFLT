@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/model/userprofile.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
-
-import '../blocs/app_riverpod_void.dart';
+import '../screen/report/report_user.dart';
 import '../value/style.dart';
 
 class AppCompanyCard extends StatefulWidget {
@@ -14,12 +12,14 @@ class AppCompanyCard extends StatefulWidget {
     required this.name,
     required this.province,
     required this.job,
+    required this.level,
   });
 
   final String avatar;
   final String name;
   final String province;
   final String job;
+  final String level;
 
   @override
   State<AppCompanyCard> createState() => _AppCompanyCardState();
@@ -41,18 +41,41 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
         mainAxisSize: MainAxisSize.max,
         children: [
           SizedBox(width: 8),
-          ClipOval(
-            child: SizedBox.fromSize(
-              size: Size.fromRadius(40), // Image radius
-              child: widget.avatar != ''
-                  ? Image.network(
-                      widget.avatar,
-                      fit: BoxFit.cover,
-                    )
-                  : Icon(
-                      Icons.apartment,
-                      size: 80,
-                    ),
+          Container(
+            child: Stack(
+              children: [
+                ClipOval(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(40), // Image radius
+                    child: widget.avatar != ''
+                        ? Image.network(
+                            widget.avatar,
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.apartment,
+                            size: 80,
+                          ),
+                  ),
+                ),
+                widget.level == 'Premium'
+                    ? Positioned(
+                        right: 0.0,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: CircleAvatar(
+                            radius: 12.0,
+                            backgroundColor: Colors.white,
+                            child: Icon(
+                              Icons.star,
+                              color: Colors.yellow[600],
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(width: 0),
+              ],
             ),
           ),
           SizedBox(width: 8),
@@ -80,19 +103,22 @@ class _AppCompanyCardState extends State<AppCompanyCard> {
                       child: Text(
                         widget.province,
                         overflow: TextOverflow.fade,
-                        maxLines: 3,
+                        maxLines: 1,
                       ),
                     ),
                     Container(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 3),
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: Colors.green),
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                        border: Border.all(width: 2, color: Colors.green),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
                       child: Text(
                         widget.job,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                   ],
@@ -499,7 +525,12 @@ class _AppCandidateProfileCardState extends State<AppCandidateProfileCard> {
           Container(
             child: GestureDetector(
               onTap: () {
-                //
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ReportUserScreen(userDetail: widget.candidate),
+                    ));
               },
               child: Icon(
                 Icons.report,
@@ -653,6 +684,7 @@ class AppSquareHomeCard extends StatefulWidget {
     required this.title,
     required this.count,
     required this.icon,
+    this.width = 185,
     this.bgColor = Colors.black,
   });
 
@@ -660,6 +692,7 @@ class AppSquareHomeCard extends StatefulWidget {
   final String title;
   final String count;
   final IconData icon;
+  final double width;
 
   @override
   State<AppSquareHomeCard> createState() => _AppSquareHomeCardState();
@@ -672,7 +705,7 @@ class _AppSquareHomeCardState extends State<AppSquareHomeCard> {
       elevation: 7,
       shadowColor: Colors.black,
       child: Container(
-        width: 163,
+        width: widget.width,
         padding: EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(

@@ -10,13 +10,14 @@ import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_history.dart';
 import 'package:jobhunt_ftl/screen/payment/payment_main_layout.dart';
 import 'package:jobhunt_ftl/screen/setting/job_recommend_screen.dart';
-import 'package:jobhunt_ftl/screen/setting/setting_screen.dart';
+import 'package:jobhunt_ftl/screen/setting/languague_screen.dart';
 import 'package:jobhunt_ftl/screen/user/candidate_job_screen.dart';
 import 'package:jobhunt_ftl/screen/user/cv_screen.dart';
 import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/screen/user/follow_company_list.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
@@ -53,6 +54,12 @@ class MenuScreen extends ConsumerWidget {
     //   );
     // }
 
+    Future<void> deleteNextTime() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('emailSaveNextTime', '');
+      await prefs.setString('passwordSaveNextTime', '');
+    }
+
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: appHintColor,
@@ -70,43 +77,44 @@ class MenuScreen extends ConsumerWidget {
                 SizedBox(
                   height: 48,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: profile?.level == 'Premium'
-                          ? Colors.yellow
-                          : Colors.transparent,
-                      width: 4.0,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: SizedBox.fromSize(
-                      size: Size.fromRadius(56), // Image radius
-                      child: profile != null || company != null
-                          ? profile?.avatarUrl != null &&
-                                  profile?.avatarUrl != ''
-                              ? Image.network(
-                                  profile?.avatarUrl ?? '',
-                                  fit: BoxFit.cover,
-                                )
-                              : company?.avatarUrl != null &&
-                                      company?.avatarUrl != ''
+                profile != null || company != null
+                    ? Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: profile?.level == 'Premium' ||
+                                    company?.level == 'Premium'
+                                ? Colors.yellow
+                                : Colors.transparent,
+                            width: 4.0,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: SizedBox.fromSize(
+                            size: Size.fromRadius(56), // Image radius
+                            child: Container(
+                              color: const Color.fromARGB(127, 255, 255, 255),
+                              child: profile?.avatarUrl != null &&
+                                      profile?.avatarUrl != ''
                                   ? Image.network(
-                                      company?.avatarUrl ?? '',
+                                      profile?.avatarUrl ?? '',
                                       fit: BoxFit.cover,
                                     )
-                                  : Icon(
-                                      Icons.no_accounts_outlined,
-                                      size: 112,
-                                    )
-                          : Icon(
-                              Icons.no_accounts_outlined,
-                              size: 112,
+                                  : company?.avatarUrl != null &&
+                                          company?.avatarUrl != ''
+                                      ? Image.network(
+                                          company?.avatarUrl ?? '',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(
+                                          Icons.no_accounts_outlined,
+                                          size: 112,
+                                        ),
                             ),
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(height: 0),
                 SizedBox(
                   height: 24,
                 ),
@@ -115,29 +123,38 @@ class MenuScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        profile == null && company == null
-                            ? Keystring.GUEST.tr
-                            : profile != null
-                                ? profile.fullName ?? ''
-                                : company?.fullname ?? '',
-                        style: textNameMenu,
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          profile == null && company == null
+                              ? Keystring.GUEST.tr
+                              : profile != null
+                                  ? profile.fullName ?? ''
+                                  : company?.fullname ?? '',
+                          style: textNameMenu,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      SizedBox(height: 8),
-                      profile?.level == 'Premium'
-                          ? AppTagCard(
-                              child: Text(Keystring.PREMIUM.tr),
-                              bgColor: Colors.yellow,
-                              borderColor: Colors.grey,
-                            )
-                          : AppTagCard(
-                              child: Text(
-                                Keystring.BASIC.tr,
-                                style: TextStyle(color: Colors.black45),
-                              ),
-                              bgColor: Colors.grey.shade300,
-                              borderColor: Colors.black54,
-                            ),
+                      SizedBox(
+                        height: profile == null && company == null ? 0 : 8,
+                      ),
+                      profile == null && company == null
+                          ? SizedBox(height: 0)
+                          : profile?.level == 'Premium' ||
+                                  company?.level == 'Premium'
+                              ? AppTagCard(
+                                  child: Text(Keystring.PREMIUM.tr),
+                                  bgColor: Colors.yellow,
+                                  borderColor: Colors.grey,
+                                )
+                              : AppTagCard(
+                                  child: Text(
+                                    Keystring.BASIC.tr,
+                                    style: TextStyle(color: Colors.black45),
+                                  ),
+                                  bgColor: Colors.grey.shade300,
+                                  borderColor: Colors.black54,
+                                ),
                     ],
                   ),
                 ),
@@ -154,16 +171,24 @@ class MenuScreen extends ConsumerWidget {
                             onTap: () {
                               log('click profile');
                               if (profile != null) {
+                                ref.invalidate(provinceChooseProvider);
+                                ref.invalidate(districtChooseProvider);
+                                ref.invalidate(wardChooseProvider);
+                                ref.invalidate(avatarProfileProvider);
+                                ref.invalidate(dateBirthProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditProfileScreenNew(
-                                            edit: true,
-                                          )),
+                                    builder: (context) =>
+                                        EditProfileScreenNew(edit: true),
+                                  ),
                                 );
                               } else if (company != null) {
                                 ref.invalidate(listJobTagCompanyProvider);
+                                ref.invalidate(provinceCompanyProvider);
+                                ref.invalidate(districtCompanyProvider);
+                                ref.invalidate(wardCompanyProvider);
+                                ref.invalidate(avatarCompanyProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -590,8 +615,7 @@ class MenuScreen extends ConsumerWidget {
                             },
                             child: Card(
                               shadowColor: Colors.grey,
-                              shape: Border.all(
-                                  color: Colors.white, width: 2),
+                              shape: Border.all(color: Colors.white, width: 2),
                               margin: EdgeInsets.symmetric(vertical: 4),
                               elevation: 2,
                               child: Container(
@@ -662,14 +686,15 @@ class MenuScreen extends ConsumerWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SettingScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => LanguageSelectScreen()),
                     );
                   },
                   child: Card(
                     shadowColor: Colors.grey,
                     shape: Border.all(color: Colors.white, width: 2),
                     margin: EdgeInsets.symmetric(vertical: 4),
-                    elevation: 2,
+                    elevation: 3,
                     child: Container(
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.background),
@@ -677,14 +702,14 @@ class MenuScreen extends ConsumerWidget {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.tune_outlined,
+                            Icons.translate,
                             size: 32,
                           ),
                           SizedBox(
                             width: 16,
                           ),
                           Text(
-                            Keystring.SETTING.tr,
+                            Keystring.LANGUAGE.tr,
                             style: textMenu,
                           ),
                         ],
@@ -698,29 +723,27 @@ class MenuScreen extends ConsumerWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          content: Text('EXIT?'),
+                          content: Text(Keystring.WANT_EXIT.tr),
                           actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancel'),
-                            ),
                             TextButton(
                               onPressed: () {
                                 resetCall(ref);
                                 if (profile != null || company != null) {
                                   Loader.show(context);
-                                  ref.read(emailLoginProvider.notifier).state =
-                                      '';
-                                  ref
-                                      .read(passwordLoginProvider.notifier)
-                                      .state = '';
+                                  // ref.read(emailLoginProvider.notifier).state = '';
+                                  // ref.read(passwordLoginProvider.notifier).state = '';
+                                  deleteNextTime();
                                   Loader.hide();
                                 }
                                 Get.offAll(() => const LoginScreen());
                               },
-                              child: const Text('YES'),
+                              child: Text(Keystring.EXIT.tr),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(Keystring.CANCEL.tr),
                             ),
                           ],
                         );

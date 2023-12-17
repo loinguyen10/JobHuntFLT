@@ -34,56 +34,60 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 20),
-            child: Center(
-              child: Row(
-                children: [
-                  Text(
-                    "${Keystring.HELLO.tr}: ",
-                    style: textCV,
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: profile?.level == 'Premium'
-                            ? Colors.yellow
-                            : Colors.transparent,
-                        width: 4.0,
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: SizedBox.fromSize(
-                        size: Size.fromRadius(24), // Image radius
-                        child: profile != null || company != null
-                            ? profile?.avatarUrl != null &&
-                                    profile?.avatarUrl != ''
-                                ? Image.network(
-                                    profile?.avatarUrl ?? '',
-                                    fit: BoxFit.cover,
-                                  )
-                                : company?.avatarUrl != null &&
-                                        company?.avatarUrl != ''
+            child: profile != null || company != null
+                ? Center(
+                    child: Row(
+                      children: [
+                        Text(
+                          "${Keystring.HELLO.tr}: ",
+                          style: textCV,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: profile?.level == 'Premium' ||
+                                      company?.level == 'Premium'
+                                  ? Colors.yellow
+                                  : Colors.transparent,
+                              width: 4.0,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: SizedBox.fromSize(
+                              size: Size.fromRadius(24), // Image radius
+                              child: Container(
+                                color: const Color.fromARGB(127, 255, 255, 255),
+                                child: profile?.avatarUrl != null &&
+                                        profile?.avatarUrl != ''
                                     ? Image.network(
-                                        company?.avatarUrl ?? '',
+                                        profile?.avatarUrl ?? '',
                                         fit: BoxFit.cover,
                                       )
-                                    : Icon(
-                                        Icons.no_accounts_outlined,
-                                        size: 48,
-                                      )
-                            : Icon(
-                                Icons.no_accounts_outlined,
-                                size: 48,
+                                    : company?.avatarUrl != null &&
+                                            company?.avatarUrl != ''
+                                        ? Image.network(
+                                            company?.avatarUrl ?? '',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Icon(
+                                            profile != null
+                                                ? Icons.no_accounts_outlined
+                                                : Icons.apartment,
+                                            size: 48,
+                                            color: Colors.black,
+                                          ),
                               ),
-                      ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  )
+                : null,
           ),
         ],
         leading: IconButton(
@@ -122,7 +126,9 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Theme.of(context).colorScheme.secondary,
+        decoration: BoxDecoration(
+          gradient: bgGradientColorHome,
+        ),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: widget.company == null
@@ -287,7 +293,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                Keystring.VERIFIED_COMPANIES.tr,
+                                Keystring.PREMIUM_COMPANIES.tr,
                                 style: textJobHome,
                               ),
                               GestureDetector(
@@ -346,6 +352,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AppSquareHomeCard(
+                                width: MediaQuery.of(context).size.width / 2.25,
                                 icon: Icons.description_outlined,
                                 title: Keystring.CV_Month.tr,
                                 count: ref
@@ -358,6 +365,7 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
                                 bgColor: Colors.greenAccent,
                               ),
                               AppSquareHomeCard(
+                                width: MediaQuery.of(context).size.width / 2.25,
                                 icon: CupertinoIcons.briefcase,
                                 title: Keystring.ACTIVE_JOB.tr,
                                 count: ref

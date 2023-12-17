@@ -433,212 +433,215 @@ class _ScreenEditProfileNew extends ConsumerState<EditProfileScreenNew> {
       },
     );
 
-    return Container(
-      decoration: BoxDecoration(
-          gradient: Theme.of(context).colorScheme.background == Colors.white
-              ? bgGradientColor0
-              : bgGradientColor1),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              widget.edit
-                  ? AppBar(
-                      title: Text(Keystring.YOUR_PROFILE.tr),
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                    )
-                  : SizedBox(
-                      height: 0,
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: Theme.of(context).colorScheme.background == Colors.white
+                ? bgGradientColor0
+                : bgGradientColor1),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                widget.edit
+                    ? AppBar(
+                        title: Text(Keystring.YOUR_PROFILE.tr),
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+                SizedBox(
+                  height: 24,
+                ),
+                ClipOval(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(128), // Image radius
+                    child: GestureDetector(
+                      onTap: () => upload(1),
+                      child: avatarProfile != ''
+                          ? avatarProfile.substring(0, 8) == 'https://'
+                              ? Image.network(
+                                  avatarProfile,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(avatarProfile),
+                                  fit: BoxFit.cover,
+                                )
+                          : Icon(
+                              Icons.no_accounts_outlined,
+                              size: 256,
+                            ),
                     ),
-              SizedBox(
-                height: 24,
-              ),
-              ClipOval(
-                child: SizedBox.fromSize(
-                  size: Size.fromRadius(128), // Image radius
-                  child: GestureDetector(
-                    onTap: () => upload(1),
-                    child: avatarProfile != ''
-                        ? avatarProfile.substring(0, 8) == 'https://'
-                            ? Image.network(
-                                avatarProfile,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(avatarProfile),
-                                fit: BoxFit.cover,
-                              )
-                        : Icon(
-                            Icons.no_accounts_outlined,
-                            size: 256,
-                          ),
                   ),
                 ),
-              ),
-              SizedBox(height: 32),
-              EditTextForm(
-                onChanged: ((value) {
-                  ref.read(fullNameProfileProvider.notifier).state = value;
-                  log(value);
-                }),
-                label: Keystring.FULLNAME.tr,
-                // hintText: Keystring.FULLNAME.tr,
-                content: profile?.fullName ?? '',
-              ),
-              // SizedBox(height: 24),
-              // EditTextForm(
-              //   onChanged: ((value) {
-              //     //
-              //   }),
-              //   label: Keystring.DISPLAY_NAME.tr,
-              // ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  // ref.read(emailProfileProvider.notifier).state = value;
-                }),
-                label: Keystring.EMAIL.tr,
-                content:
-                    profile?.email ?? ref.watch(emailProfileProvider) ?? '',
-                readOnly: true,
-                typeKeyboard: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 24),
-              EditTextForm(
-                onChanged: ((value) {
-                  if (value.length >= 11) {
-                    Fluttertoast.showToast(
-                        msg: Keystring.PHONE_LESS_11.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-
-                  ref.read(phoneProfileProvider.notifier).state = value;
-                }),
-                label: Keystring.PHONE.tr,
-                content: profile?.phone ?? '',
-                maxLines: 1,
-                maxLength: 11,
-                typeKeyboard: TextInputType.phone,
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.ADDRESS.tr,
-                child: Column(
-                  children: [
-                    AppBorderFrame(
-                      labelText: Keystring.PROVINCE.tr,
-                      child: dropProvince(),
-                    ),
-                    SizedBox(height: 20),
-                    AppBorderFrame(
-                      labelText: Keystring.DISTRICT.tr,
-                      child: dropDistrict(),
-                    ),
-                    SizedBox(height: 20),
-                    AppBorderFrame(
-                      labelText: Keystring.WARD.tr,
-                      child: dropWard(),
-                    ),
-                  ],
+                SizedBox(height: 32),
+                EditTextForm(
+                  onChanged: ((value) {
+                    ref.read(fullNameProfileProvider.notifier).state = value;
+                    log(value);
+                  }),
+                  label: Keystring.FULLNAME.tr,
+                  // hintText: Keystring.FULLNAME.tr,
+                  content: profile?.fullName ?? '',
                 ),
-              ),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.BIRTHDAY.tr,
-                child:
-                    DateCustomDialog().dobDate(context, ref, birthdayProfile),
-              ),
-              SizedBox(
-                  height: profile?.premiumExpiry != null &&
-                          profile?.premiumExpiry != ''
-                      ? 24
-                      : 0),
-              profile?.premiumExpiry != null && profile?.premiumExpiry != ''
-                  ? EditTextForm(
-                      onChanged: ((value) {
-                        ref.read(premiumExpireProfileProvider.notifier).state =
-                            value;
-                      }),
-                      label: Keystring.PREMIUM_EXPIRY_DATE.tr,
-                      content: profile?.premiumExpiry ?? '',
-                      maxLines: 1,
-                      readOnly: true,
-                    )
-                  : SizedBox(height: 0),
-              SizedBox(height: 32),
-              AppButton(
-                onPressed: () {
-                  if (ref.watch(fullNameProfileProvider).isNotEmpty &&
-                      ref.watch(phoneProfileProvider).isNotEmpty &&
-                      provinceChoose!.code != null &&
-                      districtChoose!.code != null &&
-                      wardChoose!.code != null &&
-                      ref.watch(dateBirthProvider).isNotEmpty) {
-                    log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose.code} + ${districtChoose.code} + ${wardChoose.code} + ${ref.watch(dateBirthProvider)} ');
-                    if (ref.watch(phoneProfileProvider).length < 9) {
+                // SizedBox(height: 24),
+                // EditTextForm(
+                //   onChanged: ((value) {
+                //     //
+                //   }),
+                //   label: Keystring.DISPLAY_NAME.tr,
+                // ),
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    // ref.read(emailProfileProvider.notifier).state = value;
+                  }),
+                  label: Keystring.EMAIL.tr,
+                  content:
+                      profile?.email ?? ref.watch(emailProfileProvider) ?? '',
+                  readOnly: true,
+                  typeKeyboard: TextInputType.emailAddress,
+                ),
+                SizedBox(height: 24),
+                EditTextForm(
+                  onChanged: ((value) {
+                    if (value.length >= 11) {
                       Fluttertoast.showToast(
-                        msg: Keystring.PHONE_MORE_9.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                    } else {
-                      if (!widget.edit) {
-                        log("click done");
-                        ref
-                            .read(LoginControllerProvider.notifier)
-                            .createProfile(
-                              user.uid ?? '0',
-                              ref.watch(fullNameProfileProvider),
-                              ref.watch(avatarProfileProvider),
-                              ref.watch(emailProfileProvider),
-                              ref.watch(phoneProfileProvider),
-                              ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                              ref.watch(dateBirthProvider),
-                            );
-                      } else {
-                        log("click update");
-                        ref
-                            .read(LoginControllerProvider.notifier)
-                            .updateProfile(
-                              user.uid ?? '0',
-                              ref.watch(fullNameProfileProvider),
-                              ref.watch(avatarProfileProvider),
-                              ref.watch(emailProfileProvider),
-                              ref.watch(phoneProfileProvider),
-                              ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
-                              ref.watch(dateBirthProvider),
-                              // eduImport.substring(0, eduImport.length - 1),
-                            );
-                      }
+                          msg: Keystring.PHONE_LESS_11.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                     }
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: Keystring.NOT_FULL_DATA.tr,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
-                },
-                bgColor: appPrimaryColor,
-                height: 64,
-                label: widget.edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
-                fontSize: 16,
-              ),
-              SizedBox(height: 32),
-            ],
+
+                    ref.read(phoneProfileProvider.notifier).state = value;
+                  }),
+                  label: Keystring.PHONE.tr,
+                  content: profile?.phone ?? '',
+                  maxLines: 1,
+                  maxLength: 11,
+                  typeKeyboard: TextInputType.phone,
+                ),
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.ADDRESS.tr,
+                  child: Column(
+                    children: [
+                      AppBorderFrame(
+                        labelText: Keystring.PROVINCE.tr,
+                        child: dropProvince(),
+                      ),
+                      SizedBox(height: 20),
+                      AppBorderFrame(
+                        labelText: Keystring.DISTRICT.tr,
+                        child: dropDistrict(),
+                      ),
+                      SizedBox(height: 20),
+                      AppBorderFrame(
+                        labelText: Keystring.WARD.tr,
+                        child: dropWard(),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                AppBorderFrame(
+                  labelText: Keystring.BIRTHDAY.tr,
+                  child:
+                      DateCustomDialog().dobDate(context, ref, birthdayProfile),
+                ),
+                SizedBox(
+                    height: profile?.premiumExpiry != null &&
+                            profile?.premiumExpiry != ''
+                        ? 24
+                        : 0),
+                profile?.premiumExpiry != null && profile?.premiumExpiry != ''
+                    ? EditTextForm(
+                        onChanged: ((value) {
+                          ref
+                              .read(premiumExpireProfileProvider.notifier)
+                              .state = value;
+                        }),
+                        label: Keystring.PREMIUM_EXPIRY_DATE.tr,
+                        content: profile?.premiumExpiry ?? '',
+                        maxLines: 1,
+                        readOnly: true,
+                      )
+                    : SizedBox(height: 0),
+                SizedBox(height: 32),
+                AppButton(
+                  onPressed: () {
+                    if (ref.watch(fullNameProfileProvider).isNotEmpty &&
+                        ref.watch(phoneProfileProvider).isNotEmpty &&
+                        provinceChoose!.code != null &&
+                        districtChoose!.code != null &&
+                        wardChoose!.code != null &&
+                        ref.watch(dateBirthProvider).isNotEmpty) {
+                      log('${user!.uid} + ${ref.watch(fullNameProfileProvider)} + ${ref.watch(phoneProfileProvider)} + ${provinceChoose.code} + ${districtChoose.code} + ${wardChoose.code} + ${ref.watch(dateBirthProvider)} ');
+                      if (ref.watch(phoneProfileProvider).length < 9) {
+                        Fluttertoast.showToast(
+                          msg: Keystring.PHONE_MORE_9.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      } else {
+                        if (!widget.edit) {
+                          log("click done");
+                          ref
+                              .read(LoginControllerProvider.notifier)
+                              .createProfile(
+                                user.uid ?? '0',
+                                ref.watch(fullNameProfileProvider),
+                                ref.watch(avatarProfileProvider),
+                                ref.watch(emailProfileProvider),
+                                ref.watch(phoneProfileProvider),
+                                ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                                ref.watch(dateBirthProvider),
+                              );
+                        } else {
+                          log("click update");
+                          ref
+                              .read(LoginControllerProvider.notifier)
+                              .updateProfile(
+                                user.uid ?? '0',
+                                ref.watch(fullNameProfileProvider),
+                                ref.watch(avatarProfileProvider),
+                                ref.watch(emailProfileProvider),
+                                ref.watch(phoneProfileProvider),
+                                ',${wardChoose.code},${districtChoose.code},${provinceChoose.code}',
+                                ref.watch(dateBirthProvider),
+                                // eduImport.substring(0, eduImport.length - 1),
+                              );
+                        }
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: Keystring.NOT_FULL_DATA.tr,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                  },
+                  bgColor: appPrimaryColor,
+                  height: 64,
+                  label: widget.edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,
+                  fontSize: 16,
+                ),
+                SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),

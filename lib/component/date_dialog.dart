@@ -263,8 +263,9 @@ class DateCustomDialog {
               int.parse(dateChoose.substring(0, 2)), //day
             )
           : DateTime(DateTime.now().year - 16),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(DateTime.now().year + 15, 12, 31),
+      firstDate: DateTime(1945),
+      lastDate: DateTime(DateTime.now().year - 15, 12, 31),
+      // lastDate: DateTime(DateTime.now().year + 15, 12, 31),
     );
     if (picked != null) {
       log('${dateFormat.format(picked)}');

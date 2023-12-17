@@ -22,89 +22,92 @@ class CVChooseScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(
-      child: Container(
-        color: Theme.of(context).colorScheme.secondary,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              AppBar(
-                title: Text(Keystring.YOUR_CV.tr),
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                elevation: 0,
-                foregroundColor: Theme.of(context).colorScheme.primary,
-              ),
-              GestureDetector(
-                onTap: () {
-                  ref.refresh(cvUploadProvider);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CVUploadScreen()),
-                  );
-                },
-                child: Card(
-                  shadowColor: Colors.grey,
-                  shape: Border.all(color: Colors.white, width: 2),
-                  margin: EdgeInsets.symmetric(vertical: 4),
-                  elevation: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background),
-                    padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.upload_file_outlined,
-                          size: 32,
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          Keystring.UPLOAD_CV.tr,
-                          style: textMenu,
-                        ),
-                      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Keystring.YOUR_CV.tr),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.background,
+      ),
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).colorScheme.secondary,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ref.invalidate(cvUploadProvider);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CVUploadScreen()),
+                    );
+                  },
+                  child: Card(
+                    shadowColor: Colors.grey,
+                    shape: Border.all(color: Colors.white, width: 2),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    elevation: 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.upload_file_outlined,
+                            size: 32,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.UPLOAD_CV.tr,
+                            style: textMenu,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  ref.refresh(listYourCVProvider);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CVManagerScreen()),
-                  );
-                },
-                child: Card(
-                  shadowColor: Colors.grey,
-                  shape: Border.all(color: Colors.white, width: 2),
-                  margin: EdgeInsets.symmetric(vertical: 4),
-                  elevation: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background),
-                    padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.folder_outlined,
-                          size: 32,
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          Keystring.MANAGER_CV.tr,
-                          style: textMenu,
-                        ),
-                      ],
+                GestureDetector(
+                  onTap: () {
+                    ref.invalidate(listYourCVProvider);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CVManagerScreen()),
+                    );
+                  },
+                  child: Card(
+                    shadowColor: Colors.grey,
+                    shape: Border.all(color: Colors.white, width: 2),
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    elevation: 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.folder_outlined,
+                            size: 32,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            Keystring.MANAGER_CV.tr,
+                            style: textMenu,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -154,7 +157,7 @@ class CVUploadScreen extends ConsumerWidget {
         File file = File(result.files.single.path!);
 
         ref.read(cvUploadProvider.notifier).state = file.path;
-        ref.refresh(uploadCheckProvider.notifier);
+        ref.invalidate(uploadCheckProvider);
       } else {
         // User canceled the picker
       }
@@ -165,7 +168,7 @@ class CVUploadScreen extends ConsumerWidget {
       LoginControllerProvider,
       (previous, state) {
         log('pre - state : $previous - $state');
-        if (state is CreateThingErrorEvent) {
+        if (state is CreateThingErrorEvent || state is CheckCountErrorEvent) {
           log('error');
           ref.read(uploadCheckProvider.notifier).state = 'error';
         }
@@ -173,9 +176,46 @@ class CVUploadScreen extends ConsumerWidget {
         if (state is CreateThingSuccessEvent) {
           log('c-success');
           ref.read(uploadCheckProvider.notifier).state = 'success';
+          if (ref.watch(userProfileProvider)?.level != 'Premium') {
+            ref.read(LoginControllerProvider.notifier).addCount(
+                  ref.watch(userLoginProvider)?.uid ?? '',
+                  Keystring.candidate_upload_cv,
+                );
+          }
         }
 
-        if (state is CreateThingLoadingEvent) {
+        if (state is CheckCountSuccessEvent) {
+          ref
+              .read(LoginControllerProvider.notifier)
+              .uploadCV(user!.uid ?? '0', cv);
+        }
+
+        if (state is CheckCountOverwriteEvent) {
+          ref.read(uploadCheckProvider.notifier).state = 'error';
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(
+                  state.messageOverwrite == 'CV full'
+                      ? Keystring.CV_FULL.tr
+                      : Keystring.WARNING.tr,
+                  style: textNormal,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
+        if (state is CreateThingLoadingEvent || state is ThingLoadingEvent) {
           log('c-loading');
           ref.read(uploadCheckProvider.notifier).state = 'loading';
         }
@@ -271,9 +311,15 @@ class CVUploadScreen extends ConsumerWidget {
               AppButton(
                 onPressed: () {
                   if (cv != '') {
-                    ref
-                        .read(LoginControllerProvider.notifier)
-                        .uploadCV(user!.uid ?? '0', cv);
+                    if (ref.watch(userProfileProvider)?.level == 'Premium') {
+                      ref
+                          .read(LoginControllerProvider.notifier)
+                          .uploadCV(user!.uid ?? '0', cv);
+                    } else {
+                      ref.read(LoginControllerProvider.notifier).checkCount(
+                          ref.watch(userLoginProvider)!.uid ?? '',
+                          Keystring.candidate_upload_cv);
+                    }
                   } else {
                     Fluttertoast.showToast(
                         msg: Keystring.NOT_FULL_DATA.tr,
@@ -298,9 +344,16 @@ class CVUploadScreen extends ConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            cv.substring(cv.lastIndexOf('/') + 1),
-                            style: textNormal,
+                          Container(
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width / 2),
+                            child: Expanded(
+                              child: Text(
+                                cv.substring(cv.lastIndexOf('/') + 1),
+                                style: textNormal,
+                              ),
+                            ),
                           ),
                           status == 'waiting'
                               ? Text(
@@ -312,7 +365,8 @@ class CVUploadScreen extends ConsumerWidget {
                                   : status == 'success'
                                       ? Text(
                                           Keystring.SUCCESSFUL.tr,
-                                          style: textCVupload,
+                                          style: textCVupload.copyWith(
+                                              color: Colors.green),
                                         )
                                       : Text(
                                           Keystring.UNSUCCESSFUL.tr,
@@ -353,6 +407,7 @@ class CVManagerScreen extends ConsumerWidget {
               TextButton(
                 onPressed: () {
                   ref.read(LoginControllerProvider.notifier).removeCV(code);
+                  Navigator.pop(context);
                 },
                 child: const Text('YES'),
               ),
@@ -394,7 +449,13 @@ class CVManagerScreen extends ConsumerWidget {
                 elevation: 0,
                 foregroundColor: Theme.of(context).colorScheme.primary,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 8),
+              Text(
+                Keystring.HOLD_DELETE.tr.toUpperCase(),
+                style: textNormal,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 8),
               _data.when(
                 data: (data) {
                   return ListView.builder(
@@ -435,8 +496,8 @@ class CVManagerScreen extends ConsumerWidget {
                                 Expanded(
                                   child: Text(
                                     type == 'create'
-                                        ? Keystring.CREATED_CV.tr
-                                        : Keystring.UPLOADED_CV.tr,
+                                        ? '${Keystring.CREATED_CV.tr} - ${index + 1}'
+                                        : '${Keystring.UPLOADED_CV.tr} - ${index + 1}',
                                     overflow: TextOverflow.fade,
                                     textAlign: TextAlign.center,
                                   ),
@@ -444,8 +505,10 @@ class CVManagerScreen extends ConsumerWidget {
                                 Expanded(
                                   child: Text(
                                     updateTime != null && updateTime.isNotEmpty
-                                        ? '${Keystring.UPDATE.tr}: ${updateTime}'
-                                        : '${Keystring.CREATE.tr}: ${createTime}',
+                                        // ? '${Keystring.UPDATE.tr}: ${updateTime}'
+                                        // : '${Keystring.CREATE.tr}: ${createTime}',
+                                        ? updateTime
+                                        : createTime,
                                     overflow: TextOverflow.fade,
                                     textAlign: TextAlign.right,
                                   ),

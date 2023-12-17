@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,8 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/component/app_button.dart';
 import 'package:jobhunt_ftl/component/app_small_button.dart';
 import 'package:jobhunt_ftl/component/date_dialog.dart';
-import 'package:jobhunt_ftl/component/edittext.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
+import 'package:jobhunt_ftl/model/job.dart';
 
 import '../../blocs/app_controller.dart';
 import '../../blocs/app_event.dart';
@@ -31,11 +32,23 @@ class _AllAppicationRecuiterScreenState
   var textEditingController = TextEditingController();
   bool focusCheck = false;
   String statusCheck = '';
+  JobDetail? jobChoose;
 
   @override
   Widget build(BuildContext context) {
     final sizePhone = MediaQuery.of(context).size;
     var list = ref.watch(listRecuiterApplicationProvider);
+    final getListJob = ref.watch(listCompanyJobProvider);
+
+    final listJob = [];
+
+    getListJob.when(
+      data: (_data) {
+        listJob.addAll(_data);
+      },
+      error: (error, stackTrace) => null,
+      loading: () => const CircularProgressIndicator(),
+    );
 
     ref.listen<InsideEvent>(LoginControllerProvider, (previous, state) {
       log('pre - state : $previous - $state');
@@ -69,10 +82,47 @@ class _AllAppicationRecuiterScreenState
       ref
           .read(LoginControllerProvider.notifier)
           .getRecuiterApplicationWithSetting(
-            '',
+            jobChoose?.code ?? '',
             statusCheck,
             ref.watch(dateSearchProvider),
           );
+    }
+
+    DropdownButtonHideUnderline dropJob() {
+      return DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Text(
+            Keystring.SELECT.tr,
+            style: textNormal,
+          ),
+          items: listJob
+              .map((item) => DropdownMenuItem<JobDetail>(
+                    value: item,
+                    child: Text(item.name ?? '', style: textNormal),
+                  ))
+              .toList(),
+          value: jobChoose,
+          onChanged: (value) {
+            jobChoose = value;
+            setState(() {});
+          },
+          iconStyleData: IconStyleData(
+              icon: jobChoose != null
+                  ? InkWell(
+                      onTap: () {
+                        jobChoose = null;
+                        setState(() {});
+                      },
+                      child: Icon(Icons.close),
+                    )
+                  : Icon(Icons.arrow_drop_down)),
+          buttonStyleData: dropDownButtonStyle2,
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+          ),
+        ),
+      );
     }
 
     return StatefulBuilder(
@@ -92,36 +142,7 @@ class _AllAppicationRecuiterScreenState
                   child: Row(
                     children: [
                       Expanded(
-                        child: EditText2Form(
-                          onChanged: (value) {
-                            textEditingController.text = value;
-                            log(textEditingController.text);
-                            mSetState(
-                              () {},
-                            );
-                          },
-                          autoFocus: focusCheck,
-                          controller: textEditingController,
-                          label: Keystring.SEARCH.tr,
-                          hintText: Keystring.SEARCH.tr,
-                          suffixIcon: textEditingController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                  ),
-                                  onPressed: () {
-                                    mSetState(() {
-                                      log('hello');
-                                      log('text: ${textEditingController.text}');
-                                      textEditingController.clear();
-                                    });
-                                  },
-                                )
-                              : null,
-                        ),
+                        child: dropJob(),
                       ),
                       SizedBox(
                         width: 8,

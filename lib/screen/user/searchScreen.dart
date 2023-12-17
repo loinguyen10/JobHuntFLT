@@ -28,6 +28,7 @@ class JobSearchScreen extends ConsumerStatefulWidget {
       _JobSearchScreenState();
 }
 
+
 class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
   var searchController = TextEditingController();
   var minSalaryController = TextEditingController();
@@ -37,10 +38,12 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
   ProvinceList? provinceChoose;
   String jobTypeChoose = '';
 
+
   @override
   Widget build(BuildContext context) {
     final listSearch = ref.watch(listJobSearchProvider);
     final sizePhone = MediaQuery.of(context).size;
+
 
     List<ProvinceList> listProvince = [];
     List<String> listJobType = [
@@ -51,6 +54,7 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
     final listProvinceData = ref.watch(listProvinceProvider);
 
     // final listAllTitleJobData = ref.watch(listAllTitleJobSettingProvider);
+
 
     listProvinceData.when(
       data: (_data) {
@@ -90,6 +94,7 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
         ),
       );
     }
+
 
     DropdownButtonHideUnderline dropJobType() {
       return DropdownButtonHideUnderline(
@@ -184,6 +189,7 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                           onChanged: (value) {
                             mSetState(
                               () {},
+
                             );
                           },
                           autoFocus: true,
@@ -222,12 +228,14 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                                 provinceChoose?.code ?? '',
                               );
                         },
+
                         label: Keystring.SEARCH.tr,
                         bgColor: Colors.white,
                         textColor: Colors.black,
                         colorBorder: Colors.black,
                       ),
                     ],
+
                   ),
                 ),
                 SizedBox(height: 8.0),
@@ -263,9 +271,12 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                           },
                           controller: minSalaryController,
                           label: Keystring.MIN_SALARY.tr,
-                          suffixIcon: Icon(
-                            Icons.currency_bitcoin,
-                            size: 14,
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
                           ),
                           // hintText: 'VNĐ',
                           typeKeyboard: TextInputType.number,
@@ -281,9 +292,12 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                           },
                           controller: maxSalaryController,
                           label: Keystring.MAX_SALARY.tr,
-                          suffixIcon: Icon(
-                            Icons.currency_bitcoin,
-                            size: 14,
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
                           ),
                           // hintText: 'VNĐ',
                           typeKeyboard: TextInputType.number,
@@ -393,8 +407,8 @@ class _JobSearchScreenState extends ConsumerState<JobSearchScreen> {
                         ),
                       )
                     : SingleChildScrollView(
-                        child: SizedBox(
-                          height: sizePhone.height / 2,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 80),
                           child: Center(
                             child: Text(
                               Keystring.NO_DATA.tr,

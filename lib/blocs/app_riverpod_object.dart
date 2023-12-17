@@ -327,13 +327,8 @@ final listJobTagProviderProvider = StateProvider<List<String>>((ref) {
 final jobDeadlineProvider = StateProvider.autoDispose(
     (ref) => ref.watch(jobDetailProvider)?.deadline ?? "");
 
-final jobActiveProvider = StateProvider.autoDispose((ref) {
-  if (ref.watch(jobDetailProvider)?.active == 1) {
-    return true;
-  }
-
-  return false;
-});
+final jobActiveProvider = StateProvider.autoDispose(
+    (ref) => ref.watch(jobDetailProvider)?.active ?? 0);
 
 //cv & application
 final cvUploadProvider = StateProvider((ref) => "");

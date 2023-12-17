@@ -31,7 +31,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
     final provinceChoose = ref.watch(provinceChooseJobSettingProvider);
     final educationChoose = ref.watch(educationChooseJobSettingProvider);
 
-    final _gender = ref.watch(genderJobSettingProvider);
+    // final _gender = ref.watch(genderJobSettingProvider);
     final listJob = ref.watch(listJob2SettingProvider);
     final listProvinceChoose = ref.watch(listProvinceChooseJobSettingProvider);
 
@@ -265,14 +265,12 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       if (edit) {
         ref.read(LoginControllerProvider.notifier).updateJobRecommendSetting(
               ref.watch(userLoginProvider)!.uid ?? '',
-              ref.watch(genderJobSettingProvider),
               job.substring(0, job.length - 1),
               educationId.substring(0, educationId.length - 1),
               ref.watch(yearExpericementJobSettingProvider),
               provinceId.substring(0, provinceId.length - 1),
               ref.watch(minSalaryJobSettingProvider),
               ref.watch(maxSalaryJobSettingProvider),
-              currencyChoose?.code ?? '',
             );
       } else {
         ref.read(LoginControllerProvider.notifier).createJobRecommendSetting(
@@ -303,52 +301,52 @@ class JobRecommendSettingScreen extends ConsumerWidget {
             child: Column(
               children: [
                 SizedBox(height: 16),
-                AppBorderFrame(
-                    labelText: Keystring.GENDER.tr,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text(Keystring.MALE.tr),
-                          leading: Radio(
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            value: 'Male',
-                            groupValue: _gender,
-                            onChanged: (value) {
-                              ref
-                                  .read(genderJobSettingProvider.notifier)
-                                  .state = value!;
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(Keystring.FEMALE.tr),
-                          leading: Radio(
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            value: 'Female',
-                            groupValue: _gender,
-                            onChanged: (value) {
-                              ref
-                                  .read(genderJobSettingProvider.notifier)
-                                  .state = value!;
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(Keystring.OTHER.tr),
-                          leading: Radio(
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            value: 'Other',
-                            groupValue: _gender,
-                            onChanged: (value) {
-                              ref
-                                  .read(genderJobSettingProvider.notifier)
-                                  .state = value!;
-                            },
-                          ),
-                        ),
-                      ],
-                    )),
-                SizedBox(height: 16),
+                // AppBorderFrame(
+                //     labelText: Keystring.GENDER.tr,
+                //     child: Column(
+                //       children: [
+                //         ListTile(
+                //           title: Text(Keystring.MALE.tr),
+                //           leading: Radio(
+                //             activeColor: Theme.of(context).colorScheme.primary,
+                //             value: 'Male',
+                //             groupValue: _gender,
+                //             onChanged: (value) {
+                //               ref
+                //                   .read(genderJobSettingProvider.notifier)
+                //                   .state = value!;
+                //             },
+                //           ),
+                //         ),
+                //         ListTile(
+                //           title: Text(Keystring.FEMALE.tr),
+                //           leading: Radio(
+                //             activeColor: Theme.of(context).colorScheme.primary,
+                //             value: 'Female',
+                //             groupValue: _gender,
+                //             onChanged: (value) {
+                //               ref
+                //                   .read(genderJobSettingProvider.notifier)
+                //                   .state = value!;
+                //             },
+                //           ),
+                //         ),
+                //         ListTile(
+                //           title: Text(Keystring.OTHER.tr),
+                //           leading: Radio(
+                //             activeColor: Theme.of(context).colorScheme.primary,
+                //             value: 'Other',
+                //             groupValue: _gender,
+                //             onChanged: (value) {
+                //               ref
+                //                   .read(genderJobSettingProvider.notifier)
+                //                   .state = value!;
+                //             },
+                //           ),
+                //         ),
+                //       ],
+                //     )),
+                // SizedBox(height: 16),
                 AppBorderFrame(
                   labelText: Keystring.WANT_JOB.tr,
                   child: Column(
@@ -628,10 +626,8 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                 SizedBox(height: 32),
                 AppButton(
                   onPressed: () {
-                    if (ref.watch(genderJobSettingProvider).isEmpty ||
-                        listJob.isEmpty ||
+                    if (listJob.isEmpty ||
                         listEducationShowData.isEmpty ||
-                        currencyChoose?.code == '' ||
                         listProvinceChoose.isEmpty) {
                       Fluttertoast.showToast(
                           msg: "File is blank.",

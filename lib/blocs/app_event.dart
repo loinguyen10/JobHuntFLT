@@ -47,6 +47,13 @@ class SignInErrorEvent extends InsideEvent {
   List<Object> get props => [error ?? ''];
 }
 
+class SignInBannedEvent extends InsideEvent {
+  const SignInBannedEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class SignUpStateEvent extends InsideEvent {
   const SignUpStateEvent();
 

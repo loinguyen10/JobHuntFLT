@@ -20,7 +20,7 @@ import 'app_riverpod_void.dart';
 final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
 final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
-final checkboxRememberProvider = StateProvider.autoDispose((ref) => false);
+final checkboxRememberProvider = StateProvider.autoDispose((ref) => true);
 
 final companyProfileProvider = StateProvider<CompanyDetail?>((ref) => null);
 

@@ -3122,6 +3122,16 @@ class ThankYouPage1 extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
             ],
           ),
         ),

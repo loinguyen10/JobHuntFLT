@@ -228,4 +228,5 @@ class Keystring {
   static const String NO_AVAILABLE = 'No_Available';
   static const String Require = 'Require';
   static const String THANK_YOU = 'THANK_YOU';
+  static const String This_Acc_Banned = 'This_Acc_Banned';
 }

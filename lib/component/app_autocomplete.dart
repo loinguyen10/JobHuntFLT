@@ -19,6 +19,7 @@ class AppAutocompleteEditText extends StatefulWidget {
     this.maxLength,
     this.maxLines = 1,
     this.showRemoveButton = true,
+    this.readOnly = false,
   });
 
   final List<String> listSuggestion;
@@ -37,6 +38,7 @@ class AppAutocompleteEditText extends StatefulWidget {
   int? maxLength;
   int maxLines;
   bool showRemoveButton;
+  bool readOnly;
 
   @override
   State<AppAutocompleteEditText> createState() =>
@@ -85,6 +87,7 @@ class _AppAutocompleteEditTextState extends State<AppAutocompleteEditText> {
           cursorColor: Colors.black,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           focusNode: focusNode,
+          readOnly: widget.readOnly,
           decoration: InputDecoration(
               filled: true,
               fillColor: Theme.of(context).colorScheme.inversePrimary,

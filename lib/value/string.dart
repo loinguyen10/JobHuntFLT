@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
 
 class LocaleString extends Translations {
   @override
@@ -238,7 +239,8 @@ class LocaleString extends Translations {
           'Hold_Delete': 'Hold a CV you want to delete',
           'No_Available': 'This job is no longer available.',
           'Require': 'Require',
-          'THANK_YOU': 'Thank You'
+          'THANK_YOU': 'Thank You',
+          'This_Acc_Banned': 'This account has been banned by Admin.',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -473,7 +475,8 @@ class LocaleString extends Translations {
           'Hold_Delete': 'Giữ CV mà bạn muốn xóa',
           'No_Available': 'Công việc này hiện không còn hoạt động.',
           'Require': 'Yêu cầu',
-          'Thank You': 'Cảm Ơn'
+          'Thank You': 'Cảm Ơn',
+          'This_Acc_Banned': 'Tài khoản này đã bị cấm bởi Quản Trị Viên.',
         },
       };
 }

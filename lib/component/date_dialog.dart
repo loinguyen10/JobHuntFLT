@@ -37,11 +37,16 @@ class DateCustomDialog {
         style: dalDateStyle);
   }
 
-  Widget jobDate(BuildContext context, WidgetRef ref, String? text) {
+  Widget jobDate(
+      BuildContext context, WidgetRef ref, String? text, bool readOnly) {
     return ElevatedButton(
         onPressed: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-          deadlineDatePickerShow(context, ref);
+          if (readOnly) {
+            null;
+          } else {
+            FocusManager.instance.primaryFocus?.unfocus();
+            deadlineDatePickerShow(context, ref);
+          }
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

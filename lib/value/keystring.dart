@@ -226,4 +226,5 @@ class Keystring {
   static const String GET_STARTED = 'Get_Started';
   static const String HOLD_DELETE = 'Hold_Delete';
   static const String NO_AVAILABLE = 'No_Available';
+  static const String THANK_YOU = 'THANK_YOU';
 }

@@ -741,7 +741,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               .read(authRepositoryProvider)
               .getJobRecommendSetting(uid);
           ref.read(userDetailJobSettingProvider.notifier).state = setting;
-          ref.refresh(listRecommendJobProvider);
+          ref.invalidate(listRecommendJobProvider);
         } else {
           state = const CreateThingErrorEvent(error: 'error');
         }

@@ -402,7 +402,10 @@ class JobViewScreen extends ConsumerWidget {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        '${job.numberCandidate} ${Keystring.PERSON.tr}',
+                        role != 'recruiter'?
+                        '${job.remainPeople} ${Keystring.PERSON.tr}'
+                            : '${job.remainPeople} ${Keystring.PERSON.tr} (${Keystring.Require.tr} ${job.numberCandidate} ${Keystring.PERSON.tr})'
+                        ,
                         style: textNormal,
                       ),
                     ),

@@ -19,9 +19,12 @@ class FirstScreen extends ConsumerWidget {
     Future<void> runJH() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var skipSplash = prefs.getBool('splash') ?? false;
+
+      log('$skipSplash');
+
       if (skipSplash) {
         var emailTemp = prefs.getString('emailSaveNextTime') ?? '';
-        var passTemp = prefs.getString('passSaveNextTime') ?? '';
+        var passTemp = prefs.getString('passwordSaveNextTime') ?? '';
 
         ref.read(LoginControllerProvider.notifier).login(emailTemp, passTemp);
       } else {

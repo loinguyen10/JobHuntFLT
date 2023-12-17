@@ -73,13 +73,17 @@ class InsideService {
     log('ket qua login00: ${response.statusCode}');
     log('ket qua login: ${jsonDecode(response.body)}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
-      final UserDetail result =
-          UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
-      log("Token dc luu ${result.uid}");
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('uid', result.uid ?? '');
-      await prefs.setString('email', result.email ?? '');
-      return result;
+      if (jsonDecode(response.body)['success'] != 0) {
+        final UserDetail result =
+            UserDetail.fromJson(jsonDecode(response.body)['data']['user']);
+        log("Token dc luu ${result.uid}");
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('uid', result.uid ?? '');
+        await prefs.setString('email', result.email ?? '');
+        return result;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
@@ -852,8 +856,7 @@ class InsideService {
     Response response = await post(
         Uri.parse(BASE_URL + "job/job_recommend_for_user.php"),
         body: msg);
-    log('ket qua get: ${response.statusCode}');
-    log('ket qua get: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+    log('ket qua get list recommend: ${jsonDecode(utf8.decode(response.bodyBytes))}');
     if (response.statusCode == APIStatusCode.STATUS_CODE_OK) {
       final List result =
           jsonDecode(utf8.decode(response.bodyBytes))['data']['job'];

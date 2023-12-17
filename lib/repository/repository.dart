@@ -713,28 +713,26 @@ class InsideService {
 
   Future<dynamic> updateJobRecommendSetting(
     String uid,
-    String gender,
     String job,
     String educationId,
     int yearExperience,
     String workProvince,
     int minSalary,
     int maxSalary,
-    String currency,
   ) async {
     final msg = jsonEncode({
       'uid': uid,
-      'gender': gender,
+      'gender': '',
       'job': job,
       'educationId': educationId,
       'yearExperience': yearExperience,
       'workProvince': workProvince,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': currency,
+      'currency': 'VND',
     });
 
-    log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
+    log('message setting:\n uid: $uid\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/update_profile_recommend_setting.php"),

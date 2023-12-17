@@ -758,28 +758,24 @@ class LoginController extends StateNotifier<InsideEvent> {
 
   void updateJobRecommendSetting(
     String uid,
-    String gender,
     String job,
     String educationId,
     int yearExperience,
     String workProvince,
     int minSalary,
     int maxSalary,
-    String currency,
   ) async {
     state = const UpdateThingLoadingEvent();
     try {
       final result =
           await ref.read(authRepositoryProvider).updateJobRecommendSetting(
                 uid,
-                gender,
                 job,
                 educationId,
                 yearExperience,
                 workProvince,
                 minSalary,
                 maxSalary,
-                currency,
               );
 
       if (result == 1) {

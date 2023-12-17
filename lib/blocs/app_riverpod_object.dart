@@ -15,8 +15,8 @@ import '../model/job_setting.dart';
 import '../model/user.dart';
 import 'app_riverpod_void.dart';
 
-final emailLoginProvider = StateProvider((ref) => '');
-final passwordLoginProvider = StateProvider((ref) => '');
+// final emailLoginProvider = StateProvider((ref) => '');
+// final passwordLoginProvider = StateProvider((ref) => '');
 final userLoginProvider = StateProvider<UserDetail?>((ref) => null);
 final userProfileProvider = StateProvider<UserProfileDetail?>((ref) => null);
 
@@ -141,7 +141,7 @@ final fullNameCompanyProvider =
 
 final emailCompanyProvider = StateProvider((ref) =>
     ref.watch(companyProfileProvider)?.email ??
-    ref.watch(emailLoginProvider) ??
+    ref.watch(userLoginProvider)?.email ??
     '');
 
 final websiteCompanyProvider =
@@ -613,7 +613,7 @@ final listYourFollowProvider = FutureProvider<List<FollowDetail>>(
 
 final turnFollowOn = StateProvider<bool>((ref) {
   final list = ref.watch(listYourFollowProvider);
-  final job = ref.watch(jobDetailProvider);
+  final company = ref.watch(companyInforProvider);
 
   List<FollowDetail> listFollow = [];
 
@@ -627,11 +627,11 @@ final turnFollowOn = StateProvider<bool>((ref) {
   );
 
   log('listFollow: ${listFollow.length}');
-  log('company: ${job?.companyId}');
+  log('company: ${company.uid}');
 
   for (var i in listFollow) {
-    if (job?.companyId == i.companyId) {
-      log('message11111: ${job?.companyId} & ${i.companyId} ');
+    if (company.uid == i.companyId) {
+      log('message11111: ${company.uid} & ${i.companyId} ');
       return true;
     }
   }
@@ -759,3 +759,30 @@ final OtherReasonProvider = StateProvider<bool>((ref) => false);
 final checkCreateReportProvider = StateProvider<bool>((ref) => false);
 final candidateRecommendProvider =
     StateProvider<JobRecommendSetting?>((ref) => JobRecommendSetting());
+
+final JobInCompanyProvider = StateProvider(
+  (ref) {
+    final companyuid = ref.watch(companyInforProvider).uid;
+
+    final dataJobActive = ref.watch(listActiveJobProvider);
+    List<JobDetail> listJobActive = [];
+    List<JobDetail> listJob = [];
+
+    dataJobActive.maybeWhen(
+      data: (data) {
+        listJobActive.addAll(data);
+      },
+      orElse: () {
+        listJobActive = [];
+      },
+    );
+
+    for (var job in listJobActive) {
+      if (job.companyId == companyuid) {
+        listJob.add(job);
+      }
+    }
+
+    return listJob;
+  },
+);

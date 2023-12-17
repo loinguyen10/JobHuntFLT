@@ -235,6 +235,8 @@ class LocaleString extends Translations {
           'Splash_Tile':
               'Find your dream job is easier and faster with FPLWork',
           'Get_Started': 'Let\'s Get Started',
+          'Hold_Delete': 'Hold a CV you want to delete',
+          'No_Available': 'This job is no longer available.',
         },
         'vi_VN': {
           'Hello': 'Xin Chào',
@@ -324,7 +326,7 @@ class LocaleString extends Translations {
           'Intern': 'Thực tập sinh',
           'Part_Time': 'Bán thời gian',
           'Full_Time': 'Toàn thời gian',
-          'Apply_Now': 'Ứng tuyển ngay',
+          'Apply_Now': 'Ứng tuyển',
           'Information': 'Thông tin',
           'Person': 'Người',
           'Check_CV': 'Kiểm tra CV',
@@ -411,7 +413,7 @@ class LocaleString extends Translations {
           'Yes': 'Có',
           'No': 'Không',
           'Headquarter': 'Trụ sở',
-          'Check': 'Kiểm tra',
+          'Check': 'Xem',
           'Thousands': 'Nghìn',
           'Millions': 'Triệu',
           'Billions': 'Tỷ',
@@ -466,6 +468,8 @@ class LocaleString extends Translations {
           'Splash_Tile':
               'Tìm công việc mơ ước thật dễ dàng và nhanh chóng với FPLWork',
           'Get_Started': 'Bắt đầu nào',
+          'Hold_Delete': 'Giữ CV mà bạn muốn xóa',
+          'No_Available': 'Công việc này hiện không còn hoạt động.',
         },
       };
 }

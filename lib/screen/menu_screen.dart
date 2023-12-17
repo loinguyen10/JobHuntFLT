@@ -17,6 +17,7 @@ import 'package:jobhunt_ftl/screen/user/edit_profile.dart';
 import 'package:jobhunt_ftl/screen/user/edit_recuiter.dart';
 import 'package:jobhunt_ftl/screen/user/follow_company_list.dart';
 import 'package:jobhunt_ftl/value/keystring.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../blocs/app_riverpod_object.dart';
 import '../component/loader_overlay.dart';
@@ -52,6 +53,12 @@ class MenuScreen extends ConsumerWidget {
     //     },
     //   );
     // }
+
+    Future<void> deleteNextTime() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('emailSaveNextTime', '');
+      await prefs.setString('passwordSaveNextTime', '');
+    }
 
     return Scaffold(
       // appBar: AppBar(
@@ -723,11 +730,9 @@ class MenuScreen extends ConsumerWidget {
                                 resetCall(ref);
                                 if (profile != null || company != null) {
                                   Loader.show(context);
-                                  ref.read(emailLoginProvider.notifier).state =
-                                      '';
-                                  ref
-                                      .read(passwordLoginProvider.notifier)
-                                      .state = '';
+                                  // ref.read(emailLoginProvider.notifier).state = '';
+                                  // ref.read(passwordLoginProvider.notifier).state = '';
+                                  deleteNextTime();
                                   Loader.hide();
                                 }
                                 Get.offAll(() => const LoginScreen());

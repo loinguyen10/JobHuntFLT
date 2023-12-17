@@ -195,7 +195,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
           children: <Widget>[
             EditTextController(
               onChanged: ((value) {
-                ref.read(emailLoginProvider.notifier).state = value;
+                // ref.read(emailLoginProvider.notifier).state = value;
               }),
               controller: emailController,
               textColor: Colors.black,

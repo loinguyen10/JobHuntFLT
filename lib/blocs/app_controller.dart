@@ -179,13 +179,18 @@ class LoginController extends StateNotifier<InsideEvent> {
     String email,
     String phone,
     String address,
-    String website,
+    String web,
     String taxcode,
     String description,
     String job,
   ) async {
     state = const CreateThingLoadingEvent();
     try {
+      String website = web;
+      if (web.substring(0, 8) != 'https://') {
+        web = 'https://$web';
+      }
+
       log('$avatar_url');
       if (avatar_url.isEmpty) {
         final result = await ref.read(authRepositoryProvider).createCompany(
@@ -316,7 +321,7 @@ class LoginController extends StateNotifier<InsideEvent> {
     String email,
     String phone,
     String address,
-    String website,
+    String web,
     String taxcode,
     String description,
     String job,
@@ -324,6 +329,12 @@ class LoginController extends StateNotifier<InsideEvent> {
     state = const UpdateThingLoadingEvent();
     try {
       bool check = true;
+
+      String website = web;
+      if (web.substring(0, 8) != 'https://') {
+        web = 'https://$web';
+      }
+
       if (avatar_url.substring(0, 8) != 'https://') {
         FormData formData = FormData.fromMap({
           "uploadedfile": await MultipartFile.fromFile(avatar_url,
@@ -489,6 +500,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         final result =
             await ref.read(authRepositoryProvider).addCV(url, uid, 'upload');
         if (result == 1) {
+          ref.refresh(listYourCVProvider);
           state = const CreateThingSuccessEvent();
         } else {
           state = const CreateThingErrorEvent(error: 'Failed');
@@ -916,7 +928,7 @@ class LoginController extends StateNotifier<InsideEvent> {
           );
 
       if (result == 1) {
-        ref.refresh(listYourCVProvider);
+        ref.invalidate(listYourCVProvider);
         state = const RemoveCVSuccessEvent();
       } else {
         state = const RemoveCVErrorEvent(error: 'error');

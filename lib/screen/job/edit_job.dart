@@ -475,13 +475,20 @@ class JobEditScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: EditTextForm(
+                                  child: EditTextFormWithSuffixIcon(
                                     typeKeyboard: TextInputType.number,
                                     onChanged: ((value) {
                                       ref
                                           .read(jobMinSalaryProvider.notifier)
                                           .state = int.parse(value);
                                     }),
+                                    suffixIcon: Transform.rotate(
+                                      angle: 180 * 3.14 / 180,
+                                      child: Icon(
+                                        Icons.currency_ruble_rounded,
+                                        size: 14,
+                                      ),
+                                    ),
                                     content: job?.minSalary == null
                                         ? ''
                                         : job?.minSalary.toString() ?? '',
@@ -490,13 +497,20 @@ class JobEditScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: EditTextForm(
+                                  child: EditTextFormWithSuffixIcon(
                                     typeKeyboard: TextInputType.number,
                                     onChanged: ((value) {
                                       ref
                                           .read(jobMaxSalaryProvider.notifier)
                                           .state = int.parse(value);
                                     }),
+                                    suffixIcon: Transform.rotate(
+                                      angle: 180 * 3.14 / 180,
+                                      child: Icon(
+                                        Icons.currency_ruble_rounded,
+                                        size: 14,
+                                      ),
+                                    ),
                                     content: job?.maxSalary == null
                                         ? ''
                                         : job?.maxSalary.toString() ?? '',

@@ -26,9 +26,9 @@ class LanguageSelectScreen extends StatelessWidget {
           children: [
             AppBar(
               title: Text(Keystring.LANGUAGE.tr),
-              backgroundColor: Colors.transparent,
+              backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
               elevation: 0,
-              foregroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.background,
             ),
             SingleChildScrollView(
               child: Column(

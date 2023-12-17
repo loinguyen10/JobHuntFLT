@@ -289,17 +289,17 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       }
     }
 
-    return SafeArea(
-      child: Container(
-        color: Theme.of(context).colorScheme.secondary,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(Keystring.JOB_RECOMMEND_SETTING.tr),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            foregroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          body: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Keystring.JOB_RECOMMEND_SETTING.tr),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.background,
+      ),
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).colorScheme.secondary,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(height: 16),
@@ -521,26 +521,40 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: EditTextForm(
+                        child: EditTextFormWithSuffixIcon(
                           typeKeyboard: TextInputType.number,
                           onChanged: ((value) {
                             ref
                                 .read(minSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
+                          ),
                           content: setting?.minSalary.toString() ?? '',
                           label: Keystring.MIN_SALARY.tr,
                         ),
                       ),
                       SizedBox(width: 12),
                       Expanded(
-                        child: EditTextForm(
+                        child: EditTextFormWithSuffixIcon(
                           typeKeyboard: TextInputType.number,
                           onChanged: ((value) {
                             ref
                                 .read(maxSalaryJobSettingProvider.notifier)
                                 .state = int.parse(value);
                           }),
+                          suffixIcon: Transform.rotate(
+                            angle: 180 * 3.14 / 180,
+                            child: Icon(
+                              Icons.currency_ruble_rounded,
+                              size: 14,
+                            ),
+                          ),
                           content: setting?.maxSalary.toString() ?? '',
                           label: Keystring.MAX_SALARY.tr,
                         ),

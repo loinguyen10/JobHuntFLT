@@ -42,12 +42,12 @@ class CompanyPremiumScreen extends ConsumerWidget {
 
                   return GestureDetector(
                     onTap: () {
+                      ref.read(companyInforProvider.notifier).state =
+                          listCompanyPremium[index];
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CompanyInformation(
-                              company: listCompanyPremium[index],
-                            ),
+                            builder: (context) => CompanyInformation(),
                           ));
                     },
                     child: AppCompanyCard(
@@ -112,12 +112,11 @@ class AllCompanyScreen extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () {
+                ref.read(companyInforProvider.notifier).state = _data[index];
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CompanyInformation(
-                        company: _data[index],
-                      ),
+                      builder: (context) => CompanyInformation(),
                     ));
               },
               child: AppCompanyCard(

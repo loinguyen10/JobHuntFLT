@@ -205,7 +205,7 @@ class InsideService {
 
   Future<dynamic> register(String emailAddress, String password) async {
     final msg = jsonEncode({
-      'email': emailAddress.trim(),
+      'email': emailAddress.trim().toLowerCase(),
       'password': password.trim(),
     });
     Response response =
@@ -248,7 +248,7 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
-      'tax_code': taxcode,
+      'tax_code': taxcode.trim(),
       'description': description,
       'job': job,
       'level': 'Basic',
@@ -310,7 +310,7 @@ class InsideService {
       'phone': phone,
       'address': address,
       'web': website,
-      'tax_code': taxcode,
+      'tax_code': taxcode.trim(),
       'description': description,
       'job': job,
     });

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/border_frame.dart';
 import 'package:jobhunt_ftl/component/outline_text.dart';
@@ -183,22 +184,31 @@ class JobViewScreen extends ConsumerWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      AppButton(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3.5,
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ApplyJobScreen()));
-                                        },
-                                        label: Keystring.APPLY_NOW.tr,
-                                        bgColor: appPrimaryColor,
-                                        colorBorder: appPrimaryColor,
-                                        borderRadius: 16,
-                                      ),
+                                      job.remainPeople! > 0 && job.active == 1
+                                          ? AppButton(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  3.5,
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ApplyJobScreen()));
+                                              },
+                                              label: Keystring.APPLY_NOW.tr,
+                                              fontSize: 14,
+                                              bgColor: appPrimaryColor,
+                                              colorBorder: appPrimaryColor,
+                                              borderRadius: 16,
+                                            )
+                                          : SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  3.5,
+                                              child: Container()),
                                       Expanded(
                                         child: InkWell(
                                           onTap: () {
@@ -254,6 +264,23 @@ class JobViewScreen extends ConsumerWidget {
                   SizedBox(width: 24),
                 ],
               ),
+              SizedBox(
+                height: job.remainPeople! > 0 && job.active == 1 ? 0 : 24,
+              ),
+              job.remainPeople! > 0 && job.active == 1
+                  ? SizedBox(height: 0)
+                  : Container(
+                      color: appBgGradientColor,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          Keystring.NO_AVAILABLE.tr,
+                          style: textNormal.copyWith(color: Colors.white),
+                        ),
+                      ),
+                    ),
               SizedBox(
                 height: 24,
               ),
@@ -528,14 +555,16 @@ class JobViewScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(height: 16),
                                 AppButton(
-                                  onPressed: () => {
+                                  onPressed: () {
+                                    ref
+                                        .read(companyInforProvider.notifier)
+                                        .state = job.company!;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              CompanyInformation(
-                                                  company: job.company!)),
-                                    )
+                                              CompanyInformation()),
+                                    );
                                   },
                                   height: 40,
                                   label: Keystring.CHECK.tr,

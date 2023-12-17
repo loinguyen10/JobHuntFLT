@@ -33,33 +33,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.initState();
   }
 
-  Future<void> saveRememberState(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('rememberState', value);
-  }
-
   Future<void> loadEaP() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // ref.read(emailLoginProvider.notifier).state = prefs.getString('saveEmail') ?? '';
     emailEditingController.text = prefs.getString('saveEmail') ?? '';
     // ref.read(passwordLoginProvider.notifier).state = prefs.getString('savePassword') ?? '';
     passwordEditingController.text = prefs.getString('savePassword') ?? '';
-
-    ref.read(checkboxRememberProvider.notifier).state =
-        prefs.getBool('rememberState') ?? false;
-  }
-
-  @override
-  void dispose() {
-    saveEaP(ref.watch(emailLoginProvider), ref.watch(passwordLoginProvider));
-    super.dispose();
-  }
-
-  Future<void> saveEaP(String email, String password) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('saveEmail', email);
-    prefs.setString('savePassword', password);
-    prefs.setBool('rememberState', ref.watch(checkboxRememberProvider));
   }
 
   Future<void> saveNextTime() async {
@@ -112,22 +91,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             saveNextTime();
           }
           Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ));
         }
 
         if (state is SignInMissingEvent) {
           Loader.hide();
           log('missing');
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RoleScreen(),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => RoleScreen(),
+              ));
         }
 
         if (state is SignInLoadingEvent) {
@@ -140,7 +117,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       },
     );
 
-
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -149,7 +125,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ? bgGradientColor0
                 : bgGradientColor1),
         child: SafeArea(
-
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5),
@@ -192,23 +167,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             Checkbox(
                               checkColor: Theme.of(context).colorScheme.primary,
                               value: ref.watch(checkboxRememberProvider),
-                              onChanged: (bool? value) async {
+                              onChanged: (bool? value) {
                                 setState(() {
                                   ref
                                       .read(checkboxRememberProvider.notifier)
                                       .state = value!;
                                 });
-
-                                if (value == false) {
-                                  // Nếu ô đánh dấu không được chọn, xóa email và mật khẩu đã lưu
-                                  await saveEaP('', '');
-                                } else {
-                                  // Nếu ô đánh dấu được chọn, lưu email và mật khẩu hiện tại
-                                  await saveEaP(
-                                    ref.watch(emailLoginProvider),
-                                    ref.watch(passwordLoginProvider),
-                                  );
-                                }
                               },
                             ),
                             Text(
@@ -219,11 +183,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         InkWell(
                           onTap: () {
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordScreen(),
-                              ),
-                            );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ));
                           },
                           child: Text(
                             Keystring.FORGET_PASS.tr,
@@ -235,15 +198,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     SizedBox(height: 30.0),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: appPrimaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        minimumSize: Size(double.infinity, 60),
-                      ),
+                          backgroundColor: appPrimaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          minimumSize: Size(double.infinity, 60)),
                       onPressed: () async {
                         log("click button dang nhap");
-
                         ref.read(LoginControllerProvider.notifier).login(
                               emailEditingController.text,
                               passwordEditingController.text,
@@ -266,11 +226,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         InkWell(
                           onTap: () {
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RegisterScreen(),
-                              ),
-                            );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisterScreen(),
+                                ));
                           },
                           child: Text(
                             Keystring.SIGN_UP_NOW.tr,
@@ -285,11 +244,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     InkWell(
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ));
                       },
                       child: Text(
                         Keystring.USING_APP_WITHOUT.tr,

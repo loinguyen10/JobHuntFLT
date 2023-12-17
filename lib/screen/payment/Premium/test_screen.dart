@@ -1,5 +1,8 @@
 // import 'dart:developer';
-
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jobhunt_ftl/screen/home.dart';
+import 'package:jobhunt_ftl/value/keystring.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -706,3 +709,546 @@
 //     return false;
 //   }
 // }
+// import 'dart:developer';
+
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:jobhunt_ftl/blocs/app_controller.dart';
+// import 'package:jobhunt_ftl/blocs/app_event.dart';
+// import 'package:jobhunt_ftl/component/loader_overlay.dart';
+// import 'package:jobhunt_ftl/model/company.dart';
+// import 'package:jobhunt_ftl/value/keystring.dart';
+// import '../../blocs/app_riverpod_object.dart';
+// import '../../blocs/app_riverpod_void.dart';
+// import '../../component/card.dart';
+// import '../../value/style.dart';
+// import '../job/job_view_screen.dart';
+
+// class CompanyInformation extends ConsumerWidget {
+//   CompanyInformation({Key? key});
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     // final companyInfor = ref.watch(companyProfileProvider);
+//     final role = ref.watch(userLoginProvider)?.role;
+//     final company = ref.watch(companyInforProvider);
+//     final bmCheck = ref.watch(turnFollowOn);
+
+//     double screenWidth = MediaQuery.of(context).size.width;
+//     // bool isFollow = ref.watch(isCheckFollowCompany);
+
+//     ref.listen<InsideEvent>(
+//       LoginControllerProvider,
+//       (previous, state) {
+//         log('pre - state : $previous - $state');
+//         if (state is CreateThingErrorEvent || state is UpdateThingErrorEvent) {
+//           Loader.hide();
+//           log('error4');
+//           showDialog(
+//             context: context,
+//             builder: (context) {
+//               return AlertDialog(
+//                 content: Text(Keystring.UNSUCCESSFUL.tr),
+//                 actions: <Widget>[
+//                   TextButton(
+//                     onPressed: () {
+//                       Navigator.pop(context);
+//                     },
+//                     child: const Text('OK'),
+//                   ),
+//                 ],
+//               );
+//             },
+//           );
+//         }
+
+//         if (state is CreateThingSuccessEvent ||
+//             state is UpdateThingSuccessEvent) {
+//           Loader.hide();
+//           log('c-success');
+//           log('bmfollow: ${bmCheck}');
+//         }
+
+//         if (state is CreateThingLoadingEvent ||
+//             state is UpdateThingLoadingEvent) {
+//           Loader.show(context);
+//         }
+//       },
+//     );
+
+//     return Container(
+//         decoration: BoxDecoration(
+//             gradient: Theme.of(context).colorScheme.background == Colors.white
+//                 ? bgGradientColor0
+//                 : bgGradientColor1),
+//         child: DefaultTabController(
+//           length: 2,
+//           child: Scaffold(
+//             body: NestedScrollView(
+//               headerSliverBuilder: (context, isInnerBoxScrolled) {
+//                 return [
+//                   SliverAppBar(
+//                     backgroundColor: appPrimaryColor,
+//                     expandedHeight: 500,
+//                     floating: false,
+//                     pinned: true,
+//                     leading: GestureDetector(
+//                       onTap: () {
+//                         Navigator.of(context).pop();
+//                       },
+//                       child: Container(
+//                         margin:
+//                             const EdgeInsets.only(left: 15, right: 15, top: 10),
+//                         decoration: const BoxDecoration(
+//                           shape: BoxShape.circle, // Để tạo viền tròn
+//                           color: Colors.white, // Màu nền trắng
+//                         ),
+//                         child: const Icon(
+//                           Icons.arrow_back,
+//                           color: Colors.black,
+//                           size: 18,
+//                         ),
+//                       ),
+//                     ),
+//                     flexibleSpace: FlexibleSpaceBar(
+//                       title: Visibility(
+//                         visible: isInnerBoxScrolled,
+//                         child: const Text(''),
+//                       ),
+//                       background: SingleChildScrollView(
+//                         child: Container(
+//                           color: Colors.white,
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               Row(
+//                                 children: [
+//                                   Expanded(
+//                                       flex: 2,
+//                                       child: SizedBox(
+//                                         width: screenWidth,
+//                                         height: 300,
+//                                         child: Stack(
+//                                           children: [
+//                                             Container(
+//                                               decoration: BoxDecoration(
+//                                                   gradient: Theme.of(context)
+//                                                               .colorScheme
+//                                                               .background ==
+//                                                           Colors.white
+//                                                       ? bgGradientColor0
+//                                                       : bgGradientColor1),
+//                                               child: SizedBox(
+//                                                   height: 300,
+//                                                   width: screenWidth,
+//                                                   child: const Image(
+//                                                     image: AssetImage(
+//                                                         'assets/image/background_company.jpg'),
+//                                                   )),
+//                                             ),
+//                                             Positioned(
+//                                               left: 2 * screenWidth / 5,
+//                                               right: 2 * screenWidth / 5,
+//                                               bottom: 0,
+//                                               child: SizedBox(
+//                                                 height: 80,
+//                                                 child: ClipRRect(
+//                                                   borderRadius:
+//                                                       const BorderRadius.only(
+//                                                     topLeft:
+//                                                         Radius.circular(10),
+//                                                     topRight:
+//                                                         Radius.circular(10),
+//                                                     bottomLeft:
+//                                                         Radius.circular(10),
+//                                                     bottomRight:
+//                                                         Radius.circular(10),
+//                                                   ),
+//                                                   child: Container(
+//                                                     color: appPrimaryColor,
+//                                                     child: company.avatarUrl !=
+//                                                             ''
+//                                                         ? Image.network(
+//                                                             company.avatarUrl ??
+//                                                                 '',
+//                                                             fit: BoxFit.cover)
+//                                                         : const Icon(
+//                                                             Icons.apartment,
+//                                                             size: 96,
+//                                                           ),
+//                                                   ),
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         ),
+//                                       )),
+//                                 ],
+//                               ),
+//                               const SizedBox(
+//                                 height: 10,
+//                               ),
+//                               Row(
+//                                 children: [
+//                                   SizedBox(
+//                                       width: screenWidth,
+//                                       child: Center(
+//                                           child: Text(
+//                                         textAlign: TextAlign.center,
+//                                         company.fullname.toString(),
+//                                         style: textTitleTab1Company,
+//                                       )))
+//                                 ],
+//                               ),
+//                               const SizedBox(
+//                                 height: 10,
+//                               ),
+//                               Row(
+//                                 children: [
+//                                   SizedBox(
+//                                     width: screenWidth,
+//                                     child: Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.center,
+//                                       children: [
+//                                         const Icon(
+//                                           Icons.language,
+//                                           size: 18, // Kích thước của biểu tượng
+//                                           color: Colors
+//                                               .black, // Màu sắc của biểu tượng
+//                                         ),
+//                                         const SizedBox(
+//                                           width: 5,
+//                                         ),
+//                                         Text(company.web.toString(),
+//                                             style: const TextStyle(
+//                                               fontSize: 14,
+//                                             ))
+//                                       ],
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                               const SizedBox(
+//                                 height: 10,
+//                               ),
+//                               Row(
+//                                 children: [
+//                                   SizedBox(
+//                                     width: screenWidth,
+//                                     child: Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.center,
+//                                       children: [
+//                                         const Icon(
+//                                           Icons.phone,
+//                                           size: 18, // Kích thước của biểu tượng
+//                                           color: Colors
+//                                               .black, // Màu sắc của biểu tượng
+//                                         ),
+//                                         const SizedBox(
+//                                           width: 5,
+//                                         ),
+//                                         Text(company.phone.toString(),
+//                                             style: const TextStyle(
+//                                               fontSize: 14,
+//                                             ))
+//                                       ],
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                               const SizedBox(
+//                                 height: 10,
+//                               ),
+//                               Row(
+//                                 children: [
+//                                   SizedBox(
+//                                     width: screenWidth,
+//                                     child: Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.center,
+//                                       children: [
+//                                         const Icon(
+//                                           Icons.email,
+//                                           size: 18, // Kích thước của biểu tượng
+//                                           color: Colors
+//                                               .black, // Màu sắc của biểu tượng
+//                                         ),
+class ThankYouPage1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 170,
+                padding: EdgeInsets.all(35),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF43D19E),
+                  shape: BoxShape.circle,
+                ),
+                child: Image.asset(
+                  "assets/image/card.png",
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+              Text(
+                "Thank You!",
+                style: TextStyle(
+                  color: const Color(0xFF43D19E),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 36,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              Text(
+                Keystring.Payment_status1.tr,
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 17,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Text(
+                Keystring.Payment_status2.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

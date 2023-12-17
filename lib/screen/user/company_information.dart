@@ -103,7 +103,7 @@ class CompanyInformation extends ConsumerWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       title: Visibility(
                         visible: isInnerBoxScrolled,
-                        child: const Text('Scrollable TabBar Example'),
+                        child: const Text(''),
                       ),
                       background: SingleChildScrollView(
                         child: Container(

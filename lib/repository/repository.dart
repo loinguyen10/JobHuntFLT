@@ -681,9 +681,9 @@ class InsideService {
 
   Future<dynamic> createJobRecommendSetting(
     String uid,
-    String gender,
+
     String job,
-    String educationId,
+
     int yearExperience,
     String workProvince,
     int minSalary,
@@ -692,9 +692,9 @@ class InsideService {
   ) async {
     final msg = jsonEncode({
       'uid': uid,
-      'gender': gender,
+      'gender': '',
       'job': job,
-      'educationId': educationId,
+      'educationId': '',
       'yearExperience': yearExperience,
       'workProvince': workProvince,
       'minSalary': minSalary,
@@ -702,7 +702,7 @@ class InsideService {
       'currency': currency,
     });
 
-    log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
+  //  log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/create_profile_recommend_setting.php"),
@@ -714,7 +714,7 @@ class InsideService {
   Future<dynamic> updateJobRecommendSetting(
     String uid,
     String job,
-    String educationId,
+
     int yearExperience,
     String workProvince,
     int minSalary,
@@ -724,7 +724,7 @@ class InsideService {
       'uid': uid,
       'gender': '',
       'job': job,
-      'educationId': educationId,
+      'educationId': '',
       'yearExperience': yearExperience,
       'workProvince': workProvince,
       'minSalary': minSalary,
@@ -732,7 +732,7 @@ class InsideService {
       'currency': 'VND',
     });
 
-    log('message setting:\n uid: $uid\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary');
+ //   log('message setting:\n uid: $uid\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary');
 
     Response response = await post(
         Uri.parse(BASE_URL + "profile/update_profile_recommend_setting.php"),

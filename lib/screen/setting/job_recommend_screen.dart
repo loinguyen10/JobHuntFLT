@@ -29,7 +29,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
     final currencyChoose = ref.watch(currencyChooseJobSettingProvider);
     final provinceChoose = ref.watch(provinceChooseJobSettingProvider);
-    final educationChoose = ref.watch(educationChooseJobSettingProvider);
+
 
     // final _gender = ref.watch(genderJobSettingProvider);
     final listJob = ref.watch(listJob2SettingProvider);
@@ -37,15 +37,13 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
     final listCurrencyData = ref.watch(listCurrencyProvider);
     final listProvinceData = ref.watch(listProvinceProvider);
-    final listEducationData = ref.watch(listEducationJobSettingProvider);
+
     final listAllTitleJobData = ref.watch(listAllTitleJobSettingProvider);
 
-    final listEducationShowData =
-        ref.watch(listEducationShowJobSettingProvider);
 
     List<CurrencyList> listCurrency = [];
     List<ProvinceList> listProvince = [];
-    List<EducationList> listEducation = [];
+
     List<String> listTitleJob = [];
 
     listCurrencyData.when(
@@ -66,13 +64,6 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       loading: () => const CircularProgressIndicator(),
     );
 
-    listEducationData.when(
-      data: (_data) {
-        listEducation.addAll(_data);
-      },
-      error: (error, stackTrace) => null,
-      loading: () => const CircularProgressIndicator(),
-    );
 
     listAllTitleJobData.when(
       data: (_data) {
@@ -144,45 +135,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       );
     }
 
-    DropdownButtonHideUnderline dropEducation() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listEducation
-              .map((item) => DropdownMenuItem<EducationList>(
-                    value: item,
-                    child: Text(
-                      (Get.locale!.languageCode == 'en'
-                              ? item.title_en
-                              : item.title) ??
-                          '',
-                      style: textNormal,
-                    ),
-                  ))
-              .toList(),
-          value: educationChoose?.id != null ? educationChoose : null,
-          onChanged: (value) {
-            if (!listEducationShowData.any((x) => x == value)) {
-              ref.read(educationChooseJobSettingProvider.notifier).state =
-                  value;
-              ref.read(listEducationShowJobSettingProvider.notifier).state = [
-                ...listEducationShowData,
-                value!
-              ];
-              // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
-            }
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
+
 
     String capitalizeWords(String text) {
       if (text.isEmpty) {
@@ -243,7 +196,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
 
     void done() {
       String job = '';
-      String educationId = '';
+
       String provinceId = '';
 
       for (var y in listJob) {
@@ -254,9 +207,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
         job += '$y,';
       }
 
-      for (var y in listEducationShowData) {
-        educationId += '${y.id},';
-      }
+
 
       for (var y in listProvinceChoose) {
         provinceId += '${y.code},';
@@ -266,7 +217,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
         ref.read(LoginControllerProvider.notifier).updateJobRecommendSetting(
               ref.watch(userLoginProvider)!.uid ?? '',
               job.substring(0, job.length - 1),
-              educationId.substring(0, educationId.length - 1),
+
               ref.watch(yearExpericementJobSettingProvider),
               provinceId.substring(0, provinceId.length - 1),
               ref.watch(minSalaryJobSettingProvider),
@@ -275,9 +226,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       } else {
         ref.read(LoginControllerProvider.notifier).createJobRecommendSetting(
               ref.watch(userLoginProvider)!.uid ?? '',
-              ref.watch(genderJobSettingProvider),
               job.substring(0, job.length - 1),
-              educationId.substring(0, educationId.length - 1),
               ref.watch(yearExpericementJobSettingProvider),
               provinceId.substring(0, provinceId.length - 1),
               ref.watch(minSalaryJobSettingProvider),
@@ -414,78 +363,8 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 16),
-                AppBorderFrame(
-                  labelText: Keystring.EDUCATION.tr,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      dropEducation(),
-                      listEducationShowData.isNotEmpty
-                          ? SizedBox(
-                              height: 16,
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                      listEducationShowData.isNotEmpty
-                          ? ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (_, index) {
-                                return Card(
-                                  shadowColor: Colors.grey,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  elevation: 2,
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          (Get.locale!.languageCode == 'en'
-                                                  ? listEducationShowData[index]
-                                                      .title_en
-                                                  : listEducationShowData[index]
-                                                      .title) ??
-                                              '',
-                                          overflow: TextOverflow.fade,
-                                          maxLines: 3,
-                                        ),
-                                        InkWell(
-                                          child: Icon(Icons.delete_outlined),
-                                          onTap: () {
-                                            if (listEducationShowData
-                                                .isNotEmpty) {
-                                              ref
-                                                  .read(
-                                                      listEducationShowJobSettingProvider
-                                                          .notifier)
-                                                  .state = [
-                                                for (final value
-                                                    in listEducationShowData)
-                                                  if (value !=
-                                                      listEducationShowData[
-                                                          index])
-                                                    value
-                                              ];
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemCount: listEducationShowData.length,
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                    ],
-                  ),
-                ),
+
+
                 SizedBox(height: 16),
                 AppBorderFrame(
                     labelText: Keystring.Year_Experience.tr,
@@ -627,7 +506,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                 AppButton(
                   onPressed: () {
                     if (listJob.isEmpty ||
-                        listEducationShowData.isEmpty ||
+
                         listProvinceChoose.isEmpty) {
                       Fluttertoast.showToast(
                           msg: "File is blank.",

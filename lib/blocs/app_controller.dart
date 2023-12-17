@@ -712,9 +712,7 @@ class LoginController extends StateNotifier<InsideEvent> {
 
   void createJobRecommendSetting(
     String uid,
-    String gender,
     String job,
-    String educationId,
     int yearExperience,
     String workProvince,
     int minSalary,
@@ -729,9 +727,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         final result =
             await ref.read(authRepositoryProvider).createJobRecommendSetting(
                   uid,
-                  gender,
                   job,
-                  educationId,
                   yearExperience,
                   workProvince,
                   minSalary,
@@ -759,7 +755,6 @@ class LoginController extends StateNotifier<InsideEvent> {
   void updateJobRecommendSetting(
     String uid,
     String job,
-    String educationId,
     int yearExperience,
     String workProvince,
     int minSalary,
@@ -771,7 +766,6 @@ class LoginController extends StateNotifier<InsideEvent> {
           await ref.read(authRepositoryProvider).updateJobRecommendSetting(
                 uid,
                 job,
-                educationId,
                 yearExperience,
                 workProvince,
                 minSalary,

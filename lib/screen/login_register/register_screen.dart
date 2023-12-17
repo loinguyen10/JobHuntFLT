@@ -180,7 +180,8 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                     typeKeyboard: TextInputType.emailAddress,
                     onChanged: ((value) {
                       emailUp = value;
-                      ref.read(emailRegisterProvider.notifier).state = value;
+                      ref.read(emailRegisterProvider.notifier).state =
+                          value.toLowerCase();
                     }),
                     textColor: Colors.black,
                     label: Keystring.EMAIL.tr,

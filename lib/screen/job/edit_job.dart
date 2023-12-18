@@ -42,6 +42,8 @@ class JobEditScreen extends ConsumerWidget {
     final listAllTitleJobData = ref.watch(listAllTitleJobSettingProvider);
     final listJob = ref.watch(listJobTagProviderProvider);
 
+    bool isBanned = false;
+
     List<String> listTitleJob = [];
 
     List<ProvinceList> listProvince = [];
@@ -53,6 +55,14 @@ class JobEditScreen extends ConsumerWidget {
     ];
 
     String jobTag2 = '';
+
+    if (job?.remainPeople == 0) {
+      isBanned = true;
+    }
+
+    if (jobActive == -1) {
+      isBanned = true;
+    }
 
 //get data
 
@@ -105,14 +115,16 @@ class JobEditScreen extends ConsumerWidget {
                   ))
               .toList(),
           value: provinceChoose?.code != null ? provinceChoose : null,
-          onChanged: (value) {
-            // listProvince.clear();
-            if (provinceChoose?.code != null) {
-              ref.read(districtJobProvider.notifier).state = null;
-            }
-            ref.read(provinceJobProvider.notifier).state = value;
-            log('Province: ${value?.code}');
-          },
+          onChanged: isBanned
+              ? null
+              : (ProvinceList? value) {
+                  // listProvince.clear();
+                  if (provinceChoose?.code != null) {
+                    ref.read(districtJobProvider.notifier).state = null;
+                  }
+                  ref.read(provinceJobProvider.notifier).state = value;
+                  log('Province: ${value?.code}');
+                },
           buttonStyleData: dropDownButtonStyle1,
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
@@ -136,10 +148,12 @@ class JobEditScreen extends ConsumerWidget {
                   ))
               .toList(),
           value: districtChoose?.code != null ? districtChoose : null,
-          onChanged: (value) {
-            ref.read(districtJobProvider.notifier).state = value;
-            log('District: ${value?.code}');
-          },
+          onChanged: isBanned
+              ? null
+              : (DistrictList? value) {
+                  ref.read(districtJobProvider.notifier).state = value;
+                  log('District: ${value?.code}');
+                },
           buttonStyleData: dropDownButtonStyle1,
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
@@ -169,14 +183,16 @@ class JobEditScreen extends ConsumerWidget {
                       ? Keystring.PART_TIME.tr
                       : Keystring.FULL_TIME.tr
               : null,
-          onChanged: (value) {
-            int? index;
-            if (value == Keystring.INTERN.tr) index = 0;
-            if (value == Keystring.PART_TIME.tr) index = 1;
-            if (value == Keystring.FULL_TIME.tr) index = 2;
-            ref.read(jobTypeChooseProvider.notifier).state = index;
-            log('$value + $index');
-          },
+          onChanged: isBanned
+              ? null
+              : (String? value) {
+                  int? index;
+                  if (value == Keystring.INTERN.tr) index = 0;
+                  if (value == Keystring.PART_TIME.tr) index = 1;
+                  if (value == Keystring.FULL_TIME.tr) index = 2;
+                  ref.read(jobTypeChooseProvider.notifier).state = index;
+                  log('$value + $index');
+                },
           buttonStyleData: dropDownButtonStyle1,
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
@@ -225,7 +241,7 @@ class JobEditScreen extends ConsumerWidget {
           jobTag += '$y,';
         }
 
-        jobTag2 = jobTag;
+        jobTag2 = jobTag.substring(0, jobTag.length - 1);
 
         if (company?.level != 'Premium') {
           ref.read(LoginControllerProvider.notifier).checkCount(
@@ -250,9 +266,9 @@ class JobEditScreen extends ConsumerWidget {
                   ref.watch(jobDescriptionProvider),
                   ref.watch(jobCandidateRequirementProvider),
                   ref.watch(jobBenefitProvider),
-                  jobTag,
+                  jobTag.substring(0, jobTag.length - 1),
                   jobDeadline,
-                  jobActive ? 1 : 0,
+                  jobActive, // ? 1 : 0,
                 );
           } else {
             log("click update");
@@ -269,9 +285,9 @@ class JobEditScreen extends ConsumerWidget {
                   ref.watch(jobDescriptionProvider),
                   ref.watch(jobCandidateRequirementProvider),
                   ref.watch(jobBenefitProvider),
-                  jobTag,
+                  jobTag.substring(0, jobTag.length - 1),
                   jobDeadline,
-                  jobActive ? 1 : 0,
+                  jobActive, // ? 1 : 0,
                 );
           }
         }
@@ -351,7 +367,7 @@ class JobEditScreen extends ConsumerWidget {
                   ref.watch(jobBenefitProvider),
                   jobTag2,
                   jobDeadline,
-                  jobActive ? 1 : 0,
+                  jobActive, // ? 1 : 0,
                 );
           } else {
             ref.read(LoginControllerProvider.notifier).createJob(
@@ -368,7 +384,7 @@ class JobEditScreen extends ConsumerWidget {
                   ref.watch(jobBenefitProvider),
                   jobTag2,
                   jobDeadline,
-                  jobActive ? 1 : 0,
+                  jobActive, // ? 1 : 0,
                 );
           }
         }
@@ -414,7 +430,22 @@ class JobEditScreen extends ConsumerWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 32),
+                !isBanned
+                    ? SizedBox(height: 0)
+                    : Container(
+                        color: Colors.white60,
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            Keystring.NO_AVAILABLE.tr,
+                            style:
+                                textNormalBold.copyWith(color: Colors.red[900]),
+                          ),
+                        ),
+                      ),
+                SizedBox(height: isBanned ? 24 : 32),
                 EditTextForm(
                   onChanged: ((value) {
                     //
@@ -430,6 +461,7 @@ class JobEditScreen extends ConsumerWidget {
                   }),
                   label: Keystring.Name_Job.tr,
                   content: job?.name ?? '',
+                  readOnly: isBanned,
                 ),
                 SizedBox(height: 24),
                 AppBorderFrame(
@@ -453,8 +485,10 @@ class JobEditScreen extends ConsumerWidget {
                             activeColor: appPrimaryColor,
                             inactiveThumbColor: appPrimaryColor,
                             onChanged: (bool value) {
-                              ref.read(jobSalaryProvider.notifier).state =
-                                  value;
+                              isBanned
+                                  ? null
+                                  : ref.read(jobSalaryProvider.notifier).state =
+                                      value;
                             },
                           ),
                           SizedBox(
@@ -493,6 +527,7 @@ class JobEditScreen extends ConsumerWidget {
                                         ? ''
                                         : job?.minSalary.toString() ?? '',
                                     label: Keystring.MIN_SALARY.tr,
+                                    readOnly: isBanned,
                                   ),
                                 ),
                                 SizedBox(width: 12),
@@ -515,6 +550,7 @@ class JobEditScreen extends ConsumerWidget {
                                         ? ''
                                         : job?.maxSalary.toString() ?? '',
                                     label: Keystring.MAX_SALARY.tr,
+                                    readOnly: isBanned,
                                   ),
                                 ),
                               ],
@@ -537,6 +573,7 @@ class JobEditScreen extends ConsumerWidget {
                         content: job?.yearExperience == null
                             ? ''
                             : job?.yearExperience.toString() ?? '',
+                        readOnly: isBanned,
                       ),
                     ),
                     SizedBox(width: 8),
@@ -556,6 +593,7 @@ class JobEditScreen extends ConsumerWidget {
                         content: job?.numberCandidate == null
                             ? ''
                             : job?.numberCandidate.toString() ?? '',
+                        readOnly: isBanned,
                       ),
                     ),
                   ],
@@ -593,6 +631,7 @@ class JobEditScreen extends ConsumerWidget {
                         height: 120,
                         content: job?.description ?? '',
                         maxLines: 4,
+                        readOnly: isBanned,
                       ),
                       SizedBox(height: 20),
                       EditTextForm(
@@ -605,6 +644,7 @@ class JobEditScreen extends ConsumerWidget {
                         height: 120,
                         content: job?.candidateRequirement ?? '',
                         maxLines: 4,
+                        readOnly: isBanned,
                       ),
                       SizedBox(height: 20),
                       EditTextForm(
@@ -615,6 +655,7 @@ class JobEditScreen extends ConsumerWidget {
                         height: 120,
                         content: job?.jobBenefit ?? '',
                         maxLines: 4,
+                        readOnly: isBanned,
                       ),
                     ],
                   ),
@@ -634,6 +675,7 @@ class JobEditScreen extends ConsumerWidget {
                             // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
                           }
                         },
+                        readOnly: isBanned,
                       ),
                       listJob.isNotEmpty
                           ? SizedBox(height: 16)
@@ -660,22 +702,27 @@ class JobEditScreen extends ConsumerWidget {
                                             maxLines: 3,
                                           ),
                                         ),
-                                        InkWell(
-                                          child: Icon(Icons.delete_outlined),
-                                          onTap: () {
-                                            if (listJob.isNotEmpty) {
-                                              ref
-                                                  .read(
-                                                      listJobTagProviderProvider
-                                                          .notifier)
-                                                  .state = [
-                                                for (final value in listJob)
-                                                  if (value != listJob[index])
-                                                    value
-                                              ];
-                                            }
-                                          },
-                                        ),
+                                        isBanned
+                                            ? SizedBox(width: 0)
+                                            : InkWell(
+                                                child:
+                                                    Icon(Icons.delete_outlined),
+                                                onTap: () {
+                                                  if (listJob.isNotEmpty) {
+                                                    ref
+                                                        .read(
+                                                            listJobTagProviderProvider
+                                                                .notifier)
+                                                        .state = [
+                                                      for (final value
+                                                          in listJob)
+                                                        if (value !=
+                                                            listJob[index])
+                                                          value
+                                                    ];
+                                                  }
+                                                },
+                                              ),
                                       ],
                                     ),
                                   ),
@@ -690,7 +737,8 @@ class JobEditScreen extends ConsumerWidget {
                 SizedBox(height: 24),
                 AppBorderFrame(
                   labelText: Keystring.Deadline.tr,
-                  child: DateCustomDialog().jobDate(context, ref, jobDeadline),
+                  child: DateCustomDialog()
+                      .jobDate(context, ref, jobDeadline, isBanned),
                 ),
                 SizedBox(height: 24),
                 Container(
@@ -714,11 +762,19 @@ class JobEditScreen extends ConsumerWidget {
                         width: 16,
                       ),
                       Switch(
-                        value: jobActive,
+                        value: jobActive == 1 ? true : false,
                         activeColor: Colors.green,
                         inactiveThumbColor: Colors.red,
                         onChanged: (bool value) {
-                          ref.read(jobActiveProvider.notifier).state = value;
+                          if (isBanned) {
+                            null;
+                          } else {
+                            if (value) {
+                              ref.read(jobActiveProvider.notifier).state = 1;
+                            } else {
+                              ref.read(jobActiveProvider.notifier).state = 0;
+                            }
+                          }
                         },
                       ),
                     ],
@@ -735,6 +791,7 @@ class JobEditScreen extends ConsumerWidget {
                       doneButton();
                     }
                   },
+                  disableBtn: isBanned,
                   bgColor: appPrimaryColor,
                   height: 64,
                   label: edit ? Keystring.UPDATE.tr : Keystring.DONE.tr,

@@ -99,7 +99,7 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
           Loader.hide();
           log('error');
           Fluttertoast.showToast(
-              msg: Keystring.Get_OTP_Fail.tr,
+              msg: Keystring.UNSUCCESSFUL.tr,
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
               timeInSecForIosWeb: 1,
@@ -531,7 +531,7 @@ class _PasswordRegisterScreenState
                     showEye: true,
                     onChanged: ((value) {
                       passUpController.text = value;
-                      log(passUpController.text  +'_'+ value);
+                      log(passUpController.text + '_' + value);
                     }),
                     textColor: Colors.black,
                     label: Keystring.PASSWORD.tr,
@@ -557,8 +557,9 @@ class _PasswordRegisterScreenState
                         minimumSize: Size(double.infinity, 60)),
                     onPressed: () async {
                       log('yoo1 $emailUp - ${passUpController.text}');
-                      if (passUpController.text.isNotEmpty && passAgainController.text.isNotEmpty) {
-                        if (passUpController.text  != passAgainController.text) {
+                      if (passUpController.text.isNotEmpty &&
+                          passAgainController.text.isNotEmpty) {
+                        if (passUpController.text != passAgainController.text) {
                           Fluttertoast.showToast(
                               msg: Keystring.NEED_SAME_PASS.tr,
                               toastLength: Toast.LENGTH_SHORT,
@@ -571,7 +572,7 @@ class _PasswordRegisterScreenState
                           log('yoo1 $emailUp - ${passUpController.text}');
                           ref
                               .read(LoginControllerProvider.notifier)
-                              .register(emailUp, passUpController.text );
+                              .register(emailUp, passUpController.text);
                         }
                       } else {
                         Fluttertoast.showToast(

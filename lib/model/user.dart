@@ -2,6 +2,7 @@ class UserDetail {
   String? email;
   String? uid;
   String? role;
+  String? status;
 
   UserDetail({this.email, this.uid});
 
@@ -9,6 +10,7 @@ class UserDetail {
     uid = json['uid'];
     email = json['email'];
     role = json['role'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +18,7 @@ class UserDetail {
     data['uid'] = this.uid;
     data['email'] = this.email;
     data['role'] = this.role;
+    data['status'] = this.status;
     return data;
   }
 }

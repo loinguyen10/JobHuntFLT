@@ -82,6 +82,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           );
         }
 
+        if (state is SignInBannedEvent) {
+          Loader.hide();
+          log('banned');
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text(Keystring.This_Acc_Banned.tr),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
         if (state is SignInSuccessEvent) {
           Loader.hide();
           log('success');

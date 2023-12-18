@@ -38,36 +38,40 @@ class LoginController extends StateNotifier<InsideEvent> {
       final user =
           await ref.read(authRepositoryProvider).login(email, password);
       if (user != null) {
-        ref.read(userLoginProvider.notifier).state = user;
-
-        if (user.role != null && user.role != '') {
-          if (user.role == 'candidate') {
-            log('candidate');
-            final profile =
-                await ref.read(authRepositoryProvider).getProfile(user.uid);
-            final setting = await ref
-                .read(authRepositoryProvider)
-                .getJobRecommendSetting(user.uid);
-
-            log('pro: $profile');
-
-            // log('setting: ${setting.uid} ${setting.job}');
-            ref.read(userProfileProvider.notifier).state = profile;
-            if (setting != null) {
-              ref.read(userDetailJobSettingProvider.notifier).state = setting;
-            }
-            ref.watch(listYourCVProvider);
-          } else if (user.role == 'recruiter') {
-            log('recruiter');
-            final company =
-                await ref.read(authRepositoryProvider).getCompany(user.uid);
-            log('company: $company');
-            ref.read(companyProfileProvider.notifier).state = company;
-          }
-          state = const SignInSuccessEvent();
+        if (user.status == '0') {
+          state = const SignInBannedEvent();
         } else {
-          ref.read(userProfileProvider.notifier).state = null;
-          state = const SignInMissingEvent();
+          ref.read(userLoginProvider.notifier).state = user;
+
+          if (user.role != null && user.role != '') {
+            if (user.role == 'candidate') {
+              log('candidate');
+              final profile =
+                  await ref.read(authRepositoryProvider).getProfile(user.uid);
+              final setting = await ref
+                  .read(authRepositoryProvider)
+                  .getJobRecommendSetting(user.uid);
+
+              log('pro: $profile');
+
+              // log('setting: ${setting.uid} ${setting.job}');
+              ref.read(userProfileProvider.notifier).state = profile;
+              if (setting != null) {
+                ref.read(userDetailJobSettingProvider.notifier).state = setting;
+              }
+              ref.watch(listYourCVProvider);
+            } else if (user.role == 'recruiter') {
+              log('recruiter');
+              final company =
+                  await ref.read(authRepositoryProvider).getCompany(user.uid);
+              log('company: $company');
+              ref.read(companyProfileProvider.notifier).state = company;
+            }
+            state = const SignInSuccessEvent();
+          } else {
+            ref.read(userProfileProvider.notifier).state = null;
+            state = const SignInMissingEvent();
+          }
         }
       } else {
         state = const SignInErrorEvent(error: 'Login Failed');
@@ -708,9 +712,7 @@ class LoginController extends StateNotifier<InsideEvent> {
 
   void createJobRecommendSetting(
     String uid,
-    String gender,
     String job,
-    String educationId,
     int yearExperience,
     String workProvince,
     int minSalary,
@@ -725,9 +727,7 @@ class LoginController extends StateNotifier<InsideEvent> {
         final result =
             await ref.read(authRepositoryProvider).createJobRecommendSetting(
                   uid,
-                  gender,
                   job,
-                  educationId,
                   yearExperience,
                   workProvince,
                   minSalary,
@@ -754,28 +754,22 @@ class LoginController extends StateNotifier<InsideEvent> {
 
   void updateJobRecommendSetting(
     String uid,
-    String gender,
     String job,
-    String educationId,
     int yearExperience,
     String workProvince,
     int minSalary,
     int maxSalary,
-    String currency,
   ) async {
     state = const UpdateThingLoadingEvent();
     try {
       final result =
           await ref.read(authRepositoryProvider).updateJobRecommendSetting(
                 uid,
-                gender,
                 job,
-                educationId,
                 yearExperience,
                 workProvince,
                 minSalary,
                 maxSalary,
-                currency,
               );
 
       if (result == 1) {

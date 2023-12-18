@@ -202,7 +202,7 @@ class _AppJobCardState extends State<AppJobCard> {
                 Text(
                   widget.companyName,
                   overflow: TextOverflow.fade,
-                  maxLines: 3,
+                  maxLines: 2,
                   style: textCompanyJView,
                 ),
                 SizedBox(
@@ -222,7 +222,7 @@ class _AppJobCardState extends State<AppJobCard> {
                         Text(
                           widget.province,
                           overflow: TextOverflow.fade,
-                          maxLines: 3,
+                          maxLines: 1,
                         ),
                       ],
                     ),
@@ -237,7 +237,7 @@ class _AppJobCardState extends State<AppJobCard> {
                         Text(
                           widget.money,
                           overflow: TextOverflow.fade,
-                          maxLines: 3,
+                          maxLines: 1,
                         ),
                       ],
                     ),
@@ -313,7 +313,7 @@ class _AppJobSuggestionCardState extends State<AppJobSuggestionCard> {
                 child: Text(
                   widget.province,
                   overflow: TextOverflow.fade,
-                  maxLines: 3,
+                  maxLines: 1,
                 ),
               ),
               Container(
@@ -324,7 +324,7 @@ class _AppJobSuggestionCardState extends State<AppJobSuggestionCard> {
                 child: Text(
                   widget.maxSalary,
                   overflow: TextOverflow.fade,
-                  maxLines: 3,
+                  maxLines: 1,
                 ),
               ),
             ],

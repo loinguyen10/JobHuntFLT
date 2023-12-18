@@ -4,7 +4,7 @@ class UserDetail {
   String? role;
   String? status;
 
-  UserDetail({this.email, this.uid});
+  UserDetail({this.uid, this.email, this.role, this.status});
 
   UserDetail.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];

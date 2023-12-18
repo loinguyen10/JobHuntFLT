@@ -17,6 +17,7 @@ import '../../blocs/app_event.dart';
 import '../../blocs/app_riverpod_object.dart';
 import '../../value/keystring.dart';
 import '../../value/style.dart';
+import '../setting/message_user_recruiter.dart';
 import 'application_view_screen.dart';
 
 class AllAppicationRecuiterScreen extends ConsumerStatefulWidget {
@@ -471,7 +472,14 @@ class _AllAppicationRecuiterScreenState
                                           approve == '1'
                                               ? AppSmallButton(
                                                   onPressed: () {
-                                                    //
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MessageScreen(
+                                                                  Uid: list[index].candidate?.uid?? 'tùng nà')
+                                                      ),
+                                                    );
                                                   },
                                                   label: Keystring.CHAT.tr,
                                                   margin: EdgeInsets.symmetric(

@@ -17,12 +17,6 @@ class RoleScreen extends StatefulWidget {
 
 class _RoleScreenState extends State<RoleScreen> {
   @override
-  void dispose() {
-    super.dispose();
-    Get.offAll(() => const LoginScreen());
-  }
-
-  @override
   Widget build(BuildContext context) {
     void confirmDialog(String role) {
       showDialog(

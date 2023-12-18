@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -130,312 +132,338 @@ class _ScreenHome extends ConsumerState<ScreenHome> {
           gradient: bgGradientColorHome,
         ),
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: widget.company == null
-              ? Column(
-                  //member & guest screen
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ref.invalidate(listJobSearchProvider);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => JobSearchScreen()),
-                        );
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.black, width: 1),
-                        ),
-                        elevation: 2,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Icon(
-                                Icons.search,
-                                size: 30,
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Text(
-                                Keystring.SEARCH.tr,
-                                style: textNormalHint,
-                              ),
-                            ],
+        child: RefreshIndicator(
+          color: Colors.white,
+          backgroundColor: appPrimaryColor,
+          onRefresh: () async {
+            setState(() {
+              if (widget.company != null) {
+                ref.invalidate(listRecuiterMonthApplicationProvider);
+              } else {
+                if (widget.profile != null) {
+                  ref.invalidate(listRecommendJobProvider);
+                }
+                ref.invalidate(listActiveJobProvider);
+                ref.invalidate(listJobBestProvider);
+                ref.invalidate(listCompanyProvider);
+              }
+            });
+            log('refresh');
+          },
+          child: SingleChildScrollView(
+            child: widget.company == null
+                ? Column(
+                    //member & guest screen
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          ref.invalidate(listJobSearchProvider);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => JobSearchScreen()),
+                          );
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color: Colors.black, width: 1),
+                          ),
+                          elevation: 2,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Icon(
+                                  Icons.search,
+                                  size: 30,
+                                ),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  Keystring.SEARCH.tr,
+                                  style: textNormalHint,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    widget.profile != null
-                        ? Container(
-                            margin: EdgeInsets.all(8),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      Keystring.RECOMMEND_JOB.tr,
-                                      style: textJobHome,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () => {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  JobRecommendUser()),
-                                        )
-                                      },
-                                      child: Text(
-                                        '${Keystring.VIEW_ALL.tr} ➤    ',
-                                        style: textNormalBold,
+                      SizedBox(
+                        height: 32,
+                      ),
+                      widget.profile != null
+                          ? Container(
+                              margin: EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        Keystring.RECOMMEND_JOB.tr,
+                                        style: textJobHome,
                                       ),
+                                      GestureDetector(
+                                        onTap: () => {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    JobRecommendUser()),
+                                          )
+                                        },
+                                        child: Text(
+                                          '${Keystring.VIEW_ALL.tr} ➤    ',
+                                          style: textNormalBold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Card(
+                                    shape: Border.all(
+                                        color: Colors.white, width: 2),
+                                    elevation: 5,
+                                    child: Container(
+                                      height: 224,
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: const JobRecommendListScreen(
+                                          homeMode: true),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : SizedBox(height: 0),
+                      //
+                      SizedBox(
+                        height: widget.profile != null ? 24 : 0,
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  Keystring.BEST_JOB.tr,
+                                  style: textJobHome,
                                 ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Card(
-                                  shape:
-                                      Border.all(color: Colors.white, width: 2),
-                                  elevation: 5,
-                                  child: Container(
-                                    height: 224,
-                                    width: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: const JobRecommendListScreen(
-                                        homeMode: true),
+                                GestureDetector(
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              JobBestAllScreen()),
+                                    )
+                                  },
+                                  child: Text(
+                                    '${Keystring.VIEW_ALL.tr} ➤    ',
+                                    style: textNormalBold,
                                   ),
                                 ),
                               ],
                             ),
-                          )
-                        : SizedBox(height: 0),
-                    //
-                    SizedBox(
-                      height: widget.profile != null ? 24 : 0,
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                Keystring.BEST_JOB.tr,
-                                style: textJobHome,
-                              ),
-                              GestureDetector(
-                                onTap: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            JobBestAllScreen()),
-                                  )
-                                },
-                                child: Text(
-                                  '${Keystring.VIEW_ALL.tr} ➤    ',
-                                  style: textNormalBold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Card(
-                            shape: Border.all(color: Colors.white, width: 2),
-                            // margin: EdgeInsets.all(8),
-                            elevation: 5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const JobBestListScreen(itemCount: 3),
+                            SizedBox(
+                              height: 4,
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    //
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                Keystring.PREMIUM_COMPANIES.tr,
-                                style: textJobHome,
-                              ),
-                              GestureDetector(
-                                onTap: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            CompanyVerifyScreen()),
-                                  )
-                                },
-                                child: Text(
-                                  '${Keystring.VIEW_ALL.tr} ➤    ',
-                                  style: textNormalBold,
+                            Card(
+                              shape: Border.all(color: Colors.white, width: 2),
+                              // margin: EdgeInsets.all(8),
+                              elevation: 5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                 ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: const JobBestListScreen(itemCount: 3),
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Card(
-                            shape: Border.all(color: Colors.white, width: 2),
-                            // margin: EdgeInsets.all(8),
-                            elevation: 5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: const CompanyPremiumScreen(itemCount: 3),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    //
-                    SizedBox(
-                      height: 24,
-                    ),
-                  ],
-                )
-              : Column(
-                  //company screen
-                  children: [
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              AppSquareHomeCard(
-                                width: MediaQuery.of(context).size.width / 2.25,
-                                icon: Icons.description_outlined,
-                                title: Keystring.CV_Month.tr,
-                                count: ref
-                                        .watch(
-                                            listRecuiterMonthApplicationProvider)
-                                        .value
-                                        ?.length
-                                        .toString() ??
-                                    '0',
-                                bgColor: Colors.greenAccent,
-                              ),
-                              AppSquareHomeCard(
-                                width: MediaQuery.of(context).size.width / 2.25,
-                                icon: CupertinoIcons.briefcase,
-                                title: Keystring.ACTIVE_JOB.tr,
-                                count: ref
-                                        .watch(listActivePostJobCompanyProvider)
-                                        .value
-                                        ?.length
-                                        .toString() ??
-                                    '0',
-                                bgColor: Colors.redAccent,
-                              ),
-                            ],
-                          ),
-                        ],
+                      //
+                      SizedBox(
+                        height: 24,
                       ),
-                    ),
-                    //
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                Keystring.Posted_Jobs.tr,
-                                style: textJobHome,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  ref.invalidate(jobDetailProvider);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => JobEditScreen()),
-                                  );
-                                },
-                                child: Icon(
-                                  Icons.add,
-                                  size: 40,
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  Keystring.PREMIUM_COMPANIES.tr,
+                                  style: textJobHome,
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Card(
-                            elevation: 5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: JobPostedCompanyScreen(),
+                                GestureDetector(
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CompanyVerifyScreen()),
+                                    )
+                                  },
+                                  child: Text(
+                                    '${Keystring.VIEW_ALL.tr} ➤    ',
+                                    style: textNormalBold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Card(
+                              shape: Border.all(color: Colors.white, width: 2),
+                              // margin: EdgeInsets.all(8),
+                              elevation: 5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: const CompanyPremiumScreen(itemCount: 3),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    //
-                    SizedBox(
-                      height: 24,
-                    ),
-                  ],
-                ),
+                      //
+                      SizedBox(
+                        height: 24,
+                      ),
+                    ],
+                  )
+                : Column(
+                    //company screen
+                    children: [
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                AppSquareHomeCard(
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.25,
+                                  icon: Icons.description_outlined,
+                                  title: Keystring.CV_Month.tr,
+                                  count: ref
+                                          .watch(
+                                              listRecuiterMonthApplicationProvider)
+                                          .value
+                                          ?.length
+                                          .toString() ??
+                                      '0',
+                                  bgColor: Colors.greenAccent,
+                                ),
+                                AppSquareHomeCard(
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.25,
+                                  icon: CupertinoIcons.briefcase,
+                                  title: Keystring.ACTIVE_JOB.tr,
+                                  count: ref
+                                          .watch(
+                                              listActivePostJobCompanyProvider)
+                                          .value
+                                          ?.length
+                                          .toString() ??
+                                      '0',
+                                  bgColor: Colors.redAccent,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      //
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  Keystring.Posted_Jobs.tr,
+                                  style: textJobHome,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    ref.invalidate(jobDetailProvider);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              JobEditScreen()),
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 40,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Card(
+                              elevation: 5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: JobPostedCompanyScreen(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      //
+                      SizedBox(
+                        height: 24,
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );

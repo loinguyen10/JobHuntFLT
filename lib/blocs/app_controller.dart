@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:jobhunt_ftl/model/user.dart';
 import 'package:jobhunt_ftl/repository/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
@@ -130,6 +131,8 @@ class LoginController extends StateNotifier<InsideEvent> {
         if (result == 1) {
           final profile =
               await ref.read(authRepositoryProvider).getProfile(uid);
+          ref.read(userLoginProvider.notifier).state = UserDetail(
+              uid: uid, email: email, role: 'candidate', status: '1');
           log('pro: $profile');
           ref.read(userProfileProvider.notifier).state = profile;
           state = const CreateThingSuccessEvent();
@@ -159,6 +162,8 @@ class LoginController extends StateNotifier<InsideEvent> {
           if (result == 1) {
             final profile =
                 await ref.read(authRepositoryProvider).getProfile(uid);
+            ref.read(userLoginProvider.notifier).state = UserDetail(
+                uid: uid, email: email, role: 'candidate', status: '1');
             log('pro: $profile');
             ref.read(userProfileProvider.notifier).state = profile;
             state = const CreateThingSuccessEvent();
@@ -214,6 +219,8 @@ class LoginController extends StateNotifier<InsideEvent> {
           final company =
               await ref.read(authRepositoryProvider).getCompany(uid);
           log('company: $company');
+          ref.read(userLoginProvider.notifier).state = UserDetail(
+              uid: uid, email: email, role: 'recruiter', status: '1');
           ref.read(companyProfileProvider.notifier).state = company;
           state = const CreateThingSuccessEvent();
         } else {
@@ -245,6 +252,8 @@ class LoginController extends StateNotifier<InsideEvent> {
           if (result == 1) {
             final company =
                 await ref.read(authRepositoryProvider).getCompany(uid);
+            ref.read(userLoginProvider.notifier).state = UserDetail(
+                uid: uid, email: email, role: 'recruiter', status: '1');
             log('company: $company');
             ref.read(companyProfileProvider.notifier).state = company;
             state = const CreateThingSuccessEvent();

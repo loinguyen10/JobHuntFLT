@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jobhunt_ftl/blocs/app_controller.dart';
 import 'package:jobhunt_ftl/blocs/app_event.dart';
 import 'package:jobhunt_ftl/blocs/app_riverpod_object.dart';
+import 'package:jobhunt_ftl/blocs/app_riverpod_void.dart';
 import 'package:jobhunt_ftl/component/loader_overlay.dart';
 import 'package:jobhunt_ftl/screen/home.dart';
 import 'package:jobhunt_ftl/screen/login_register/select_role_screen.dart';
@@ -315,7 +316,8 @@ class OTPScreen extends ConsumerStatefulWidget {
 
 class _OTPScreenState extends ConsumerState<OTPScreen> {
   late Timer _timer;
-  int _start = 10;
+  int _start = 60;
+  final otpUpController = TextEditingController();
 
   @override
   void dispose() {
@@ -350,8 +352,6 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String otpUp = '';
-
     ref.listen<InsideEvent>(
       LoginControllerProvider,
       (previous, state) {
@@ -398,8 +398,8 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
               SizedBox(height: 16),
               EditTextForm(
                 onChanged: ((value) {
-                  otpUp = value;
-                  log('$otpUp va $value');
+                  otpUpController.text = value;
+                  log('${otpUpController.text} va $value');
                 }),
                 textColor: Colors.black,
                 hintText: 'OTP',
@@ -422,7 +422,7 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
 
                             log('Resend OTP button pressed');
                             setState(() {
-                              _start = 10;
+                              _start = 60;
                             });
                           }
                         : null,
@@ -437,7 +437,7 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
                     onPressed: () {
                       ref
                           .read(LoginControllerProvider.notifier)
-                          .checkOTP1(otpUp, widget.emailUp);
+                          .checkOTP1(otpUpController.text, widget.emailUp);
                     },
                     child: Text(Keystring.OK.tr),
                   ),
@@ -570,9 +570,11 @@ class _PasswordRegisterScreenState
                               fontSize: 16.0);
                         } else {
                           log('yoo1 $emailUp - ${passUpController.text}');
-                          ref
-                              .read(LoginControllerProvider.notifier)
-                              .register(emailUp, passUpController.text);
+                          if (checkPassword(passUpController.text)) {
+                            ref
+                                .read(LoginControllerProvider.notifier)
+                                .register(emailUp, passUpController.text);
+                          }
                         }
                       } else {
                         Fluttertoast.showToast(

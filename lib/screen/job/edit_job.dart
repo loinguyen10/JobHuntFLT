@@ -241,7 +241,7 @@ class JobEditScreen extends ConsumerWidget {
           jobTag += '$y,';
         }
 
-        jobTag2 = jobTag;
+        jobTag2 = jobTag.substring(0, jobTag.length - 1);
 
         if (company?.level != 'Premium') {
           ref.read(LoginControllerProvider.notifier).checkCount(
@@ -266,7 +266,7 @@ class JobEditScreen extends ConsumerWidget {
                   ref.watch(jobDescriptionProvider),
                   ref.watch(jobCandidateRequirementProvider),
                   ref.watch(jobBenefitProvider),
-                  jobTag,
+                  jobTag.substring(0, jobTag.length - 1),
                   jobDeadline,
                   jobActive, // ? 1 : 0,
                 );
@@ -285,7 +285,7 @@ class JobEditScreen extends ConsumerWidget {
                   ref.watch(jobDescriptionProvider),
                   ref.watch(jobCandidateRequirementProvider),
                   ref.watch(jobBenefitProvider),
-                  jobTag,
+                  jobTag.substring(0, jobTag.length - 1),
                   jobDeadline,
                   jobActive, // ? 1 : 0,
                 );

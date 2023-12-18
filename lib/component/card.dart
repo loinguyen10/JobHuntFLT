@@ -579,101 +579,103 @@ class _AppJobHomeCardState extends State<AppJobHomeCard> {
                 width: 1, color: Theme.of(context).colorScheme.outline),
             borderRadius: BorderRadius.all(Radius.circular(8))),
         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ClipOval(
-                  child: SizedBox.fromSize(
-                    size: Size.fromRadius(40), // Image radius
-                    child: widget.avatar != ''
-                        ? Image.network(
-                            widget.avatar,
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Icons.no_accounts_outlined,
-                            size: 80,
-                          ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.name,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
-                        style: textNameVCompany,
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        widget.companyName,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
-                        style: textCompanyJView,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.place,
-                        color: appPrimaryColor,
-                        size: 20,
-                      ),
-                      Text(
-                        widget.province,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
-                      ),
-                    ],
+                  ClipOval(
+                    child: SizedBox.fromSize(
+                      size: Size.fromRadius(40), // Image radius
+                      child: widget.avatar != ''
+                          ? Image.network(
+                              widget.avatar,
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.no_accounts_outlined,
+                              size: 80,
+                            ),
+                    ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.monetization_on,
-                        color: Colors.green,
-                        size: 20,
-                      ),
-                      Text(
-                        widget.money,
-                        overflow: TextOverflow.fade,
-                        maxLines: 3,
-                      ),
-                    ],
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                          style: textNameVCompany,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          widget.companyName,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                          style: textCompanyJView,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.timelapse,
-                  color: Colors.red,
-                  size: 20,
+              SizedBox(height: 16),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.place,
+                          color: appPrimaryColor,
+                          size: 20,
+                        ),
+                        Text(
+                          widget.province,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.monetization_on,
+                          color: Colors.green,
+                          size: 20,
+                        ),
+                        Text(
+                          widget.money,
+                          overflow: TextOverflow.fade,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(width: 8),
-                Text('${Keystring.Deadline.tr}: ${widget.deadline}'),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.timelapse,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                  SizedBox(width: 8),
+                  Text('${Keystring.Deadline.tr}: ${widget.deadline}'),
+                ],
+              ),
+            ],
+          ),
         ));
   }
 }

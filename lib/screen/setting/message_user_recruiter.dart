@@ -144,7 +144,16 @@ class MessageScreen extends ConsumerWidget {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 10,
+                        height: MediaQuery.of(context).size.width / 10,
+                        child: CircularProgressIndicator(
+                          color: appPrimaryColor,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    );
                   } else if (snapshot.hasError) {
                     return Text('Đã xảy ra lỗi: ${snapshot.error}');
                   } else {
@@ -432,43 +441,44 @@ class _Conversation extends ConsumerState<Conversation> {
         ),
         body: Column(
           children: [
-            GestureDetector(
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => SearchScreen()),
-                // );
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(color: Colors.black, width: 1),
-                ),
-                elevation: 2,
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Icon(
-                        Icons.search,
-                        size: 30,
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        Keystring.SEARCH,
-                        style: textNormalHint,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Navigator.push(
+            //     //   context,
+            //     //   MaterialPageRoute(
+            //     //       builder: (context) => SearchScreen()),
+            //     // );
+            //   },
+            //   child: Card(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10.0),
+            //       side: BorderSide(color: Colors.black, width: 1),
+            //     ),
+            //     elevation: 2,
+            //     child: Container(
+            //       padding: EdgeInsets.symmetric(vertical: 16),
+            //       child: Row(
+            //         children: [
+            //           SizedBox(
+            //             width: 16,
+            //           ),
+            //           Icon(
+            //             Icons.search,
+            //             size: 30,
+            //           ),
+            //           SizedBox(
+            //             width: 16,
+            //           ),
+            //           Text(
+            //             Keystring.SEARCH,
+            //             style: textNormalHint,
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            SizedBox(height: 16),
             Expanded(
                 flex: 7,
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -479,7 +489,16 @@ class _Conversation extends ConsumerState<Conversation> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 10,
+                          height: MediaQuery.of(context).size.width / 10,
+                          child: CircularProgressIndicator(
+                            color: appPrimaryColor,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      );
                     } else if (snapshot.hasError) {
                       return Text('Đã xảy ra lỗi: ${snapshot.error}');
                     } else {

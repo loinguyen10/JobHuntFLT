@@ -27,7 +27,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final setting = ref.watch(userDetailJobSettingProvider);
 
-    final currencyChoose = ref.watch(currencyChooseJobSettingProvider);
+    // final currencyChoose = ref.watch(currencyChooseJobSettingProvider);
     final provinceChoose = ref.watch(provinceChooseJobSettingProvider);
 
 
@@ -73,32 +73,32 @@ class JobRecommendSettingScreen extends ConsumerWidget {
       loading: () => const CircularProgressIndicator(),
     );
 
-    DropdownButtonHideUnderline dropCurrency() {
-      return DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            Keystring.SELECT.tr,
-            style: textNormal,
-          ),
-          items: listCurrency
-              .map((item) => DropdownMenuItem<CurrencyList>(
-                    value: item,
-                    child: Text('${item.symbol ?? ''}  ${item.code ?? ''}',
-                        style: textNormal),
-                  ))
-              .toList(),
-          value: currencyChoose?.code != null ? currencyChoose : null,
-          onChanged: (value) {
-            ref.read(currencyChooseJobSettingProvider.notifier).state = value;
-          },
-          buttonStyleData: dropDownButtonStyle1,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      );
-    }
+    // DropdownButtonHideUnderline dropCurrency() {
+    //   return DropdownButtonHideUnderline(
+    //     child: DropdownButton2(
+    //       isExpanded: true,
+    //       hint: Text(
+    //         Keystring.SELECT.tr,
+    //         style: textNormal,
+    //       ),
+    //       items: listCurrency
+    //           .map((item) => DropdownMenuItem<CurrencyList>(
+    //                 value: item,
+    //                 child: Text('${item.symbol ?? ''}  ${item.code ?? ''}',
+    //                     style: textNormal),
+    //               ))
+    //           .toList(),
+    //       value: currencyChoose?.code != null ? currencyChoose : null,
+    //       onChanged: (value) {
+    //         ref.read(currencyChooseJobSettingProvider.notifier).state = value;
+    //       },
+    //       buttonStyleData: dropDownButtonStyle1,
+    //       menuItemStyleData: const MenuItemStyleData(
+    //         height: 40,
+    //       ),
+    //     ),
+    //   );
+    // }
 
     DropdownButtonHideUnderline dropProvince() {
       return DropdownButtonHideUnderline(
@@ -231,7 +231,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
               provinceId.substring(0, provinceId.length - 1),
               ref.watch(minSalaryJobSettingProvider),
               ref.watch(maxSalaryJobSettingProvider),
-              currencyChoose?.code ?? '',
+              // currencyChoose?.code ?? '',
             );
       }
     }
@@ -306,7 +306,7 @@ class JobRecommendSettingScreen extends ConsumerWidget {
                           if (!listJob.any((x) => x == value)) {
                             ref.read(listJob2SettingProvider.notifier).state = [
                               ...listJob,
-                              capitalizeWords(value)
+                              value
                             ];
                             // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
                           }

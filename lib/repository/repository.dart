@@ -688,7 +688,6 @@ class InsideService {
     String workProvince,
     int minSalary,
     int maxSalary,
-    String currency,
   ) async {
     final msg = jsonEncode({
       'uid': uid,
@@ -699,7 +698,7 @@ class InsideService {
       'workProvince': workProvince,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': currency,
+      'currency': '',
     });
 
   //  log('message setting:\n uid: $uid\n gender: $gender\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary\n currency: $currency');
@@ -729,7 +728,7 @@ class InsideService {
       'workProvince': workProvince,
       'minSalary': minSalary,
       'maxSalary': maxSalary,
-      'currency': 'VND',
+      'currency': '',
     });
 
  //   log('message setting:\n uid: $uid\n job: $job\n educationId: $educationId\n yearExperience: $yearExperience\n workProvince: workProvince\n minSalary: $minSalary\n maxSalary: $maxSalary');

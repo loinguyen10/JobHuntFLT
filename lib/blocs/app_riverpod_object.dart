@@ -504,8 +504,8 @@ final applicationDetailProvider =
 final userDetailJobSettingProvider =
     StateProvider<JobRecommendSetting?>((ref) => null);
 
-final genderJobSettingProvider = StateProvider(
-    (ref) => ref.watch(userDetailJobSettingProvider)?.gender ?? '');
+// final genderJobSettingProvider = StateProvider(
+//     (ref) => ref.watch(userDetailJobSettingProvider)?.gender ?? '');
 
 final listJob2SettingProvider = StateProvider<List<String>>((ref) {
   if (ref.watch(userDetailJobSettingProvider) != null) {
@@ -524,21 +524,21 @@ final minSalaryJobSettingProvider = StateProvider<int>(
 final maxSalaryJobSettingProvider = StateProvider<int>(
     (ref) => ref.watch(userDetailJobSettingProvider)?.maxSalary ?? 0);
 
-final currencyChooseJobSettingProvider =
-    StateProvider.autoDispose<CurrencyList?>((ref) {
-  if (ref.watch(userDetailJobSettingProvider) != null &&
-      !ref.watch(listCurrencyProvider).isLoading) {
-    var list = ref.watch(listCurrencyProvider).value;
-    var currency = ref.watch(userDetailJobSettingProvider)?.currency;
-
-    for (var x in list!) {
-      if (currency == x.code) {
-        return x;
-      }
-    }
-  }
-  return CurrencyList();
-});
+// final currencyChooseJobSettingProvider =
+//     StateProvider.autoDispose<CurrencyList?>((ref) {
+//   if (ref.watch(userDetailJobSettingProvider) != null &&
+//       !ref.watch(listCurrencyProvider).isLoading) {
+//     var list = ref.watch(listCurrencyProvider).value;
+//     var currency = ref.watch(userDetailJobSettingProvider)?.currency;
+//
+//     for (var x in list!) {
+//       if (currency == x.code) {
+//         return x;
+//       }
+//     }
+//   }
+//   return CurrencyList();
+// });
 
 final provinceChooseJobSettingProvider =
     StateProvider.autoDispose<ProvinceList?>((ref) => ProvinceList());
@@ -577,14 +577,14 @@ final educationChooseJobSettingProvider =
 final listEducationJobSettingProvider =
     FutureProvider<List<EducationList>>((ref) => getEducationList());
 
-final listEducationShowJobSettingProvider =
-    StateProvider<List<EducationList>>((ref) {
-  if (ref.watch(userDetailJobSettingProvider) != null) {
-    var education = ref.watch(userDetailJobSettingProvider)?.education;
-    return [...education!];
-  }
-  return [];
-});
+// final listEducationShowJobSettingProvider =
+//     StateProvider<List<EducationList>>((ref) {
+//   if (ref.watch(userDetailJobSettingProvider) != null) {
+//     var education = ref.watch(userDetailJobSettingProvider)?.education;
+//     return [...education!];
+//   }
+//   return [];
+// });
 
 //
 // final userDetailJobSettingProvider =

@@ -1,43 +1,26 @@
 class JobRecommendSetting {
   String? uid;
-  String? gender;
   String? job;
-  String? educationId;
   int? yearExperience;
   String? workProvince;
   int? minSalary;
   int? maxSalary;
-  String? currency;
-  List<EducationList>? education;
 
   JobRecommendSetting(
       {this.uid,
-      this.gender,
       this.job,
-      this.educationId,
       this.yearExperience,
       this.workProvince,
       this.minSalary,
-      this.maxSalary,
-      this.currency,
-      this.education});
+      this.maxSalary,});
 
   JobRecommendSetting.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
-    gender = json['gender'];
     job = json['job'];
-    educationId = json['educationId'];
     yearExperience = int.parse(json['yearExperience']);
     workProvince = json['workProvince'];
     minSalary = int.parse(json['minSalary']);
     maxSalary = int.parse(json['maxSalary']);
-    currency = json['currency'];
-    if (json['education'] != null) {
-      education = <EducationList>[];
-      json['education'].forEach((v) {
-        education!.add(new EducationList.fromJson(v));
-      });
-    }
   }
 }
 

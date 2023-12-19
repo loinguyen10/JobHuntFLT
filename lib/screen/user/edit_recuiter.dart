@@ -571,7 +571,7 @@ class RecuiterEditScreen extends ConsumerWidget {
                         onSelected: (value) {
                           if (!listJob.any((x) => x == value)) {
                             ref.read(listJobTagCompanyProvider.notifier).state =
-                                [...listJob, capitalizeWords(value)];
+                                [...listJob, value];
                           }
                         },
                       ),

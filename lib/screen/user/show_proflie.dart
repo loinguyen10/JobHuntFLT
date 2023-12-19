@@ -19,7 +19,6 @@ class ShowProfileScreen extends ConsumerWidget {
     final avatarProfile = profile.avatarUrl ?? '';
     final recommendProfile = ref.watch(candidateRecommendProvider);
     final listJob = recommendProfile?.job?.split(',');
-    final listEducation = recommendProfile?.education;
 
     return Container(
       decoration: BoxDecoration(
@@ -124,38 +123,7 @@ class ShowProfileScreen extends ConsumerWidget {
                             ),
                     ],
                   )),
-              SizedBox(height: 24),
-              AppBorderFrame(
-                labelText: Keystring.EDUCATION.tr,
-                child: listEducation != null && listEducation.isNotEmpty
-                    ? ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (_, index) {
-                          return Card(
-                            shadowColor: Colors.grey,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            elevation: 2,
-                            child: ListTile(
-                              title: Text(
-                                (Get.locale!.languageCode == 'en'
-                                        ? listEducation[index].title_en
-                                        : listEducation[index].title) ??
-                                    '',
-                                overflow: TextOverflow.fade,
-                                maxLines: 2,
-                              ),
-                            ),
-                          );
-                        },
-                        itemCount: listEducation.length,
-                      )
-                    : SizedBox(
-                        height: 80,
-                        child: Text(Keystring.NO_DATA.tr),
-                      ),
-              ),
+
               SizedBox(height: 32),
             ],
           ),

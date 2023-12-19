@@ -477,8 +477,7 @@ class MenuScreen extends ConsumerWidget {
                                         ref.invalidate(
                                             listAllTitleJobSettingProvider);
                                         ref.invalidate(listJob2SettingProvider);
-                                        if (ref.watch(
-                                                userDetailJobSettingProvider) !=
+                                        if (ref.watch(userDetailJobSettingProvider)?.uid !=
                                             null) {
                                           edit = true;
                                         }

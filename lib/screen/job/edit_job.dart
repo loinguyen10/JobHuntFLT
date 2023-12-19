@@ -671,7 +671,7 @@ class JobEditScreen extends ConsumerWidget {
                           if (!listJob.any((x) => x == value)) {
                             ref
                                 .read(listJobTagProviderProvider.notifier)
-                                .state = [...listJob, capitalizeWords(value)];
+                                .state = [...listJob, value];
                             // listEducationShowData.sort((a, b) => a.id!.compareTo(b.id!));
                           }
                         },

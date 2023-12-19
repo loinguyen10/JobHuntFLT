@@ -726,12 +726,12 @@ class LoginController extends StateNotifier<InsideEvent> {
     String workProvince,
     int minSalary,
     int maxSalary,
-    String currency,
   ) async {
-    if (state == AddTitleErrorEvent()) {
-      state = const CreateThingErrorEvent(error: 'error');
-    } else {
+    // if (state == AddTitleErrorEvent()) {
+    //   state = const CreateThingErrorEvent(error: 'error');
+    // } else {
       state = const CreateThingLoadingEvent();
+      log('$uid $job $yearExperience $workProvince $minSalary $maxSalary');
       try {
         final result =
             await ref.read(authRepositoryProvider).createJobRecommendSetting(
@@ -741,7 +741,6 @@ class LoginController extends StateNotifier<InsideEvent> {
                   workProvince,
                   minSalary,
                   maxSalary,
-                  currency,
                 );
 
         if (result == 1) {
@@ -750,6 +749,7 @@ class LoginController extends StateNotifier<InsideEvent> {
               .read(authRepositoryProvider)
               .getJobRecommendSetting(uid);
           ref.read(userDetailJobSettingProvider.notifier).state = setting;
+          log('${ref.watch(userDetailJobSettingProvider)!.uid} ${ref.watch(userDetailJobSettingProvider)!.job} ${ref.watch(userDetailJobSettingProvider)!.yearExperience} ${ref.watch(userDetailJobSettingProvider)!.workProvince} ${ref.watch(userDetailJobSettingProvider)!.minSalary} ${ref.watch(userDetailJobSettingProvider)!.maxSalary}');
           ref.invalidate(listRecommendJobProvider);
         } else {
           state = const CreateThingErrorEvent(error: 'error');
@@ -757,7 +757,7 @@ class LoginController extends StateNotifier<InsideEvent> {
       } catch (e) {
         state = CreateThingErrorEvent(error: e.toString());
       }
-    }
+    // }
     state = const ThingStateEvent();
   }
 
